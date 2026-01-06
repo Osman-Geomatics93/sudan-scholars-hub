@@ -67,15 +67,15 @@ export function Navbar({ locale }: NavbarProps) {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 animate-fade-in-down">
       <Container>
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center gap-2">
+          <Link href={`/${locale}`} className="flex items-center gap-2 shrink-0">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
               <GraduationCap className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold text-gray-900 hidden sm:block">
+            <span className="text-lg lg:text-xl font-bold text-gray-900 hidden lg:block whitespace-nowrap">
               {locale === 'ar' ? 'بوابة منح السودان' : 'Sudan Scholars Hub'}
             </span>
           </Link>

@@ -105,19 +105,19 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="gradient-hero py-16 md:py-24 lg:py-32">
+      <section className="gradient-hero py-12 md:py-20 lg:py-28 overflow-hidden">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-display text-gray-900 mb-6 text-balance">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-display font-bold text-gray-900 mb-4 md:mb-6 text-balance animate-on-load animate-fade-in-up">
               {t('heroTitle')}
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto px-4 animate-on-load animate-fade-in-up animation-delay-200">
               {t('heroSubtitle')}
             </p>
 
             {/* Search Bar */}
-            <div className="max-w-2xl mx-auto mb-12">
-              <div className="flex gap-2 bg-white p-2 rounded-xl shadow-lg">
+            <div className="max-w-2xl mx-auto mb-8 md:mb-12 px-4 animate-on-load animate-scale-in animation-delay-400">
+              <div className="flex flex-col sm:flex-row gap-2 bg-white p-2 sm:p-2 rounded-xl shadow-lg">
                 <Input
                   placeholder={t('searchPlaceholder')}
                   className="border-0 focus:ring-0 h-12"
@@ -126,21 +126,21 @@ export default function HomePage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
                 />
-                <Button size="lg" className="shrink-0" onClick={handleSearch}>
-                  <Search className="h-5 w-5 md:me-2" />
-                  <span className="hidden md:inline">{locale === 'ar' ? 'بحث' : 'Search'}</span>
+                <Button size="lg" className="shrink-0 w-full sm:w-auto" onClick={handleSearch}>
+                  <Search className="h-5 w-5 me-2 sm:me-0 md:me-2" />
+                  <span className="sm:hidden md:inline">{locale === 'ar' ? 'بحث' : 'Search'}</span>
                 </Button>
               </div>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {stats.map((stat) => (
-                <div key={stat.labelKey} className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-primary-600 mb-1">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 px-4 animate-on-load animate-fade-in-up animation-delay-600">
+              {stats.map((stat, index) => (
+                <div key={stat.labelKey} className="text-center p-3 md:p-0">
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-gray-600">{t(`stats.${stat.labelKey}`)}</div>
+                  <div className="text-sm md:text-base text-gray-600">{t(`stats.${stat.labelKey}`)}</div>
                 </div>
               ))}
             </div>
@@ -149,14 +149,14 @@ export default function HomePage() {
       </section>
 
       {/* Featured Scholarships */}
-      <section className="section-padding bg-white">
+      <section className="py-12 md:py-16 lg:py-24 bg-white">
         <Container>
-          <div className="flex justify-between items-end mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 md:mb-8 gap-3">
             <div>
-              <h2 className="text-h2 text-gray-900 mb-2">{t('featuredTitle')}</h2>
-              <p className="text-gray-600">{t('featuredSubtitle')}</p>
+              <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-1 md:mb-2">{t('featuredTitle')}</h2>
+              <p className="text-sm md:text-base text-gray-600">{t('featuredSubtitle')}</p>
             </div>
-            <Link href={`/${locale}/scholarships`} className="hidden md:flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium">
+            <Link href={`/${locale}/scholarships`} className="hidden md:flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium shrink-0">
               {locale === 'ar' ? 'عرض الكل' : 'View All'}
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Link>
@@ -191,14 +191,14 @@ export default function HomePage() {
       </section>
 
       {/* Categories */}
-      <section className="section-padding bg-gray-50">
+      <section className="py-12 md:py-16 lg:py-24 bg-gray-50">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-3">{t('categoriesTitle')}</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">{t('categoriesSubtitle')}</p>
+          <div className="text-center mb-8 md:mb-12 px-4">
+            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('categoriesTitle')}</h2>
+            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">{t('categoriesSubtitle')}</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {categories.map((category) => {
               const Icon = iconMap[category.icon] || GraduationCap;
               return (
@@ -206,14 +206,14 @@ export default function HomePage() {
                   key={category.id}
                   href={`/${locale}/scholarships?field=${category.id}`}
                 >
-                  <Card className="p-6 text-center hover:border-primary-300 hover:shadow-md transition-all group cursor-pointer">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 text-primary-600 mb-4 group-hover:bg-primary-600 group-hover:text-white transition-colors">
-                      <Icon className="h-6 w-6" />
+                  <Card className="p-4 md:p-6 text-center hover:border-primary-300 hover:shadow-md transition-all group cursor-pointer h-full">
+                    <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary-100 text-primary-600 mb-3 md:mb-4 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                      <Icon className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">
+                    <h3 className="font-semibold text-gray-900 mb-1 text-sm md:text-base">
                       {tCategories(category.id)}
                     </h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs md:text-sm text-gray-500">
                       {category.count} {locale === 'ar' ? 'منحة' : 'scholarships'}
                     </p>
                   </Card>
@@ -225,30 +225,30 @@ export default function HomePage() {
       </section>
 
       {/* Study in Turkey Section */}
-      <section className="section-padding bg-gradient-to-br from-red-600 to-red-700 text-white">
+      <section className="py-12 md:py-16 lg:py-24 bg-gradient-to-br from-red-600 to-red-700 text-white">
         <Container>
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">{tTurkey('homeSectionTitle')}</h2>
-              <p className="text-red-100 text-lg mb-6">{tTurkey('homeSectionSubtitle')}</p>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="text-center lg:text-start">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">{tTurkey('homeSectionTitle')}</h2>
+              <p className="text-red-100 text-base md:text-lg mb-6">{tTurkey('homeSectionSubtitle')}</p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4 text-center">
-                  <GraduationCap className="h-8 w-8 mx-auto mb-2" />
-                  <p className="font-semibold">{locale === 'ar' ? 'منحة ممولة بالكامل' : 'Fully Funded'}</p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 md:mb-8">
+                <div className="bg-white/10 backdrop-blur rounded-lg p-3 md:p-4 text-center">
+                  <GraduationCap className="h-6 w-6 md:h-8 md:w-8 mx-auto mb-1 md:mb-2" />
+                  <p className="font-semibold text-xs sm:text-sm md:text-base">{locale === 'ar' ? 'منحة ممولة بالكامل' : 'Fully Funded'}</p>
                 </div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4 text-center">
-                  <Building2 className="h-8 w-8 mx-auto mb-2" />
-                  <p className="font-semibold">{locale === 'ar' ? '+200 جامعة' : '200+ Universities'}</p>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-3 md:p-4 text-center">
+                  <Building2 className="h-6 w-6 md:h-8 md:w-8 mx-auto mb-1 md:mb-2" />
+                  <p className="font-semibold text-xs sm:text-sm md:text-base">{locale === 'ar' ? '+200 جامعة' : '200+ Unis'}</p>
                 </div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4 text-center">
-                  <CheckCircle className="h-8 w-8 mx-auto mb-2" />
-                  <p className="font-semibold">{locale === 'ar' ? 'سكن + راتب' : 'Housing + Stipend'}</p>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-3 md:p-4 text-center">
+                  <CheckCircle className="h-6 w-6 md:h-8 md:w-8 mx-auto mb-1 md:mb-2" />
+                  <p className="font-semibold text-xs sm:text-sm md:text-base">{locale === 'ar' ? 'سكن + راتب' : 'Housing + Stipend'}</p>
                 </div>
               </div>
 
               <Link href={`/${locale}/turkey`}>
-                <Button size="lg" variant="secondary">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto">
                   {tTurkey('homeSectionButton')}
                   <ChevronRight className="h-5 w-5 ms-2 rtl:rotate-180" />
                 </Button>
@@ -293,21 +293,21 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="section-padding bg-white">
+      <section className="py-12 md:py-16 lg:py-24 bg-white">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-3">{t('howItWorksTitle')}</h2>
-            <p className="text-gray-600">{t('howItWorksSubtitle')}</p>
+          <div className="text-center mb-8 md:mb-12 px-4">
+            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('howItWorksTitle')}</h2>
+            <p className="text-sm md:text-base text-gray-600">{t('howItWorksSubtitle')}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {[1, 2, 3].map((step) => (
-              <div key={step} className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-600 text-white text-2xl font-bold mb-6">
+              <div key={step} className="text-center px-4 md:px-0">
+                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-600 text-white text-xl md:text-2xl font-bold mb-4 md:mb-6">
                   {step}
                 </div>
-                <h3 className="text-h4 text-gray-900 mb-3">{t(`step${step}Title`)}</h3>
-                <p className="text-gray-600">{t(`step${step}Desc`)}</p>
+                <h3 className="text-lg md:text-h4 font-semibold text-gray-900 mb-2 md:mb-3">{t(`step${step}Title`)}</h3>
+                <p className="text-sm md:text-base text-gray-600">{t(`step${step}Desc`)}</p>
               </div>
             ))}
           </div>
@@ -315,34 +315,34 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="section-padding bg-gray-50">
+      <section className="py-12 md:py-16 lg:py-24 bg-gray-50">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-3">{t('testimonialsTitle')}</h2>
-            <p className="text-gray-600">{t('testimonialsSubtitle')}</p>
+          <div className="text-center mb-8 md:mb-12 px-4">
+            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('testimonialsTitle')}</h2>
+            <p className="text-sm md:text-base text-gray-600">{t('testimonialsSubtitle')}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {testimonials.map((testimonial) => (
-              <Card key={testimonial.id} className="p-6">
-                <div className="flex items-center gap-4 mb-4">
+              <Card key={testimonial.id} className="p-4 md:p-6">
+                <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
                   <Image
                     src={testimonial.avatar}
                     alt={getLocalizedField(testimonial, 'name', locale)}
                     width={48}
                     height={48}
-                    className="rounded-full object-cover"
+                    className="rounded-full object-cover w-10 h-10 md:w-12 md:h-12"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-gray-900 text-sm md:text-base">
                       {getLocalizedField(testimonial, 'name', locale)}
                     </h4>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs md:text-sm text-gray-500">
                       {getLocalizedField(testimonial, 'university', locale)}
                     </p>
                   </div>
                 </div>
-                <p className="text-gray-600 italic">
+                <p className="text-sm md:text-base text-gray-600 italic">
                   &ldquo;{getLocalizedField(testimonial, 'quote', locale)}&rdquo;
                 </p>
               </Card>
@@ -352,24 +352,24 @@ export default function HomePage() {
       </section>
 
       {/* Newsletter */}
-      <section className="section-padding bg-primary-600">
+      <section className="py-12 md:py-16 lg:py-24 bg-primary-600">
         <Container size="md">
-          <div className="text-center text-white">
-            <h2 className="text-h2 mb-3">{t('newsletterTitle')}</h2>
-            <p className="text-primary-100 mb-8 max-w-xl mx-auto">
+          <div className="text-center text-white px-4">
+            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold mb-2 md:mb-3">{t('newsletterTitle')}</h2>
+            <p className="text-sm md:text-base text-primary-100 mb-6 md:mb-8 max-w-xl mx-auto">
               {t('newsletterSubtitle')}
             </p>
 
             {newsletterStatus === 'success' ? (
               <div className="bg-white/20 rounded-lg p-4 max-w-md mx-auto">
-                <p className="text-white font-medium">{newsletterMessage}</p>
+                <p className="text-white font-medium text-sm md:text-base">{newsletterMessage}</p>
               </div>
             ) : (
               <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                 <Input
                   type="email"
                   placeholder={t('newsletterPlaceholder')}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-primary-200 focus:ring-white"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-primary-200 focus:ring-white h-12"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   required
@@ -377,7 +377,7 @@ export default function HomePage() {
                 <Button
                   type="submit"
                   variant="secondary"
-                  className="shrink-0"
+                  className="shrink-0 w-full sm:w-auto"
                   disabled={newsletterStatus === 'loading'}
                 >
                   {newsletterStatus === 'loading'
