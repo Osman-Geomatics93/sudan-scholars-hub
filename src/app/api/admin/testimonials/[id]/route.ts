@@ -58,21 +58,23 @@ export async function PUT(
       );
     }
 
+    // Only update fields that are provided
+    const updateData: any = {};
+    if (body.name !== undefined) updateData.name = body.name;
+    if (body.nameAr !== undefined) updateData.nameAr = body.nameAr;
+    if (body.university !== undefined) updateData.university = body.university;
+    if (body.universityAr !== undefined) updateData.universityAr = body.universityAr;
+    if (body.country !== undefined) updateData.country = body.country;
+    if (body.countryAr !== undefined) updateData.countryAr = body.countryAr;
+    if (body.quote !== undefined) updateData.quote = body.quote;
+    if (body.quoteAr !== undefined) updateData.quoteAr = body.quoteAr;
+    if (body.avatar !== undefined) updateData.avatar = body.avatar;
+    if (body.scholarshipYear !== undefined) updateData.scholarshipYear = body.scholarshipYear;
+    if (body.isPublished !== undefined) updateData.isPublished = body.isPublished;
+
     const testimonial = await prisma.testimonial.update({
       where: { id },
-      data: {
-        name: body.name,
-        nameAr: body.nameAr,
-        university: body.university,
-        universityAr: body.universityAr,
-        country: body.country,
-        countryAr: body.countryAr,
-        quote: body.quote,
-        quoteAr: body.quoteAr,
-        avatar: body.avatar,
-        scholarshipYear: body.scholarshipYear,
-        isPublished: body.isPublished,
-      },
+      data: updateData,
     });
 
     return NextResponse.json(testimonial);
