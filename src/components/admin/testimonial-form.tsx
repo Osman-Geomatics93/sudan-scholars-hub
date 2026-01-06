@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Save, ArrowLeft, Loader2 } from 'lucide-react';
+import { Save, ArrowLeft, Loader2, Search } from 'lucide-react';
+import { COUNTRIES } from '@/lib/constants/countries';
 
 interface TestimonialFormData {
   name: string;
@@ -23,24 +24,6 @@ interface TestimonialFormProps {
   testimonialId?: string;
 }
 
-const COUNTRIES = [
-  { en: 'United States', ar: 'الولايات المتحدة' },
-  { en: 'United Kingdom', ar: 'المملكة المتحدة' },
-  { en: 'Germany', ar: 'ألمانيا' },
-  { en: 'Turkey', ar: 'تركيا' },
-  { en: 'Canada', ar: 'كندا' },
-  { en: 'Australia', ar: 'أستراليا' },
-  { en: 'France', ar: 'فرنسا' },
-  { en: 'Netherlands', ar: 'هولندا' },
-  { en: 'Sweden', ar: 'السويد' },
-  { en: 'Japan', ar: 'اليابان' },
-  { en: 'China', ar: 'الصين' },
-  { en: 'South Korea', ar: 'كوريا الجنوبية' },
-  { en: 'Malaysia', ar: 'ماليزيا' },
-  { en: 'Saudi Arabia', ar: 'المملكة العربية السعودية' },
-  { en: 'UAE', ar: 'الإمارات العربية المتحدة' },
-  { en: 'Qatar', ar: 'قطر' },
-];
 
 export function TestimonialForm({ initialData, testimonialId }: TestimonialFormProps) {
   const router = useRouter();
@@ -51,9 +34,22 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [countrySearch, setCountrySearch] = useState('');
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 15 }, (_, i) => currentYear - i);
+
+  // Filter countries based on search
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch.trim()) return COUNTRIES;
+    const query = countrySearch.toLowerCase();
+    return COUNTRIES.filter(
+      (c) =>
+        c.name.toLowerCase().includes(query) ||
+        c.nameAr.includes(countrySearch) ||
+        c.code.includes(query)
+    );
+  }, [countrySearch]);
 
   const [formData, setFormData] = useState<TestimonialFormData>({
     name: initialData?.name || '',
@@ -69,13 +65,13 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
     isPublished: initialData?.isPublished ?? true,
   });
 
-  const handleCountryChange = (countryEn: string) => {
-    const country = COUNTRIES.find((c) => c.en === countryEn);
+  const handleCountryChange = (countryName: string) => {
+    const country = COUNTRIES.find((c) => c.name === countryName);
     if (country) {
       setFormData((prev) => ({
         ...prev,
-        country: country.en,
-        countryAr: country.ar,
+        country: country.name,
+        countryAr: country.nameAr,
       }));
     }
   };
@@ -240,35 +236,40 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
             />
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <label className="mb-1 block text-sm font-medium text-gray-700">
               Country *
             </label>
-            <select
-              value={formData.country}
-              onChange={(e) => handleCountryChange(e.target.value)}
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-            >
-              {COUNTRIES.map((c) => (
-                <option key={c.en} value={c.en}>
-                  {c.en}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              الدولة (عربي)
-            </label>
-            <input
-              type="text"
-              value={formData.countryAr}
-              readOnly
-              dir="rtl"
-              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-600"
-            />
+            <div className="relative">
+              <div className="relative mb-2">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search countries..."
+                  value={countrySearch}
+                  onChange={(e) => setCountrySearch(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                />
+              </div>
+              <select
+                value={formData.country}
+                onChange={(e) => handleCountryChange(e.target.value)}
+                required
+                size={6}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              >
+                {filteredCountries.map((c) => (
+                  <option key={c.code} value={c.name}>
+                    {c.flag} {c.name} ({c.nameAr})
+                  </option>
+                ))}
+              </select>
+              {formData.country && (
+                <p className="mt-1 text-sm text-gray-500">
+                  Selected: {formData.country} / {formData.countryAr}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

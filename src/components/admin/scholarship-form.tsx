@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Save, ArrowLeft, Loader2 } from 'lucide-react';
+import { Save, ArrowLeft, Loader2, Search } from 'lucide-react';
+import { COUNTRIES } from '@/lib/constants/countries';
 
 interface ScholarshipFormData {
   title: string;
@@ -51,17 +52,6 @@ const FIELDS = [
   'TECHNOLOGY',
 ];
 
-const COUNTRIES = [
-  { code: 'uk', name: 'United Kingdom', nameAr: 'المملكة المتحدة' },
-  { code: 'usa', name: 'United States', nameAr: 'الولايات المتحدة' },
-  { code: 'germany', name: 'Germany', nameAr: 'ألمانيا' },
-  { code: 'australia', name: 'Australia', nameAr: 'أستراليا' },
-  { code: 'canada', name: 'Canada', nameAr: 'كندا' },
-  { code: 'netherlands', name: 'Netherlands', nameAr: 'هولندا' },
-  { code: 'japan', name: 'Japan', nameAr: 'اليابان' },
-  { code: 'switzerland', name: 'Switzerland', nameAr: 'سويسرا' },
-  { code: 'france', name: 'France', nameAr: 'فرنسا' },
-];
 
 export function ScholarshipForm({ initialData, scholarshipId }: ScholarshipFormProps) {
   const router = useRouter();
@@ -72,6 +62,19 @@ export function ScholarshipForm({ initialData, scholarshipId }: ScholarshipFormP
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [countrySearch, setCountrySearch] = useState('');
+
+  // Filter countries based on search
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch.trim()) return COUNTRIES;
+    const query = countrySearch.toLowerCase();
+    return COUNTRIES.filter(
+      (c) =>
+        c.name.toLowerCase().includes(query) ||
+        c.nameAr.includes(countrySearch) ||
+        c.code.includes(query)
+    );
+  }, [countrySearch]);
 
   const [formData, setFormData] = useState<ScholarshipFormData>({
     title: initialData?.title || '',
@@ -259,19 +262,37 @@ export function ScholarshipForm({ initialData, scholarshipId }: ScholarshipFormP
             <label className="mb-1 block text-sm font-medium text-gray-700">
               Country *
             </label>
-            <select
-              value={formData.countryCode}
-              onChange={(e) => handleCountryChange(e.target.value)}
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-            >
-              <option value="">Select Country</option>
-              {COUNTRIES.map((country) => (
-                <option key={country.code} value={country.code}>
-                  {country.name}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <div className="relative mb-2">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search countries..."
+                  value={countrySearch}
+                  onChange={(e) => setCountrySearch(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                />
+              </div>
+              <select
+                value={formData.countryCode}
+                onChange={(e) => handleCountryChange(e.target.value)}
+                required
+                size={8}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              >
+                <option value="">Select Country</option>
+                {filteredCountries.map((country) => (
+                  <option key={country.code} value={country.code}>
+                    {country.flag} {country.name} ({country.nameAr})
+                  </option>
+                ))}
+              </select>
+              {formData.country && (
+                <p className="mt-1 text-sm text-gray-500">
+                  Selected: {formData.country} / {formData.countryAr}
+                </p>
+              )}
+            </div>
           </div>
 
           <div>
