@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Disable caching for this route
+export const dynamic = 'force-dynamic';
+
 // GET - List published testimonials (public endpoint)
 export async function GET() {
   try {
