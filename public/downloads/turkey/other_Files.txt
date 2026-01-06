@@ -1,0 +1,8 @@
+turkiye-burslari-guide.pdf    | ✓ Already exists (Main guide)    |
+  | document-checklist.pdf        | Document Checklist               |
+  | application-tips.pdf          | Application Tips                 |
+  | recommendation-letter-bsc.pdf | Bachelor's Recommendation Letter |
+  | recommendation-letter-msc.pdf | Master's Recommendation Letter   |
+  | recommendation-letter-phd.pdf | PhD Recommendation Letter        |
+  | validation-letter-msc.pdf     | Master's Validation Letter       |
+  | validation-letter-phd.pdf     | PhD Validation Letter            |

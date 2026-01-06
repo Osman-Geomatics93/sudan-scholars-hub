@@ -1,0 +1,267 @@
+// Sudan Scholars Hub - Database Schema
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ ADMIN AUTH ============
+model Admin {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  role         Role      @default(EDITOR)
+  otpCode      String?   // 6-digit OTP code (hashed)
+  otpExpiresAt DateTime? // OTP expiration time
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  EDITOR
+}
+
+// ============ USER AUTH (Google OAuth) ============
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?   // Google profile picture
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Extended profile fields
+  phone          String?
+  location       String?
+  bio            String?   @db.Text
+  educationLevel String?   // HIGH_SCHOOL, BACHELOR, MASTER, PHD
+  fieldOfStudy   String?   // ENGINEERING, MEDICINE, BUSINESS, etc.
+  socialLinks    Json?     // { twitter?: string, linkedin?: string, facebook?: string, website?: string }
+  profileImage   String?   // Custom uploaded profile picture (overrides Google image)
+
+  accounts          Account[]
+  savedScholarships SavedScholarship[]
+}
+
+// OAuth Account linking (required by NextAuth)
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+// ============ SCHOLARSHIPS ============
+model Scholarship {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+
+  // English content
+  title        String
+  university   String
+  country      String
+  countryCode  String
+  description  String   @db.Text
+  eligibility  String[]
+  benefits     String[]
+  requirements String[]
+  howToApply   String   @db.Text
+  duration     String
+
+  // Arabic content
+  titleAr        String
+  universityAr   String
+  countryAr      String
+  descriptionAr  String   @db.Text
+  eligibilityAr  String[]
+  benefitsAr     String[]
+  requirementsAr String[]
+  howToApplyAr   String   @db.Text
+  durationAr     String
+
+  // Metadata
+  deadline       DateTime
+  fundingType    FundingType
+  level          StudyLevel
+  field          FieldOfStudy
+  applicationUrl String
+  image          String
+
+  // Flags
+  isFeatured  Boolean @default(false)
+  isPublished Boolean @default(false)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  savedBy SavedScholarship[]
+
+  @@index([level, fundingType, field])
+  @@index([deadline])
+  @@index([isFeatured])
+  @@index([isPublished])
+}
+
+// ============ SAVED SCHOLARSHIPS ============
+model SavedScholarship {
+  id            String            @id @default(cuid())
+  userId        String
+  scholarshipId String
+  status        ApplicationStatus @default(SAVED)
+  notes         String?           @db.Text
+  savedAt       DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId])
+  @@index([userId])
+  @@index([scholarshipId])
+  @@index([status])
+}
+
+enum ApplicationStatus {
+  SAVED
+  APPLYING
+  APPLIED
+  ACCEPTED
+  REJECTED
+}
+
+enum FundingType {
+  FULLY_FUNDED
+  PARTIALLY_FUNDED
+}
+
+enum StudyLevel {
+  BACHELOR
+  MASTER
+  PHD
+}
+
+enum FieldOfStudy {
+  ENGINEERING
+  MEDICINE
+  BUSINESS
+  ARTS
+  SCIENCE
+  LAW
+  EDUCATION
+  TECHNOLOGY
+}
+
+// ============ COUNTRIES ============
+model Country {
+  id     String  @id @default(cuid())
+  code   String  @unique // e.g., "uk", "usa"
+  name   String          // English name
+  nameAr String          // Arabic name
+  flag   String?         // Emoji or URL
+}
+
+// ============ CONTACT FORM ============
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// ============ NEWSLETTER ============
+model Subscriber {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  isActive       Boolean   @default(true)
+  subscribedAt   DateTime  @default(now())
+  unsubscribedAt DateTime?
+
+  @@index([isActive])
+}
+
+// ============ TESTIMONIALS ============
+model Testimonial {
+  id              String   @id @default(cuid())
+  name            String
+  nameAr          String
+  university      String
+  universityAr    String
+  country         String
+  countryAr       String
+  quote           String   @db.Text
+  quoteAr         String   @db.Text
+  avatar          String
+  scholarshipYear Int
+  isPublished     Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  @@index([isPublished])
+}
+
+// ============ BLOG POSTS ============
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+
+  // English content
+  title       String
+  excerpt     String   @db.Text
+  content     String   @db.Text
+  category    String
+  author      String
+  readTime    String
+
+  // Arabic content
+  titleAr     String
+  excerptAr   String   @db.Text
+  contentAr   String   @db.Text
+  categoryAr  String
+  authorAr    String
+  readTimeAr  String
+
+  // Media & Tags
+  image       String
+  tags        String[]
+
+  // Status
+  isFeatured  Boolean  @default(false)
+  isPublished Boolean  @default(false)
+
+  // Timestamps
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished])
+  @@index([isFeatured])
+  @@index([slug])
+  @@index([createdAt])
+}
