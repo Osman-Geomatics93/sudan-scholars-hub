@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ScholarshipCard } from '@/components/features/scholarship-card';
 import { SkeletonCard } from '@/components/ui/skeleton';
-import { testimonials, stats, categories } from '@/lib/mock-data';
+import { stats, categories } from '@/lib/mock-data';
 import { getLocalizedField } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -36,6 +36,7 @@ export default function HomePage() {
   const tTurkey = useTranslations('turkey');
 
   const [featuredScholarships, setFeaturedScholarships] = useState<Scholarship[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -85,21 +86,31 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    async function fetchFeatured() {
+    async function fetchData() {
       try {
-        const res = await fetch('/api/scholarships/featured');
-        if (res.ok) {
-          const data = await res.json();
+        // Fetch featured scholarships and testimonials in parallel
+        const [scholarshipsRes, testimonialsRes] = await Promise.all([
+          fetch('/api/scholarships/featured'),
+          fetch('/api/testimonials'),
+        ]);
+
+        if (scholarshipsRes.ok) {
+          const data = await scholarshipsRes.json();
           setFeaturedScholarships(data.scholarships.slice(0, 3));
         }
+
+        if (testimonialsRes.ok) {
+          const data = await testimonialsRes.json();
+          setTestimonials(data.testimonials.slice(0, 3));
+        }
       } catch (error) {
-        console.error('Failed to fetch featured scholarships:', error);
+        console.error('Failed to fetch data:', error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchFeatured();
+    fetchData();
   }, []);
 
   return (
@@ -315,41 +326,43 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-12 md:py-16 lg:py-24 bg-gray-50">
-        <Container>
-          <div className="text-center mb-8 md:mb-12 px-4">
-            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('testimonialsTitle')}</h2>
-            <p className="text-sm md:text-base text-gray-600">{t('testimonialsSubtitle')}</p>
-          </div>
+      {testimonials.length > 0 && (
+        <section className="py-12 md:py-16 lg:py-24 bg-gray-50">
+          <Container>
+            <div className="text-center mb-8 md:mb-12 px-4">
+              <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('testimonialsTitle')}</h2>
+              <p className="text-sm md:text-base text-gray-600">{t('testimonialsSubtitle')}</p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            {testimonials.map((testimonial) => (
-              <Card key={testimonial.id} className="p-4 md:p-6">
-                <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
-                  <Image
-                    src={testimonial.avatar}
-                    alt={getLocalizedField(testimonial, 'name', locale)}
-                    width={48}
-                    height={48}
-                    className="rounded-full object-cover w-10 h-10 md:w-12 md:h-12"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-sm md:text-base">
-                      {getLocalizedField(testimonial, 'name', locale)}
-                    </h4>
-                    <p className="text-xs md:text-sm text-gray-500">
-                      {getLocalizedField(testimonial, 'university', locale)}
-                    </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              {testimonials.map((testimonial) => (
+                <Card key={testimonial.id} className="p-4 md:p-6">
+                  <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                    <Image
+                      src={testimonial.avatar}
+                      alt={getLocalizedField(testimonial, 'name', locale)}
+                      width={48}
+                      height={48}
+                      className="rounded-full object-cover w-10 h-10 md:w-12 md:h-12"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-sm md:text-base">
+                        {getLocalizedField(testimonial, 'name', locale)}
+                      </h4>
+                      <p className="text-xs md:text-sm text-gray-500">
+                        {getLocalizedField(testimonial, 'university', locale)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <p className="text-sm md:text-base text-gray-600 italic">
-                  &ldquo;{getLocalizedField(testimonial, 'quote', locale)}&rdquo;
-                </p>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </section>
+                  <p className="text-sm md:text-base text-gray-600 italic">
+                    &ldquo;{getLocalizedField(testimonial, 'quote', locale)}&rdquo;
+                  </p>
+                </Card>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Newsletter */}
       <section className="py-12 md:py-16 lg:py-24 bg-primary-600">
