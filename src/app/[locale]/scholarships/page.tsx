@@ -12,6 +12,8 @@ import { ScholarshipCard } from '@/components/features/scholarship-card';
 import { FilterSidebar } from '@/components/features/filter-sidebar';
 import { EmptyState } from '@/components/features/empty-state';
 import { SkeletonCard } from '@/components/ui/skeleton';
+import { ComparisonBar } from '@/components/features/comparison-bar';
+import { ComparisonModal } from '@/components/features/comparison-modal';
 import { Scholarship } from '@/types/scholarship';
 
 const ITEMS_PER_PAGE = 6;
@@ -138,12 +140,12 @@ function ScholarshipsContent({ locale }: { locale: string }) {
   ];
 
   return (
-    <section className="section-padding bg-gray-50 min-h-screen">
+    <section className="section-padding bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
       <Container>
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-h1 text-gray-900 mb-2">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-h1 text-gray-900 dark:text-gray-50 mb-2">{t('title')}</h1>
+          <p className="text-gray-600 dark:text-gray-400">{t('subtitle')}</p>
 
           {/* Search Bar */}
           <div className="mt-6 max-w-2xl">
@@ -193,7 +195,7 @@ function ScholarshipsContent({ locale }: { locale: string }) {
           {/* Main Content */}
           <div className="flex-1">
             {/* Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-6 bg-white p-4 rounded-lg border border-gray-200">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6 bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-4">
                 {/* Mobile filter button */}
                 <Button
@@ -210,13 +212,13 @@ function ScholarshipsContent({ locale }: { locale: string }) {
                   )}
                 </Button>
 
-                <span className="text-gray-600">
+                <span className="text-gray-600 dark:text-gray-400">
                   {total} {t('results')}
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">{t('sortBy')}:</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('sortBy')}:</span>
                 <Select
                   options={sortOptions}
                   value={sortBy}
@@ -289,6 +291,10 @@ function ScholarshipsContent({ locale }: { locale: string }) {
           </div>
         </div>
       </Container>
+
+      {/* Comparison Components */}
+      <ComparisonBar locale={locale} />
+      <ComparisonModal locale={locale} />
     </section>
   );
 }

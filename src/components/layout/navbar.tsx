@@ -9,6 +9,7 @@ import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, 
 import { Container } from './container';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/features/language-switcher';
+import { ThemeToggle } from '@/components/features/theme-toggle';
 import { cn } from '@/lib/utils';
 
 interface NavbarProps {
@@ -67,7 +68,7 @@ export function Navbar({ locale }: NavbarProps) {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 animate-fade-in-down">
+    <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 animate-fade-in-down transition-colors duration-200">
       <Container>
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -75,7 +76,7 @@ export function Navbar({ locale }: NavbarProps) {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
               <GraduationCap className="h-6 w-6 text-white" />
             </div>
-            <span className="text-lg lg:text-xl font-bold text-gray-900 hidden lg:block whitespace-nowrap">
+            <span className="text-lg lg:text-xl font-bold text-gray-900 dark:text-gray-50 hidden lg:block whitespace-nowrap">
               {locale === 'ar' ? 'بوابة منح السودان' : 'Sudan Scholars Hub'}
             </span>
           </Link>
@@ -86,7 +87,7 @@ export function Navbar({ locale }: NavbarProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
+                className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
               >
                 {link.label}
               </Link>
@@ -96,7 +97,7 @@ export function Navbar({ locale }: NavbarProps) {
             <div className="relative" ref={resourcesMenuRef}>
               <button
                 onClick={() => setIsResourcesOpen(!isResourcesOpen)}
-                className="flex items-center gap-1 text-gray-600 hover:text-primary-600 font-medium transition-colors"
+                className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
                 suppressHydrationWarning
               >
                 {isRTL ? 'الموارد' : 'Resources'}
@@ -104,12 +105,12 @@ export function Navbar({ locale }: NavbarProps) {
               </button>
 
               {isResourcesOpen && (
-                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
                   {resourceLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors"
+                      className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                       onClick={() => setIsResourcesOpen(false)}
                     >
                       <link.icon className="h-4 w-4" />
@@ -122,17 +123,18 @@ export function Navbar({ locale }: NavbarProps) {
           </div>
 
           {/* Right side actions */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle locale={locale} />
             <LanguageSwitcher locale={locale} />
 
             {!mounted || status === 'loading' ? (
-              <div className="h-10 w-10 animate-pulse bg-gray-200 rounded-full" />
+              <div className="h-10 w-10 animate-pulse bg-gray-200 dark:bg-gray-700 rounded-full" />
             ) : isLoggedIn ? (
               // User Menu
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                   suppressHydrationWarning
                 >
                   {session.user?.image ? (
@@ -144,28 +146,28 @@ export function Navbar({ locale }: NavbarProps) {
                       className="rounded-full"
                     />
                   ) : (
-                    <div className="w-9 h-9 bg-primary-100 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-primary-600" />
+                    <div className="w-9 h-9 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
+                      <User className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                     </div>
                   )}
-                  <ChevronDown className={cn('h-4 w-4 text-gray-500 transition-transform', isUserMenuOpen && 'rotate-180')} />
+                  <ChevronDown className={cn('h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform', isUserMenuOpen && 'rotate-180')} />
                 </button>
 
                 {/* Dropdown Menu */}
                 {isUserMenuOpen && (
-                  <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="font-medium text-gray-900 truncate">
+                  <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                      <p className="font-medium text-gray-900 dark:text-gray-50 truncate">
                         {session.user?.name || (isRTL ? 'مستخدم' : 'User')}
                       </p>
-                      <p className="text-sm text-gray-500 truncate">{session.user?.email}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{session.user?.email}</p>
                     </div>
 
                     {!isAdmin && (
                       <>
                         <Link
                           href={`/${locale}/profile`}
-                          className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                          className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <User className="h-4 w-4" />
@@ -173,7 +175,7 @@ export function Navbar({ locale }: NavbarProps) {
                         </Link>
                         <Link
                           href={`/${locale}/profile`}
-                          className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                          className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <Bookmark className="h-4 w-4" />
@@ -185,7 +187,7 @@ export function Navbar({ locale }: NavbarProps) {
                     {isAdmin && (
                       <Link
                         href={`/${locale}/admin`}
-                        className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
                         <User className="h-4 w-4" />
@@ -193,10 +195,10 @@ export function Navbar({ locale }: NavbarProps) {
                       </Link>
                     )}
 
-                    <div className="border-t border-gray-100 mt-2 pt-2">
+                    <div className="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
                       <button
                         onClick={handleSignOut}
-                        className="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 w-full"
+                        className="flex items-center gap-3 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full"
                         suppressHydrationWarning
                       >
                         <LogOut className="h-4 w-4" />
@@ -219,7 +221,7 @@ export function Navbar({ locale }: NavbarProps) {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2 text-gray-600 hover:text-gray-900"
+            className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-50"
             onClick={() => setIsOpen(!isOpen)}
             suppressHydrationWarning
           >
@@ -231,15 +233,15 @@ export function Navbar({ locale }: NavbarProps) {
         <div
           className={cn(
             'md:hidden overflow-hidden transition-all duration-300',
-            isOpen ? 'max-h-[700px] pb-4' : 'max-h-0'
+            isOpen ? 'max-h-[800px] pb-4' : 'max-h-0'
           )}
         >
-          <div className="flex flex-col gap-4 pt-4 border-t border-gray-100">
+          <div className="flex flex-col gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-600 hover:text-primary-600 font-medium transition-colors py-2"
+                className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors py-2"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
@@ -247,8 +249,8 @@ export function Navbar({ locale }: NavbarProps) {
             ))}
 
             {/* Mobile Resources Section */}
-            <div className="border-t border-gray-100 pt-4">
-              <p className="text-sm font-semibold text-gray-900 mb-2">
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-50 mb-2">
                 {isRTL ? 'الموارد' : 'Resources'}
               </p>
               <div className="grid grid-cols-2 gap-2">
@@ -256,7 +258,7 @@ export function Navbar({ locale }: NavbarProps) {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center gap-2 py-2 px-3 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                    className="flex items-center gap-2 py-2 px-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm"
                     onClick={() => setIsOpen(false)}
                   >
                     <link.icon className="h-4 w-4" />
@@ -268,11 +270,11 @@ export function Navbar({ locale }: NavbarProps) {
 
             {/* Mobile User Section */}
             {!mounted ? (
-              <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
-                <div className="h-10 w-24 animate-pulse bg-gray-200 rounded" />
+              <div className="flex items-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <div className="h-10 w-24 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
               </div>
             ) : isLoggedIn ? (
-              <div className="border-t border-gray-100 pt-4 space-y-2">
+              <div className="border-t border-gray-100 dark:border-gray-800 pt-4 space-y-2">
                 <div className="flex items-center gap-3 py-2">
                   {session.user?.image ? (
                     <Image
@@ -283,20 +285,20 @@ export function Navbar({ locale }: NavbarProps) {
                       className="rounded-full"
                     />
                   ) : (
-                    <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-primary-600" />
+                    <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
+                      <User className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                     </div>
                   )}
                   <div>
-                    <p className="font-medium text-gray-900">{session.user?.name}</p>
-                    <p className="text-sm text-gray-500">{session.user?.email}</p>
+                    <p className="font-medium text-gray-900 dark:text-gray-50">{session.user?.name}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{session.user?.email}</p>
                   </div>
                 </div>
 
                 {!isAdmin && (
                   <Link
                     href={`/${locale}/profile`}
-                    className="flex items-center gap-3 py-2 text-gray-700"
+                    className="flex items-center gap-3 py-2 text-gray-700 dark:text-gray-200"
                     onClick={() => setIsOpen(false)}
                   >
                     <Bookmark className="h-5 w-5" />
@@ -307,7 +309,7 @@ export function Navbar({ locale }: NavbarProps) {
                 {isAdmin && (
                   <Link
                     href={`/${locale}/admin`}
-                    className="flex items-center gap-3 py-2 text-gray-700"
+                    className="flex items-center gap-3 py-2 text-gray-700 dark:text-gray-200"
                     onClick={() => setIsOpen(false)}
                   >
                     <User className="h-5 w-5" />
@@ -317,7 +319,7 @@ export function Navbar({ locale }: NavbarProps) {
 
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center gap-3 py-2 text-red-600 w-full"
+                  className="flex items-center gap-3 py-2 text-red-600 dark:text-red-400 w-full"
                   suppressHydrationWarning
                 >
                   <LogOut className="h-5 w-5" />
@@ -325,7 +327,8 @@ export function Navbar({ locale }: NavbarProps) {
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <ThemeToggle locale={locale} />
                 <LanguageSwitcher locale={locale} />
                 <Link href={`/${locale}/login`} className="flex-1">
                   <Button className="w-full">

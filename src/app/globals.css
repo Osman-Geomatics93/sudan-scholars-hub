@@ -6,8 +6,23 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 255 255 255;
+    --foreground: 17 24 39;
+    --card: 255 255 255;
+    --card-foreground: 17 24 39;
+    --border: 229 231 235;
+    --input: 229 231 235;
+    --ring: 37 99 235;
+  }
+
+  .dark {
+    --background: 3 7 18;
+    --foreground: 249 250 251;
+    --card: 17 24 39;
+    --card-foreground: 249 250 251;
+    --border: 55 65 81;
+    --input: 55 65 81;
+    --ring: 59 130 246;
   }
 
   html {
@@ -15,7 +30,12 @@
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased;
+    @apply bg-white text-gray-900 antialiased transition-colors duration-200;
+  }
+
+  .dark body,
+  body.dark {
+    @apply bg-gray-950 text-gray-50;
   }
 
   /* RTL Support */
@@ -43,6 +63,10 @@
 
   .gradient-hero {
     @apply bg-gradient-to-br from-primary-50 via-white to-secondary-50;
+  }
+
+  .dark .gradient-hero {
+    @apply bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900;
   }
 }
 
