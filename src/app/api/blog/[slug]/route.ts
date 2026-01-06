@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Disable caching for this route
+export const dynamic = 'force-dynamic';
+
 // GET - Get single blog post by slug (public)
 export async function GET(
   request: NextRequest,
