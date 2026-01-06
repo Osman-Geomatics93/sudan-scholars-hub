@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
 import { scholarshipSchema } from '@/lib/validations/scholarship';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET - List all scholarships (including drafts)
 export async function GET(request: NextRequest) {
   const session = await getAdminSession();

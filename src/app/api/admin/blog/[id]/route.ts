@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET single blog post by ID
 export async function GET(
   request: NextRequest,
@@ -71,38 +74,40 @@ export async function PUT(
       }
     }
 
+    // Only update fields that are provided
+    const updateData: any = {};
+    if (body.slug !== undefined) updateData.slug = body.slug;
+    if (body.title !== undefined) updateData.title = body.title;
+    if (body.titleAr !== undefined) updateData.titleAr = body.titleAr;
+    if (body.excerpt !== undefined) updateData.excerpt = body.excerpt;
+    if (body.excerptAr !== undefined) updateData.excerptAr = body.excerptAr;
+    if (body.content !== undefined) updateData.content = body.content;
+    if (body.contentAr !== undefined) updateData.contentAr = body.contentAr;
+    if (body.category !== undefined) updateData.category = body.category;
+    if (body.categoryAr !== undefined) updateData.categoryAr = body.categoryAr;
+    if (body.author !== undefined) updateData.author = body.author;
+    if (body.authorAr !== undefined) updateData.authorAr = body.authorAr;
+    if (body.readTime !== undefined) updateData.readTime = body.readTime;
+    if (body.readTimeAr !== undefined) updateData.readTimeAr = body.readTimeAr;
+    if (body.image !== undefined) updateData.image = body.image;
+    if (body.tags !== undefined) updateData.tags = body.tags;
+    if (body.isFeatured !== undefined) updateData.isFeatured = body.isFeatured;
+
     // Handle publishedAt based on isPublished status
-    let publishedAt = existing.publishedAt;
-    if (body.isPublished && !existing.isPublished) {
-      // Being published for the first time
-      publishedAt = new Date();
-    } else if (!body.isPublished) {
-      // Being unpublished
-      publishedAt = null;
+    if (body.isPublished !== undefined) {
+      updateData.isPublished = body.isPublished;
+      if (body.isPublished && !existing.isPublished) {
+        // Being published for the first time
+        updateData.publishedAt = new Date();
+      } else if (!body.isPublished) {
+        // Being unpublished
+        updateData.publishedAt = null;
+      }
     }
 
     const blogPost = await prisma.blogPost.update({
       where: { id },
-      data: {
-        slug: body.slug,
-        title: body.title,
-        titleAr: body.titleAr,
-        excerpt: body.excerpt,
-        excerptAr: body.excerptAr,
-        content: body.content,
-        contentAr: body.contentAr,
-        category: body.category,
-        categoryAr: body.categoryAr,
-        author: body.author,
-        authorAr: body.authorAr,
-        readTime: body.readTime,
-        readTimeAr: body.readTimeAr,
-        image: body.image,
-        tags: body.tags,
-        isFeatured: body.isFeatured,
-        isPublished: body.isPublished,
-        publishedAt,
-      },
+      data: updateData,
     });
 
     return NextResponse.json(blogPost);

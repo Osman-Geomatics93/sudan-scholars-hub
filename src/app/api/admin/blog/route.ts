@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
 import { blogPostSchema } from '@/lib/validations/blog';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET - List all blog posts (including drafts)
 export async function GET(request: NextRequest) {
   const session = await getAdminSession();

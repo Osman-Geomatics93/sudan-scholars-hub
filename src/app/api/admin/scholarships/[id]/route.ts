@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET single scholarship by ID
 export async function GET(
   request: NextRequest,
@@ -71,38 +74,40 @@ export async function PUT(
       }
     }
 
+    // Only update fields that are provided
+    const updateData: any = {};
+    if (body.slug !== undefined) updateData.slug = body.slug;
+    if (body.title !== undefined) updateData.title = body.title;
+    if (body.titleAr !== undefined) updateData.titleAr = body.titleAr;
+    if (body.university !== undefined) updateData.university = body.university;
+    if (body.universityAr !== undefined) updateData.universityAr = body.universityAr;
+    if (body.country !== undefined) updateData.country = body.country;
+    if (body.countryAr !== undefined) updateData.countryAr = body.countryAr;
+    if (body.countryCode !== undefined) updateData.countryCode = body.countryCode;
+    if (body.description !== undefined) updateData.description = body.description;
+    if (body.descriptionAr !== undefined) updateData.descriptionAr = body.descriptionAr;
+    if (body.eligibility !== undefined) updateData.eligibility = body.eligibility;
+    if (body.eligibilityAr !== undefined) updateData.eligibilityAr = body.eligibilityAr;
+    if (body.benefits !== undefined) updateData.benefits = body.benefits;
+    if (body.benefitsAr !== undefined) updateData.benefitsAr = body.benefitsAr;
+    if (body.requirements !== undefined) updateData.requirements = body.requirements;
+    if (body.requirementsAr !== undefined) updateData.requirementsAr = body.requirementsAr;
+    if (body.howToApply !== undefined) updateData.howToApply = body.howToApply;
+    if (body.howToApplyAr !== undefined) updateData.howToApplyAr = body.howToApplyAr;
+    if (body.duration !== undefined) updateData.duration = body.duration;
+    if (body.durationAr !== undefined) updateData.durationAr = body.durationAr;
+    if (body.deadline !== undefined) updateData.deadline = new Date(body.deadline);
+    if (body.fundingType !== undefined) updateData.fundingType = body.fundingType;
+    if (body.level !== undefined) updateData.level = body.level;
+    if (body.field !== undefined) updateData.field = body.field;
+    if (body.applicationUrl !== undefined) updateData.applicationUrl = body.applicationUrl;
+    if (body.image !== undefined) updateData.image = body.image;
+    if (body.isFeatured !== undefined) updateData.isFeatured = body.isFeatured;
+    if (body.isPublished !== undefined) updateData.isPublished = body.isPublished;
+
     const scholarship = await prisma.scholarship.update({
       where: { id },
-      data: {
-        slug: body.slug,
-        title: body.title,
-        titleAr: body.titleAr,
-        university: body.university,
-        universityAr: body.universityAr,
-        country: body.country,
-        countryAr: body.countryAr,
-        countryCode: body.countryCode,
-        description: body.description,
-        descriptionAr: body.descriptionAr,
-        eligibility: body.eligibility,
-        eligibilityAr: body.eligibilityAr,
-        benefits: body.benefits,
-        benefitsAr: body.benefitsAr,
-        requirements: body.requirements,
-        requirementsAr: body.requirementsAr,
-        howToApply: body.howToApply,
-        howToApplyAr: body.howToApplyAr,
-        duration: body.duration,
-        durationAr: body.durationAr,
-        deadline: new Date(body.deadline),
-        fundingType: body.fundingType,
-        level: body.level,
-        field: body.field,
-        applicationUrl: body.applicationUrl,
-        image: body.image,
-        isFeatured: body.isFeatured,
-        isPublished: body.isPublished,
-      },
+      data: updateData,
     });
 
     return NextResponse.json(scholarship);

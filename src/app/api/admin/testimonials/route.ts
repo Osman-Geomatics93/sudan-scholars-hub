@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
 import { testimonialSchema } from '@/lib/validations/testimonial';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET - List all testimonials
 export async function GET(request: NextRequest) {
   const session = await getAdminSession();

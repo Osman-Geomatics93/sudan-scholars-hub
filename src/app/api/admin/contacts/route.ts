@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET - List all contact messages
 export async function GET(request: NextRequest) {
   const session = await getAdminSession();

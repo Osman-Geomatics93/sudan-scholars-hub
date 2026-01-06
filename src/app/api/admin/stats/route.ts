@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET - Dashboard statistics
 export async function GET() {
   const session = await getAdminSession();
