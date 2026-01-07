@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
 import { ReactNode } from 'react';
 import { ComparisonProvider } from '@/contexts/comparison-context';
+import { AnalyticsProvider } from '@/contexts/analytics-context';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -18,7 +19,9 @@ export function Providers({ children }: ProvidersProps) {
       disableTransitionOnChange={false}
     >
       <SessionProvider>
-        <ComparisonProvider>{children}</ComparisonProvider>
+        <AnalyticsProvider>
+          <ComparisonProvider>{children}</ComparisonProvider>
+        </AnalyticsProvider>
       </SessionProvider>
     </ThemeProvider>
   );

@@ -299,3 +299,37 @@ model University {
   @@index([name])
   @@index([qsRank])
 }
+
+// ============ ANALYTICS ============
+// Track page views
+model PageView {
+  id        String   @id @default(cuid())
+  sessionId String   // Anonymous session identifier
+  path      String   // Page path e.g., "/en/turkey"
+  referrer  String?  // Where visitor came from
+  userAgent String?  // Browser info
+  locale    String   // "en" or "ar"
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([sessionId])
+  @@index([createdAt])
+  @@index([locale])
+}
+
+// Track file downloads
+model DownloadEvent {
+  id           String   @id @default(cuid())
+  sessionId    String   // Link to visitor session
+  fileName     String   // e.g., "turkiye-burslari-guide.pdf"
+  filePath     String   // Full path: "/downloads/turkey/..."
+  fileType     String   // "pdf", "docx"
+  category     String   // "guide", "form", "letter"
+  referrerPage String?  // Which page triggered the download
+  createdAt    DateTime @default(now())
+
+  @@index([fileName])
+  @@index([category])
+  @@index([createdAt])
+  @@index([sessionId])
+}

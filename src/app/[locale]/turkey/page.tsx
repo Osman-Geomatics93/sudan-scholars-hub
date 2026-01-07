@@ -32,6 +32,7 @@ import {
 import { Container } from '@/components/layout/container';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { TrackedDownload } from '@/components/features/tracked-download';
 
 export default function TurkeyPage() {
   const locale = useLocale();
@@ -313,15 +314,12 @@ export default function TurkeyPage() {
                     <ExternalLink className="h-4 w-4 ms-2" />
                   </Button>
                 </a>
-                <a
-                  href="/downloads/turkey/turkiye-burslari-guide.pdf"
-                  download
-                >
+                <TrackedDownload href="/downloads/turkey/turkiye-burslari-guide.pdf">
                   <Button size="lg" variant="outline" className="border-red-300 text-red-700 hover:bg-red-50">
                     <Download className="h-4 w-4 me-2" />
                     {t('downloadGuide')}
                   </Button>
-                </a>
+                </TrackedDownload>
               </div>
             </div>
 
@@ -437,12 +435,12 @@ export default function TurkeyPage() {
                         {t(resource.descKey)}
                       </p>
                       {fileAvailable ? (
-                        <a href={resource.file} download>
+                        <TrackedDownload href={resource.file}>
                           <Button variant="outline" size="sm" className={`${colors.text} border-current ${colors.hover}`}>
                             <Download className="h-4 w-4 me-2" />
                             {t('downloadBtn')}
                           </Button>
-                        </a>
+                        </TrackedDownload>
                       ) : (
                         <div className="relative inline-block group">
                           <Button
@@ -514,12 +512,12 @@ export default function TurkeyPage() {
                           {t(letter.descKey)}
                         </p>
                         {fileAvailable ? (
-                          <a href={letter.file} download>
+                          <TrackedDownload href={letter.file}>
                             <Button variant="outline" size="sm" className={`${colors.text} border-current ${colors.hover}`}>
                               <Download className="h-4 w-4 me-2" />
                               {t('downloadBtn')}
                             </Button>
-                          </a>
+                          </TrackedDownload>
                         ) : (
                           <div className="relative inline-block group">
                             <Button
@@ -574,12 +572,12 @@ export default function TurkeyPage() {
                           {t(letter.descKey)}
                         </p>
                         {fileAvailable ? (
-                          <a href={letter.file} download>
+                          <TrackedDownload href={letter.file}>
                             <Button variant="outline" size="sm" className={`${colors.text} border-current ${colors.hover}`}>
                               <Download className="h-4 w-4 me-2" />
                               {t('downloadBtn')}
                             </Button>
-                          </a>
+                          </TrackedDownload>
                         ) : (
                           <div className="relative inline-block group">
                             <Button
@@ -641,18 +639,18 @@ export default function TurkeyPage() {
                       {t(secondarySchoolForm.descKey)}
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      <a href={secondarySchoolForm.docFile} download>
+                      <TrackedDownload href={secondarySchoolForm.docFile}>
                         <Button variant="outline" size="sm" className="text-blue-600 border-blue-300 hover:bg-blue-50">
                           <FileType className="h-4 w-4 me-2" />
                           {t('downloadDoc')}
                         </Button>
-                      </a>
-                      <a href={secondarySchoolForm.pdfFile} download>
+                      </TrackedDownload>
+                      <TrackedDownload href={secondarySchoolForm.pdfFile}>
                         <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
                           <FileText className="h-4 w-4 me-2" />
                           {t('downloadPdf')}
                         </Button>
-                      </a>
+                      </TrackedDownload>
                     </div>
                   </div>
                 </div>
@@ -681,18 +679,18 @@ export default function TurkeyPage() {
                       {t(universityForm.descKey)}
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      <a href={universityForm.docFile} download>
+                      <TrackedDownload href={universityForm.docFile}>
                         <Button variant="outline" size="sm" className="text-blue-600 border-blue-300 hover:bg-blue-50">
                           <FileType className="h-4 w-4 me-2" />
                           {t('downloadDoc')}
                         </Button>
-                      </a>
-                      <a href={universityForm.pdfFile} download>
+                      </TrackedDownload>
+                      <TrackedDownload href={universityForm.pdfFile}>
                         <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
                           <FileText className="h-4 w-4 me-2" />
                           {t('downloadPdf')}
                         </Button>
-                      </a>
+                      </TrackedDownload>
                     </div>
                   </div>
                 </div>

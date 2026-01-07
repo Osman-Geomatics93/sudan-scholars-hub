@@ -383,5 +383,12 @@
     "qsRank": "QS Rank",
     "timesRank": "Times Rank",
     "topRanked": "Top Ranked"
+  },
+  "cookieConsent": {
+    "title": "Cookie Notice",
+    "description": "We use cookies to analyze site traffic and improve your experience. By clicking \"Accept All\", you consent to our use of cookies.",
+    "acceptAll": "Accept All",
+    "essentialOnly": "Essential Only",
+    "learnMore": "Learn More"
   }
 }
