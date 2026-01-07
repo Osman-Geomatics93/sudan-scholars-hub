@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/footer';
 import { Providers } from '@/components/providers';
 import { GoogleAnalytics } from '@/components/analytics/google-analytics';
 import { CookieConsent } from '@/components/analytics/cookie-consent';
+import { ChatWidget } from '@/components/chatbot/chat-widget';
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -36,6 +37,7 @@ export default async function LocaleLayout({
           <main className="flex-1">{children}</main>
           <Footer locale={locale} />
           <CookieConsent />
+          <ChatWidget />
         </NextIntlClientProvider>
       </Providers>
     </div>
