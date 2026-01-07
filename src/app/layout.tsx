@@ -9,6 +9,16 @@ export const metadata: Metadata = {
     default: 'Sudan Scholars Hub | بوابة منح السودان',
     template: '%s | Sudan Scholars Hub',
   },
+  manifest: '/manifest.json',
+  themeColor: '#2563eb',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Sudan Scholars Hub',
+  },
+  formatDetection: {
+    telephone: false,
+  },
   description: 'Your gateway to scholarships and study opportunities for Sudanese students. Find fully funded scholarships in Turkey, UK, USA, Germany and more. | بوابتك للمنح الدراسية وفرص الدراسة للطلاب السودانيين',
   keywords: [
     'scholarships for Sudanese students',
