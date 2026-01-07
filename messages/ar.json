@@ -32,6 +32,7 @@
   "nav": {
     "home": "الرئيسية",
     "scholarships": "المنح",
+    "calendar": "التقويم",
     "about": "من نحن",
     "contact": "اتصل بنا",
     "language": "English",
@@ -358,5 +359,29 @@
     "copyLink": "نسخ الرابط",
     "copied": "تم النسخ!",
     "close": "إغلاق"
+  },
+  "calendar": {
+    "title": "تقويم المنح الدراسية",
+    "subtitle": "تتبع جميع المواعيد النهائية للمنح الدراسية في مكان واحد",
+    "pageTitle": "تقويم المنح الدراسية",
+    "calendarView": "التقويم",
+    "timelineView": "الجدول الزمني",
+    "gridView": "بطاقات",
+    "upcomingDeadlines": "المواعيد النهائية القادمة",
+    "selectDate": "اختر تاريخاً",
+    "noDeadlines": "لا توجد مواعيد نهائية في هذا اليوم",
+    "clickToView": "انقر على تاريخ لعرض المنح الدراسية",
+    "daysLeft": "يوم متبقي",
+    "today": "اليوم",
+    "lessThan7Days": "< 7 أيام",
+    "days7to30": "7-30 يوم",
+    "moreThan30Days": "> 30 يوم",
+    "noUpcomingDeadlines": "لا توجد مواعيد نهائية قادمة"
+  },
+  "universities": {
+    "title": "الجامعات",
+    "qsRank": "تصنيف QS",
+    "timesRank": "تصنيف تايمز",
+    "topRanked": "الأعلى تصنيفاً"
   }
 }

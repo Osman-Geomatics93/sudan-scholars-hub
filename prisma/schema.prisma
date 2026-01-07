@@ -281,3 +281,21 @@ model Advertisement {
   @@index([isActive])
   @@index([order])
 }
+
+// ============ UNIVERSITIES ============
+model University {
+  id        String   @id @default(cuid())
+  name      String   @unique // English name (must match scholarship.university)
+  nameAr    String            // Arabic name
+  country   String
+  countryAr String
+  qsRank    Int?              // QS World Ranking (nullable)
+  timesRank Int?              // Times Higher Education Ranking (nullable)
+  logo      String?           // University logo URL
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([qsRank])
+}

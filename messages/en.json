@@ -32,6 +32,7 @@
   "nav": {
     "home": "Home",
     "scholarships": "Scholarships",
+    "calendar": "Calendar",
     "about": "About",
     "contact": "Contact",
     "language": "العربية",
@@ -358,5 +359,29 @@
     "copyLink": "Copy Link",
     "copied": "Copied!",
     "close": "Close"
+  },
+  "calendar": {
+    "title": "Scholarship Calendar",
+    "subtitle": "Track all scholarship deadlines in one place",
+    "pageTitle": "Scholarship Calendar",
+    "calendarView": "Calendar",
+    "timelineView": "Timeline",
+    "gridView": "Grid",
+    "upcomingDeadlines": "Upcoming Deadlines",
+    "selectDate": "Select a date",
+    "noDeadlines": "No deadlines on this date",
+    "clickToView": "Click on a date to view scholarships",
+    "daysLeft": "days left",
+    "today": "Today",
+    "lessThan7Days": "< 7 days",
+    "days7to30": "7-30 days",
+    "moreThan30Days": "> 30 days",
+    "noUpcomingDeadlines": "No upcoming deadlines"
+  },
+  "universities": {
+    "title": "Universities",
+    "qsRank": "QS Rank",
+    "timesRank": "Times Rank",
+    "topRanked": "Top Ranked"
   }
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Filter, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
+import { Filter, ChevronLeft, ChevronRight, Search, X, Calendar, LayoutGrid } from 'lucide-react';
 import { Container } from '@/components/layout/container';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,10 @@ import { EmptyState } from '@/components/features/empty-state';
 import { SkeletonCard } from '@/components/ui/skeleton';
 import { ComparisonBar } from '@/components/features/comparison-bar';
 import { ComparisonModal } from '@/components/features/comparison-modal';
+import { ScholarshipCalendar } from '@/components/features/scholarship-calendar';
 import { Scholarship } from '@/types/scholarship';
+
+type ViewMode = 'grid' | 'calendar';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -38,6 +41,8 @@ function ScholarshipsContent({ locale }: { locale: string }) {
     fundingTypes: [] as string[],
     countries: [] as string[],
   });
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [calendarScholarships, setCalendarScholarships] = useState<any[]>([]);
 
   const handleSearch = () => {
     setActiveSearch(searchQuery);
@@ -114,6 +119,25 @@ function ScholarshipsContent({ locale }: { locale: string }) {
 
     fetchScholarships();
   }, [currentPage, sortBy, filters, activeSearch]);
+
+  // Fetch all scholarships for calendar view
+  useEffect(() => {
+    if (viewMode !== 'calendar') return;
+
+    async function fetchCalendarScholarships() {
+      try {
+        const res = await fetch('/api/scholarships/calendar');
+        if (res.ok) {
+          const data = await res.json();
+          setCalendarScholarships(data.scholarships);
+        }
+      } catch (error) {
+        console.error('Failed to fetch calendar scholarships:', error);
+      }
+    }
+
+    fetchCalendarScholarships();
+  }, [viewMode]);
 
   const handleFilterChange = (type: string, value: string) => {
     setFilters((prev) => {
@@ -217,76 +241,113 @@ function ScholarshipsContent({ locale }: { locale: string }) {
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">{t('sortBy')}:</span>
-                <Select
-                  options={sortOptions}
-                  value={sortBy}
-                  onChange={(e) => {
-                    setSortBy(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="w-40"
-                />
+              <div className="flex items-center gap-4">
+                {/* View Toggle */}
+                <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                      viewMode === 'grid'
+                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                    }`}
+                  >
+                    <LayoutGrid className="h-4 w-4" />
+                    <span className="hidden sm:inline">{locale === 'ar' ? 'بطاقات' : 'Grid'}</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('calendar')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                      viewMode === 'calendar'
+                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                    }`}
+                  >
+                    <Calendar className="h-4 w-4" />
+                    <span className="hidden sm:inline">{locale === 'ar' ? 'التقويم' : 'Calendar'}</span>
+                  </button>
+                </div>
+
+                {viewMode === 'grid' && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{t('sortBy')}:</span>
+                    <Select
+                      options={sortOptions}
+                      value={sortBy}
+                      onChange={(e) => {
+                        setSortBy(e.target.value);
+                        setCurrentPage(1);
+                      }}
+                      className="w-40"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Loading State */}
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
-                  <SkeletonCard key={i} />
-                ))}
-              </div>
-            ) : scholarships.length > 0 ? (
+            {/* Calendar View */}
+            {viewMode === 'calendar' ? (
+              <ScholarshipCalendar scholarships={calendarScholarships} locale={locale} />
+            ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {scholarships.map((scholarship) => (
-                    <ScholarshipCard
-                      key={scholarship.id}
-                      scholarship={scholarship}
-                      locale={locale}
-                    />
-                  ))}
-                </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-8">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={currentPage === 1}
-                      onClick={() => setCurrentPage((p) => p - 1)}
-                    >
-                      <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
-                    </Button>
-
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <Button
-                        key={page}
-                        variant={currentPage === page ? 'primary' : 'ghost'}
-                        size="sm"
-                        onClick={() => setCurrentPage(page)}
-                        className="w-10"
-                      >
-                        {page}
-                      </Button>
+                {/* Loading State */}
+                {loading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
+                      <SkeletonCard key={i} />
                     ))}
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={currentPage === totalPages}
-                      onClick={() => setCurrentPage((p) => p + 1)}
-                    >
-                      <ChevronRight className="h-4 w-4 rtl:rotate-180" />
-                    </Button>
                   </div>
+                ) : scholarships.length > 0 ? (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                      {scholarships.map((scholarship) => (
+                        <ScholarshipCard
+                          key={scholarship.id}
+                          scholarship={scholarship}
+                          locale={locale}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div className="flex justify-center items-center gap-2 mt-8">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={currentPage === 1}
+                          onClick={() => setCurrentPage((p) => p - 1)}
+                        >
+                          <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
+                        </Button>
+
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                          <Button
+                            key={page}
+                            variant={currentPage === page ? 'primary' : 'ghost'}
+                            size="sm"
+                            onClick={() => setCurrentPage(page)}
+                            className="w-10"
+                          >
+                            {page}
+                          </Button>
+                        ))}
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={currentPage === totalPages}
+                          onClick={() => setCurrentPage((p) => p + 1)}
+                        >
+                          <ChevronRight className="h-4 w-4 rtl:rotate-180" />
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <EmptyState onClearFilters={handleClearFilters} />
                 )}
               </>
-            ) : (
-              <EmptyState onClearFilters={handleClearFilters} />
             )}
           </div>
         </div>

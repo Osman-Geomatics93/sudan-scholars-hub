@@ -14,6 +14,7 @@ import {
   X,
   Quote,
   Image,
+  Building2,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -78,6 +79,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Advertisements',
       labelAr: 'الإعلانات',
       icon: Image,
+    },
+    {
+      href: `/${locale}/admin/universities`,
+      label: 'Universities',
+      labelAr: 'الجامعات',
+      icon: Building2,
     },
   ];
 

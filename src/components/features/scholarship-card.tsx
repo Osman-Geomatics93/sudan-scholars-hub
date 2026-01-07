@@ -1,9 +1,10 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Calendar, MapPin, GraduationCap } from 'lucide-react';
+import { Calendar, MapPin, GraduationCap, Trophy } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { SaveButton } from '@/components/features/save-button';
@@ -14,6 +15,9 @@ import { formatDate, isDeadlineSoon, getLocalizedField } from '@/lib/utils';
 import { useComparison } from '@/contexts/comparison-context';
 import { cn } from '@/lib/utils';
 
+// Cache for university rankings to avoid repeated API calls
+const rankingsCache: Record<string, number | null> = {};
+
 interface ScholarshipCardProps {
   scholarship: Scholarship;
   locale: string;
@@ -23,12 +27,39 @@ export function ScholarshipCard({ scholarship, locale }: ScholarshipCardProps) {
   const t = useTranslations('badges');
   const tListing = useTranslations('listing');
   const { isInComparison } = useComparison();
+  const [qsRank, setQsRank] = useState<number | null>(null);
 
   const title = getLocalizedField(scholarship, 'title', locale);
   const university = getLocalizedField(scholarship, 'university', locale);
+  const universityEn = scholarship.university; // English name for API lookup
   const country = getLocalizedField(scholarship, 'country', locale);
   const deadlineSoon = isDeadlineSoon(scholarship.deadline);
   const isSelected = isInComparison(scholarship.id);
+
+  // Fetch university ranking
+  useEffect(() => {
+    async function fetchRanking() {
+      // Check cache first
+      if (universityEn in rankingsCache) {
+        setQsRank(rankingsCache[universityEn]);
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/universities?name=${encodeURIComponent(universityEn)}`);
+        if (res.ok) {
+          const data = await res.json();
+          const rank = data.university?.qsRank || null;
+          rankingsCache[universityEn] = rank;
+          setQsRank(rank);
+        }
+      } catch (error) {
+        rankingsCache[universityEn] = null;
+      }
+    }
+
+    fetchRanking();
+  }, [universityEn]);
 
   return (
     <Link href={`/${locale}/scholarships/${scholarship.slug}`}>
@@ -51,6 +82,12 @@ export function ScholarshipCard({ scholarship, locale }: ScholarshipCardProps) {
             )}
             {scholarship.isNew && <Badge variant="info">{t('new')}</Badge>}
             {deadlineSoon && <Badge variant="warning">{t('deadlineSoon')}</Badge>}
+            {qsRank && qsRank <= 500 && (
+              <Badge variant="default" className="bg-amber-500 text-white flex items-center gap-1">
+                <Trophy className="h-3 w-3" />
+                QS #{qsRank}
+              </Badge>
+            )}
           </div>
           {/* Share, Compare, and Save Buttons */}
           <div className="absolute top-3 end-3 flex gap-2">

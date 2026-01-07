@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe } from 'lucide-react';
+import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe, Calendar } from 'lucide-react';
 import { Container } from './container';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/features/language-switcher';
@@ -52,6 +52,7 @@ export function Navbar({ locale }: NavbarProps) {
   const navLinks = [
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/scholarships`, label: t('scholarships') },
+    { href: `/${locale}/calendar`, label: isRTL ? 'التقويم' : 'Calendar' },
     { href: `/${locale}/about`, label: t('about') },
     { href: `/${locale}/contact`, label: t('contact') },
   ];
