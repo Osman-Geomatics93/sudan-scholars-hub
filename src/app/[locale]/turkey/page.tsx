@@ -89,6 +89,9 @@ export default function TurkeyPage() {
     '/downloads/turkey/english-certificate.pdf',
     '/downloads/turkey/validation-letter-msc.pdf',
     '/downloads/turkey/validation-letter-phd.pdf',
+    '/downloads/turkey/recommendation-letter-bsc.pdf',
+    '/downloads/turkey/recommendation-letter-msc.pdf',
+    '/downloads/turkey/recommendation-letter-phd.pdf',
   ];
 
   const isFileAvailable = (filePath: string) => availableFiles.includes(filePath);
