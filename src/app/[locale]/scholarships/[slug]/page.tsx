@@ -22,6 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { ScholarshipCard } from '@/components/features/scholarship-card';
 import { ShareModal } from '@/components/features/share-modal';
+import { PDFDownloadButton } from '@/components/features/pdf-download-button';
 import { formatDate, getLocalizedField } from '@/lib/utils';
 import { Scholarship } from '@/types/scholarship';
 import { ShareContent } from '@/lib/share-utils';
@@ -302,13 +303,44 @@ export default function ScholarshipDetailsPage({
                 </Button>
               </a>
 
-              <button
-                onClick={() => setIsShareModalOpen(true)}
-                className="flex items-center justify-center gap-2 w-full py-2 text-gray-600 hover:text-primary-600 transition-colors"
-              >
-                <Share2 className="h-4 w-4" />
-                {t('shareTitle')}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="flex items-center justify-center gap-2 flex-1 py-2 text-gray-600 hover:text-primary-600 transition-colors"
+                >
+                  <Share2 className="h-4 w-4" />
+                  {t('shareTitle')}
+                </button>
+                <PDFDownloadButton
+                  scholarship={{
+                    title: scholarship.title,
+                    titleAr: scholarship.titleAr,
+                    university: scholarship.university,
+                    universityAr: scholarship.universityAr,
+                    country: scholarship.country,
+                    countryAr: scholarship.countryAr,
+                    description: scholarship.description,
+                    descriptionAr: scholarship.descriptionAr,
+                    eligibility: scholarship.eligibility,
+                    eligibilityAr: scholarship.eligibilityAr,
+                    benefits: scholarship.benefits,
+                    benefitsAr: scholarship.benefitsAr,
+                    requirements: scholarship.requirements,
+                    requirementsAr: scholarship.requirementsAr,
+                    howToApply: scholarship.howToApply,
+                    howToApplyAr: scholarship.howToApplyAr,
+                    duration: scholarship.duration,
+                    durationAr: scholarship.durationAr,
+                    deadline: scholarship.deadline,
+                    fundingType: scholarship.fundingType,
+                    levels: scholarship.levels,
+                    field: scholarship.field,
+                    applicationUrl: scholarship.applicationUrl,
+                  }}
+                  locale={locale as 'en' | 'ar'}
+                  className="flex-1"
+                />
+              </div>
 
               <hr className="my-6" />
 
