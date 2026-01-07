@@ -265,3 +265,19 @@ model BlogPost {
   @@index([slug])
   @@index([createdAt])
 }
+
+// ============ ADVERTISEMENTS ============
+model Advertisement {
+  id        String   @id @default(cuid())
+  title     String   // English title
+  titleAr   String   // Arabic title
+  imageUrl  String   // Ad banner image URL
+  linkUrl   String?  // Optional click-through URL
+  isActive  Boolean  @default(true)
+  order     Int      @default(0) // Display order in carousel
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([order])
+}

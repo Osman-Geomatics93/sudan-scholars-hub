@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ScholarshipCard } from '@/components/features/scholarship-card';
 import { SkeletonCard } from '@/components/ui/skeleton';
+import { AdCarousel } from '@/components/features/ad-carousel';
 import { stats, categories } from '@/lib/mock-data';
 import { getLocalizedField } from '@/lib/utils';
 import Link from 'next/link';
@@ -156,6 +157,13 @@ export default function HomePage() {
               ))}
             </div>
           </div>
+        </Container>
+      </section>
+
+      {/* Ad Carousel */}
+      <section className="py-8 md:py-12 bg-white">
+        <Container>
+          <AdCarousel locale={locale} autoPlayInterval={5000} />
         </Container>
       </section>
 

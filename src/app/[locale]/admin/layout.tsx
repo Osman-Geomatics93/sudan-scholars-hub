@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   Quote,
+  Image,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -71,6 +72,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Subscribers',
       labelAr: 'المشتركين',
       icon: Users,
+    },
+    {
+      href: `/${locale}/admin/advertisements`,
+      label: 'Advertisements',
+      labelAr: 'الإعلانات',
+      icon: Image,
     },
   ];
 
