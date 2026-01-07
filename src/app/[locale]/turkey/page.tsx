@@ -27,6 +27,7 @@ import {
   FileCheck,
   FileType,
   School,
+  PlayCircle,
 } from 'lucide-react';
 import { Container } from '@/components/layout/container';
 import { Card } from '@/components/ui/card';
@@ -701,8 +702,55 @@ export default function TurkeyPage() {
         </Container>
       </section>
 
-      {/* Living in Turkey Section */}
+      {/* Video Tutorials Section */}
       <section className="section-padding bg-white">
+        <Container>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 mb-4">
+              <PlayCircle className="h-7 w-7" />
+            </div>
+            <h2 className="text-h2 text-gray-900 mb-4">{t('videoTutorialsTitle')}</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t('videoTutorialsSubtitle')}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Video 1 */}
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube-nocookie.com/embed/KnOmrKa_FDM"
+                  title={t('video1Title')}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900">{t('video1Title')}</h3>
+              </div>
+            </Card>
+
+            {/* Video 2 */}
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube-nocookie.com/embed/CLcQVtwWAHk"
+                  title={t('video2Title')}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900">{t('video2Title')}</h3>
+              </div>
+            </Card>
+          </div>
+        </Container>
+      </section>
+
+      {/* Living in Turkey Section */}
+      <section className="section-padding bg-gray-50">
         <Container>
           <div className="text-center mb-12">
             <h2 className="text-h2 text-gray-900 mb-4">{t('livingTitle')}</h2>

@@ -288,7 +288,11 @@
     "certificateForm": "English Studies Certificate",
     "certificateFormDesc": "University-approved certificate form for students who studied in English",
     "downloadDoc": "Download DOCX",
-    "downloadPdf": "Download PDF"
+    "downloadPdf": "Download PDF",
+    "videoTutorialsTitle": "Video Tutorials",
+    "videoTutorialsSubtitle": "Watch step-by-step guides on how to apply for Turkish scholarships",
+    "video1Title": "How to Apply for Türkiye Burslari",
+    "video2Title": "Application Tips & Guide"
   },
   "profile": {
     "title": "My Profile",

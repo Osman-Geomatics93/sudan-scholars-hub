@@ -288,7 +288,11 @@
     "certificateForm": "شهادة الدراسة بالإنجليزية",
     "certificateFormDesc": "نموذج الشهادة المعتمدة من الجامعة للطلاب الذين درسوا بالإنجليزية",
     "downloadDoc": "تحميل DOCX",
-    "downloadPdf": "تحميل PDF"
+    "downloadPdf": "تحميل PDF",
+    "videoTutorialsTitle": "فيديوهات تعليمية",
+    "videoTutorialsSubtitle": "شاهد دليل خطوة بخطوة للتقديم على المنح التركية",
+    "video1Title": "كيفية التقديم لمنحة تركيا بورسلاري",
+    "video2Title": "نصائح ودليل التقديم"
   },
   "profile": {
     "title": "ملفي الشخصي",
