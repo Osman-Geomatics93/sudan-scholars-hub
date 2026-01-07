@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Disable caching
+export const dynamic = 'force-dynamic';
+
 // GET - Fetch active advertisements for public display
 export async function GET() {
   try {
