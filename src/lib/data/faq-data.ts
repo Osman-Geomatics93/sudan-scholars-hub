@@ -16,7 +16,7 @@ export const faqData: FAQItem[] = [
   // General Scholarships
   {
     id: 'what-scholarships',
-    keywords: ['scholarships', 'available', 'find', 'منح', 'متاحة', 'أجد'],
+    keywords: ['scholarships available', 'what scholarships', 'list scholarships', 'منح متاحة', 'ما المنح'],
     question: {
       en: 'What scholarships are available?',
       ar: 'ما هي المنح الدراسية المتاحة؟'
@@ -29,7 +29,7 @@ export const faqData: FAQItem[] = [
   },
   {
     id: 'how-to-apply',
-    keywords: ['apply', 'application', 'how', 'تقديم', 'كيف', 'أقدم'],
+    keywords: ['apply', 'application', 'applying', 'تقديم', 'أقدم'],
     question: {
       en: 'How do I apply for a scholarship?',
       ar: 'كيف أقدم على منحة دراسية؟'
@@ -55,7 +55,7 @@ export const faqData: FAQItem[] = [
   },
   {
     id: 'deadlines',
-    keywords: ['deadline', 'deadlines', 'when', 'date', 'موعد', 'مواعيد', 'متى', 'تاريخ'],
+    keywords: ['deadline', 'deadlines', 'due date', 'موعد', 'مواعيد', 'الموعد النهائي'],
     question: {
       en: 'What are the scholarship deadlines?',
       ar: 'ما هي مواعيد المنح الدراسية؟'
@@ -83,7 +83,7 @@ export const faqData: FAQItem[] = [
   },
   {
     id: 'turkey-benefits',
-    keywords: ['benefits', 'cover', 'include', 'stipend', 'مزايا', 'تغطي', 'تشمل', 'راتب'],
+    keywords: ['benefits', 'stipend', 'salary', 'coverage', 'مزايا', 'راتب', 'تغطية'],
     question: {
       en: 'What are the benefits of Türkiye Burslari?',
       ar: 'ما هي مزايا منحة تركيا بورسلاري؟'
@@ -109,7 +109,7 @@ export const faqData: FAQItem[] = [
   },
   {
     id: 'turkey-documents',
-    keywords: ['documents', 'papers', 'need', 'required', 'مستندات', 'أوراق', 'مطلوبة', 'احتاج'],
+    keywords: ['documents', 'papers', 'required documents', 'مستندات', 'أوراق', 'الأوراق المطلوبة'],
     question: {
       en: 'What documents do I need for Türkiye Burslari?',
       ar: 'ما المستندات المطلوبة لمنحة تركيا بورسلاري؟'
@@ -137,7 +137,7 @@ export const faqData: FAQItem[] = [
   // Application Help
   {
     id: 'motivation-letter',
-    keywords: ['motivation', 'letter', 'statement', 'purpose', 'write', 'دافع', 'خطاب', 'كتابة', 'بيان'],
+    keywords: ['motivation letter', 'personal statement', 'statement of purpose', 'خطاب الدافع', 'بيان الغرض'],
     question: {
       en: 'How do I write a motivation letter?',
       ar: 'كيف أكتب خطاب الدافع؟'
@@ -178,7 +178,7 @@ export const faqData: FAQItem[] = [
   // Website Navigation
   {
     id: 'find-scholarships',
-    keywords: ['find', 'search', 'browse', 'where', 'أجد', 'بحث', 'تصفح', 'أين'],
+    keywords: ['find scholarships', 'search scholarships', 'browse scholarships', 'scholarship page', 'أجد المنح', 'بحث المنح', 'صفحة المنح'],
     question: {
       en: 'Where can I find scholarships on this website?',
       ar: 'أين أجد المنح على هذا الموقع؟'
@@ -204,7 +204,7 @@ export const faqData: FAQItem[] = [
   },
   {
     id: 'contact-us',
-    keywords: ['contact', 'help', 'support', 'question', 'تواصل', 'مساعدة', 'دعم', 'سؤال'],
+    keywords: ['contact us', 'contact team', 'reach you', 'get support', 'تواصل معكم', 'اتصل بنا'],
     question: {
       en: 'How can I contact you for more help?',
       ar: 'كيف أتواصل معكم للمزيد من المساعدة؟'
@@ -240,13 +240,20 @@ export function findMatchingFAQ(message: string, locale: string = 'en'): FAQItem
 
   for (const faq of faqData) {
     let score = 0;
+
     for (const keyword of faq.keywords) {
-      if (normalizedMessage.includes(keyword.toLowerCase())) {
-        score += 1;
+      const keywordLower = keyword.toLowerCase();
+
+      // Check if the keyword phrase exists in the message
+      if (normalizedMessage.includes(keywordLower)) {
+        // Longer keywords (phrases) get higher scores
+        const wordCount = keywordLower.split(/\s+/).length;
+        score += wordCount * 2;
       }
     }
 
-    if (score > bestScore && score >= 1) {
+    // Require minimum score of 3 (at least one 2-word phrase or multiple single words)
+    if (score > bestScore && score >= 3) {
       bestScore = score;
       bestMatch = faq;
     }

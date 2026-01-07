@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { findMatchingFAQ } from '@/lib/data/faq-data';
-import { generateChatResponse } from '@/lib/gemini';
+import { generateChatResponse } from '@/lib/groq';
 
 export async function POST(request: NextRequest) {
   try {
