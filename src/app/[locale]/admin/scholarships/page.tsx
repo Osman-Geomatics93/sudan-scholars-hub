@@ -25,7 +25,7 @@ interface Scholarship {
   countryAr: string;
   deadline: string;
   fundingType: string;
-  level: string;
+  levels: string[];
   field: string;
   isFeatured: boolean;
   isPublished: boolean;
@@ -233,9 +233,13 @@ export default function ScholarshipsPage() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
-                    {scholarship.level}
-                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {(scholarship.levels || []).map((level: string) => (
+                      <span key={level} className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                        {level}
+                      </span>
+                    ))}
+                  </div>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500">
                   {new Date(scholarship.deadline).toLocaleDateString(

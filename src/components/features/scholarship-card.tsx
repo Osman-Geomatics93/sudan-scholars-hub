@@ -90,13 +90,15 @@ export function ScholarshipCard({ scholarship, locale }: ScholarshipCardProps) {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <Badge>
-              {scholarship.level === 'bachelor'
-                ? tListing('bachelor')
-                : scholarship.level === 'master'
-                ? tListing('master')
-                : tListing('phd')}
-            </Badge>
+            {(scholarship.levels || []).map((level) => (
+              <Badge key={level}>
+                {level.toLowerCase() === 'bachelor'
+                  ? tListing('bachelor')
+                  : level.toLowerCase() === 'master'
+                  ? tListing('master')
+                  : tListing('phd')}
+              </Badge>
+            ))}
           </div>
         </div>
       </Card>

@@ -28,7 +28,7 @@ interface ScholarshipFormData {
   durationAr: string;
   deadline: string;
   fundingType: 'FULLY_FUNDED' | 'PARTIALLY_FUNDED';
-  level: 'BACHELOR' | 'MASTER' | 'PHD';
+  levels: ('BACHELOR' | 'MASTER' | 'PHD')[];
   field: string;
   applicationUrl: string;
   image: string;
@@ -99,7 +99,7 @@ export function ScholarshipForm({ initialData, scholarshipId }: ScholarshipFormP
     durationAr: initialData?.durationAr || '',
     deadline: initialData?.deadline ? new Date(initialData.deadline).toISOString().split('T')[0] : '',
     fundingType: initialData?.fundingType || 'FULLY_FUNDED',
-    level: initialData?.level || 'MASTER',
+    levels: initialData?.levels || ['MASTER'],
     field: initialData?.field || 'ENGINEERING',
     applicationUrl: initialData?.applicationUrl || '',
     image: initialData?.image || '',
@@ -692,18 +692,33 @@ export function ScholarshipForm({ initialData, scholarshipId }: ScholarshipFormP
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Study Level *
+            <label className="mb-2 block text-sm font-medium text-gray-700">
+              Study Levels * (Select all that apply)
             </label>
-            <select
-              value={formData.level}
-              onChange={(e) => setFormData({ ...formData, level: e.target.value as any })}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-            >
-              <option value="BACHELOR">Bachelor</option>
-              <option value="MASTER">Master</option>
-              <option value="PHD">PhD</option>
-            </select>
+            <div className="flex flex-wrap gap-4">
+              {(['BACHELOR', 'MASTER', 'PHD'] as const).map((level) => (
+                <label key={level} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.levels.includes(level)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFormData({ ...formData, levels: [...formData.levels, level] });
+                      } else {
+                        setFormData({ ...formData, levels: formData.levels.filter((l) => l !== level) });
+                      }
+                    }}
+                    className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  />
+                  <span className="text-sm text-gray-700">
+                    {level === 'BACHELOR' ? 'Bachelor (BSc)' : level === 'MASTER' ? 'Master (MSc)' : 'PhD'}
+                  </span>
+                </label>
+              ))}
+            </div>
+            {formData.levels.length === 0 && (
+              <p className="mt-1 text-sm text-red-500">Please select at least one level</p>
+            )}
           </div>
 
           <div>

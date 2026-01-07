@@ -31,8 +31,8 @@ export async function GET(request: NextRequest) {
     };
 
     if (level) {
-      const levels = level.split(',');
-      where.level = { in: levels as any };
+      const levelFilters = level.split(',');
+      where.levels = { hasSome: levelFilters as any };
     }
 
     if (fundingType) {

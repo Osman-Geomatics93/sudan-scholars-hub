@@ -23,7 +23,7 @@ export const scholarshipSchema = z.object({
   durationAr: z.string().min(1).max(50),
   deadline: z.string().datetime().or(z.date()),
   fundingType: z.enum(['FULLY_FUNDED', 'PARTIALLY_FUNDED']),
-  level: z.enum(['BACHELOR', 'MASTER', 'PHD']),
+  levels: z.array(z.enum(['BACHELOR', 'MASTER', 'PHD'])).min(1),
   field: z.enum([
     'ENGINEERING',
     'MEDICINE',

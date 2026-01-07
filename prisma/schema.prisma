@@ -102,7 +102,7 @@ model Scholarship {
   // Metadata
   deadline       DateTime
   fundingType    FundingType
-  level          StudyLevel
+  levels         StudyLevel[]
   field          FieldOfStudy
   applicationUrl String
   image          String
@@ -118,7 +118,7 @@ model Scholarship {
   // Relations
   savedBy SavedScholarship[]
 
-  @@index([level, fundingType, field])
+  @@index([fundingType, field])
   @@index([deadline])
   @@index([isFeatured])
   @@index([isPublished])

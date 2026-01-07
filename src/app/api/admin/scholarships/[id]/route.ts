@@ -98,7 +98,7 @@ export async function PUT(
     if (body.durationAr !== undefined) updateData.durationAr = body.durationAr;
     if (body.deadline !== undefined) updateData.deadline = new Date(body.deadline);
     if (body.fundingType !== undefined) updateData.fundingType = body.fundingType;
-    if (body.level !== undefined) updateData.level = body.level;
+    if (body.levels !== undefined) updateData.levels = body.levels;
     if (body.field !== undefined) updateData.field = body.field;
     if (body.applicationUrl !== undefined) updateData.applicationUrl = body.applicationUrl;
     if (body.image !== undefined) updateData.image = body.image;

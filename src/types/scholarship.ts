@@ -30,7 +30,7 @@ export interface Scholarship {
   countryAr: string;
   deadline: string;
   fundingType: FundingType;
-  level: StudyLevel;
+  levels: StudyLevel[];
   field: FieldOfStudy;
   description: string;
   descriptionAr: string;

@@ -50,8 +50,8 @@ export default function ScholarshipDetailsPage({
           setScholarship(data.scholarship);
 
           // Fetch related scholarships
-          if (data.scholarship) {
-            const relatedRes = await fetch(`/api/scholarships?level=${data.scholarship.level}&limit=3`);
+          if (data.scholarship && data.scholarship.levels?.length > 0) {
+            const relatedRes = await fetch(`/api/scholarships?level=${data.scholarship.levels[0]}&limit=3`);
             if (relatedRes.ok) {
               const relatedData = await relatedRes.json();
               setRelatedScholarships(
@@ -121,7 +121,7 @@ export default function ScholarshipDetailsPage({
     {
       icon: GraduationCap,
       label: t('studyLevel'),
-      value: getLevelLabel(scholarship.level),
+      value: (scholarship.levels || []).map(getLevelLabel).join(', '),
     },
     {
       icon: Clock,

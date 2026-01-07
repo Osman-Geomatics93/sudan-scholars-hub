@@ -111,9 +111,11 @@ export function ComparisonModal({ locale = 'en' }: ComparisonModalProps) {
                   <Badge variant={scholarship.fundingType === 'FULLY_FUNDED' ? 'success' : 'warning'}>
                     {getFundingLabel(scholarship.fundingType)}
                   </Badge>
-                  <Badge variant="info">
-                    {getLevelLabel(scholarship.level)}
-                  </Badge>
+                  {(scholarship.levels || []).map((level) => (
+                    <Badge key={level} variant="info">
+                      {getLevelLabel(level)}
+                    </Badge>
+                  ))}
                 </div>
 
                 {/* Details */}
