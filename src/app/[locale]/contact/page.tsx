@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github, Globe, ChevronDown, ChevronUp } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github, Globe, ChevronDown, ChevronUp, Send, Users } from 'lucide-react';
 import { Container } from '@/components/layout/container';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -75,6 +75,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
   ];
 
   const socialLinks = [
+    { icon: Send, href: 'https://t.me/+uNRCkz0PUfQzOGZk', label: 'Telegram', color: 'hover:bg-[#0088cc]/10 hover:text-[#0088cc]' },
     { icon: Linkedin, href: 'https://www.linkedin.com/in/osman-o-a-ibrahim-a02a9a197', label: 'LinkedIn' },
     { icon: Github, href: 'https://github.com/Osman-Geomatics93', label: 'GitHub' },
     { icon: Facebook, href: 'https://www.facebook.com/www.osmangood/', label: 'Facebook' },
@@ -195,17 +196,52 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                 </div>
               </div>
 
+              {/* Telegram Community Card */}
+              <a
+                href="https://t.me/+uNRCkz0PUfQzOGZk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group"
+              >
+                <Card className="p-5 bg-gradient-to-r from-[#0088cc] to-[#00a0e3] text-white hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                      <Send className="h-7 w-7" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg mb-1">
+                        {locale === 'ar' ? 'انضم لقناتنا على تيليجرام' : 'Join Our Telegram Channel'}
+                      </h3>
+                      <p className="text-white/80 text-sm">
+                        {locale === 'ar'
+                          ? 'احصل على آخر أخبار المنح الدراسية والنصائح مباشرة'
+                          : 'Get latest scholarship news and tips directly'}
+                      </p>
+                    </div>
+                    <div className="hidden sm:flex items-center gap-2 bg-white/20 rounded-full px-4 py-2 group-hover:bg-white/30 transition-colors">
+                      <Users className="h-4 w-4" />
+                      <span className="text-sm font-medium">
+                        {locale === 'ar' ? 'انضم الآن' : 'Join Now'}
+                      </span>
+                    </div>
+                  </div>
+                </Card>
+              </a>
+
               {/* Social Links */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('socialTitle')}</h3>
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-3">
                   {socialLinks.map((social) => (
                     <a
                       key={social.label}
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary-100 hover:text-primary-600 transition-colors"
+                      className={cn(
+                        "w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 transition-colors",
+                        social.color || "hover:bg-primary-100 hover:text-primary-600"
+                      )}
                       aria-label={social.label}
                       title={social.label}
                     >
