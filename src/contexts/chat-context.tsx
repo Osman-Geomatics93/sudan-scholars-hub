@@ -25,8 +25,8 @@ interface ChatContextType {
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 const STORAGE_KEY = 'chat_messages';
-const WELCOME_MESSAGE_EN = "Hi! I'm your scholarship assistant. How can I help you today? You can ask me about scholarships, application requirements, deadlines, or anything else!";
-const WELCOME_MESSAGE_AR = "مرحباً! أنا مساعد المنح الدراسية. كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن المنح ومتطلبات التقديم والمواعيد أو أي شيء آخر!";
+const WELCOME_MESSAGE_EN = "Hi! I'm your scholarship assistant, created by Osman Ibrahim. How can I help you today? You can ask me about scholarships, application requirements, deadlines, or anything else!";
+const WELCOME_MESSAGE_AR = "مرحباً! أنا مساعد المنح الدراسية، من تطوير عثمان إبراهيم. كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن المنح ومتطلبات التقديم والمواعيد أو أي شيء آخر!";
 
 export function ChatProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
