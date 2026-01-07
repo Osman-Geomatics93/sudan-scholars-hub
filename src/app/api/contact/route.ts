@@ -10,8 +10,11 @@ export async function POST(request: NextRequest) {
     // Validate input
     const result = contactSchema.safeParse(body);
     if (!result.success) {
+      // Get the first error message for user-friendly display
+      const fieldErrors = result.error.flatten().fieldErrors;
+      const firstError = Object.values(fieldErrors).flat()[0] || 'Invalid input';
       return NextResponse.json(
-        { error: 'Invalid input', details: result.error.flatten() },
+        { error: firstError, details: result.error.flatten() },
         { status: 400 }
       );
     }
