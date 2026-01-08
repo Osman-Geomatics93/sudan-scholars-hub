@@ -14,6 +14,7 @@ import {
   X,
   Quote,
   Image,
+  Images,
   Building2,
   BarChart3,
 } from 'lucide-react';
@@ -80,6 +81,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Advertisements',
       labelAr: 'الإعلانات',
       icon: Image,
+    },
+    {
+      href: `/${locale}/admin/posters`,
+      label: 'Posters',
+      labelAr: 'البوسترات',
+      icon: Images,
     },
     {
       href: `/${locale}/admin/universities`,

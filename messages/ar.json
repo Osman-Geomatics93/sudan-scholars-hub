@@ -390,5 +390,37 @@
     "acceptAll": "قبول الكل",
     "essentialOnly": "الأساسية فقط",
     "learnMore": "اعرف المزيد"
+  },
+  "posters": {
+    "title": "بوسترات المنح الدراسية",
+    "subtitle": "أدلة بصرية ورسوم توضيحية للمنح الدراسية",
+    "heroTitle": "بوسترات ورسوم توضيحية للمنح الدراسية",
+    "heroSubtitle": "تصفح مجموعتنا من البوسترات التعليمية حول المنح الدراسية وفرص الدراسة",
+    "viewAll": "عرض جميع البوسترات",
+    "view": "عرض",
+    "download": "تحميل",
+    "downloading": "جاري التحميل...",
+    "downloadComplete": "اكتمل التحميل!",
+    "downloadFailed": "فشل التحميل",
+    "close": "إغلاق",
+    "previous": "السابق",
+    "next": "التالي",
+    "viewScholarship": "عرض المنحة",
+    "visitLink": "زيارة الرابط",
+    "filterAll": "الكل",
+    "noPosters": "لا توجد بوسترات",
+    "noPosterDescription": "لا توجد بوسترات تطابق معايير البحث",
+    "featured": "مميز",
+    "categories": {
+      "SCHOLARSHIP_INFO": "معلومات المنح",
+      "TURKEY": "تركيا",
+      "EUROPE": "أوروبا",
+      "USA_CANADA": "أمريكا وكندا",
+      "ASIA": "آسيا",
+      "APPLICATION_TIPS": "نصائح التقديم",
+      "DEADLINE_REMINDER": "تذكير بالمواعيد",
+      "SUCCESS_STORIES": "قصص النجاح",
+      "GENERAL": "عام"
+    }
   }
 }

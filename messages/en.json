@@ -390,5 +390,37 @@
     "acceptAll": "Accept All",
     "essentialOnly": "Essential Only",
     "learnMore": "Learn More"
+  },
+  "posters": {
+    "title": "Scholarship Posters",
+    "subtitle": "Visual guides and infographics for scholarships",
+    "heroTitle": "Scholarship Posters & Infographics",
+    "heroSubtitle": "Browse our collection of informative posters about scholarships and study opportunities",
+    "viewAll": "View All Posters",
+    "view": "View",
+    "download": "Download",
+    "downloading": "Downloading...",
+    "downloadComplete": "Download complete!",
+    "downloadFailed": "Download failed",
+    "close": "Close",
+    "previous": "Previous",
+    "next": "Next",
+    "viewScholarship": "View Scholarship",
+    "visitLink": "Visit Link",
+    "filterAll": "All",
+    "noPosters": "No posters found",
+    "noPosterDescription": "There are no posters matching your filter criteria",
+    "featured": "Featured",
+    "categories": {
+      "SCHOLARSHIP_INFO": "Scholarship Info",
+      "TURKEY": "Turkey",
+      "EUROPE": "Europe",
+      "USA_CANADA": "USA & Canada",
+      "ASIA": "Asia",
+      "APPLICATION_TIPS": "Application Tips",
+      "DEADLINE_REMINDER": "Deadline Reminder",
+      "SUCCESS_STORIES": "Success Stories",
+      "GENERAL": "General"
+    }
   }
 }

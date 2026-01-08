@@ -117,6 +117,7 @@ model Scholarship {
 
   // Relations
   savedBy SavedScholarship[]
+  posters Poster[]
 
   @@index([fundingType, field])
   @@index([deadline])
@@ -171,6 +172,18 @@ enum FieldOfStudy {
   LAW
   EDUCATION
   TECHNOLOGY
+}
+
+enum PosterCategory {
+  SCHOLARSHIP_INFO
+  TURKEY
+  EUROPE
+  USA_CANADA
+  ASIA
+  APPLICATION_TIPS
+  DEADLINE_REMINDER
+  SUCCESS_STORIES
+  GENERAL
 }
 
 // ============ COUNTRIES ============
@@ -298,6 +311,44 @@ model University {
 
   @@index([name])
   @@index([qsRank])
+}
+
+// ============ POSTERS/INFOGRAPHICS ============
+model Poster {
+  id            String         @id @default(cuid())
+
+  // Bilingual content
+  title         String         // English title
+  titleAr       String         // Arabic title
+  description   String?        @db.Text  // English description (optional)
+  descriptionAr String?        @db.Text  // Arabic description (optional)
+
+  // Image (external URL - portrait ~1580x2048 or 3:4 ratio)
+  imageUrl      String
+
+  // Category
+  category      PosterCategory
+
+  // Optional link to related scholarship
+  scholarshipId String?
+  scholarship   Scholarship?   @relation(fields: [scholarshipId], references: [id], onDelete: SetNull)
+
+  // External link (alternative to scholarship link)
+  externalUrl   String?
+
+  // Status & ordering
+  isActive      Boolean        @default(true)
+  isFeatured    Boolean        @default(false)  // For homepage display
+  order         Int            @default(0)
+
+  // Timestamps
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([isActive])
+  @@index([isFeatured])
+  @@index([category])
+  @@index([order])
 }
 
 // ============ ANALYTICS ============
