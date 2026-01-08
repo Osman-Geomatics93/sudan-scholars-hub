@@ -582,7 +582,7 @@ export const teamMembers: TeamMember[] = [
     roleAr: 'دبلوم تصميم جرافيك - سنة نهائية',
     bio: 'Karadeniz Technical University, Final-year Diploma student specializing in Graphic Design, with a strong passion for visual design, digital creativity, and photography.',
     bioAr: 'جامعة كارادينيز التقنية، طالبة سنة نهائية دبلوم تصميم جرافيك، شغوفة بالتصميم البصري والإبداع الرقمي والتصوير الفوتوغرافي.',
-    avatar: 'https://imgur.com/rwI0CF0.jpg',
+    avatar: 'https://i.imgur.com/rwI0CF0.jpg',
     linkedin: '#',
     twitter: '#',
   },
