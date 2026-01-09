@@ -138,7 +138,7 @@ export function Navbar({ locale }: NavbarProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative px-2 lg:px-4 py-2 text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group whitespace-nowrap"
+                className="relative px-1.5 lg:px-4 py-2 text-xs lg:text-base text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group whitespace-nowrap"
               >
                 <span className="relative z-10">{link.label}</span>
                 {/* Animated underline */}
@@ -152,7 +152,7 @@ export function Navbar({ locale }: NavbarProps) {
             <div className="relative" ref={turkeyMenuRef}>
               <button
                 onClick={() => setIsTurkeyOpen(!isTurkeyOpen)}
-                className="relative flex items-center gap-1 px-2 lg:px-4 py-2 text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group whitespace-nowrap"
+                className="relative flex items-center gap-1 px-1.5 lg:px-4 py-2 text-xs lg:text-base text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group whitespace-nowrap"
                 suppressHydrationWarning
               >
                 <span className="relative z-10">{t('turkey')}</span>
@@ -278,7 +278,7 @@ export function Navbar({ locale }: NavbarProps) {
             <div className="relative" ref={resourcesMenuRef}>
               <button
                 onClick={() => setIsResourcesOpen(!isResourcesOpen)}
-                className="relative flex items-center gap-1 px-2 lg:px-4 py-2 text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group whitespace-nowrap"
+                className="relative flex items-center gap-1 px-1.5 lg:px-4 py-2 text-xs lg:text-base text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group whitespace-nowrap"
                 suppressHydrationWarning
               >
                 <span className="relative z-10">{isRTL ? 'الموارد' : 'Resources'}</span>
@@ -306,7 +306,7 @@ export function Navbar({ locale }: NavbarProps) {
           </div>
 
           {/* Right side actions */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-3">
+          <div className="hidden md:flex items-center gap-1 lg:gap-3 shrink-0">
             <ThemeToggle locale={locale} />
             <LanguageSwitcher locale={locale} />
 
