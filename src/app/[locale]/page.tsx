@@ -121,10 +121,10 @@ export default function HomePage() {
       <section className="gradient-hero pt-24 pb-12 md:pt-28 md:pb-20 lg:pt-36 lg:pb-28 overflow-hidden">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-display font-bold text-gray-900 mb-4 md:mb-6 text-balance animate-on-load animate-fade-in-up">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-display font-bold text-gray-900 dark:text-white mb-4 md:mb-6 text-balance animate-on-load animate-fade-in-up">
               {t('heroTitle')}
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto px-4 animate-on-load animate-fade-in-up animation-delay-200">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-4 animate-on-load animate-fade-in-up animation-delay-200">
               {t('heroSubtitle')}
             </p>
 
@@ -153,7 +153,7 @@ export default function HomePage() {
                   <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm md:text-base text-gray-600">{t(`stats.${stat.labelKey}`)}</div>
+                  <div className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t(`stats.${stat.labelKey}`)}</div>
                 </div>
               ))}
             </div>
@@ -180,8 +180,8 @@ export default function HomePage() {
         <Container>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 md:mb-8 gap-3">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-1 md:mb-2">{t('featuredTitle')}</h2>
-              <p className="text-sm md:text-base text-gray-600">{t('featuredSubtitle')}</p>
+              <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 dark:text-gray-50 mb-1 md:mb-2">{t('featuredTitle')}</h2>
+              <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t('featuredSubtitle')}</p>
             </div>
             <Link href={`/${locale}/scholarships`} className="hidden md:flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium shrink-0">
               {locale === 'ar' ? 'عرض الكل' : 'View All'}
@@ -221,8 +221,8 @@ export default function HomePage() {
       <section className="py-12 md:py-16 lg:py-24 bg-gray-50">
         <Container>
           <div className="text-center mb-8 md:mb-12 px-4">
-            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('categoriesTitle')}</h2>
-            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">{t('categoriesSubtitle')}</p>
+            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 dark:text-gray-50 mb-2 md:mb-3">{t('categoriesTitle')}</h2>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t('categoriesSubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
@@ -237,10 +237,10 @@ export default function HomePage() {
                     <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary-100 text-primary-600 mb-3 md:mb-4 group-hover:bg-primary-600 group-hover:text-white transition-colors">
                       <Icon className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-1 text-sm md:text-base">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1 text-sm md:text-base">
                       {tCategories(category.id)}
                     </h3>
-                    <p className="text-xs md:text-sm text-gray-500">
+                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
                       {category.count} {locale === 'ar' ? 'منحة' : 'scholarships'}
                     </p>
                   </Card>
@@ -323,8 +323,8 @@ export default function HomePage() {
       <section className="py-12 md:py-16 lg:py-24 bg-white">
         <Container>
           <div className="text-center mb-8 md:mb-12 px-4">
-            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('howItWorksTitle')}</h2>
-            <p className="text-sm md:text-base text-gray-600">{t('howItWorksSubtitle')}</p>
+            <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 dark:text-gray-50 mb-2 md:mb-3">{t('howItWorksTitle')}</h2>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t('howItWorksSubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -333,8 +333,8 @@ export default function HomePage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-600 text-white text-xl md:text-2xl font-bold mb-4 md:mb-6">
                   {step}
                 </div>
-                <h3 className="text-lg md:text-h4 font-semibold text-gray-900 mb-2 md:mb-3">{t(`step${step}Title`)}</h3>
-                <p className="text-sm md:text-base text-gray-600">{t(`step${step}Desc`)}</p>
+                <h3 className="text-lg md:text-h4 font-semibold text-gray-900 dark:text-gray-50 mb-2 md:mb-3">{t(`step${step}Title`)}</h3>
+                <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">{t(`step${step}Desc`)}</p>
               </div>
             ))}
           </div>
