@@ -177,19 +177,20 @@ export function Navbar({ locale }: NavbarProps) {
                   </Link>
 
                   {/* Calendars with nested submenu */}
-                  <div
-                    className="relative"
-                    onMouseEnter={() => setIsCalendarsOpen(true)}
-                    onMouseLeave={() => setIsCalendarsOpen(false)}
-                  >
+                  <div className="relative">
                     <button
+                      onClick={() => {
+                        setIsCalendarsOpen(!isCalendarsOpen);
+                        setIsUniversitiesOpen(false);
+                        setIsYosOpen(false);
+                      }}
                       className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
                     >
                       <span className="flex items-center gap-3">
                         <Calendar className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                         {t('calendars')}
                       </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isRTL && 'rotate-180')} />
+                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isCalendarsOpen && 'rotate-90', isRTL && !isCalendarsOpen && 'rotate-180')} />
                     </button>
 
                     {/* Calendars Submenu */}
@@ -217,19 +218,20 @@ export function Navbar({ locale }: NavbarProps) {
                   </div>
 
                   {/* Universities with nested submenu */}
-                  <div
-                    className="relative"
-                    onMouseEnter={() => setIsUniversitiesOpen(true)}
-                    onMouseLeave={() => setIsUniversitiesOpen(false)}
-                  >
+                  <div className="relative">
                     <button
+                      onClick={() => {
+                        setIsUniversitiesOpen(!isUniversitiesOpen);
+                        setIsCalendarsOpen(false);
+                        setIsYosOpen(false);
+                      }}
                       className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
                     >
                       <span className="flex items-center gap-3">
                         <Building2 className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                         {t('universities')}
                       </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isRTL && 'rotate-180')} />
+                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isUniversitiesOpen && 'rotate-90', isRTL && !isUniversitiesOpen && 'rotate-180')} />
                     </button>
 
                     {/* Universities Submenu */}
@@ -257,19 +259,20 @@ export function Navbar({ locale }: NavbarProps) {
                   </div>
 
                   {/* YöS Exam with nested submenu */}
-                  <div
-                    className="relative"
-                    onMouseEnter={() => setIsYosOpen(true)}
-                    onMouseLeave={() => setIsYosOpen(false)}
-                  >
+                  <div className="relative">
                     <button
+                      onClick={() => {
+                        setIsYosOpen(!isYosOpen);
+                        setIsCalendarsOpen(false);
+                        setIsUniversitiesOpen(false);
+                      }}
                       className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
                     >
                       <span className="flex items-center gap-3">
                         <FileQuestion className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                         {t('yosExam')}
                       </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isRTL && 'rotate-180')} />
+                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isYosOpen && 'rotate-90', isRTL && !isYosOpen && 'rotate-180')} />
                     </button>
 
                     {/* YöS Exam Submenu */}
