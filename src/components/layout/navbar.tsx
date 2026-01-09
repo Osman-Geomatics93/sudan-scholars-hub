@@ -51,6 +51,7 @@ export function Navbar({ locale }: NavbarProps) {
 
   const navLinks = [
     { href: `/${locale}`, label: t('home') },
+    { href: `/${locale}/turkey`, label: t('turkey') },
     { href: `/${locale}/scholarships`, label: t('scholarships') },
     { href: `/${locale}/calendar`, label: isRTL ? 'التقويم' : 'Calendar' },
     { href: `/${locale}/about`, label: t('about') },
