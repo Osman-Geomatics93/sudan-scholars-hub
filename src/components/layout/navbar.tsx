@@ -171,8 +171,8 @@ export function Navbar({ locale }: NavbarProps) {
                 "rounded-2xl shadow-2xl shadow-black/10 p-2 z-50 overflow-hidden",
                 "transition-all duration-300 ease-out",
                 isTurkeyOpen
-                  ? "opacity-100 scale-100 visible"
-                  : "opacity-0 scale-95 invisible"
+                  ? "opacity-100 scale-100 visible pointer-events-auto"
+                  : "opacity-0 scale-95 invisible pointer-events-none"
               )}>
                   {/* Turkey Main Page */}
                   <Link
@@ -205,7 +205,7 @@ export function Navbar({ locale }: NavbarProps) {
                       'absolute top-0 w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
                       'transition-all duration-300 ease-out',
                       isRTL ? 'end-full me-2' : 'start-full ms-2',
-                      isCalendarsOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                      isCalendarsOpen ? 'opacity-100 scale-100 visible pointer-events-auto' : 'opacity-0 scale-95 invisible pointer-events-none'
                     )}>
                       {turkeyCalendarLinks.map((link) => (
                         <Link
@@ -245,7 +245,7 @@ export function Navbar({ locale }: NavbarProps) {
                       'absolute top-0 w-64 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
                       'transition-all duration-300 ease-out',
                       isRTL ? 'end-full me-2' : 'start-full ms-2',
-                      isUniversitiesOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                      isUniversitiesOpen ? 'opacity-100 scale-100 visible pointer-events-auto' : 'opacity-0 scale-95 invisible pointer-events-none'
                     )}>
                       {turkeyUniversityLinks.map((link) => (
                         <Link
@@ -285,7 +285,7 @@ export function Navbar({ locale }: NavbarProps) {
                       'absolute top-0 w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
                       'transition-all duration-300 ease-out',
                       isRTL ? 'end-full me-2' : 'start-full ms-2',
-                      isYosOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                      isYosOpen ? 'opacity-100 scale-100 visible pointer-events-auto' : 'opacity-0 scale-95 invisible pointer-events-none'
                     )}>
                       {turkeyYosLinks.map((link) => (
                         <Link
@@ -326,8 +326,8 @@ export function Navbar({ locale }: NavbarProps) {
                 "rounded-2xl shadow-2xl shadow-black/10 p-2 z-50 overflow-hidden",
                 "transition-all duration-300 ease-out",
                 isResourcesOpen
-                  ? "opacity-100 scale-100 visible"
-                  : "opacity-0 scale-95 invisible"
+                  ? "opacity-100 scale-100 visible pointer-events-auto"
+                  : "opacity-0 scale-95 invisible pointer-events-none"
               )}>
                 {resourceLinks.map((link) => (
                   <Link
@@ -391,8 +391,8 @@ export function Navbar({ locale }: NavbarProps) {
                   "rounded-2xl shadow-2xl shadow-black/10 overflow-hidden z-50",
                   "transition-all duration-300 ease-out",
                   isUserMenuOpen
-                    ? "opacity-100 scale-100 visible"
-                    : "opacity-0 scale-95 invisible"
+                    ? "opacity-100 scale-100 visible pointer-events-auto"
+                    : "opacity-0 scale-95 invisible pointer-events-none"
                 )}>
                   <div className="px-4 py-3 bg-gradient-to-r from-primary-50/50 to-secondary-50/50 dark:from-primary-900/20 dark:to-secondary-900/20 border-b border-gray-100/50 dark:border-gray-700/50">
                     <p className="font-semibold text-gray-900 dark:text-gray-50 truncate">
