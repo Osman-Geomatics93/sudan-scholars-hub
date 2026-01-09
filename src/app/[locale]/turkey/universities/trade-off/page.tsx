@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Container } from '@/components/layout/container';
 import {
@@ -14,13 +15,245 @@ import {
   ArrowRight,
   BookOpen,
   Users,
-  Award
+  Award,
+  DollarSign,
+  ClipboardCheck,
+  ListChecks,
+  AlertTriangle,
+  ChevronDown,
+  Plus,
+  Minus
 } from 'lucide-react';
+
+// FAQ Item Component
+function FAQItem({
+  icon: Icon,
+  questionEn,
+  questionAr,
+  answerEn,
+  answerAr,
+  isRTL,
+  isOpen,
+  onToggle
+}: {
+  icon: React.ElementType;
+  questionEn: string;
+  questionAr: string;
+  answerEn: string | React.ReactNode;
+  answerAr: string | React.ReactNode;
+  isRTL: boolean;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="w-full px-6 py-5 flex items-center gap-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+      >
+        <div className="flex items-center justify-center w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg shrink-0">
+          <Icon className="h-6 w-6 text-red-600 dark:text-red-400" />
+        </div>
+        <h3 className="flex-1 text-lg font-semibold text-gray-900 dark:text-gray-50">
+          {isRTL ? questionAr : questionEn}
+        </h3>
+        <div className="shrink-0">
+          {isOpen ? (
+            <Minus className="h-5 w-5 text-red-600 dark:text-red-400" />
+          ) : (
+            <Plus className="h-5 w-5 text-gray-400" />
+          )}
+        </div>
+      </button>
+      <div
+        className={`transition-all duration-300 ease-in-out ${
+          isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+        } overflow-hidden`}
+      >
+        <div className="px-6 pb-6 pt-2 text-gray-600 dark:text-gray-400 leading-relaxed border-t border-gray-100 dark:border-gray-700">
+          {isRTL ? answerAr : answerEn}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function TradeOffPage() {
   const pathname = usePathname();
   const locale = pathname.split('/')[1] || 'en';
   const isRTL = locale === 'ar';
+  const [openFAQ, setOpenFAQ] = useState<number | null>(0); // First FAQ open by default
+
+  const toggleFAQ = (index: number) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
+
+  const faqItems = [
+    {
+      icon: HelpCircle,
+      questionEn: "What does Mufazala mean?",
+      questionAr: "ماذا تعني المفاضلة؟",
+      answerEn: (
+        <div className="space-y-3">
+          <p>
+            Mufazala means that a person submits an application to study at a specific university through a website or method determined by the university. Each university specifies the exams it accepts for the application, and also specifies minimum scores required for certain specializations.
+          </p>
+          <p>
+            The term &quot;Mufazala&quot; (المفاضلة) literally means &quot;comparison&quot; or &quot;differentiation&quot; - the university compares applicants based on their scores and qualifications to select the best candidates.
+          </p>
+        </div>
+      ),
+      answerAr: (
+        <div className="space-y-3">
+          <p>
+            المفاضلة تعني أن الشخص يقوم بتقديم طلب للدراسة في جامعة معينة ضمن موقع إلكتروني أو طريقة تحددها الجامعة. تحدد كل جامعة الامتحانات التي تقبلها للتقديم، كما تحدد الحد الأدنى من الدرجات المطلوبة لتخصصات معينة.
+          </p>
+          <p>
+            كلمة &quot;المفاضلة&quot; تعني المقارنة أو التفريق - حيث تقوم الجامعة بمقارنة المتقدمين بناءً على درجاتهم ومؤهلاتهم لاختيار أفضل المرشحين.
+          </p>
+        </div>
+      )
+    },
+    {
+      icon: DollarSign,
+      questionEn: "What are the Mufazala fees?",
+      questionAr: "كم أُجرة المفاضلة؟",
+      answerEn: (
+        <div className="space-y-3">
+          <p>
+            In most universities, the Mufazala is <strong className="text-green-600 dark:text-green-400">completely free</strong>. However, some universities charge application fees, such as:
+          </p>
+          <ul className="list-disc list-inside space-y-1 mr-4">
+            <li>Erciyes University</li>
+            <li>Gazi University</li>
+            <li>And some other universities</li>
+          </ul>
+          <p className="text-sm bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+            <strong>Note:</strong> Some universities conduct up to 7 rounds of Mufazala until all seats are filled, while other universities have only one round. This gives you multiple chances to apply!
+          </p>
+        </div>
+      ),
+      answerAr: (
+        <div className="space-y-3">
+          <p>
+            في أغلب الجامعات تكون المفاضلة <strong className="text-green-600 dark:text-green-400">مجانية تماماً</strong>. لكن بعض الجامعات تفرض رسوم تقديم، مثل:
+          </p>
+          <ul className="list-disc list-inside space-y-1 mr-4">
+            <li>جامعة أرجيس (Erciyes)</li>
+            <li>جامعة غازي (Gazi)</li>
+            <li>وبعض الجامعات الأخرى</li>
+          </ul>
+          <p className="text-sm bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+            <strong>ملاحظة:</strong> بعض الجامعات تقوم بعمل حتى 7 جولات من المفاضلة حتى يتم ملء جميع المقاعد، بينما جامعات أخرى لديها جولة واحدة فقط. هذا يمنحك فرص متعددة للتقديم!
+          </p>
+        </div>
+      )
+    },
+    {
+      icon: ClipboardCheck,
+      questionEn: "What are the Mufazala requirements?",
+      questionAr: "ما هي شروط المفاضلة؟",
+      answerEn: (
+        <div className="space-y-3">
+          <p>The common requirements for most universities are:</p>
+          <ul className="space-y-2">
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>The student must be a foreigner or have <strong>non-Turkish citizenship</strong></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>Valid <strong>passport</strong> or Turkish ID (for dual citizens)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>At least one of the required certificates:</span>
+            </li>
+          </ul>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">YÖS Certificate</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">SAT 1</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">SAT 2</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">ACT</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm col-span-2">High School Diploma / Certificate</div>
+          </div>
+        </div>
+      ),
+      answerAr: (
+        <div className="space-y-3">
+          <p>الشروط العامة لمعظم الجامعات هي:</p>
+          <ul className="space-y-2">
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>أن يكون الطالب أجنبياً أو يحمل <strong>جنسية غير تركية</strong></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span><strong>جواز سفر</strong> ساري المفعول أو الهوية التركية (للمزدوجي الجنسية)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>واحدة على الأقل من الشهادات المطلوبة:</span>
+            </li>
+          </ul>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">شهادة اليوس (YÖS)</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">SAT 1</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">SAT 2</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm">ACT</div>
+            <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded text-center text-sm col-span-2">شهادة الثانوية العامة</div>
+          </div>
+        </div>
+      )
+    },
+    {
+      icon: ListChecks,
+      questionEn: "How do preferences (الرغبات) work?",
+      questionAr: "كيف تعمل الرغبات؟",
+      answerEn: (
+        <div className="space-y-3">
+          <p>
+            In most universities, you can choose <strong>up to 5 preferences</strong> (programs/majors) when applying. However, this number varies by university.
+          </p>
+          <div className="bg-amber-50 dark:bg-amber-900/30 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-2">
+                <p className="font-semibold text-amber-800 dark:text-amber-200">Important Warning!</p>
+                <ul className="text-sm space-y-1 text-amber-700 dark:text-amber-300">
+                  <li>• Your <strong>first preference is the most important</strong> - it is reviewed first</li>
+                  <li>• Be very careful when choosing your preferences</li>
+                  <li>• If you are accepted in <strong>any</strong> of your preferences, you may NOT be able to apply again in the second round at the same university</li>
+                  <li>• Choose wisely - don&apos;t put a program as a preference unless you would actually accept it</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+      answerAr: (
+        <div className="space-y-3">
+          <p>
+            في معظم الجامعات، يمكنك اختيار <strong>حتى 5 رغبات</strong> (تخصصات/برامج) عند التقديم. لكن هذا العدد يختلف من جامعة لأخرى.
+          </p>
+          <div className="bg-amber-50 dark:bg-amber-900/30 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-2">
+                <p className="font-semibold text-amber-800 dark:text-amber-200">تحذير مهم!</p>
+                <ul className="text-sm space-y-1 text-amber-700 dark:text-amber-300">
+                  <li>• <strong>الرغبة الأولى هي الأهم</strong> - يتم مراجعتها أولاً</li>
+                  <li>• كن حذراً جداً عند اختيار رغباتك</li>
+                  <li>• إذا تم قبولك في <strong>أي</strong> من رغباتك، قد لا تتمكن من التقديم مرة أخرى في الجولة الثانية في نفس الجامعة</li>
+                  <li>• اختر بحكمة - لا تضع تخصصاً كرغبة إلا إذا كنت ستقبله فعلاً</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  ];
 
   const steps = [
     {
@@ -109,63 +342,78 @@ export default function TradeOffPage() {
         </Container>
       </section>
 
-      {/* What is Mufazala Section */}
+      {/* Quick Overview Cards */}
       <section className="py-12 md:py-16">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 md:p-8">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="flex items-center justify-center w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg shrink-0">
-                  <GraduationCap className="h-6 w-6 text-red-600 dark:text-red-400" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-2">
-                    {isRTL ? 'تعريف المفاضلة' : 'Definition of Mufazala'}
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                    {isRTL
-                      ? 'المفاضلة هي نظام القبول الجامعي في تركيا للطلاب الدوليين. تفتح كل جامعة تركية باب التقديم في فترة محددة، ويتنافس الطلاب على المقاعد المتاحة بناءً على درجاتهم في امتحانات مثل اليوس أو السات أو معدل الثانوية العامة.'
-                      : 'Mufazala is the university admission system in Turkey for international students. Each Turkish university opens applications during a specific period, and students compete for available seats based on their scores in exams like YÖS, SAT, or high school GPA.'}
-                  </p>
-                </div>
+            <div className="grid md:grid-cols-3 gap-4 mb-12">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 text-center">
+                <Users className="h-10 w-10 text-red-600 dark:text-red-400 mx-auto mb-3" />
+                <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
+                  {isRTL ? 'للطلاب الدوليين' : 'For International Students'}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {isRTL ? 'نظام خاص بالطلاب الأجانب' : 'Special system for foreign students'}
+                </p>
               </div>
-
-              <div className="grid md:grid-cols-3 gap-4 mt-8">
-                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 text-center">
-                  <Users className="h-8 w-8 text-red-600 dark:text-red-400 mx-auto mb-2" />
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
-                    {isRTL ? 'للطلاب الدوليين' : 'For International Students'}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {isRTL ? 'نظام خاص بالطلاب الأجانب' : 'Special system for foreign students'}
-                  </p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 text-center">
-                  <Calendar className="h-8 w-8 text-red-600 dark:text-red-400 mx-auto mb-2" />
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
-                    {isRTL ? 'مواعيد محددة' : 'Specific Deadlines'}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {isRTL ? 'لكل جامعة مواعيد خاصة' : 'Each university has its own dates'}
-                  </p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 text-center">
-                  <Award className="h-8 w-8 text-red-600 dark:text-red-400 mx-auto mb-2" />
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
-                    {isRTL ? 'تنافسي' : 'Competitive'}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {isRTL ? 'القبول بناءً على الدرجات' : 'Admission based on scores'}
-                  </p>
-                </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 text-center">
+                <Calendar className="h-10 w-10 text-red-600 dark:text-red-400 mx-auto mb-3" />
+                <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
+                  {isRTL ? 'مواعيد محددة' : 'Specific Deadlines'}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {isRTL ? 'لكل جامعة مواعيد خاصة' : 'Each university has its own dates'}
+                </p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 text-center">
+                <Award className="h-10 w-10 text-red-600 dark:text-red-400 mx-auto mb-3" />
+                <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
+                  {isRTL ? 'تنافسي' : 'Competitive'}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {isRTL ? 'القبول بناءً على الدرجات' : 'Admission based on scores'}
+                </p>
               </div>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Accepted Exams Section */}
+      {/* FAQ Accordion Section */}
       <section className="py-12 md:py-16 bg-white dark:bg-gray-800">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-3">
+                {isRTL ? 'أسئلة شائعة عن المفاضلة' : 'Frequently Asked Questions about Mufazala'}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                {isRTL
+                  ? 'كل ما تحتاج معرفته عن نظام القبول الجامعي في تركيا'
+                  : 'Everything you need to know about the university admission system in Turkey'}
+              </p>
+            </div>
+            <div className="space-y-4">
+              {faqItems.map((item, index) => (
+                <FAQItem
+                  key={index}
+                  icon={item.icon}
+                  questionEn={item.questionEn}
+                  questionAr={item.questionAr}
+                  answerEn={item.answerEn}
+                  answerAr={item.answerAr}
+                  isRTL={isRTL}
+                  isOpen={openFAQ === index}
+                  onToggle={() => toggleFAQ(index)}
+                />
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Accepted Exams Section */}
+      <section className="py-12 md:py-16">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 text-center mb-8">
