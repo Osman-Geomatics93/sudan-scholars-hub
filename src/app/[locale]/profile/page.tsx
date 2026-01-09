@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select } from '@/components/ui/select';
 import { ProfileEditForm } from '@/components/features/profile-edit-form';
+import { SkeletonProfile } from '@/components/ui/skeleton';
 
 interface SavedScholarship {
   id: string;
@@ -222,8 +223,10 @@ export default function ProfilePage() {
 
   if (loading || sessionStatus === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+        <Container>
+          <SkeletonProfile />
+        </Container>
       </div>
     );
   }

@@ -13,6 +13,7 @@ import {
   ArrowRight,
   ArrowLeft,
 } from 'lucide-react';
+import { SkeletonStatCard, SkeletonTable } from '@/components/ui/skeleton';
 
 interface Stats {
   scholarships: {
@@ -122,8 +123,25 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+      <div className="space-y-8">
+        {/* Header skeleton */}
+        <div>
+          <div className="h-8 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+          <div className="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        </div>
+
+        {/* Stats cards skeleton */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <SkeletonStatCard key={i} />
+          ))}
+        </div>
+
+        {/* Tables skeleton */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          <SkeletonTable columns={3} rows={5} />
+          <SkeletonTable columns={2} rows={5} />
+        </div>
       </div>
     );
   }

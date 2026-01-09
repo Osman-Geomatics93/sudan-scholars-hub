@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Download, Users, UserCheck, UserX } from 'lucide-react';
+import { SkeletonStatCard, SkeletonTable } from '@/components/ui/skeleton';
 
 interface Subscriber {
   id: string;
@@ -68,8 +69,32 @@ export default function SubscribersPage() {
 
   if (loading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+      <div className="space-y-6">
+        {/* Header skeleton */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="h-8 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+            <div className="h-4 w-56 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          </div>
+          <div className="h-10 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        </div>
+
+        {/* Stats skeleton */}
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <SkeletonStatCard key={i} />
+          ))}
+        </div>
+
+        {/* Filter tabs skeleton */}
+        <div className="flex gap-2">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-10 w-20 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+          ))}
+        </div>
+
+        {/* Table skeleton */}
+        <SkeletonTable columns={3} rows={10} showHeader />
       </div>
     );
   }

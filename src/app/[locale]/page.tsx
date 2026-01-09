@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ScholarshipCard } from '@/components/features/scholarship-card';
-import { SkeletonCard } from '@/components/ui/skeleton';
+import { SkeletonCard, SkeletonTestimonial } from '@/components/ui/skeleton';
 import { AdCarousel } from '@/components/features/ad-carousel';
 import { FeaturedPosters } from '@/components/features/featured-posters';
 import { stats, categories } from '@/lib/mock-data';
@@ -342,40 +342,48 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      {testimonials.length > 0 && (
-        <section className="py-12 md:py-16 lg:py-24 bg-gray-50">
+      {(loading || testimonials.length > 0) && (
+        <section className="py-12 md:py-16 lg:py-24 bg-gray-50 dark:bg-gray-900">
           <Container>
             <div className="text-center mb-8 md:mb-12 px-4">
-              <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 mb-2 md:mb-3">{t('testimonialsTitle')}</h2>
-              <p className="text-sm md:text-base text-gray-600">{t('testimonialsSubtitle')}</p>
+              <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 dark:text-gray-50 mb-2 md:mb-3">{t('testimonialsTitle')}</h2>
+              <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t('testimonialsSubtitle')}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              {testimonials.map((testimonial) => (
-                <Card key={testimonial.id} className="p-4 md:p-6">
-                  <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
-                    <Image
-                      src={testimonial.avatar}
-                      alt={getLocalizedField(testimonial, 'name', locale)}
-                      width={48}
-                      height={48}
-                      className="rounded-full object-cover w-10 h-10 md:w-12 md:h-12"
-                    />
-                    <div>
-                      <h4 className="font-semibold text-gray-900 text-sm md:text-base">
-                        {getLocalizedField(testimonial, 'name', locale)}
-                      </h4>
-                      <p className="text-xs md:text-sm text-gray-500">
-                        {getLocalizedField(testimonial, 'university', locale)}
-                      </p>
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                {[1, 2, 3].map((i) => (
+                  <SkeletonTestimonial key={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                {testimonials.map((testimonial) => (
+                  <Card key={testimonial.id} className="p-4 md:p-6">
+                    <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                      <Image
+                        src={testimonial.avatar}
+                        alt={getLocalizedField(testimonial, 'name', locale)}
+                        width={48}
+                        height={48}
+                        className="rounded-full object-cover w-10 h-10 md:w-12 md:h-12"
+                      />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-50 text-sm md:text-base">
+                          {getLocalizedField(testimonial, 'name', locale)}
+                        </h4>
+                        <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
+                          {getLocalizedField(testimonial, 'university', locale)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <p className="text-sm md:text-base text-gray-600 italic">
-                    &ldquo;{getLocalizedField(testimonial, 'quote', locale)}&rdquo;
-                  </p>
-                </Card>
-              ))}
-            </div>
+                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 italic">
+                      &ldquo;{getLocalizedField(testimonial, 'quote', locale)}&rdquo;
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            )}
           </Container>
         </section>
       )}

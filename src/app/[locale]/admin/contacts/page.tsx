@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Mail, MailOpen, Trash2, Eye } from 'lucide-react';
+import { SkeletonContactList, SkeletonContactDetail } from '@/components/ui/skeleton';
 
 interface ContactMessage {
   id: string;
@@ -102,8 +103,18 @@ export default function ContactsPage() {
 
   if (loading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+      <div className="space-y-6">
+        {/* Header skeleton */}
+        <div>
+          <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+          <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        </div>
+
+        {/* Content skeleton */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          <SkeletonContactList />
+          <SkeletonContactDetail />
+        </div>
       </div>
     );
   }

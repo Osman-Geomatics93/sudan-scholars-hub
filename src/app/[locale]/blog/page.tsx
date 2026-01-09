@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, ArrowRight, BookOpen, User, Loader2 } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, BookOpen, User } from 'lucide-react';
 import { Container } from '@/components/layout/container';
 import { Card } from '@/components/ui/card';
 import { ShareButton } from '@/components/features/share-button';
+import { SkeletonBlogFeatured, SkeletonBlogCard } from '@/components/ui/skeleton';
 
 interface BlogPost {
   id: string;
@@ -75,16 +76,34 @@ export default function BlogPage() {
           <Container size="md">
             <div className="text-center">
               <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
                 {isRTL ? 'المدونة' : 'Blog'}
               </h1>
+              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                {isRTL
+                  ? 'مقالات ونصائح وأدلة لمساعدتك في رحلتك نحو المنحة الدراسية'
+                  : 'Articles, tips, and guides to help you on your scholarship journey'
+                }
+              </p>
             </div>
           </Container>
         </section>
-        <section className="py-16">
+
+        {/* Featured Post Skeleton */}
+        <section className="py-12 bg-white dark:bg-gray-800">
           <Container>
-            <div className="flex justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+            <SkeletonBlogFeatured />
+          </Container>
+        </section>
+
+        {/* Blog Cards Skeleton */}
+        <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-900">
+          <Container>
+            <div className="h-8 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-8" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <SkeletonBlogCard key={i} />
+              ))}
             </div>
           </Container>
         </section>

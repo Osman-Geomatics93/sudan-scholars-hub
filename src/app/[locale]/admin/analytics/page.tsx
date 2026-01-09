@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { AnalyticsChart } from '@/components/admin/analytics-chart';
 import { Button } from '@/components/ui/button';
+import { SkeletonStatCard, SkeletonChart } from '@/components/ui/skeleton';
 
 interface AnalyticsData {
   summary: {
@@ -174,9 +175,7 @@ export default function AnalyticsPage() {
             {isRTL ? 'مشاهدات الصفحات' : 'Page Views Over Time'}
           </h2>
           {loading ? (
-            <div className="h-64 flex items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
-            </div>
+            <SkeletonChart />
           ) : (
             <AnalyticsChart
               data={data?.charts.pageViewsByDay || []}
@@ -193,9 +192,7 @@ export default function AnalyticsPage() {
             {isRTL ? 'التحميلات حسب الملف' : 'Downloads by File'}
           </h2>
           {loading ? (
-            <div className="h-64 flex items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
-            </div>
+            <SkeletonChart />
           ) : (
             <AnalyticsChart
               data={data?.charts.downloadsByFile || []}
