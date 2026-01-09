@@ -32,6 +32,11 @@
   "nav": {
     "home": "Home",
     "turkey": "Study in Turkey",
+    "turkeyMain": "Turkey Main Page",
+    "calendars": "Calendars",
+    "admissionsCalendar": "Admissions Calendar",
+    "graduateCalendar": "Masters & PhD Calendar",
+    "summerCalendar": "Summer Calendar",
     "scholarships": "Scholarships",
     "calendar": "Calendar",
     "about": "About",

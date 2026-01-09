@@ -32,6 +32,11 @@
   "nav": {
     "home": "الرئيسية",
     "turkey": "الدراسة في تركيا",
+    "turkeyMain": "صفحة تركيا الرئيسية",
+    "calendars": "التقويمات",
+    "admissionsCalendar": "تقويم المفاضلات علي الجامعات التركية",
+    "graduateCalendar": "تقويم الدراسات العليا",
+    "summerCalendar": "التقويم الصيفي",
     "scholarships": "المنح",
     "calendar": "التقويم",
     "about": "من نحن",
