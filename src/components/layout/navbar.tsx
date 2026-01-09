@@ -164,11 +164,12 @@ export function Navbar({ locale }: NavbarProps) {
               {/* Mega Menu */}
               {isTurkeyOpen && (
                 <div className={cn(
-                  "absolute mt-4 w-full md:w-[600px] lg:w-[800px] max-w-[calc(100vw-2rem)]",
+                  "fixed md:absolute mt-4 w-[calc(100vw-1rem)] md:w-[500px] lg:w-[650px]",
                   "bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl",
                   "border border-gray-200/50 dark:border-gray-700/50",
                   "rounded-2xl shadow-2xl shadow-black/10 p-4 md:p-6 z-50",
-                  isRTL ? "end-0" : "start-0"
+                  "left-2 right-2 md:left-auto md:right-0",
+                  "top-16 md:top-auto"
                 )}>
                   {/* Header with Turkey flag */}
                   <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200/50 dark:border-gray-700/50">
