@@ -51,8 +51,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        arabic: ['Cairo', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        arabic: ['var(--font-cairo)', 'Cairo', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'display': ['3rem', { lineHeight: '3.75rem', fontWeight: '700' }],

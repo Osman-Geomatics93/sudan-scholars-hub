@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { inter, cairo } from '@/lib/fonts';
 
 const siteUrl = 'https://www.deltaroots.store';
 
@@ -88,7 +89,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning>
+    <html className={`${inter.variable} ${cairo.variable}`} suppressHydrationWarning>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );
