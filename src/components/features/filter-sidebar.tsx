@@ -123,8 +123,8 @@ export function FilterSidebar({
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0">
-        <div className="sticky top-20 bg-white rounded-lg border border-gray-200 p-6">
+      <aside className="hidden lg:block w-56 xl:w-64 shrink-0">
+        <div className="sticky top-[4.5rem] bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 xl:p-6 max-h-[calc(100vh-6rem)] overflow-y-auto">
           <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Filter className="h-4 w-4" />
             {t('filterTitle')}
@@ -136,14 +136,14 @@ export function FilterSidebar({
       {/* Mobile Filter Modal */}
       <div
         className={cn(
-          'fixed inset-0 z-50 lg:hidden transition-opacity',
+          'fixed inset-0 z-[45] lg:hidden transition-opacity',
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
       >
         <div className="absolute inset-0 bg-black/50" onClick={onClose} />
         <div
           className={cn(
-            'absolute inset-y-0 start-0 w-80 max-w-full bg-white p-6 overflow-y-auto transition-transform',
+            'absolute inset-y-0 start-0 w-[85vw] max-w-xs sm:max-w-sm bg-white dark:bg-gray-900 p-4 sm:p-6 overflow-y-auto transition-transform',
             isOpen ? 'translate-x-0' : '-translate-x-full rtl:translate-x-full'
           )}
         >

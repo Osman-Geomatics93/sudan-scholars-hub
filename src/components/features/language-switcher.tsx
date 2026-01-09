@@ -29,10 +29,13 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   // Render a placeholder during SSR to avoid hydration mismatch
   if (!mounted) {
     return (
-      <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 bg-gray-100 dark:bg-gray-800">
+      <button
+        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 bg-gray-100 dark:bg-gray-800"
+        suppressHydrationWarning
+      >
         <Globe className="h-5 w-5" />
         <span>{locale === 'ar' ? 'English' : 'العربية'}</span>
-      </div>
+      </button>
     );
   }
 
@@ -48,6 +51,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
         'transition-all duration-300 group'
       )}
       aria-label={`Switch to ${locale === 'ar' ? 'English' : 'Arabic'}`}
+      suppressHydrationWarning
     >
       <Globe className="h-5 w-5 group-hover:text-primary-500 group-hover:rotate-12 transition-all duration-300" />
       <span className="group-hover:translate-x-0.5 transition-transform duration-300">{t('language')}</span>

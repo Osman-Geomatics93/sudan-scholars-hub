@@ -292,14 +292,14 @@ function ScholarshipsContent({ locale }: { locale: string }) {
               <>
                 {/* Loading State */}
                 {loading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
                     {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
                       <SkeletonCard key={i} />
                     ))}
                   </div>
                 ) : scholarships.length > 0 ? (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
                       {scholarships.map((scholarship) => (
                         <ScholarshipCard
                           key={scholarship.id}
@@ -368,7 +368,7 @@ function ScholarshipsLoadingFallback() {
           <div className="h-10 w-64 bg-gray-200 rounded animate-pulse mb-2" />
           <div className="h-6 w-96 bg-gray-200 rounded animate-pulse" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <SkeletonCard key={i} />
           ))}

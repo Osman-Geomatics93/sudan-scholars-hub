@@ -49,12 +49,13 @@ export function ChatWidget() {
       <button
         onClick={toggleChat}
         className={cn(
-          'fixed z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl',
-          isRTL ? 'left-4 sm:left-6' : 'right-4 sm:right-6',
-          'bottom-4 sm:bottom-6',
+          'fixed z-50 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl',
+          isRTL ? 'left-2 sm:left-4 md:left-6' : 'right-2 sm:right-4 md:right-6',
+          'bottom-2 sm:bottom-4 md:bottom-6',
           isOpen && 'scale-0 opacity-0'
         )}
         aria-label={isRTL ? 'فتح المحادثة' : 'Open chat'}
+        suppressHydrationWarning
       >
         <MessageCircle className="h-6 w-6" />
         {/* Pulse animation */}
@@ -65,13 +66,13 @@ export function ChatWidget() {
       <div
         className={cn(
           'fixed z-50 flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-gray-900 shadow-2xl transition-all duration-300',
-          isRTL ? 'left-4 sm:left-6' : 'right-4 sm:right-6',
-          'bottom-4 sm:bottom-6',
+          isRTL ? 'left-2 sm:left-4 md:left-6' : 'right-2 sm:right-4 md:right-6',
+          'bottom-2 sm:bottom-4 md:bottom-6',
           isOpen
-            ? 'h-[500px] w-[350px] sm:w-[380px] opacity-100 scale-100'
+            ? 'h-[calc(100vh-6rem)] sm:h-[450px] md:h-[500px] w-[calc(100vw-1rem)] sm:w-[320px] md:w-[380px] opacity-100 scale-100'
             : 'h-0 w-0 opacity-0 scale-90 pointer-events-none'
         )}
-        style={{ maxHeight: 'calc(100vh - 100px)' }}
+        style={{ maxHeight: 'calc(100dvh - 5rem)' }}
       >
         {/* Header */}
         <div className="flex items-center justify-between bg-gradient-to-r from-primary-500 to-primary-600 px-4 py-3 text-white">
@@ -93,6 +94,7 @@ export function ChatWidget() {
               onClick={clearMessages}
               className="rounded-lg p-2 hover:bg-white/20 transition-colors"
               title={isRTL ? 'مسح المحادثة' : 'Clear chat'}
+              suppressHydrationWarning
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -100,6 +102,7 @@ export function ChatWidget() {
               onClick={closeChat}
               className="rounded-lg p-2 hover:bg-white/20 transition-colors"
               title={isRTL ? 'إغلاق' : 'Close'}
+              suppressHydrationWarning
             >
               <X className="h-5 w-5" />
             </button>
@@ -124,6 +127,7 @@ export function ChatWidget() {
                   key={idx}
                   onClick={() => sendMessage(action)}
                   className="rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1.5 text-xs text-gray-700 dark:text-gray-300 hover:bg-primary-100 hover:text-primary-700 dark:hover:bg-primary-900 dark:hover:text-primary-300 transition-colors"
+                  suppressHydrationWarning
                 >
                   {action}
                 </button>
@@ -144,11 +148,13 @@ export function ChatWidget() {
               className="flex-1 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:text-white"
               disabled={isLoading}
               dir={isRTL ? 'rtl' : 'ltr'}
+              suppressHydrationWarning
             />
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white transition-all hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              suppressHydrationWarning
             >
               <Send className={cn('h-4 w-4', isRTL && 'rotate-180')} />
             </button>

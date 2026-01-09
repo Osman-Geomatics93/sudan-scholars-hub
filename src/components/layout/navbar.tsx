@@ -164,10 +164,10 @@ export function Navbar({ locale }: NavbarProps) {
               {/* Mega Menu */}
               {isTurkeyOpen && (
                 <div className={cn(
-                  "absolute mt-4 w-[800px] max-w-[95vw]",
+                  "absolute mt-4 w-full md:w-[600px] lg:w-[800px] max-w-[calc(100vw-2rem)]",
                   "bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl",
                   "border border-gray-200/50 dark:border-gray-700/50",
-                  "rounded-2xl shadow-2xl shadow-black/10 p-6 z-50",
+                  "rounded-2xl shadow-2xl shadow-black/10 p-4 md:p-6 z-50",
                   isRTL ? "end-0" : "start-0"
                 )}>
                   {/* Header with Turkey flag */}
@@ -182,7 +182,7 @@ export function Navbar({ locale }: NavbarProps) {
                   </div>
 
                   {/* Grid of 4 sections - responsive */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                     {/* Section 1: Overview - Featured Card */}
                     <div>
                       <Link
@@ -436,8 +436,8 @@ export function Navbar({ locale }: NavbarProps) {
         {/* Mobile Navigation */}
         <div
           className={cn(
-            'md:hidden overflow-hidden transition-all duration-300',
-            isOpen ? 'max-h-[800px] pb-4' : 'max-h-0'
+            'md:hidden overflow-y-auto transition-all duration-300',
+            isOpen ? 'max-h-[calc(100vh-4rem)] pb-4' : 'max-h-0 overflow-hidden'
           )}
         >
           <div className="flex flex-col gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
@@ -596,6 +596,12 @@ export function Navbar({ locale }: NavbarProps) {
                   <LogOut className="h-5 w-5" />
                   {isRTL ? 'تسجيل الخروج' : 'Sign Out'}
                 </button>
+
+                {/* Theme and Language for logged-in users */}
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+                  <ThemeToggle locale={locale} />
+                  <LanguageSwitcher locale={locale} />
+                </div>
               </div>
             ) : (
               <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">

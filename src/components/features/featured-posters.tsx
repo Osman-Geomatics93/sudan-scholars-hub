@@ -120,10 +120,10 @@ export function FeaturedPosters({ locale }: FeaturedPostersProps) {
 
       {/* Horizontal scroll container */}
       <div
-        className="overflow-x-auto scrollbar-hide -mx-4 px-4"
+        className="overflow-x-auto scrollbar-hide -mx-4 px-4 md:-mx-0 md:px-0"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="flex gap-4 min-w-max pb-4">
+        <div className="flex gap-3 sm:gap-4 min-w-max pb-4 snap-x snap-mandatory">
           {posters.map((poster) => {
             const title = getLocalizedField(poster, 'title', locale);
             const categoryLabel = t(`categories.${poster.category}`);
@@ -131,7 +131,7 @@ export function FeaturedPosters({ locale }: FeaturedPostersProps) {
             return (
               <div
                 key={poster.id}
-                className="w-48 flex-shrink-0 group cursor-pointer"
+                className="w-32 sm:w-40 md:w-48 flex-shrink-0 group cursor-pointer snap-start"
                 onClick={() => handleOpenLightbox(poster)}
               >
                 {/* Image */}
@@ -140,7 +140,7 @@ export function FeaturedPosters({ locale }: FeaturedPostersProps) {
                     src={poster.imageUrl}
                     alt={title}
                     fill
-                    sizes="192px"
+                    sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, 192px"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
 

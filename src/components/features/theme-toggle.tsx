@@ -19,7 +19,10 @@ export function ThemeToggle({ locale = 'en' }: ThemeToggleProps) {
 
   if (!mounted) {
     return (
-      <button className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 w-9 h-9 animate-pulse" />
+      <button
+        className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 w-9 h-9 animate-pulse"
+        suppressHydrationWarning
+      />
     );
   }
 
@@ -65,6 +68,7 @@ export function ThemeToggle({ locale = 'en' }: ThemeToggleProps) {
       )}
       title={getLabel()}
       aria-label={getLabel()}
+      suppressHydrationWarning
     >
       {/* Glow effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 dark:from-indigo-400 dark:to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />

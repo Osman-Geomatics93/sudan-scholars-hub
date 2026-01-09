@@ -65,7 +65,7 @@ export function ComparisonModal({ locale = 'en' }: ComparisonModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-6xl max-h-[90vh] mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden animate-scale-in">
+      <div className="relative w-full max-w-6xl max-h-[90dvh] mx-2 sm:mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden animate-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
@@ -80,8 +80,8 @@ export function ComparisonModal({ locale = 'en' }: ComparisonModalProps) {
         </div>
 
         {/* Content */}
-        <div className="overflow-auto max-h-[calc(90vh-140px)]">
-          <div className={`grid gap-4 p-4 ${scholarships.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
+        <div className="overflow-auto max-h-[calc(90dvh-140px)]">
+          <div className={`grid gap-3 sm:gap-4 p-3 sm:p-4 ${scholarships.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
             {scholarships.map((scholarship) => (
               <div
                 key={scholarship.id}
