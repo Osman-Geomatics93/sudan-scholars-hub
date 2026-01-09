@@ -437,8 +437,8 @@ export function Navbar({ locale }: NavbarProps) {
         {/* Mobile Navigation */}
         <div
           className={cn(
-            'md:hidden overflow-y-auto transition-all duration-300',
-            isOpen ? 'max-h-[calc(100vh-4rem)] pb-4' : 'max-h-0 overflow-hidden'
+            'md:hidden overflow-y-auto transition-all duration-300 overscroll-contain',
+            isOpen ? 'max-h-[calc(100vh-4rem)] pb-24' : 'max-h-0 overflow-hidden'
           )}
         >
           <div className="flex flex-col gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
@@ -599,13 +599,13 @@ export function Navbar({ locale }: NavbarProps) {
                 </button>
 
                 {/* Theme and Language for logged-in users */}
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <div className="flex items-center gap-3 pt-4 pb-8 border-t border-gray-100 dark:border-gray-800">
                   <ThemeToggle locale={locale} />
                   <LanguageSwitcher locale={locale} />
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+              <div className="flex items-center gap-3 pt-4 pb-8 border-t border-gray-100 dark:border-gray-800">
                 <ThemeToggle locale={locale} />
                 <LanguageSwitcher locale={locale} />
                 <Link href={`/${locale}/login`} className="flex-1">
