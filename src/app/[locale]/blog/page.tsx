@@ -168,7 +168,7 @@ export default function BlogPage() {
   return (
     <div dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Hero */}
-      <section className="gradient-hero py-16 md:py-24">
+      <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
         <Container size="md">
           <div className="text-center">
             <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />

@@ -92,7 +92,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
   return (
     <>
       {/* Hero */}
-      <section className="gradient-hero py-16 md:py-20">
+      <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-20">
         <Container size="md">
           <div className="text-center">
             <h1 className="text-display text-gray-900 mb-4">{t('heroTitle')}</h1>

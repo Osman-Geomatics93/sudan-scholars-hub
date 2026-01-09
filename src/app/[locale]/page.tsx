@@ -118,7 +118,7 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="gradient-hero py-12 md:py-20 lg:py-28 overflow-hidden">
+      <section className="gradient-hero pt-24 pb-12 md:pt-28 md:pb-20 lg:pt-36 lg:pb-28 overflow-hidden">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-display font-bold text-gray-900 mb-4 md:mb-6 text-balance animate-on-load animate-fade-in-up">

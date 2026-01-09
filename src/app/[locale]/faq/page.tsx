@@ -167,7 +167,7 @@ export default function FAQPage() {
   return (
     <div dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Hero */}
-      <section className="gradient-hero py-16 md:py-24">
+      <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
         <Container size="md">
           <div className="text-center">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">

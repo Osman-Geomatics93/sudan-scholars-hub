@@ -21,7 +21,7 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
   return (
     <>
       {/* Hero */}
-      <section className="gradient-hero py-16 md:py-24">
+      <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
         <Container size="md">
           <div className="text-center">
             <h1 className="text-display text-gray-900 mb-6">{t('heroTitle')}</h1>

@@ -224,7 +224,7 @@ export default function TurkeyPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-800 py-20 md:py-28 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-800 pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden">
         <div className="absolute inset-0 bg-black/20" />
         <div className="absolute top-10 right-10 w-32 h-32 md:w-48 md:h-48 opacity-20">
           <svg viewBox="0 0 100 100" className="w-full h-full text-white fill-current">
