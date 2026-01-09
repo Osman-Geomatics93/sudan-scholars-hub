@@ -162,7 +162,7 @@ export default function HomePage() {
       </section>
 
       {/* Ad Carousel */}
-      <section className="py-8 md:py-12 bg-white">
+      <section className="py-8 md:py-12 bg-white dark:bg-gray-900">
         <Container>
           <AdCarousel locale={locale} autoPlayInterval={5000} />
         </Container>
@@ -176,7 +176,7 @@ export default function HomePage() {
       </section>
 
       {/* Featured Scholarships */}
-      <section className="py-12 md:py-16 lg:py-24 bg-white">
+      <section className="py-12 md:py-16 lg:py-24 bg-white dark:bg-gray-900">
         <Container>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 md:mb-8 gap-3">
             <div>
@@ -218,7 +218,7 @@ export default function HomePage() {
       </section>
 
       {/* Categories */}
-      <section className="py-12 md:py-16 lg:py-24 bg-gray-50">
+      <section className="py-12 md:py-16 lg:py-24 bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="text-center mb-8 md:mb-12 px-4">
             <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 dark:text-gray-50 mb-2 md:mb-3">{t('categoriesTitle')}</h2>
@@ -320,7 +320,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-12 md:py-16 lg:py-24 bg-white">
+      <section className="py-12 md:py-16 lg:py-24 bg-white dark:bg-gray-900">
         <Container>
           <div className="text-center mb-8 md:mb-12 px-4">
             <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 dark:text-gray-50 mb-2 md:mb-3">{t('howItWorksTitle')}</h2>
