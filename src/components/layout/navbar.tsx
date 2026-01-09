@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, ChevronRight, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2, FileQuestion } from 'lucide-react';
+import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2, FileQuestion } from 'lucide-react';
 import { Container } from './container';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/features/language-switcher';
@@ -23,9 +23,6 @@ export function Navbar({ locale }: NavbarProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [isTurkeyOpen, setIsTurkeyOpen] = useState(false);
-  const [isCalendarsOpen, setIsCalendarsOpen] = useState(false);
-  const [isUniversitiesOpen, setIsUniversitiesOpen] = useState(false);
-  const [isYosOpen, setIsYosOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -164,139 +161,113 @@ export function Navbar({ locale }: NavbarProps) {
                 <span className="absolute inset-0 bg-primary-50 dark:bg-primary-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
               </button>
 
+              {/* Mega Menu */}
               {isTurkeyOpen && (
-                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-2xl shadow-black/10 p-2 z-50">
-                  {/* Turkey Main Page */}
-                  <Link
-                    href={turkeyMainLink.href}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
-                    onClick={() => setIsTurkeyOpen(false)}
-                  >
-                    <turkeyMainLink.icon className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
-                    {turkeyMainLink.label}
-                  </Link>
+                <div className={cn(
+                  "absolute mt-4 w-[800px] max-w-[95vw]",
+                  "bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl",
+                  "border border-gray-200/50 dark:border-gray-700/50",
+                  "rounded-2xl shadow-2xl shadow-black/10 p-6 z-50",
+                  isRTL ? "end-0" : "start-0"
+                )}>
+                  {/* Header with Turkey flag */}
+                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200/50 dark:border-gray-700/50">
+                    <span className="text-3xl">🇹🇷</span>
+                    <div>
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-white">{t('turkey')}</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {isRTL ? 'اكتشف الجامعات والفرص التعليمية' : 'Explore universities and opportunities'}
+                      </p>
+                    </div>
+                  </div>
 
-                  {/* Calendars with nested submenu */}
-                  <div className="relative">
-                    <button
-                      onClick={() => {
-                        setIsCalendarsOpen(!isCalendarsOpen);
-                        setIsUniversitiesOpen(false);
-                        setIsYosOpen(false);
-                      }}
-                      className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
-                    >
-                      <span className="flex items-center gap-3">
-                        <Calendar className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
-                        {t('calendars')}
-                      </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isCalendarsOpen && 'rotate-90', isRTL && !isCalendarsOpen && 'rotate-180')} />
-                    </button>
+                  {/* Grid of 4 sections - responsive */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* Section 1: Overview - Featured Card */}
+                    <div>
+                      <Link
+                        href={turkeyMainLink.href}
+                        className="block p-4 rounded-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200/50 dark:border-red-700/30 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 group/featured"
+                        onClick={() => setIsTurkeyOpen(false)}
+                      >
+                        <Globe className="w-8 h-8 text-red-500 mb-3 group-hover/featured:scale-110 transition-transform duration-300" />
+                        <h4 className="font-semibold text-red-700 dark:text-red-400">
+                          {isRTL ? 'اكتشف تركيا' : 'Explore Turkey'}
+                        </h4>
+                        <p className="text-sm text-red-600/70 dark:text-red-300/70 mt-1">
+                          {isRTL ? 'بوابتك للتعليم التركي' : 'Your gateway to Turkish education'}
+                        </p>
+                      </Link>
+                    </div>
 
-                    {/* Calendars Submenu */}
-                    {isCalendarsOpen && (
-                      <div className={cn(
-                        'absolute top-0 w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
-                        isRTL ? 'end-full me-2' : 'start-full ms-2'
-                      )}>
+                    {/* Section 2: Calendars */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                          <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{t('calendars')}</h4>
+                      </div>
+                      <div className="space-y-1">
                         {turkeyCalendarLinks.map((link) => (
                           <Link
                             key={link.href}
                             href={link.href}
-                            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/subitem"
-                            onClick={() => {
-                              setIsTurkeyOpen(false);
-                              setIsCalendarsOpen(false);
-                            }}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-300 text-sm hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
+                            onClick={() => setIsTurkeyOpen(false)}
                           >
-                            <link.icon className="h-5 w-5 text-gray-400 group-hover/subitem:text-primary-500 transition-colors duration-200" />
+                            <link.icon className="w-4 h-4 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                             {link.label}
                           </Link>
                         ))}
                       </div>
-                    )}
-                  </div>
+                    </div>
 
-                  {/* Universities with nested submenu */}
-                  <div className="relative">
-                    <button
-                      onClick={() => {
-                        setIsUniversitiesOpen(!isUniversitiesOpen);
-                        setIsCalendarsOpen(false);
-                        setIsYosOpen(false);
-                      }}
-                      className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
-                    >
-                      <span className="flex items-center gap-3">
-                        <Building2 className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
-                        {t('universities')}
-                      </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isUniversitiesOpen && 'rotate-90', isRTL && !isUniversitiesOpen && 'rotate-180')} />
-                    </button>
-
-                    {/* Universities Submenu */}
-                    {isUniversitiesOpen && (
-                      <div className={cn(
-                        'absolute top-0 w-64 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
-                        isRTL ? 'end-full me-2' : 'start-full ms-2'
-                      )}>
+                    {/* Section 3: Universities */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
+                          <Building2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                        </div>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{t('universities')}</h4>
+                      </div>
+                      <div className="space-y-1">
                         {turkeyUniversityLinks.map((link) => (
                           <Link
                             key={link.href}
                             href={link.href}
-                            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/subitem"
-                            onClick={() => {
-                              setIsTurkeyOpen(false);
-                              setIsUniversitiesOpen(false);
-                            }}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-300 text-sm hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
+                            onClick={() => setIsTurkeyOpen(false)}
                           >
-                            <link.icon className="h-5 w-5 text-gray-400 group-hover/subitem:text-primary-500 transition-colors duration-200" />
+                            <link.icon className="w-4 h-4 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                             {link.label}
                           </Link>
                         ))}
                       </div>
-                    )}
-                  </div>
+                    </div>
 
-                  {/* YöS Exam with nested submenu */}
-                  <div className="relative">
-                    <button
-                      onClick={() => {
-                        setIsYosOpen(!isYosOpen);
-                        setIsCalendarsOpen(false);
-                        setIsUniversitiesOpen(false);
-                      }}
-                      className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
-                    >
-                      <span className="flex items-center gap-3">
-                        <FileQuestion className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
-                        {t('yosExam')}
-                      </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isYosOpen && 'rotate-90', isRTL && !isYosOpen && 'rotate-180')} />
-                    </button>
-
-                    {/* YöS Exam Submenu */}
-                    {isYosOpen && (
-                      <div className={cn(
-                        'absolute top-0 w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
-                        isRTL ? 'end-full me-2' : 'start-full ms-2'
-                      )}>
+                    {/* Section 4: YÖS Exam */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30">
+                          <FileQuestion className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        </div>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{t('yosExam')}</h4>
+                      </div>
+                      <div className="space-y-1">
                         {turkeyYosLinks.map((link) => (
                           <Link
                             key={link.href}
                             href={link.href}
-                            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/subitem"
-                            onClick={() => {
-                              setIsTurkeyOpen(false);
-                              setIsYosOpen(false);
-                            }}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-300 text-sm hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
+                            onClick={() => setIsTurkeyOpen(false)}
                           >
-                            <link.icon className="h-5 w-5 text-gray-400 group-hover/subitem:text-primary-500 transition-colors duration-200" />
+                            <link.icon className="w-4 h-4 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                             {link.label}
                           </Link>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               )}
