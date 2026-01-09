@@ -101,7 +101,7 @@ export default function BlogDetailPage() {
 
   if (loading) {
     return (
-      <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
+      <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="flex h-64 items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
@@ -113,13 +113,13 @@ export default function BlogDetailPage() {
 
   if (error || !blogPost) {
     return (
-      <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
+      <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="py-16 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4">
               {isRTL ? 'المقال غير موجود' : 'Article Not Found'}
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               {isRTL
                 ? 'عذراً، لم نتمكن من العثور على المقال المطلوب'
                 : "Sorry, we couldn't find the article you're looking for"}
@@ -138,7 +138,7 @@ export default function BlogDetailPage() {
   }
 
   return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-white">
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-white dark:bg-gray-900">
       {/* Hero Image */}
       <div className="relative h-64 md:h-96 lg:h-[500px] w-full">
         <Image
@@ -191,7 +191,7 @@ export default function BlogDetailPage() {
               {blogPost.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
+                  className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-full"
                 >
                   <Tag className="h-3 w-3" />
                   {tag}
@@ -201,7 +201,7 @@ export default function BlogDetailPage() {
           )}
 
           {/* Excerpt */}
-          <p className="text-xl text-gray-600 leading-relaxed mb-8 font-medium">
+          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-8 font-medium">
             {isRTL ? blogPost.excerptAr : blogPost.excerpt}
           </p>
 
@@ -214,16 +214,16 @@ export default function BlogDetailPage() {
           />
 
           {/* Author Box */}
-          <div className="mt-12 p-6 bg-gray-50 rounded-xl">
+          <div className="mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
                 <User className="h-8 w-8 text-primary-600" />
               </div>
               <div>
-                <p className="font-semibold text-gray-900">
+                <p className="font-semibold text-gray-900 dark:text-gray-50">
                   {isRTL ? blogPost.authorAr : blogPost.author}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   {isRTL
                     ? 'فريق مركز منح السودان'
                     : 'Sudan Scholars Hub Team'}
@@ -233,13 +233,13 @@ export default function BlogDetailPage() {
           </div>
 
           {/* Share Section */}
-          <div className="flex items-center gap-4 mt-8 pt-8 border-t">
-            <span className="text-gray-600">
+          <div className="flex items-center gap-4 mt-8 pt-8 border-t dark:border-gray-700">
+            <span className="text-gray-600 dark:text-gray-400">
               {isRTL ? 'شارك المقال:' : 'Share this article:'}
             </span>
             <button
               onClick={() => setIsShareModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
               <Share2 className="h-4 w-4" />
               {isRTL ? 'مشاركة' : 'Share'}
@@ -247,7 +247,7 @@ export default function BlogDetailPage() {
           </div>
 
           {/* Back to Blog */}
-          <div className="mt-12 pt-8 border-t">
+          <div className="mt-12 pt-8 border-t dark:border-gray-700">
             <Link
               href={`/${locale}/blog`}
               className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700 transition-colors"

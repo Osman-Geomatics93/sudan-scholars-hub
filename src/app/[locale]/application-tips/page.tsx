@@ -184,10 +184,10 @@ export default function ApplicationTipsPage() {
         <Container size="md">
           <div className="text-center">
             <Award className="h-16 w-16 text-primary-600 mx-auto mb-6" />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
               {isRTL ? 'نصائح للتقديم' : 'Application Tips'}
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {isRTL
                 ? 'دليلك الشامل لتقديم طلب منحة ناجح وزيادة فرصك في القبول'
                 : 'Your comprehensive guide to submitting a successful scholarship application and increasing your chances of acceptance'
@@ -198,7 +198,7 @@ export default function ApplicationTipsPage() {
       </section>
 
       {/* Quick Tips */}
-      <section className="py-12 bg-white border-b">
+      <section className="py-12 bg-white dark:bg-gray-900 border-b dark:border-gray-800">
         <Container>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {[
@@ -211,7 +211,7 @@ export default function ApplicationTipsPage() {
                 <div className={`inline-flex p-3 rounded-full ${item.color} mb-3`}>
                   <item.icon className="h-6 w-6" />
                 </div>
-                <p className="font-medium text-gray-900">{item.text}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-50">{item.text}</p>
               </div>
             ))}
           </div>
@@ -219,9 +219,9 @@ export default function ApplicationTipsPage() {
       </section>
 
       {/* Main Tips */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-950">
         <Container>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 text-center mb-10">
             {isRTL ? 'نصائح أساسية للتقديم' : 'Essential Application Tips'}
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -232,15 +232,15 @@ export default function ApplicationTipsPage() {
                     <tip.icon className="h-6 w-6 text-primary-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-2">
                       {isRTL ? tip.titleAr : tip.title}
                     </h3>
-                    <p className="text-gray-600 mb-4 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
                       {isRTL ? tip.descriptionAr : tip.description}
                     </p>
                     <ul className="space-y-2">
                       {(isRTL ? tip.tipsAr : tip.tips).map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                           <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
                           <span>{item}</span>
                         </li>
@@ -255,12 +255,12 @@ export default function ApplicationTipsPage() {
       </section>
 
       {/* Timeline */}
-      <section className="py-12 md:py-16 bg-white">
+      <section className="py-12 md:py-16 bg-white dark:bg-gray-900">
         <Container size="md">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 text-center mb-4">
             {isRTL ? 'الجدول الزمني للتقديم' : 'Application Timeline'}
           </h2>
-          <p className="text-gray-600 text-center mb-10 max-w-xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-400 text-center mb-10 max-w-xl mx-auto">
             {isRTL
               ? 'خطط لطلبك باتباع هذا الجدول الزمني الموصى به'
               : 'Plan your application by following this recommended timeline'
@@ -278,11 +278,11 @@ export default function ApplicationTipsPage() {
 
                   {/* Content */}
                   <div className={`${isRTL ? 'mr-10 md:mr-0' : 'ml-10 md:ml-0'} md:w-1/2 ${idx % 2 === 0 ? 'md:pe-8 md:text-end' : 'md:ps-8'}`}>
-                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
                       <span className="text-sm font-medium text-primary-600">
                         {isRTL ? item.monthAr : item.month}
                       </span>
-                      <p className="text-gray-900 mt-1">
+                      <p className="text-gray-900 dark:text-gray-50 mt-1">
                         {isRTL ? item.taskAr : item.task}
                       </p>
                     </div>

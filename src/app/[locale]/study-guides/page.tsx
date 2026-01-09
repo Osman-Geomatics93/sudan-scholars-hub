@@ -171,10 +171,10 @@ export default function StudyGuidesPage() {
         <Container size="md">
           <div className="text-center">
             <Globe className="h-16 w-16 text-primary-600 mx-auto mb-6" />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
               {isRTL ? 'أدلة الدراسة' : 'Study Guides'}
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {isRTL
                 ? 'كل ما تحتاج معرفته عن الدراسة في الخارج - من اختيار الوجهة إلى الاستقرار'
                 : 'Everything you need to know about studying abroad - from choosing a destination to settling in'
@@ -185,9 +185,9 @@ export default function StudyGuidesPage() {
       </section>
 
       {/* Country Guides */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-950">
         <Container>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 text-center mb-10">
             {isRTL ? 'أدلة الدول' : 'Country Guides'}
           </h2>
           <div className="space-y-8">
@@ -214,16 +214,16 @@ export default function StudyGuidesPage() {
 
                   {/* Content */}
                   <div className="flex-1 p-6 lg:p-8">
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
                       {isRTL ? guide.descriptionAr : guide.description}
                     </p>
 
                     {/* Highlights */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       {guide.highlights.map((h, i) => (
-                        <div key={i} className="text-center p-3 bg-gray-50 rounded-lg">
+                        <div key={i} className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                           <h.icon className="h-5 w-5 text-primary-600 mx-auto mb-1" />
-                          <span className="text-sm text-gray-700">
+                          <span className="text-sm text-gray-700 dark:text-gray-300">
                             {isRTL ? h.textAr : h.text}
                           </span>
                         </div>
@@ -235,10 +235,10 @@ export default function StudyGuidesPage() {
                       <div className="flex items-start gap-2">
                         <DollarSign className="h-4 w-4 text-gray-400 mt-0.5" />
                         <div>
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-gray-900 dark:text-gray-50">
                             {isRTL ? 'تكلفة المعيشة:' : 'Cost of Living:'}
                           </span>
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 dark:text-gray-400">
                             {isRTL ? guide.costOfLivingAr : guide.costOfLiving}
                           </p>
                         </div>
@@ -246,10 +246,10 @@ export default function StudyGuidesPage() {
                       <div className="flex items-start gap-2">
                         <Languages className="h-4 w-4 text-gray-400 mt-0.5" />
                         <div>
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-gray-900 dark:text-gray-50">
                             {isRTL ? 'اللغة:' : 'Language:'}
                           </span>
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 dark:text-gray-400">
                             {isRTL ? guide.languageAr : guide.language}
                           </p>
                         </div>
@@ -257,10 +257,10 @@ export default function StudyGuidesPage() {
                       <div className="flex items-start gap-2 md:col-span-2">
                         <FileCheck className="h-4 w-4 text-gray-400 mt-0.5" />
                         <div>
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-gray-900 dark:text-gray-50">
                             {isRTL ? 'التأشيرة:' : 'Visa:'}
                           </span>
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 dark:text-gray-400">
                             {isRTL ? guide.visaAr : guide.visa}
                           </p>
                         </div>
@@ -268,11 +268,11 @@ export default function StudyGuidesPage() {
                     </div>
 
                     {/* Top Universities */}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      <span className="text-sm font-medium text-gray-900">
+                    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
                         {isRTL ? 'أفضل الجامعات:' : 'Top Universities:'}
                       </span>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                         {guide.universities.join(' • ')}
                       </p>
                     </div>
@@ -285,9 +285,9 @@ export default function StudyGuidesPage() {
       </section>
 
       {/* General Tips */}
-      <section className="py-12 md:py-16 bg-white">
+      <section className="py-12 md:py-16 bg-white dark:bg-gray-900">
         <Container>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 text-center mb-10">
             {isRTL ? 'نصائح عامة للدراسة بالخارج' : 'General Tips for Studying Abroad'}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -296,10 +296,10 @@ export default function StudyGuidesPage() {
                 <div className="inline-flex p-3 bg-primary-100 rounded-full mb-4">
                   <tip.icon className="h-6 w-6 text-primary-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-2">
                   {isRTL ? tip.titleAr : tip.title}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   {isRTL ? tip.descriptionAr : tip.description}
                 </p>
               </Card>

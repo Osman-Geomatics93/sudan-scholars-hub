@@ -118,15 +118,15 @@ export default function BlogPage() {
           <Container size="md">
             <div className="text-center">
               <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
                 {isRTL ? 'المدونة' : 'Blog'}
               </h1>
             </div>
           </Container>
         </section>
-        <section className="py-16">
+        <section className="py-16 bg-white dark:bg-gray-900">
           <Container>
-            <div className="rounded-lg bg-red-50 p-4 text-red-700 text-center">
+            <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 text-red-700 dark:text-red-400 text-center">
               {isRTL ? 'فشل في تحميل المقالات' : 'Failed to load articles'}
             </div>
           </Container>
@@ -142,10 +142,10 @@ export default function BlogPage() {
           <Container size="md">
             <div className="text-center">
               <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
                 {isRTL ? 'المدونة' : 'Blog'}
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 {isRTL
                   ? 'مقالات ونصائح وأدلة لمساعدتك في رحلتك نحو المنحة الدراسية'
                   : 'Articles, tips, and guides to help you on your scholarship journey'
@@ -154,9 +154,9 @@ export default function BlogPage() {
             </div>
           </Container>
         </section>
-        <section className="py-16">
+        <section className="py-16 bg-white dark:bg-gray-900">
           <Container>
-            <div className="text-center text-gray-500">
+            <div className="text-center text-gray-500 dark:text-gray-400">
               {isRTL ? 'لا توجد مقالات حالياً' : 'No articles available yet'}
             </div>
           </Container>
@@ -172,10 +172,10 @@ export default function BlogPage() {
         <Container size="md">
           <div className="text-center">
             <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
               {isRTL ? 'المدونة' : 'Blog'}
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {isRTL
                 ? 'مقالات ونصائح وأدلة لمساعدتك في رحلتك نحو المنحة الدراسية'
                 : 'Articles, tips, and guides to help you on your scholarship journey'
@@ -187,7 +187,7 @@ export default function BlogPage() {
 
       {/* Featured Post */}
       {featuredPost && (
-        <section className="py-12 bg-white">
+        <section className="py-12 bg-white dark:bg-gray-900">
           <Container>
             <Card className="overflow-hidden">
               <div className="flex flex-col lg:flex-row">
@@ -220,13 +220,13 @@ export default function BlogPage() {
                   <span className="text-primary-600 font-medium text-sm mb-2">
                     {isRTL ? featuredPost.categoryAr : featuredPost.category}
                   </span>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
+                  <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-4">
                     {isRTL ? featuredPost.titleAr : featuredPost.title}
                   </h2>
-                  <p className="text-gray-600 mb-6 line-clamp-3">
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-3">
                     {isRTL ? featuredPost.excerptAr : featuredPost.excerpt}
                   </p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
+                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-6">
                     <div className="flex items-center gap-1">
                       <User className="h-4 w-4" />
                       <span>{isRTL ? featuredPost.authorAr : featuredPost.author}</span>
@@ -256,9 +256,9 @@ export default function BlogPage() {
 
       {/* All Posts */}
       {otherPosts.length > 0 && (
-        <section className="py-12 md:py-16 bg-gray-50">
+        <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-950">
           <Container>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8">
               {isRTL ? 'جميع المقالات' : 'All Articles'}
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -291,13 +291,13 @@ export default function BlogPage() {
                       </div>
                     </div>
                     <div className="p-5">
-                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
                         {isRTL ? post.titleAr : post.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                         {isRTL ? post.excerptAr : post.excerpt}
                       </p>
-                      <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           <span>{formatDate(post.publishedAt)}</span>

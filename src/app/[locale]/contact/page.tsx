@@ -95,19 +95,19 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
       <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-20">
         <Container size="md">
           <div className="text-center">
-            <h1 className="text-display text-gray-900 mb-4">{t('heroTitle')}</h1>
-            <p className="text-xl text-gray-600">{t('heroSubtitle')}</p>
+            <h1 className="text-display text-gray-900 dark:text-white mb-4">{t('heroTitle')}</h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300">{t('heroSubtitle')}</p>
           </div>
         </Container>
       </section>
 
       {/* Contact Form & Info */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-gray-900">
         <Container>
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <Card className="p-6 md:p-8">
-              <h2 className="text-h3 text-gray-900 mb-6">{t('formTitle')}</h2>
+              <h2 className="text-h3 text-gray-900 dark:text-gray-50 mb-6">{t('formTitle')}</h2>
 
               {isSubmitted ? (
                 <div className="text-center py-8">
@@ -126,7 +126,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                       />
                     </svg>
                   </div>
-                  <p className="text-lg text-gray-900 font-medium">{t('successMessage')}</p>
+                  <p className="text-lg text-gray-900 dark:text-gray-50 font-medium">{t('successMessage')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -174,7 +174,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
             {/* Contact Info */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-h3 text-gray-900 mb-6">{t('infoTitle')}</h2>
+                <h2 className="text-h3 text-gray-900 dark:text-gray-50 mb-6">{t('infoTitle')}</h2>
                 <div className="space-y-6">
                   {contactInfo.map((info) => (
                     <a
@@ -188,8 +188,8 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                         <info.icon className="h-5 w-5 text-primary-600" />
                       </div>
                       <div>
-                        <div className="text-sm text-gray-500">{info.label}</div>
-                        <div className="font-medium text-gray-900 group-hover:text-primary-600 transition-colors">{info.value}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{info.label}</div>
+                        <div className="font-medium text-gray-900 dark:text-gray-50 group-hover:text-primary-600 transition-colors">{info.value}</div>
                       </div>
                     </a>
                   ))}
@@ -230,7 +230,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
 
               {/* Social Links */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('socialTitle')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4">{t('socialTitle')}</h3>
                 <div className="flex flex-wrap gap-3">
                   {socialLinks.map((social) => (
                     <a
@@ -270,9 +270,9 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
       </section>
 
       {/* FAQ */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-50 dark:bg-gray-950">
         <Container size="md">
-          <h2 className="text-h2 text-gray-900 text-center mb-8">{t('faqTitle')}</h2>
+          <h2 className="text-h2 text-gray-900 dark:text-gray-50 text-center mb-8">{t('faqTitle')}</h2>
 
           <div className="space-y-4">
             {faqs.map((faq, index) => (
@@ -284,7 +284,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                   className="w-full p-4 md:p-6 flex items-center justify-between text-start"
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
                 >
-                  <span className="font-semibold text-gray-900">{faq.question}</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-50">{faq.question}</span>
                   {expandedFaq === index ? (
                     <ChevronUp className="h-5 w-5 text-gray-400 shrink-0" />
                   ) : (
@@ -297,7 +297,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                     expandedFaq === index ? 'max-h-96' : 'max-h-0'
                   )}
                 >
-                  <p className="px-4 md:px-6 pb-4 md:pb-6 text-gray-600">{faq.answer}</p>
+                  <p className="px-4 md:px-6 pb-4 md:pb-6 text-gray-600 dark:text-gray-300">{faq.answer}</p>
                 </div>
               </Card>
             ))}

@@ -198,7 +198,7 @@ function ScholarshipsContent({ locale }: { locale: string }) {
               </Button>
             </div>
             {activeSearch && (
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                 {locale === 'ar' ? `نتائج البحث عن: "${activeSearch}"` : `Search results for: "${activeSearch}"`}
               </p>
             )}
@@ -362,11 +362,11 @@ function ScholarshipsContent({ locale }: { locale: string }) {
 
 function ScholarshipsLoadingFallback() {
   return (
-    <section className="section-padding bg-gray-50 min-h-screen">
+    <section className="section-padding bg-gray-50 dark:bg-gray-950 min-h-screen">
       <Container>
         <div className="mb-8">
-          <div className="h-10 w-64 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-6 w-96 bg-gray-200 rounded animate-pulse" />
+          <div className="h-10 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+          <div className="h-6 w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
           {Array.from({ length: 6 }).map((_, i) => (

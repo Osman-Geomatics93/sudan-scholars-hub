@@ -76,7 +76,7 @@ export default function ScholarshipDetailsPage({
 
   if (loading) {
     return (
-      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-950 min-h-screen flex items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
       </div>
     );
@@ -153,12 +153,12 @@ export default function ScholarshipDetailsPage({
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <Container>
           <nav className="py-4 text-sm">
-            <ol className="flex items-center gap-2 text-gray-600">
+            <ol className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
               <li>
                 <Link href={`/${locale}`} className="hover:text-primary-600">
                   {locale === 'ar' ? 'الرئيسية' : 'Home'}
@@ -171,14 +171,14 @@ export default function ScholarshipDetailsPage({
                 </Link>
               </li>
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
-              <li className="text-gray-900 font-medium truncate max-w-[200px]">{title}</li>
+              <li className="text-gray-900 dark:text-gray-50 font-medium truncate max-w-[200px]">{title}</li>
             </ol>
           </nav>
         </Container>
       </div>
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <Container>
           <div className="py-8">
             <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
@@ -202,9 +202,9 @@ export default function ScholarshipDetailsPage({
                   {scholarship.isFeatured && <Badge variant="warning">{tBadges('featured')}</Badge>}
                 </div>
 
-                <h1 className="text-h1 text-gray-900 mb-3">{title}</h1>
+                <h1 className="text-h1 text-gray-900 dark:text-gray-50 mb-3">{title}</h1>
 
-                <div className="flex flex-wrap items-center gap-4 text-gray-600">
+                <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-400">
                   <span className="flex items-center gap-2">
                     <GraduationCap className="h-5 w-5 text-gray-400" />
                     {university}
@@ -227,16 +227,16 @@ export default function ScholarshipDetailsPage({
           <div className="flex-1 space-y-8">
             {/* Overview */}
             <Card className="p-6">
-              <h2 className="text-h3 text-gray-900 mb-4">{t('overview')}</h2>
-              <p className="text-gray-600 leading-relaxed">{description}</p>
+              <h2 className="text-h3 text-gray-900 dark:text-gray-50 mb-4">{t('overview')}</h2>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{description}</p>
             </Card>
 
             {/* Eligibility */}
             <Card className="p-6">
-              <h2 className="text-h3 text-gray-900 mb-4">{t('eligibility')}</h2>
+              <h2 className="text-h3 text-gray-900 dark:text-gray-50 mb-4">{t('eligibility')}</h2>
               <ul className="space-y-3">
                 {eligibility.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3 text-gray-600">
+                  <li key={index} className="flex items-start gap-3 text-gray-600 dark:text-gray-400">
                     <Check className="h-5 w-5 text-secondary-500 shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -246,10 +246,10 @@ export default function ScholarshipDetailsPage({
 
             {/* Benefits */}
             <Card className="p-6">
-              <h2 className="text-h3 text-gray-900 mb-4">{t('benefits')}</h2>
+              <h2 className="text-h3 text-gray-900 dark:text-gray-50 mb-4">{t('benefits')}</h2>
               <ul className="space-y-3">
                 {benefits.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3 text-gray-600">
+                  <li key={index} className="flex items-start gap-3 text-gray-600 dark:text-gray-400">
                     <Check className="h-5 w-5 text-secondary-500 shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -259,10 +259,10 @@ export default function ScholarshipDetailsPage({
 
             {/* Requirements */}
             <Card className="p-6">
-              <h2 className="text-h3 text-gray-900 mb-4">{t('requirements')}</h2>
+              <h2 className="text-h3 text-gray-900 dark:text-gray-50 mb-4">{t('requirements')}</h2>
               <ul className="space-y-3">
                 {requirements.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3 text-gray-600">
+                  <li key={index} className="flex items-start gap-3 text-gray-600 dark:text-gray-400">
                     <Check className="h-5 w-5 text-secondary-500 shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -272,8 +272,8 @@ export default function ScholarshipDetailsPage({
 
             {/* How to Apply */}
             <Card className="p-6">
-              <h2 className="text-h3 text-gray-900 mb-4">{t('howToApply')}</h2>
-              <p className="text-gray-600 leading-relaxed mb-6">{howToApply}</p>
+              <h2 className="text-h3 text-gray-900 dark:text-gray-50 mb-4">{t('howToApply')}</h2>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">{howToApply}</p>
               <a
                 href={scholarship.applicationUrl}
                 target="_blank"
@@ -306,7 +306,7 @@ export default function ScholarshipDetailsPage({
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsShareModalOpen(true)}
-                  className="flex items-center justify-center gap-2 flex-1 py-2 text-gray-600 hover:text-primary-600 transition-colors"
+                  className="flex items-center justify-center gap-2 flex-1 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 transition-colors"
                 >
                   <Share2 className="h-4 w-4" />
                   {t('shareTitle')}
@@ -345,14 +345,14 @@ export default function ScholarshipDetailsPage({
               <hr className="my-6" />
 
               {/* Key Facts */}
-              <h3 className="font-semibold text-gray-900 mb-4">{t('keyFacts')}</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-4">{t('keyFacts')}</h3>
               <div className="space-y-4">
                 {keyFacts.map((fact, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <fact.icon className="h-5 w-5 text-primary-600 shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-sm text-gray-500">{fact.label}</div>
-                      <div className="font-medium text-gray-900">{fact.value}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{fact.label}</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-50">{fact.value}</div>
                     </div>
                   </div>
                 ))}
@@ -364,7 +364,7 @@ export default function ScholarshipDetailsPage({
         {/* Related Scholarships */}
         {relatedScholarships.length > 0 && (
           <div className="pb-16">
-            <h2 className="text-h2 text-gray-900 mb-6">{t('relatedTitle')}</h2>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-6">{t('relatedTitle')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedScholarships.map((s) => (
                 <ScholarshipCard key={s.id} scholarship={s} locale={locale} />

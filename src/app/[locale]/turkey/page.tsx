@@ -263,11 +263,11 @@ export default function TurkeyPage() {
       </section>
 
       {/* Why Turkey Section */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-gray-900">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-4">{t('whyTitle')}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t('whySubtitle')}</p>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('whyTitle')}</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t('whySubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -276,10 +276,10 @@ export default function TurkeyPage() {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 mb-4">
                   <card.icon className="h-7 w-7" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-2">
                   {t(card.titleKey)}
                 </h3>
-                <p className="text-gray-600 text-sm">{t(card.descKey)}</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">{t(card.descKey)}</p>
               </Card>
             ))}
           </div>
@@ -287,19 +287,19 @@ export default function TurkeyPage() {
       </section>
 
       {/* Türkiye Burslari Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-h2 text-gray-900 mb-4">{t('scholarshipTitle')}</h2>
-              <p className="text-lg text-gray-600 mb-6">{t('scholarshipSubtitle')}</p>
-              <p className="text-gray-600 mb-8">{t('scholarshipDesc')}</p>
+              <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('scholarshipTitle')}</h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">{t('scholarshipSubtitle')}</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-8">{t('scholarshipDesc')}</p>
 
               <div className="flex items-center gap-3 mb-6 p-4 bg-red-50 rounded-lg">
                 <Calendar className="h-6 w-6 text-red-600 shrink-0" />
                 <div>
-                  <p className="font-semibold text-gray-900">{t('deadline')}</p>
-                  <p className="text-gray-600">{t('deadlineDate')}</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-50">{t('deadline')}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{t('deadlineDate')}</p>
                 </div>
               </div>
 
@@ -326,7 +326,7 @@ export default function TurkeyPage() {
             <div className="space-y-6">
               {/* Benefits */}
               <Card className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-green-600" />
                   {t('scholarshipBenefits')}
                 </h3>
@@ -334,7 +334,7 @@ export default function TurkeyPage() {
                   {benefits.map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                      <span className="text-gray-600">{benefit}</span>
+                      <span className="text-gray-600 dark:text-gray-400">{benefit}</span>
                     </li>
                   ))}
                 </ul>
@@ -342,7 +342,7 @@ export default function TurkeyPage() {
 
               {/* Eligibility */}
               <Card className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
                   <FileText className="h-5 w-5 text-blue-600" />
                   {t('scholarshipEligibility')}
                 </h3>
@@ -352,7 +352,7 @@ export default function TurkeyPage() {
                       <span className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold shrink-0">
                         {index + 1}
                       </span>
-                      <span className="text-gray-600">{item}</span>
+                      <span className="text-gray-600 dark:text-gray-400">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -363,11 +363,11 @@ export default function TurkeyPage() {
       </section>
 
       {/* University Enrollment Section */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-gray-900">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-4">{t('enrollmentTitle')}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t('enrollmentSubtitle')}</p>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('enrollmentTitle')}</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t('enrollmentSubtitle')}</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-12">
@@ -376,9 +376,9 @@ export default function TurkeyPage() {
                 <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
                   <FileText className="h-6 w-6 text-red-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">{t('yosTitle')}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50">{t('yosTitle')}</h3>
               </div>
-              <p className="text-gray-600">{t('yosDesc')}</p>
+              <p className="text-gray-600 dark:text-gray-400">{t('yosDesc')}</p>
             </Card>
 
             <Card className="p-6 border-2 border-blue-100">
@@ -386,22 +386,22 @@ export default function TurkeyPage() {
                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
                   <Building2 className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">{t('directTitle')}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50">{t('directTitle')}</h3>
               </div>
-              <p className="text-gray-600">{t('directDesc')}</p>
+              <p className="text-gray-600 dark:text-gray-400">{t('directDesc')}</p>
             </Card>
           </div>
 
           {/* Popular Universities */}
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">{t('popularUnis')}</h3>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 text-center mb-8">{t('popularUnis')}</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {universities.map((uni) => (
                 <Card key={uni.logo} className="p-4 text-center hover:shadow-md transition-shadow">
                   <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
-                    <span className="text-xl font-bold text-gray-700">{uni.logo}</span>
+                    <span className="text-xl font-bold text-gray-700 dark:text-gray-300">{uni.logo}</span>
                   </div>
-                  <p className="text-sm font-medium text-gray-900">{uni.name}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-50">{uni.name}</p>
                 </Card>
               ))}
             </div>
@@ -410,11 +410,11 @@ export default function TurkeyPage() {
       </section>
 
       {/* Resources & Downloads Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-4">{t('resourcesTitle')}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t('resourcesSubtitle')}</p>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('resourcesTitle')}</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t('resourcesSubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -428,7 +428,7 @@ export default function TurkeyPage() {
                       <resource.icon className={`h-6 w-6 ${colors.text}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                         {t(resource.titleKey)}
                       </h3>
                       <p className="text-gray-600 text-sm mb-4">
@@ -481,16 +481,16 @@ export default function TurkeyPage() {
       </section>
 
       {/* Letters & Templates Section */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-gray-900">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-4">{t('lettersTitle')}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t('lettersSubtitle')}</p>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('lettersTitle')}</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t('lettersSubtitle')}</p>
           </div>
 
           {/* Recommendation Letters */}
           <div className="mb-10">
-            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center justify-center gap-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 mb-6 flex items-center justify-center gap-2">
               <Users className="h-5 w-5 text-blue-600" />
               {t('recommendationTitle')}
             </h3>
@@ -505,7 +505,7 @@ export default function TurkeyPage() {
                         <letter.icon className={`h-6 w-6 ${colors.text}`} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-lg font-semibold text-gray-900 mb-1">
+                        <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                           {t(letter.titleKey)}
                         </h4>
                         <p className="text-gray-600 text-sm mb-4">
@@ -550,7 +550,7 @@ export default function TurkeyPage() {
 
           {/* Validation Letters */}
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center justify-center gap-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 mb-6 flex items-center justify-center gap-2">
               <FileCheck className="h-5 w-5 text-teal-600" />
               {t('validationTitle')}
             </h3>
@@ -565,7 +565,7 @@ export default function TurkeyPage() {
                         <letter.icon className={`h-6 w-6 ${colors.text}`} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-lg font-semibold text-gray-900 mb-1">
+                        <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                           {t(letter.titleKey)}
                         </h4>
                         <p className="text-gray-600 text-sm mb-4">
@@ -611,20 +611,20 @@ export default function TurkeyPage() {
       </section>
 
       {/* Student Forms Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-4">{t('studentFormsTitle')}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t('studentFormsSubtitle')}</p>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('studentFormsTitle')}</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t('studentFormsSubtitle')}</p>
           </div>
 
           {/* Secondary School Students */}
           <div className="mb-12">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center justify-center gap-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center justify-center gap-2">
               <School className="h-5 w-5 text-rose-600" />
               {t('secondaryTitle')}
             </h3>
-            <p className="text-center text-gray-600 mb-6">{t('secondaryDesc')}</p>
+            <p className="text-center text-gray-600 dark:text-gray-400 mb-6">{t('secondaryDesc')}</p>
             <div className="max-w-lg mx-auto">
               <Card className="p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start gap-4">
@@ -632,7 +632,7 @@ export default function TurkeyPage() {
                     <secondarySchoolForm.icon className={`h-6 w-6 ${colorClasses[secondarySchoolForm.color].text}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-1">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                       {t(secondarySchoolForm.titleKey)}
                     </h4>
                     <p className="text-gray-600 text-sm mb-4">
@@ -660,11 +660,11 @@ export default function TurkeyPage() {
 
           {/* University Students */}
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center justify-center gap-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center justify-center gap-2">
               <Award className="h-5 w-5 text-cyan-600" />
               {t('universityTitle')}
             </h3>
-            <p className="text-center text-gray-600 mb-6">{t('universityDesc')}</p>
+            <p className="text-center text-gray-600 dark:text-gray-400 mb-6">{t('universityDesc')}</p>
             <div className="max-w-lg mx-auto">
               <Card className="p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start gap-4">
@@ -672,7 +672,7 @@ export default function TurkeyPage() {
                     <universityForm.icon className={`h-6 w-6 ${colorClasses[universityForm.color].text}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-1">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                       {t(universityForm.titleKey)}
                     </h4>
                     <p className="text-gray-600 text-sm mb-4">
@@ -701,14 +701,14 @@ export default function TurkeyPage() {
       </section>
 
       {/* Video Tutorials Section */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-gray-900">
         <Container>
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 mb-4">
               <PlayCircle className="h-7 w-7" />
             </div>
-            <h2 className="text-h2 text-gray-900 mb-4">{t('videoTutorialsTitle')}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t('videoTutorialsSubtitle')}</p>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('videoTutorialsTitle')}</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t('videoTutorialsSubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -724,7 +724,7 @@ export default function TurkeyPage() {
                 />
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900">{t('video1Title')}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-50">{t('video1Title')}</h3>
               </div>
             </Card>
 
@@ -740,7 +740,7 @@ export default function TurkeyPage() {
                 />
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900">{t('video2Title')}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-50">{t('video2Title')}</h3>
               </div>
             </Card>
           </div>
@@ -748,11 +748,11 @@ export default function TurkeyPage() {
       </section>
 
       {/* Living in Turkey Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-4">{t('livingTitle')}</h2>
-            <p className="text-xl text-gray-600">{t('livingSubtitle')}</p>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('livingTitle')}</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400">{t('livingSubtitle')}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -764,7 +764,7 @@ export default function TurkeyPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900">{t(card.titleKey)}</h3>
                 </div>
-                <p className="text-gray-600">{t(card.descKey)}</p>
+                <p className="text-gray-600 dark:text-gray-400">{t(card.descKey)}</p>
               </Card>
             ))}
           </div>

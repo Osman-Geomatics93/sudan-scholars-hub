@@ -170,10 +170,10 @@ export default function FAQPage() {
       <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
         <Container size="md">
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
               {isRTL ? 'الأسئلة الشائعة' : 'Frequently Asked Questions'}
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {isRTL
                 ? 'إجابات على الأسئلة الأكثر شيوعاً حول المنح الدراسية وعملية التقديم'
                 : 'Answers to the most common questions about scholarships and the application process'
@@ -184,7 +184,7 @@ export default function FAQPage() {
       </section>
 
       {/* Category Tabs */}
-      <section className="bg-white border-b sticky top-16 z-20">
+      <section className="bg-white dark:bg-gray-900 border-b dark:border-gray-800 sticky top-16 z-20">
         <Container>
           <div className="flex gap-2 py-4 overflow-x-auto scrollbar-hide">
             {categories.map((cat) => (
@@ -195,7 +195,7 @@ export default function FAQPage() {
                   'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
                   activeCategory === cat.id
                     ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                 )}
               >
                 <cat.icon className="h-4 w-4" />
@@ -207,19 +207,19 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ Accordion */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-950">
         <Container size="md">
           <div className="space-y-4">
             {filteredFaqs.map((faq) => (
               <div
                 key={faq.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+                className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden"
               >
                 <button
                   onClick={() => toggleItem(faq.id)}
-                  className="w-full flex items-center justify-between p-5 text-start hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between p-5 text-start hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
-                  <span className="font-medium text-gray-900 pe-4">
+                  <span className="font-medium text-gray-900 dark:text-gray-50 pe-4">
                     {isRTL ? faq.questionAr : faq.question}
                   </span>
                   <ChevronDown
@@ -231,8 +231,8 @@ export default function FAQPage() {
                 </button>
                 {openItems.includes(faq.id) && (
                   <div className="px-5 pb-5 pt-0">
-                    <div className="border-t border-gray-100 pt-4">
-                      <p className="text-gray-600 leading-relaxed">
+                    <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+                      <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                         {isRTL ? faq.answerAr : faq.answer}
                       </p>
                     </div>

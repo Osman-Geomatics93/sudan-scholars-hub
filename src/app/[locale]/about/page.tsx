@@ -24,19 +24,19 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
       <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
         <Container size="md">
           <div className="text-center">
-            <h1 className="text-display text-gray-900 mb-6">{t('heroTitle')}</h1>
-            <p className="text-xl text-gray-600">{t('heroSubtitle')}</p>
+            <h1 className="text-display text-gray-900 dark:text-white mb-6">{t('heroTitle')}</h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300">{t('heroSubtitle')}</p>
           </div>
         </Container>
       </section>
 
       {/* Mission */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-gray-900">
         <Container size="md">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-h2 text-gray-900 mb-4">{t('missionTitle')}</h2>
-              <p className="text-gray-600 leading-relaxed">{t('missionText')}</p>
+              <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('missionTitle')}</h2>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('missionText')}</p>
             </div>
             <div className="relative h-64 md:h-80 rounded-lg overflow-hidden">
               <Image
@@ -52,7 +52,7 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
       </section>
 
       {/* Story */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-50 dark:bg-gray-950">
         <Container size="md">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative h-64 md:h-80 rounded-lg overflow-hidden order-2 md:order-1">
@@ -65,8 +65,8 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
               />
             </div>
             <div className="order-1 md:order-2">
-              <h2 className="text-h2 text-gray-900 mb-4">{t('storyTitle')}</h2>
-              <p className="text-gray-600 leading-relaxed">{t('storyText')}</p>
+              <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('storyTitle')}</h2>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('storyText')}</p>
             </div>
           </div>
         </Container>
@@ -89,10 +89,10 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
       </section>
 
       {/* Team */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-gray-900">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="text-h2 text-gray-900 mb-3">{t('teamTitle')}</h2>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-3">{t('teamTitle')}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -105,13 +105,13 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
                   height={96}
                   className="rounded-full mx-auto mb-4 object-cover"
                 />
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                   {getLocalizedField(member, 'name', locale)}
                 </h3>
                 <p className="text-primary-600 text-sm mb-3">
                   {getLocalizedField(member, 'role', locale)}
                 </p>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
                   {getLocalizedField(member, 'bio', locale)}
                 </p>
               </Card>
@@ -121,10 +121,10 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
       </section>
 
       {/* Partners */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gray-50 dark:bg-gray-950">
         <Container>
           <div className="text-center">
-            <h2 className="text-h2 text-gray-900 mb-8">{t('partnersTitle')}</h2>
+            <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-8">{t('partnersTitle')}</h2>
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
               {['University of Oxford', 'Harvard', 'MIT', 'Stanford', 'Cambridge'].map((partner) => (
                 <div
