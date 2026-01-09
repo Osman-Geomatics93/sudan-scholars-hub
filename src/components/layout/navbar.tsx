@@ -27,6 +27,7 @@ export function Navbar({ locale }: NavbarProps) {
   const [isUniversitiesOpen, setIsUniversitiesOpen] = useState(false);
   const [isYosOpen, setIsYosOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const resourcesMenuRef = useRef<HTMLDivElement>(null);
   const turkeyMenuRef = useRef<HTMLDivElement>(null);
@@ -38,6 +39,15 @@ export function Navbar({ locale }: NavbarProps) {
   // Set mounted state to prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Scroll detection for navbar transformation
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Close menus when clicking outside
@@ -98,28 +108,46 @@ export function Navbar({ locale }: NavbarProps) {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 animate-fade-in-down transition-colors duration-200">
+    <nav className={cn(
+      "fixed top-0 w-full z-50 transition-all duration-500 ease-out",
+      scrolled
+        ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20"
+        : "bg-white/70 dark:bg-gray-900/70 backdrop-blur-md",
+      "border-b border-white/20 dark:border-gray-700/30"
+    )}>
       <Container>
-        <div className="flex h-16 items-center justify-between">
+        <div className={cn(
+          "flex items-center justify-between transition-all duration-500",
+          scrolled ? "h-14" : "h-16"
+        )}>
           {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center gap-2 shrink-0">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
-              <GraduationCap className="h-6 w-6 text-white" />
+          <Link href={`/${locale}`} className="group flex items-center gap-2.5 shrink-0">
+            {/* Icon with glow effect */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl blur-lg opacity-0 group-hover:opacity-50 transition-all duration-500" />
+              <div className="relative bg-gradient-to-br from-primary-500 to-primary-600 p-2.5 rounded-xl shadow-lg shadow-primary-500/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                <GraduationCap className="h-6 w-6 text-white" />
+              </div>
             </div>
-            <span className="text-lg lg:text-xl font-bold text-gray-900 dark:text-gray-50 hidden lg:block whitespace-nowrap">
+            {/* Text with gradient on hover */}
+            <span className="text-lg lg:text-xl font-bold hidden lg:block whitespace-nowrap bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent group-hover:from-primary-600 group-hover:to-secondary-500 transition-all duration-300">
               {locale === 'ar' ? 'بوابة منح السودان' : 'Sudan Scholars Hub'}
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
+                className="relative px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group"
               >
-                {link.label}
+                <span className="relative z-10">{link.label}</span>
+                {/* Animated underline */}
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+                {/* Background highlight */}
+                <span className="absolute inset-0 bg-primary-50 dark:bg-primary-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
               </Link>
             ))}
 
@@ -127,22 +155,32 @@ export function Navbar({ locale }: NavbarProps) {
             <div className="relative" ref={turkeyMenuRef}>
               <button
                 onClick={() => setIsTurkeyOpen(!isTurkeyOpen)}
-                className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
+                className="relative flex items-center gap-1 px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group"
                 suppressHydrationWarning
               >
-                {t('turkey')}
-                <ChevronDown className={cn('h-4 w-4 transition-transform', isTurkeyOpen && 'rotate-180')} />
+                <span className="relative z-10">{t('turkey')}</span>
+                <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isTurkeyOpen && 'rotate-180')} />
+                {/* Background highlight */}
+                <span className="absolute inset-0 bg-primary-50 dark:bg-primary-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
               </button>
 
-              {isTurkeyOpen && (
-                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+              <div className={cn(
+                "absolute end-0 mt-2 w-56 max-w-[90vw] origin-top-right",
+                "bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl",
+                "border border-gray-200/50 dark:border-gray-700/50",
+                "rounded-2xl shadow-2xl shadow-black/10 p-2 z-50 overflow-hidden",
+                "transition-all duration-300 ease-out",
+                isTurkeyOpen
+                  ? "opacity-100 scale-100 visible"
+                  : "opacity-0 scale-95 invisible"
+              )}>
                   {/* Turkey Main Page */}
                   <Link
                     href={turkeyMainLink.href}
-                    className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
                     onClick={() => setIsTurkeyOpen(false)}
                   >
-                    <turkeyMainLink.icon className="h-4 w-4" />
+                    <turkeyMainLink.icon className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                     {turkeyMainLink.label}
                   </Link>
 
@@ -153,37 +191,37 @@ export function Navbar({ locale }: NavbarProps) {
                     onMouseLeave={() => setIsCalendarsOpen(false)}
                   >
                     <button
-                      className="flex items-center justify-between w-full px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
                     >
                       <span className="flex items-center gap-3">
-                        <Calendar className="h-4 w-4" />
+                        <Calendar className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                         {t('calendars')}
                       </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform', isRTL && 'rotate-180')} />
+                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isRTL && 'rotate-180')} />
                     </button>
 
                     {/* Calendars Submenu */}
-                    {isCalendarsOpen && (
-                      <div className={cn(
-                        'absolute top-0 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50',
-                        isRTL ? 'end-full me-1' : 'start-full ms-1'
-                      )}>
-                        {turkeyCalendarLinks.map((link) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                            onClick={() => {
-                              setIsTurkeyOpen(false);
-                              setIsCalendarsOpen(false);
-                            }}
-                          >
-                            <link.icon className="h-4 w-4" />
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+                    <div className={cn(
+                      'absolute top-0 w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
+                      'transition-all duration-300 ease-out',
+                      isRTL ? 'end-full me-2' : 'start-full ms-2',
+                      isCalendarsOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                    )}>
+                      {turkeyCalendarLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/subitem"
+                          onClick={() => {
+                            setIsTurkeyOpen(false);
+                            setIsCalendarsOpen(false);
+                          }}
+                        >
+                          <link.icon className="h-5 w-5 text-gray-400 group-hover/subitem:text-primary-500 transition-colors duration-200" />
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Universities with nested submenu */}
@@ -193,37 +231,37 @@ export function Navbar({ locale }: NavbarProps) {
                     onMouseLeave={() => setIsUniversitiesOpen(false)}
                   >
                     <button
-                      className="flex items-center justify-between w-full px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
                     >
                       <span className="flex items-center gap-3">
-                        <Building2 className="h-4 w-4" />
+                        <Building2 className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                         {t('universities')}
                       </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform', isRTL && 'rotate-180')} />
+                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isRTL && 'rotate-180')} />
                     </button>
 
                     {/* Universities Submenu */}
-                    {isUniversitiesOpen && (
-                      <div className={cn(
-                        'absolute top-0 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50',
-                        isRTL ? 'end-full me-1' : 'start-full ms-1'
-                      )}>
-                        {turkeyUniversityLinks.map((link) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                            onClick={() => {
-                              setIsTurkeyOpen(false);
-                              setIsUniversitiesOpen(false);
-                            }}
-                          >
-                            <link.icon className="h-4 w-4" />
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+                    <div className={cn(
+                      'absolute top-0 w-64 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
+                      'transition-all duration-300 ease-out',
+                      isRTL ? 'end-full me-2' : 'start-full ms-2',
+                      isUniversitiesOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                    )}>
+                      {turkeyUniversityLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/subitem"
+                          onClick={() => {
+                            setIsTurkeyOpen(false);
+                            setIsUniversitiesOpen(false);
+                          }}
+                        >
+                          <link.icon className="h-5 w-5 text-gray-400 group-hover/subitem:text-primary-500 transition-colors duration-200" />
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
 
                   {/* YöS Exam with nested submenu */}
@@ -233,68 +271,76 @@ export function Navbar({ locale }: NavbarProps) {
                     onMouseLeave={() => setIsYosOpen(false)}
                   >
                     <button
-                      className="flex items-center justify-between w-full px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
                     >
                       <span className="flex items-center gap-3">
-                        <FileQuestion className="h-4 w-4" />
+                        <FileQuestion className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                         {t('yosExam')}
                       </span>
-                      <ChevronRight className={cn('h-4 w-4 transition-transform', isRTL && 'rotate-180')} />
+                      <ChevronRight className={cn('h-4 w-4 transition-transform duration-200', isRTL && 'rotate-180')} />
                     </button>
 
                     {/* YöS Exam Submenu */}
-                    {isYosOpen && (
-                      <div className={cn(
-                        'absolute top-0 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50',
-                        isRTL ? 'end-full me-1' : 'start-full ms-1'
-                      )}>
-                        {turkeyYosLinks.map((link) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                            onClick={() => {
-                              setIsTurkeyOpen(false);
-                              setIsYosOpen(false);
-                            }}
-                          >
-                            <link.icon className="h-4 w-4" />
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+                    <div className={cn(
+                      'absolute top-0 w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/10 border border-gray-200/50 dark:border-gray-700/50 p-2 z-50',
+                      'transition-all duration-300 ease-out',
+                      isRTL ? 'end-full me-2' : 'start-full ms-2',
+                      isYosOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                    )}>
+                      {turkeyYosLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/subitem"
+                          onClick={() => {
+                            setIsTurkeyOpen(false);
+                            setIsYosOpen(false);
+                          }}
+                        >
+                          <link.icon className="h-5 w-5 text-gray-400 group-hover/subitem:text-primary-500 transition-colors duration-200" />
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+              </div>
             </div>
 
             {/* Resources Dropdown */}
             <div className="relative" ref={resourcesMenuRef}>
               <button
                 onClick={() => setIsResourcesOpen(!isResourcesOpen)}
-                className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors"
+                className="relative flex items-center gap-1 px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300 group"
                 suppressHydrationWarning
               >
-                {isRTL ? 'الموارد' : 'Resources'}
-                <ChevronDown className={cn('h-4 w-4 transition-transform', isResourcesOpen && 'rotate-180')} />
+                <span className="relative z-10">{isRTL ? 'الموارد' : 'Resources'}</span>
+                <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isResourcesOpen && 'rotate-180')} />
+                {/* Background highlight */}
+                <span className="absolute inset-0 bg-primary-50 dark:bg-primary-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
               </button>
 
-              {isResourcesOpen && (
-                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
-                  {resourceLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                      onClick={() => setIsResourcesOpen(false)}
-                    >
-                      <link.icon className="h-4 w-4" />
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
+              <div className={cn(
+                "absolute end-0 mt-2 w-56 max-w-[90vw] origin-top-right",
+                "bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl",
+                "border border-gray-200/50 dark:border-gray-700/50",
+                "rounded-2xl shadow-2xl shadow-black/10 p-2 z-50 overflow-hidden",
+                "transition-all duration-300 ease-out",
+                isResourcesOpen
+                  ? "opacity-100 scale-100 visible"
+                  : "opacity-0 scale-95 invisible"
+              )}>
+                {resourceLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 group/item"
+                    onClick={() => setIsResourcesOpen(false)}
+                  >
+                    <link.icon className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -310,51 +356,68 @@ export function Navbar({ locale }: NavbarProps) {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="flex items-center gap-2 p-0.5 rounded-full transition-all duration-300 group"
                   suppressHydrationWarning
                 >
-                  {session.user?.image ? (
-                    <Image
-                      src={session.user.image}
-                      alt={session.user.name || 'User'}
-                      width={36}
-                      height={36}
-                      className="rounded-full"
-                    />
-                  ) : (
-                    <div className="w-9 h-9 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                  {/* Avatar with gradient ring */}
+                  <div className="relative">
+                    {/* Glow effect on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                    {/* Gradient ring */}
+                    <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 p-0.5">
+                      <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                        {session.user?.image ? (
+                          <Image
+                            src={session.user.image}
+                            alt={session.user.name || 'User'}
+                            width={36}
+                            height={36}
+                            className="rounded-full w-full h-full object-cover"
+                          />
+                        ) : (
+                          <User className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                        )}
+                      </div>
                     </div>
-                  )}
-                  <ChevronDown className={cn('h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform', isUserMenuOpen && 'rotate-180')} />
+                  </div>
+                  <ChevronDown className={cn('h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-300', isUserMenuOpen && 'rotate-180')} />
                 </button>
 
                 {/* Dropdown Menu */}
-                {isUserMenuOpen && (
-                  <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
-                    <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
-                      <p className="font-medium text-gray-900 dark:text-gray-50 truncate">
-                        {session.user?.name || (isRTL ? 'مستخدم' : 'User')}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{session.user?.email}</p>
-                    </div>
+                <div className={cn(
+                  "absolute end-0 mt-2 w-56 max-w-[90vw] origin-top-right",
+                  "bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl",
+                  "border border-gray-200/50 dark:border-gray-700/50",
+                  "rounded-2xl shadow-2xl shadow-black/10 overflow-hidden z-50",
+                  "transition-all duration-300 ease-out",
+                  isUserMenuOpen
+                    ? "opacity-100 scale-100 visible"
+                    : "opacity-0 scale-95 invisible"
+                )}>
+                  <div className="px-4 py-3 bg-gradient-to-r from-primary-50/50 to-secondary-50/50 dark:from-primary-900/20 dark:to-secondary-900/20 border-b border-gray-100/50 dark:border-gray-700/50">
+                    <p className="font-semibold text-gray-900 dark:text-gray-50 truncate">
+                      {session.user?.name || (isRTL ? 'مستخدم' : 'User')}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{session.user?.email}</p>
+                  </div>
 
+                  <div className="p-2">
                     {!isAdmin && (
                       <>
                         <Link
                           href={`/${locale}/profile`}
-                          className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 transition-all duration-200 group/item"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          <User className="h-4 w-4" />
+                          <User className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                           {isRTL ? 'الملف الشخصي' : 'Profile'}
                         </Link>
                         <Link
                           href={`/${locale}/profile`}
-                          className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 transition-all duration-200 group/item"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          <Bookmark className="h-4 w-4" />
+                          <Bookmark className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                           {isRTL ? 'المنح المحفوظة' : 'Saved Scholarships'}
                         </Link>
                       </>
@@ -363,26 +426,26 @@ export function Navbar({ locale }: NavbarProps) {
                     {isAdmin && (
                       <Link
                         href={`/${locale}/admin`}
-                        className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 transition-all duration-200 group/item"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        <User className="h-4 w-4" />
+                        <User className="h-5 w-5 text-gray-400 group-hover/item:text-primary-500 transition-colors duration-200" />
                         {isRTL ? 'لوحة التحكم' : 'Admin Dashboard'}
                       </Link>
                     )}
-
-                    <div className="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
-                      <button
-                        onClick={handleSignOut}
-                        className="flex items-center gap-3 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full"
-                        suppressHydrationWarning
-                      >
-                        <LogOut className="h-4 w-4" />
-                        {isRTL ? 'تسجيل الخروج' : 'Sign Out'}
-                      </button>
-                    </div>
                   </div>
-                )}
+
+                  <div className="border-t border-gray-100/50 dark:border-gray-700/50 p-2">
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-all duration-200 group/item"
+                      suppressHydrationWarning
+                    >
+                      <LogOut className="h-5 w-5 group-hover/item:scale-110 transition-transform duration-200" />
+                      {isRTL ? 'تسجيل الخروج' : 'Sign Out'}
+                    </button>
+                  </div>
+                </div>
               </div>
             ) : (
               // Login Button
@@ -395,13 +458,25 @@ export function Navbar({ locale }: NavbarProps) {
             )}
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button - Animated hamburger to X */}
           <button
-            className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-50"
+            className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
             onClick={() => setIsOpen(!isOpen)}
             suppressHydrationWarning
+            aria-label="Toggle menu"
           >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <span className={cn(
+              "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute",
+              isOpen ? "rotate-45 translate-y-0" : "-translate-y-2"
+            )} />
+            <span className={cn(
+              "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300",
+              isOpen && "opacity-0 scale-0"
+            )} />
+            <span className={cn(
+              "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute",
+              isOpen ? "-rotate-45 translate-y-0" : "translate-y-2"
+            )} />
           </button>
         </div>
 
