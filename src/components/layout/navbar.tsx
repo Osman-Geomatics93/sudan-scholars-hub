@@ -165,7 +165,7 @@ export function Navbar({ locale }: NavbarProps) {
               </button>
 
               {isTurkeyOpen && (
-                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-2xl shadow-black/10 p-2 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-2xl shadow-black/10 p-2 z-50">
                   {/* Turkey Main Page */}
                   <Link
                     href={turkeyMainLink.href}
