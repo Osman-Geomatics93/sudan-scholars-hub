@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { ExternalLink, ChevronUp, ChevronDown, Search, Filter, X, Calendar } from 'lucide-react';
+import { ExternalLink, ChevronUp, ChevronDown, Search, Filter, X, Calendar, DollarSign, Gift } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -34,6 +34,7 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
   const [selectedCertificate, setSelectedCertificate] = useState<string>('');
   const [hideEnded, setHideEnded] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [freeOnly, setFreeOnly] = useState(false);
 
   // Handle sorting
   const handleSort = (field: SortField) => {
@@ -77,6 +78,10 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
       });
     }
 
+    if (freeOnly) {
+      result = result.filter((item) => item.isFreeApplication);
+    }
+
     // Apply sorting
     result.sort((a, b) => {
       let comparison = 0;
@@ -102,7 +107,7 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
     });
 
     return result;
-  }, [admissions, searchQuery, selectedCity, selectedCertificate, hideEnded, sortField, sortDirection]);
+  }, [admissions, searchQuery, selectedCity, selectedCertificate, hideEnded, freeOnly, sortField, sortDirection]);
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -165,9 +170,10 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
     setSelectedCity('');
     setSelectedCertificate('');
     setHideEnded(false);
+    setFreeOnly(false);
   };
 
-  const hasActiveFilters = searchQuery || selectedCity || selectedCertificate || hideEnded;
+  const hasActiveFilters = searchQuery || selectedCity || selectedCertificate || hideEnded || freeOnly;
 
   return (
     <div className="space-y-4">
@@ -213,6 +219,24 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
                 </div>
                 <span className="text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                   {isRTL ? 'اخفاء المفاضلات المنتهية' : 'Hide ended'}
+                </span>
+              </label>
+
+              {/* Free Only Toggle */}
+              <label className="flex items-center gap-2 cursor-pointer">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={freeOnly}
+                    onChange={(e) => setFreeOnly(e.target.checked)}
+                    className="sr-only"
+                  />
+                  <div className={`w-10 h-6 rounded-full transition-colors ${freeOnly ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${freeOnly ? (isRTL ? 'left-1' : 'right-1') : (isRTL ? 'right-1' : 'left-1')}`} />
+                  </div>
+                </div>
+                <span className="text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                  {isRTL ? 'المجانية فقط' : 'Free only'}
                 </span>
               </label>
             </div>
@@ -335,6 +359,9 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
                 <th className="px-4 py-3 text-start text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                   {isRTL ? 'نوع التقديم' : 'Type'}
                 </th>
+                <th className="px-4 py-3 text-start text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  {isRTL ? 'رسوم التقديم' : 'Fee'}
+                </th>
                 <th
                   className="px-4 py-3 text-start text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('localRanking')}
@@ -349,7 +376,7 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredAndSortedData.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="px-4 py-12 text-center">
+                  <td colSpan={13} className="px-4 py-12 text-center">
                     <Calendar className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
                     <p className="text-gray-500 dark:text-gray-400">
                       {isRTL ? 'لا يوجد مفاضلات' : 'No admissions found'}
@@ -436,6 +463,19 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
                         >
                           {getApplicationTypeLabel(admission.applicationType)}
                         </Badge>
+                      </td>
+                      <td className="px-4 py-3">
+                        {admission.isFreeApplication ? (
+                          <Badge variant="success" className="text-xs">
+                            <Gift className="h-3 w-3 me-1" />
+                            {isRTL ? 'مجاني' : 'Free'}
+                          </Badge>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+                            <DollarSign className="h-3 w-3" />
+                            {admission.applicationFee} {admission.applicationFeeCurrency || 'TRY'}
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3">
                         <span

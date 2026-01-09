@@ -8,7 +8,7 @@ import { AdmissionsTable } from '@/components/features/admissions-table';
 import { UniversityAdmission } from '@/lib/admissions-data';
 import { SkeletonTable } from '@/components/ui/skeleton';
 import {
-  Calendar,
+  School,
   CheckCircle,
   Database,
   RefreshCw,
@@ -21,9 +21,10 @@ import {
   Globe,
   Clock,
   Award,
+  BookOpen,
 } from 'lucide-react';
 
-export default function AdmissionsCalendarPage() {
+export default function MastersPhDCalendarPage() {
   const pathname = usePathname();
   const locale = pathname.split('/')[1] || 'en';
   const isRTL = locale === 'ar';
@@ -34,7 +35,7 @@ export default function AdmissionsCalendarPage() {
   useEffect(() => {
     async function fetchAdmissions() {
       try {
-        const res = await fetch('/api/university-admissions?active=true&calendarType=bachelor');
+        const res = await fetch('/api/university-admissions?active=true&calendarType=masters-phd');
         if (res.ok) {
           const data = await res.json();
           setAdmissions(data.admissions);
@@ -74,50 +75,50 @@ export default function AdmissionsCalendarPage() {
 
   const calendarFeatures = isRTL
     ? [
-        'بسبب تميز تقويمنا تم تصدره نتائج البحث في جوجل (Google) ولهذا يمكنكم العثور على التقويم بشكل اسرع',
-        'تقويمنا يحتوى على ميزات لا يمكن ايجادها في اماكن أُخرى ومن اهمها اختيار الشهادة المقبولة',
-        'عن طريق الضغط على رابط التفاصيل يمكنكم بسهولة ايجاد التفاصيل بشكل كامل وبشكل سريع',
-        'يتم تحديث تقويم المفاضلات بشكل مستمر لكي لا يُفَوت الطالب أيّة مفاضلة',
+        'تقويم مخصص لبرامج الماجستير والدكتوراه في الجامعات التركية',
+        'يحتوي على جميع المعلومات اللازمة للتقديم على برامج الدراسات العليا',
+        'يتم تحديث التقويم بشكل مستمر لضمان دقة المعلومات',
+        'يمكنك البحث والفرز حسب الشهادة المقبولة والمدينة',
       ]
     : [
-        'Our calendar ranks high in Google search results, making it easy to find',
-        'Our calendar contains features not found elsewhere, including certificate filter',
-        'Click the details link to easily find complete information quickly',
-        'The admissions calendar is updated continuously so students don\'t miss any deadline',
+        'Dedicated calendar for Masters and PhD programs in Turkish universities',
+        'Contains all necessary information for applying to graduate programs',
+        'Calendar is continuously updated to ensure information accuracy',
+        'Search and filter by accepted certificate and city',
       ];
 
   const latestUpdates = isRTL
     ? [
-        { icon: RefreshCw, text: 'تم تحديث تقويم المفاضلات بشكل كامل ليسهل عليكم العثور على المفاضلات بشكل اسرع واسلس' },
-        { icon: Filter, text: 'ميزة الفرز ولتطبيقها يمكنكم الضغط على عناوين الأعمدة' },
-        { icon: CheckCircle, text: 'تم إضافة ميزة اختيار الشهادة المقبولة ليسهل العثور على الجامعة التي تناسب شهادتكم' },
+        { icon: RefreshCw, text: 'تم إضافة تقويم مخصص لبرامج الماجستير والدكتوراه' },
+        { icon: Filter, text: 'ميزة الفرز والبحث متاحة' },
+        { icon: CheckCircle, text: 'تم إضافة ميزة اختيار الشهادة المقبولة' },
         { icon: Search, text: 'اضافة ميزة البحث لمشاهدة الجامعة بشكل اسرع' },
-        { icon: Palette, text: 'الوان اضافية لمعرفة حالة التسجيل بشكل واضح' },
+        { icon: Palette, text: 'الوان مميزة لمعرفة حالة التسجيل' },
       ]
     : [
-        { icon: RefreshCw, text: 'Completely updated calendar design for easier and smoother navigation' },
-        { icon: Filter, text: 'Sorting feature - click column headers to sort' },
-        { icon: CheckCircle, text: 'Added certificate filter to find universities matching your certificate' },
+        { icon: RefreshCw, text: 'Added dedicated calendar for Masters and PhD programs' },
+        { icon: Filter, text: 'Sorting and search features available' },
+        { icon: CheckCircle, text: 'Added certificate filter to find matching universities' },
         { icon: Search, text: 'Added search feature for faster university lookup' },
-        { icon: Palette, text: 'Additional colors to clearly indicate registration status' },
+        { icon: Palette, text: 'Distinct colors to indicate registration status' },
       ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-red-600 to-red-700 text-white pt-24 pb-16 md:pt-32 md:pb-24">
+      <section className="bg-gradient-to-br from-purple-600 to-purple-700 text-white pt-24 pb-16 md:pt-32 md:pb-24">
         <Container>
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
-              <Calendar className="h-8 w-8" />
+              <School className="h-8 w-8" />
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              {isRTL ? 'تقويم المفاضلات 2026' : 'Admissions Calendar 2026'}
+              {isRTL ? 'تقويم الماجستير والدكتوراه 2026' : 'Masters & PhD Calendar 2026'}
             </h1>
-            <p className="text-lg md:text-xl text-red-100 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-purple-100 max-w-2xl mx-auto">
               {isRTL
-                ? 'تقويم المفاضلات علي الجامعات التركية - تتبع مواعيد التقديم والمفاضلات'
-                : 'Turkish University Admissions Calendar - Track application deadlines and admissions dates'}
+                ? 'تقويم مفاضلات الماجستير والدكتوراه في الجامعات التركية'
+                : 'Graduate Programs Admissions Calendar for Turkish Universities'}
             </p>
           </div>
         </Container>
@@ -127,14 +128,15 @@ export default function AdmissionsCalendarPage() {
       <section className="py-12 md:py-16 bg-white dark:bg-gray-900">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-6 flex items-center gap-3">
+              <BookOpen className="h-8 w-8 text-purple-600" />
               {isRTL ? 'تعريف' : 'Introduction'}
             </h2>
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 {isRTL
-                  ? 'مرحبا بكم في صفحة تقويم المفاضلات. تم إنشاء تقويم المفاضلات ليتمكن الطالب الراغب بالدراسة في تركيا من التسجيل على الجامعة التي تناسبه بشكل سلس، تقويم المفاضلات وموقعنا الالكتروني يتيح للطالب متابعة الأخبار بشكل أسرع من أي مصدر آخر، يتصدر تقويمنا نتائج البحث لعدة اسباب اهمها هي رغبة الطالب بالحصول على المعلومات بشكل افضل واسرع بدون أي تأخير.'
-                  : 'Welcome to the Admissions Calendar page. This calendar was created to help students who want to study in Turkey register at suitable universities smoothly. Our admissions calendar and website allow students to follow the news faster than any other source. Our calendar ranks high in search results for several reasons, most importantly the student\'s desire to obtain information better and faster without any delay.'}
+                  ? 'مرحبا بكم في صفحة تقويم مفاضلات الماجستير والدكتوراه. هذا التقويم مخصص للطلاب الراغبين في إكمال دراستهم العليا في الجامعات التركية. يحتوي التقويم على جميع مواعيد التقديم للبرامج المتاحة في مختلف الجامعات التركية.'
+                  : 'Welcome to the Masters & PhD Admissions Calendar page. This calendar is dedicated to students who wish to pursue their graduate studies at Turkish universities. The calendar contains all application deadlines for available programs across various Turkish universities.'}
               </p>
             </div>
           </div>
@@ -146,8 +148,8 @@ export default function AdmissionsCalendarPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 flex items-center gap-3">
-              <Database className="h-8 w-8 text-red-600" />
-              {isRTL ? 'ماذا يحتوي تقويم المفاضلات الخاص بنا' : 'What Our Calendar Contains'}
+              <Database className="h-8 w-8 text-purple-600" />
+              {isRTL ? 'ماذا يحتوي التقويم' : 'What Our Calendar Contains'}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {calendarContains.map((item, index) => (
@@ -155,8 +157,8 @@ export default function AdmissionsCalendarPage() {
                   key={index}
                   className="flex items-center gap-3 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800"
                 >
-                  <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center shrink-0">
-                    <item.icon className="h-5 w-5 text-red-600" />
+                  <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center shrink-0">
+                    <item.icon className="h-5 w-5 text-purple-600" />
                   </div>
                   <span className="text-gray-700 dark:text-gray-300 font-medium">{item.text}</span>
                 </div>
@@ -171,8 +173,8 @@ export default function AdmissionsCalendarPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 flex items-center gap-3">
-              <Star className="h-8 w-8 text-red-600" />
-              {isRTL ? 'مضمون التقويم' : 'Calendar Features'}
+              <Star className="h-8 w-8 text-purple-600" />
+              {isRTL ? 'مميزات التقويم' : 'Calendar Features'}
             </h2>
             <Card className="p-6">
               <ul className="space-y-4">
@@ -193,8 +195,8 @@ export default function AdmissionsCalendarPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 flex items-center gap-3">
-              <RefreshCw className="h-8 w-8 text-red-600" />
-              {isRTL ? 'اهم تحديثات تقويم المفاضلات' : 'Latest Calendar Updates'}
+              <RefreshCw className="h-8 w-8 text-purple-600" />
+              {isRTL ? 'أحدث التحديثات' : 'Latest Updates'}
             </h2>
             <div className="space-y-4">
               {latestUpdates.map((update, index) => (
@@ -202,8 +204,8 @@ export default function AdmissionsCalendarPage() {
                   key={index}
                   className="flex items-start gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800"
                 >
-                  <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center shrink-0">
-                    <update.icon className="h-5 w-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center shrink-0">
+                    <update.icon className="h-5 w-5 text-purple-600" />
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">{update.text}</p>
                 </div>
@@ -249,15 +251,27 @@ export default function AdmissionsCalendarPage() {
       <section className="py-12 md:py-16 bg-gray-50 dark:bg-gray-950">
         <Container>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 text-center">
-            {isRTL ? 'تقويم المفاضلات' : 'Admissions Calendar'}
+            {isRTL ? 'تقويم الماجستير والدكتوراه' : 'Masters & PhD Calendar'}
           </h2>
           {loading ? (
             <div className="space-y-4">
               <div className="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
               <SkeletonTable columns={12} rows={10} showHeader />
             </div>
-          ) : (
+          ) : admissions.length > 0 ? (
             <AdmissionsTable admissions={admissions} locale={locale} />
+          ) : (
+            <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl">
+              <School className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                {isRTL ? 'لا توجد مفاضلات حالياً' : 'No Admissions Available'}
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                {isRTL
+                  ? 'سيتم إضافة مفاضلات الماجستير والدكتوراه قريباً'
+                  : 'Masters & PhD admissions will be added soon'}
+              </p>
+            </div>
           )}
         </Container>
       </section>

@@ -384,3 +384,55 @@ model DownloadEvent {
   @@index([createdAt])
   @@index([sessionId])
 }
+
+// ============ UNIVERSITY ADMISSIONS (Turkish Universities) ============
+model UniversityAdmission {
+  id                     String   @id @default(cuid())
+
+  // University Info
+  universityNameEn       String   // English name
+  universityNameTr       String   // Turkish name
+  universityNameAr       String   // Arabic name
+  city                   String   // City in English
+  cityAr                 String   // City in Arabic
+
+  // Program Info
+  degree                 String   // bachelor, master, phd, all
+  specialization         String?  // Optional specialization field
+
+  // Dates
+  registrationStart      DateTime
+  registrationEnd        DateTime
+  resultsDate            DateTime
+
+  // Certificates & Application
+  acceptedCertificates   String[] // Array of certificate codes
+  detailsUrl             String   // University application page URL
+  applicationType        String   // yos, direct, sat, turkiye-burslari
+  localRanking           Int      // University's local ranking in Turkey
+
+  // Application Fee
+  applicationFee         Float?   // Fee amount (null = free)
+  applicationFeeCurrency String?  // TRY, USD, EUR
+  isFreeApplication      Boolean  @default(true)
+
+  // Calendar Type & Summer Program Fields
+  calendarType           String   @default("bachelor") // bachelor, masters-phd, summer
+  programDuration        String?  // e.g., "4 weeks", "8 weeks" (for summer programs)
+  languageOfInstruction  String[] // ["Turkish", "English", "Arabic"]
+
+  // Status
+  isActive               Boolean  @default(true)
+
+  // Timestamps
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@index([city])
+  @@index([degree])
+  @@index([isActive])
+  @@index([registrationStart])
+  @@index([registrationEnd])
+  @@index([isFreeApplication])
+  @@index([calendarType])
+}

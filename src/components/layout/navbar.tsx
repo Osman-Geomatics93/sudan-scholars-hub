@@ -76,7 +76,7 @@ export function Navbar({ locale }: NavbarProps) {
 
   const turkeyCalendarLinks = [
     { href: `/${locale}/turkey/admissions-calendar`, label: t('admissionsCalendar'), icon: Calendar },
-    { href: `/${locale}/turkey/graduate-calendar`, label: t('graduateCalendar'), icon: BookOpen },
+    { href: `/${locale}/turkey/masters-phd-calendar`, label: t('graduateCalendar'), icon: BookOpen },
     { href: `/${locale}/turkey/summer-calendar`, label: t('summerCalendar'), icon: Calendar },
   ];
 

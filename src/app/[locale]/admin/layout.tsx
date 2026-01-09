@@ -17,6 +17,7 @@ import {
   Images,
   Building2,
   BarChart3,
+  Calendar,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -93,6 +94,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Universities',
       labelAr: 'الجامعات',
       icon: Building2,
+    },
+    {
+      href: `/${locale}/admin/university-admissions`,
+      label: 'Admissions Calendar',
+      labelAr: 'تقويم المفاضلات',
+      icon: Calendar,
     },
     {
       href: `/${locale}/admin/analytics`,
