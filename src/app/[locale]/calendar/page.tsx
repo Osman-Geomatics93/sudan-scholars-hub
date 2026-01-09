@@ -48,7 +48,7 @@ export default function CalendarPage() {
   }, []);
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen py-8 md:py-12">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen pt-24 pb-8 md:pt-32 md:pb-12">
       <Container>
         {/* Page Header */}
         <div className="mb-8">
