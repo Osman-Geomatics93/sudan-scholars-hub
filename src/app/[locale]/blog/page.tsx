@@ -72,7 +72,7 @@ export default function BlogPage() {
   if (loading) {
     return (
       <div dir={isRTL ? 'rtl' : 'ltr'}>
-        <section className="gradient-hero py-16 md:py-24">
+        <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
           <Container size="md">
             <div className="text-center">
               <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
@@ -114,7 +114,7 @@ export default function BlogPage() {
   if (error) {
     return (
       <div dir={isRTL ? 'rtl' : 'ltr'}>
-        <section className="gradient-hero py-16 md:py-24">
+        <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
           <Container size="md">
             <div className="text-center">
               <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
@@ -138,7 +138,7 @@ export default function BlogPage() {
   if (blogPosts.length === 0) {
     return (
       <div dir={isRTL ? 'rtl' : 'ltr'}>
-        <section className="gradient-hero py-16 md:py-24">
+        <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
           <Container size="md">
             <div className="text-center">
               <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
