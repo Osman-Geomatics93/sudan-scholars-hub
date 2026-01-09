@@ -7,6 +7,7 @@ const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale,
   localePrefix: 'always',
+  localeDetection: false, // Always use Arabic as default, don't detect browser language
 });
 
 // Paths that require admin authentication
@@ -78,5 +79,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/(ar|en)/:path*'],
+  matcher: ['/', '/(ar|en)/:path*', '/((?!api|_next|.*\\..*).*)'],
 };
