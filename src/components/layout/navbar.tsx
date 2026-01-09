@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, ChevronRight, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2 } from 'lucide-react';
+import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, ChevronRight, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2, FileQuestion } from 'lucide-react';
 import { Container } from './container';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/features/language-switcher';
@@ -25,6 +25,7 @@ export function Navbar({ locale }: NavbarProps) {
   const [isTurkeyOpen, setIsTurkeyOpen] = useState(false);
   const [isCalendarsOpen, setIsCalendarsOpen] = useState(false);
   const [isUniversitiesOpen, setIsUniversitiesOpen] = useState(false);
+  const [isYosOpen, setIsYosOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const resourcesMenuRef = useRef<HTMLDivElement>(null);
@@ -78,6 +79,11 @@ export function Navbar({ locale }: NavbarProps) {
     { href: `/${locale}/turkey/universities/ranking`, label: t('universityRanking'), icon: GraduationCap },
     { href: `/${locale}/turkey/universities/trade-off`, label: t('tradeOff'), icon: HelpCircle },
     { href: `/${locale}/turkey/universities/recognized-sudan`, label: t('recognizedSudan'), icon: GraduationCap },
+  ];
+
+  const turkeyYosLinks = [
+    { href: `/${locale}/turkey/yos-exam/questions`, label: t('yosQuestions'), icon: FileQuestion },
+    { href: `/${locale}/turkey/yos-exam/unified`, label: t('yosUnified'), icon: FileQuestion },
   ];
 
   const resourceLinks = [
@@ -210,6 +216,46 @@ export function Navbar({ locale }: NavbarProps) {
                             onClick={() => {
                               setIsTurkeyOpen(false);
                               setIsUniversitiesOpen(false);
+                            }}
+                          >
+                            <link.icon className="h-4 w-4" />
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* YöS Exam with nested submenu */}
+                  <div
+                    className="relative"
+                    onMouseEnter={() => setIsYosOpen(true)}
+                    onMouseLeave={() => setIsYosOpen(false)}
+                  >
+                    <button
+                      className="flex items-center justify-between w-full px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    >
+                      <span className="flex items-center gap-3">
+                        <FileQuestion className="h-4 w-4" />
+                        {t('yosExam')}
+                      </span>
+                      <ChevronRight className={cn('h-4 w-4 transition-transform', isRTL && 'rotate-180')} />
+                    </button>
+
+                    {/* YöS Exam Submenu */}
+                    {isYosOpen && (
+                      <div className={cn(
+                        'absolute top-0 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50',
+                        isRTL ? 'end-full me-1' : 'start-full ms-1'
+                      )}>
+                        {turkeyYosLinks.map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                            onClick={() => {
+                              setIsTurkeyOpen(false);
+                              setIsYosOpen(false);
                             }}
                           >
                             <link.icon className="h-4 w-4" />
@@ -415,6 +461,23 @@ export function Navbar({ locale }: NavbarProps) {
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {turkeyUniversityLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="flex items-center gap-2 py-2 px-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <link.icon className="h-4 w-4" />
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+              {/* YöS Exam */}
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-3 mb-2 px-3">
+                {t('yosExam')}
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {turkeyYosLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
