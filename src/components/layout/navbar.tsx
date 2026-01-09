@@ -62,8 +62,9 @@ export function Navbar({ locale }: NavbarProps) {
     { href: `/${locale}/contact`, label: t('contact') },
   ];
 
-  const turkeyLinks = [
-    { href: `/${locale}/turkey`, label: t('turkeyMain'), icon: Globe },
+  const turkeyMainLink = { href: `/${locale}/turkey`, label: t('turkeyMain'), icon: Globe };
+
+  const turkeyCalendarLinks = [
     { href: `/${locale}/turkey/admissions-calendar`, label: t('admissionsCalendar'), icon: Calendar },
     { href: `/${locale}/turkey/graduate-calendar`, label: t('graduateCalendar'), icon: BookOpen },
     { href: `/${locale}/turkey/summer-calendar`, label: t('summerCalendar'), icon: Calendar },
@@ -119,10 +120,24 @@ export function Navbar({ locale }: NavbarProps) {
 
               {isTurkeyOpen && (
                 <div className="absolute end-0 mt-2 w-64 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+                  {/* Turkey Main Page - no header */}
+                  <Link
+                    href={turkeyMainLink.href}
+                    className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    onClick={() => setIsTurkeyOpen(false)}
+                  >
+                    <turkeyMainLink.icon className="h-4 w-4" />
+                    {turkeyMainLink.label}
+                  </Link>
+
+                  {/* Divider */}
+                  <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
+
+                  {/* Calendars Section */}
                   <p className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     {t('calendars')}
                   </p>
-                  {turkeyLinks.map((link) => (
+                  {turkeyCalendarLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
@@ -297,8 +312,21 @@ export function Navbar({ locale }: NavbarProps) {
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-50 mb-2">
                 {t('turkey')}
               </p>
+              {/* Turkey Main Page */}
+              <Link
+                href={turkeyMainLink.href}
+                className="flex items-center gap-2 py-2 px-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm mb-2"
+                onClick={() => setIsOpen(false)}
+              >
+                <turkeyMainLink.icon className="h-4 w-4" />
+                {turkeyMainLink.label}
+              </Link>
+              {/* Calendars */}
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-3 mb-2 px-3">
+                {t('calendars')}
+              </p>
               <div className="grid grid-cols-2 gap-2">
-                {turkeyLinks.map((link) => (
+                {turkeyCalendarLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
