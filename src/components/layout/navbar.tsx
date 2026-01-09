@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe, Calendar } from 'lucide-react';
+import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, ChevronRight, BookOpen, HelpCircle, Lightbulb, Globe, Calendar } from 'lucide-react';
 import { Container } from './container';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/features/language-switcher';
@@ -23,6 +23,7 @@ export function Navbar({ locale }: NavbarProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [isTurkeyOpen, setIsTurkeyOpen] = useState(false);
+  const [isCalendarsOpen, setIsCalendarsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const resourcesMenuRef = useRef<HTMLDivElement>(null);
@@ -119,8 +120,8 @@ export function Navbar({ locale }: NavbarProps) {
               </button>
 
               {isTurkeyOpen && (
-                <div className="absolute end-0 mt-2 w-64 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
-                  {/* Turkey Main Page - no header */}
+                <div className="absolute end-0 mt-2 w-56 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+                  {/* Turkey Main Page */}
                   <Link
                     href={turkeyMainLink.href}
                     className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
@@ -130,24 +131,45 @@ export function Navbar({ locale }: NavbarProps) {
                     {turkeyMainLink.label}
                   </Link>
 
-                  {/* Divider */}
-                  <div className="border-t border-gray-200 dark:border-gray-700 my-2" />
-
-                  {/* Calendars Section */}
-                  <p className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    {t('calendars')}
-                  </p>
-                  {turkeyCalendarLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                      onClick={() => setIsTurkeyOpen(false)}
+                  {/* Calendars with nested submenu */}
+                  <div
+                    className="relative"
+                    onMouseEnter={() => setIsCalendarsOpen(true)}
+                    onMouseLeave={() => setIsCalendarsOpen(false)}
+                  >
+                    <button
+                      className="flex items-center justify-between w-full px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                     >
-                      <link.icon className="h-4 w-4" />
-                      {link.label}
-                    </Link>
-                  ))}
+                      <span className="flex items-center gap-3">
+                        <Calendar className="h-4 w-4" />
+                        {t('calendars')}
+                      </span>
+                      <ChevronRight className={cn('h-4 w-4 transition-transform', isRTL && 'rotate-180')} />
+                    </button>
+
+                    {/* Calendars Submenu */}
+                    {isCalendarsOpen && (
+                      <div className={cn(
+                        'absolute top-0 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50',
+                        isRTL ? 'end-full me-1' : 'start-full ms-1'
+                      )}>
+                        {turkeyCalendarLinks.map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                            onClick={() => {
+                              setIsTurkeyOpen(false);
+                              setIsCalendarsOpen(false);
+                            }}
+                          >
+                            <link.icon className="h-4 w-4" />
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
