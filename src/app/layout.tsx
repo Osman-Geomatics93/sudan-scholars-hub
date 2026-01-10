@@ -1,8 +1,12 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { inter, cairo } from '@/lib/fonts';
 
 const siteUrl = 'https://www.deltaroots.store';
+
+export const viewport: Viewport = {
+  themeColor: '#2563eb',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -11,7 +15,6 @@ export const metadata: Metadata = {
     template: '%s | Sudan Scholars Hub',
   },
   manifest: '/manifest.json',
-  themeColor: '#2563eb',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
