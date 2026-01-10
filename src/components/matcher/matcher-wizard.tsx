@@ -62,9 +62,14 @@ export function MatcherWizard({ locale, existingProfile }: MatcherWizardProps) {
     setError(null);
 
     try {
-      // Save/update profile
+      // First check if profile exists
+      const checkResponse = await fetch('/api/matcher/profile');
+      const checkData = await checkResponse.json();
+      const hasExistingProfile = checkData.profile !== null;
+
+      // Save/update profile - always use PATCH if profile exists
       const profileResponse = await fetch('/api/matcher/profile', {
-        method: existingProfile ? 'PATCH' : 'POST',
+        method: hasExistingProfile ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
