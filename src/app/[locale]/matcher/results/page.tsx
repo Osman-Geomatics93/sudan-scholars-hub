@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ interface MatchResultData {
   };
 }
 
-export default function MatcherResultsPage() {
+function MatcherResultsContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -339,5 +339,24 @@ export default function MatcherResultsPage() {
         </Container>
       </div>
     </MainLayout>
+  );
+}
+
+function ResultsLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto mb-4" />
+        <p className="text-gray-600 dark:text-gray-400">Loading results...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function MatcherResultsPage() {
+  return (
+    <Suspense fallback={<ResultsLoading />}>
+      <MatcherResultsContent />
+    </Suspense>
   );
 }
