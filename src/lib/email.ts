@@ -2,6 +2,20 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+/**
+ * Escape HTML special characters to prevent XSS in emails
+ */
+function escapeHtml(text: string): string {
+  const htmlEntities: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, char => htmlEntities[char]);
+}
+
 export async function sendContactNotification({
   name,
   email,
@@ -15,21 +29,27 @@ export async function sendContactNotification({
 }) {
   const adminEmail = process.env.ADMIN_EMAIL || '424236@ogr.ktu.edu.tr';
 
+  // Sanitize user inputs
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeSubject = escapeHtml(subject);
+  const safeMessage = escapeHtml(message);
+
   await resend.emails.send({
     from: 'Sudan Scholars Hub <onboarding@resend.dev>',
     to: adminEmail,
-    subject: `New Contact: ${subject}`,
+    subject: `New Contact: ${safeSubject}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #1e40af;">New Contact Form Submission</h2>
         <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
-          <p><strong>From:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subject:</strong> ${subject}</p>
+          <p><strong>From:</strong> ${safeName}</p>
+          <p><strong>Email:</strong> ${safeEmail}</p>
+          <p><strong>Subject:</strong> ${safeSubject}</p>
         </div>
         <div style="margin-top: 20px;">
           <h3 style="color: #374151;">Message:</h3>
-          <p style="white-space: pre-wrap;">${message}</p>
+          <p style="white-space: pre-wrap;">${safeMessage}</p>
         </div>
         <hr style="margin-top: 30px;" />
         <p style="color: #6b7280; font-size: 12px;">
@@ -104,6 +124,9 @@ export async function sendAdminOTP({
   email: string;
   otpCode: string;
 }) {
+  // OTP is generated internally, but escape just in case
+  const safeOtpCode = escapeHtml(otpCode);
+
   await resend.emails.send({
     from: 'Sudan Scholars Hub <onboarding@resend.dev>',
     to: email,
@@ -116,7 +139,7 @@ export async function sendAdminOTP({
         </div>
         <div style="background: #f3f4f6; padding: 30px; border-radius: 8px; text-align: center; margin: 20px 0;">
           <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #1e40af;">
-            ${otpCode}
+            ${safeOtpCode}
           </span>
         </div>
         <div style="text-align: center; padding: 20px;">

@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
+import { requireAdmin, unauthorizedResponse } from '@/lib/auth-utils';
 
 // Disable caching
 export const dynamic = 'force-dynamic';
 
 // GET - Dashboard statistics
 export async function GET() {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const [

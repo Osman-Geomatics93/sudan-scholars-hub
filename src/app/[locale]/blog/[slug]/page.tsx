@@ -8,6 +8,7 @@ import { Calendar, Clock, ArrowLeft, User, Tag, Loader2, Share2 } from 'lucide-r
 import { Container } from '@/components/layout/container';
 import { ShareModal } from '@/components/features/share-modal';
 import { ShareContent } from '@/lib/share-utils';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface BlogPost {
   id: string;
@@ -96,7 +97,7 @@ export default function BlogDetailPage() {
     // Wrap in paragraph tags
     html = `<p class="text-gray-700 leading-relaxed mb-4">${html}</p>`;
 
-    return html;
+    return DOMPurify.sanitize(html, { ALLOWED_TAGS: ["p", "br", "strong", "em", "ul", "ol", "li", "h1", "h2", "h3", "h4", "a", "blockquote"], ALLOWED_ATTR: ["href", "class", "target", "rel"] });
   };
 
   if (loading) {

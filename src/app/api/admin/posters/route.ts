@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
+import { requireAdmin, unauthorizedResponse } from '@/lib/auth-utils';
 import { PosterCategory } from '@prisma/client';
 
 // Disable caching
@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic';
 
 // GET - List all posters (including inactive)
 export async function GET(request: NextRequest) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const { searchParams } = new URL(request.url);
@@ -50,8 +50,8 @@ export async function GET(request: NextRequest) {
 
 // POST - Create new poster
 export async function POST(request: NextRequest) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const body = await request.json();

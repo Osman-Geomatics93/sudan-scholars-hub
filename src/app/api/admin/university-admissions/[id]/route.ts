@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
+import { requireAdmin, unauthorizedResponse } from '@/lib/auth-utils';
 
 // Disable caching
 export const dynamic = 'force-dynamic';
@@ -10,8 +10,8 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const { id } = await params;
@@ -42,8 +42,8 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const { id } = await params;
@@ -103,8 +103,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const { id } = await params;

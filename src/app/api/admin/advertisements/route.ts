@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
+import { requireAdmin, unauthorizedResponse } from '@/lib/auth-utils';
 
 // Disable caching
 export const dynamic = 'force-dynamic';
 
 // GET - List all advertisements (including inactive)
 export async function GET(request: NextRequest) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const advertisements = await prisma.advertisement.findMany({
@@ -27,8 +27,8 @@ export async function GET(request: NextRequest) {
 
 // POST - Create new advertisement
 export async function POST(request: NextRequest) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const body = await request.json();

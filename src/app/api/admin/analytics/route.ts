@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getAdminSession, unauthorizedResponse } from '@/lib/auth-utils';
+import { requireAdmin, unauthorizedResponse } from '@/lib/auth-utils';
 
 export const dynamic = 'force-dynamic';
 
 // GET - Fetch analytics data for admin dashboard
 export async function GET(request: NextRequest) {
-  const session = await getAdminSession();
-  if (!session) return unauthorizedResponse();
+  const { session, error } = await requireAdmin();
+  if (error) return error;
 
   try {
     const { searchParams } = new URL(request.url);

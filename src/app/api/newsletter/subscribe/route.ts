@@ -2,9 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { subscribeSchema } from '@/lib/validations/newsletter';
 import { sendWelcomeEmail } from '@/lib/email';
+import { checkRateLimit, getClientIP, rateLimitedResponse, RATE_LIMITS } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const clientIP = getClientIP(request);
+    const { success, resetTime } = checkRateLimit(
+      `newsletter:${clientIP}`,
+      RATE_LIMITS.newsletter.limit,
+      RATE_LIMITS.newsletter.windowMs
+    );
+
+    if (!success) {
+      return rateLimitedResponse(resetTime);
+    }
+
     const body = await request.json();
 
     // Validate input

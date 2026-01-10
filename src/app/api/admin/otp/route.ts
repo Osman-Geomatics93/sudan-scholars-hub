@@ -2,9 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { sendAdminOTP } from '@/lib/email';
+import { checkRateLimit, getClientIP, rateLimitedResponse, RATE_LIMITS } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting - stricter for OTP to prevent brute force
+    const clientIP = getClientIP(request);
+    const { success, resetTime } = checkRateLimit(
+      `otp:${clientIP}`,
+      RATE_LIMITS.otp.limit,
+      RATE_LIMITS.otp.windowMs
+    );
+
+    if (!success) {
+      return rateLimitedResponse(resetTime);
+    }
+
     const { email } = await request.json();
 
     if (!email) {
