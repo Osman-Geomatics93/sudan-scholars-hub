@@ -216,7 +216,7 @@ export function GPAConverter({ locale, onGPAChange }: GPAConverterProps) {
 
       {/* Reference Table */}
       {showTable && (
-        <Card className="overflow-hidden">
+        <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">
               {isRTL ? 'جدول المرجع السريع' : 'Quick Reference Table'}
@@ -225,37 +225,39 @@ export function GPAConverter({ locale, onGPAChange }: GPAConverterProps) {
               {isRTL ? '← اسحب للمزيد' : 'Swipe for more →'}
             </p>
           </CardHeader>
-          <CardContent className="p-0 sm:p-6">
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs sm:text-sm" style={{ minWidth: '480px' }}>
-                <thead>
-                  <tr className="border-b dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
-                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">4.0 GPA</th>
-                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'النسبة' : 'Percent'}</th>
-                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'الحرف' : 'Letter'}</th>
-                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">UK</th>
-                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'ألماني' : 'German'}</th>
-                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'فرنسي' : 'French'}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {REFERENCE_TABLE.map((row, idx) => (
-                    <tr
-                      key={idx}
-                      className={`border-b dark:border-gray-700 ${
-                        idx % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800/50' : ''
-                      }`}
-                    >
-                      <td className="px-2 sm:px-3 py-2 font-medium">{row.gpa40}</td>
-                      <td className="px-2 sm:px-3 py-2">{row.percent}%</td>
-                      <td className="px-2 sm:px-3 py-2">{row.letter}</td>
-                      <td className="px-2 sm:px-3 py-2">{row.uk}</td>
-                      <td className="px-2 sm:px-3 py-2">{row.german}</td>
-                      <td className="px-2 sm:px-3 py-2">{row.french}</td>
+          <CardContent className="px-2 sm:px-6">
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs sm:text-sm">
+                  <thead>
+                    <tr className="bg-gray-100 dark:bg-gray-800">
+                      <th className="px-3 py-2.5 text-start font-semibold whitespace-nowrap border-r border-gray-200 dark:border-gray-700">4.0 GPA</th>
+                      <th className="px-3 py-2.5 text-start font-semibold whitespace-nowrap border-r border-gray-200 dark:border-gray-700">{isRTL ? 'النسبة' : 'Percent'}</th>
+                      <th className="px-3 py-2.5 text-start font-semibold whitespace-nowrap border-r border-gray-200 dark:border-gray-700">{isRTL ? 'الحرف' : 'Letter'}</th>
+                      <th className="px-3 py-2.5 text-start font-semibold whitespace-nowrap border-r border-gray-200 dark:border-gray-700">UK</th>
+                      <th className="px-3 py-2.5 text-start font-semibold whitespace-nowrap border-r border-gray-200 dark:border-gray-700">{isRTL ? 'ألماني' : 'German'}</th>
+                      <th className="px-3 py-2.5 text-start font-semibold whitespace-nowrap">{isRTL ? 'فرنسي' : 'French'}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {REFERENCE_TABLE.map((row, idx) => (
+                      <tr
+                        key={idx}
+                        className={`border-t border-gray-200 dark:border-gray-700 ${
+                          idx % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800/50' : 'bg-white dark:bg-gray-900'
+                        }`}
+                      >
+                        <td className="px-3 py-2 font-medium border-r border-gray-200 dark:border-gray-700">{row.gpa40}</td>
+                        <td className="px-3 py-2 border-r border-gray-200 dark:border-gray-700">{row.percent}%</td>
+                        <td className="px-3 py-2 border-r border-gray-200 dark:border-gray-700">{row.letter}</td>
+                        <td className="px-3 py-2 border-r border-gray-200 dark:border-gray-700">{row.uk}</td>
+                        <td className="px-3 py-2 border-r border-gray-200 dark:border-gray-700">{row.german}</td>
+                        <td className="px-3 py-2">{row.french}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </CardContent>
         </Card>
