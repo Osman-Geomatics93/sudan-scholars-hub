@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:admissions": "tsx prisma/seed-admissions.ts",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"
   },
