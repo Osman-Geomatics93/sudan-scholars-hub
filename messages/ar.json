@@ -513,5 +513,153 @@
       "master": "ماجستير",
       "phd": "دكتوراه"
     }
+  },
+  "matcher": {
+    "title": "مطابق المنح الذكي",
+    "subtitle": "اعثر على المنح المناسبة لملفك الشخصي باستخدام الذكاء الاصطناعي",
+    "signInRequired": "سجّل الدخول لاستخدام مطابق المنح الذكي",
+    "signInButton": "تسجيل الدخول للبدء",
+    "features": {
+      "smartMatching": "مطابقة ذكية",
+      "smartMatchingDesc": "نحلل ملفك الشخصي ونقارنه مع متطلبات المنح المختلفة",
+      "personalizedRecommendations": "توصيات مخصصة",
+      "personalizedRecommendationsDesc": "احصل على شرح مفصل لماذا كل منحة مناسبة لك",
+      "smartRanking": "تصنيف ذكي",
+      "smartRankingDesc": "نرتب المنح حسب درجة التطابق مع ملفك"
+    },
+    "wizard": {
+      "step1": "المعدل",
+      "step2": "التعليم",
+      "step3": "الشخصية",
+      "step4": "التفضيلات",
+      "step5": "المراجعة",
+      "next": "التالي",
+      "back": "السابق",
+      "findScholarships": "ابحث عن المنح",
+      "searching": "جاري البحث..."
+    },
+    "gpa": {
+      "title": "أداؤك الأكاديمي",
+      "subtitle": "أدخل معدلك أو درجاتك",
+      "system": "نظام الدرجات",
+      "value": "معدلك/درجتك",
+      "converted": "المحول إلى نسبة مئوية"
+    },
+    "education": {
+      "title": "المستوى التعليمي",
+      "subtitle": "أخبرنا عن خلفيتك التعليمية",
+      "currentLevel": "المستوى التعليمي الحالي",
+      "targetLevel": "الدرجة المستهدفة",
+      "fieldsOfStudy": "مجالات الدراسة",
+      "selectFields": "اختر مجالات اهتمامك"
+    },
+    "personal": {
+      "title": "المعلومات الشخصية",
+      "subtitle": "هذا يساعدنا في العثور على المنح الإقليمية",
+      "country": "بلد المنشأ",
+      "languages": "اللغات التي تتحدثها",
+      "age": "العمر",
+      "ageOptional": "اختياري"
+    },
+    "preferences": {
+      "title": "تفضيلاتك",
+      "subtitle": "حدد تفضيلاتك للحصول على نتائج أكثر دقة",
+      "funding": "تفضيل التمويل",
+      "fullyFundedOnly": "ممولة بالكامل فقط",
+      "fullyFundedDesc": "عرض المنح الممولة بالكامل فقط (رسوم + سكن + راتب)",
+      "anyFunding": "جميع المنح",
+      "anyFundingDesc": "عرض جميع المنح بما فيها الممولة جزئياً",
+      "specialCircumstances": "ظروف خاصة",
+      "specialCircumstancesPlaceholder": "مثال: لاجئ، ذوي احتياجات خاصة، أول جيل جامعي في العائلة، ظروف مالية صعبة...",
+      "specialCircumstancesHint": "بعض المنح لها فئات خاصة للطلاب ذوي الظروف المعينة"
+    },
+    "review": {
+      "title": "مراجعة ملفك الشخصي",
+      "subtitle": "تأكد من صحة معلوماتك قبل البحث",
+      "academicPerformance": "الأداء الأكاديمي",
+      "gradingSystem": "نظام الدرجات",
+      "educationLevel": "المستوى التعليمي",
+      "currentLevel": "المستوى الحالي",
+      "targetDegree": "الدرجة المستهدفة",
+      "fieldsOfStudy": "مجالات الدراسة",
+      "personalInfo": "المعلومات الشخصية",
+      "country": "البلد",
+      "languages": "اللغات",
+      "age": "العمر",
+      "notSpecified": "غير محدد",
+      "preferences": "التفضيلات",
+      "fundingPreference": "تفضيل التمويل",
+      "specialCircumstances": "ظروف خاصة",
+      "none": "لا يوجد",
+      "readyToMatch": "جاهز للبحث!",
+      "clickToFind": "انقر على \"ابحث عن المنح\" لمعرفة المنح التي تتناسب مع ملفك الشخصي.",
+      "editHint": "يمكنك العودة لتعديل أي قسم بالنقر على \"السابق\""
+    },
+    "results": {
+      "title": "نتائج المطابقة",
+      "subtitle": "وجدنا {count} منحة تتناسب مع ملفك الشخصي",
+      "processingTime": "تمت المعالجة في {time} ثانية",
+      "runAgain": "إعادة المطابقة",
+      "viewHistory": "سجل المطابقات",
+      "noMatches": "لم يتم العثور على منح مطابقة",
+      "noMatchesDesc": "جرب تعديل معدلك أو تفضيلاتك للحصول على نتائج أكثر",
+      "editProfile": "تعديل الملف الشخصي",
+      "details": "التفاصيل",
+      "apply": "تقديم",
+      "matchScore": "درجة التطابق",
+      "excellentMatch": "تطابق ممتاز",
+      "goodMatch": "تطابق جيد",
+      "fairMatch": "تطابق مقبول"
+    },
+    "history": {
+      "title": "سجل المطابقات",
+      "subtitle": "عرض نتائج المطابقات السابقة",
+      "newMatch": "مطابقة جديدة",
+      "noHistory": "لا يوجد سجل بعد",
+      "noHistoryDesc": "قم بتشغيل المطابق للعثور على المنح المناسبة لك",
+      "startMatching": "ابدأ المطابقة",
+      "view": "عرض",
+      "delete": "حذف",
+      "confirmDelete": "هل أنت متأكد من حذف هذه النتيجة؟",
+      "scholarships": "منحة",
+      "topMatches": "أفضل المطابقات:",
+      "note": "معلومة",
+      "historyLimit": "يتم حفظ آخر 10 نتائج مطابقة. النتائج القديمة تُحذف تلقائياً عند تجاوز الحد."
+    },
+    "factors": {
+      "gpa": "المعدل",
+      "field": "المجال",
+      "level": "المستوى",
+      "funding": "التمويل",
+      "country": "البلد"
+    },
+    "levels": {
+      "HIGH_SCHOOL": "الثانوية العامة",
+      "BACHELOR": "بكالوريوس",
+      "MASTER": "ماجستير",
+      "PHD": "دكتوراه"
+    },
+    "fields": {
+      "ENGINEERING": "الهندسة",
+      "MEDICINE": "الطب",
+      "BUSINESS": "إدارة الأعمال",
+      "COMPUTER_SCIENCE": "علوم الحاسوب",
+      "LAW": "القانون",
+      "ARTS": "الفنون والآداب",
+      "SCIENCES": "العلوم",
+      "SOCIAL_SCIENCES": "العلوم الاجتماعية",
+      "EDUCATION": "التعليم",
+      "OTHER": "أخرى"
+    },
+    "funding": {
+      "FULLY_FUNDED_ONLY": "ممولة بالكامل فقط",
+      "ANY": "جميع المنح"
+    },
+    "errors": {
+      "fetchFailed": "فشل تحميل النتائج",
+      "noResults": "لم يتم تحديد النتائج",
+      "matchFailed": "فشلت المطابقة. يرجى المحاولة مرة أخرى.",
+      "rateLimit": "طلبات كثيرة جداً. يرجى الانتظار بضع دقائق."
+    }
   }
 }

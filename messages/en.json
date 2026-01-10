@@ -513,5 +513,153 @@
       "master": "Master",
       "phd": "PhD"
     }
+  },
+  "matcher": {
+    "title": "AI Scholarship Matcher",
+    "subtitle": "Find scholarships that match your profile using AI",
+    "signInRequired": "Sign in to use the AI Scholarship Matcher",
+    "signInButton": "Sign In to Get Started",
+    "features": {
+      "smartMatching": "Smart Matching",
+      "smartMatchingDesc": "We analyze your profile and compare it with different scholarship requirements",
+      "personalizedRecommendations": "Personalized Recommendations",
+      "personalizedRecommendationsDesc": "Get detailed explanations of why each scholarship fits you",
+      "smartRanking": "Smart Ranking",
+      "smartRankingDesc": "We rank scholarships by how well they match your profile"
+    },
+    "wizard": {
+      "step1": "GPA",
+      "step2": "Education",
+      "step3": "Personal",
+      "step4": "Preferences",
+      "step5": "Review",
+      "next": "Next",
+      "back": "Back",
+      "findScholarships": "Find My Scholarships",
+      "searching": "Searching..."
+    },
+    "gpa": {
+      "title": "Your Academic Performance",
+      "subtitle": "Enter your GPA or grades",
+      "system": "Grading System",
+      "value": "Your GPA/Grade",
+      "converted": "Converted to Percentage"
+    },
+    "education": {
+      "title": "Education Level",
+      "subtitle": "Tell us about your educational background",
+      "currentLevel": "Current Education Level",
+      "targetLevel": "Target Degree",
+      "fieldsOfStudy": "Fields of Study",
+      "selectFields": "Select your areas of interest"
+    },
+    "personal": {
+      "title": "Personal Information",
+      "subtitle": "This helps us find regional scholarships",
+      "country": "Country of Origin",
+      "languages": "Languages You Speak",
+      "age": "Age",
+      "ageOptional": "Optional"
+    },
+    "preferences": {
+      "title": "Your Preferences",
+      "subtitle": "Set your preferences for more accurate results",
+      "funding": "Funding Preference",
+      "fullyFundedOnly": "Fully Funded Only",
+      "fullyFundedDesc": "Show only fully funded scholarships (tuition + housing + stipend)",
+      "anyFunding": "All Scholarships",
+      "anyFundingDesc": "Show all scholarships including partially funded ones",
+      "specialCircumstances": "Special Circumstances",
+      "specialCircumstancesPlaceholder": "e.g., Refugee status, disability, first-generation student, financial hardship...",
+      "specialCircumstancesHint": "Some scholarships have special categories for students with certain circumstances"
+    },
+    "review": {
+      "title": "Review Your Profile",
+      "subtitle": "Make sure your information is correct before searching",
+      "academicPerformance": "Academic Performance",
+      "gradingSystem": "Grading System",
+      "educationLevel": "Education Level",
+      "currentLevel": "Current Level",
+      "targetDegree": "Target Degree",
+      "fieldsOfStudy": "Fields of Study",
+      "personalInfo": "Personal Information",
+      "country": "Country",
+      "languages": "Languages",
+      "age": "Age",
+      "notSpecified": "Not specified",
+      "preferences": "Preferences",
+      "fundingPreference": "Funding Preference",
+      "specialCircumstances": "Special Circumstances",
+      "none": "None",
+      "readyToMatch": "Ready to match!",
+      "clickToFind": "Click \"Find My Scholarships\" to discover scholarships that match your profile.",
+      "editHint": "You can go back to edit any section by clicking \"Back\""
+    },
+    "results": {
+      "title": "Your Matches",
+      "subtitle": "We found {count} scholarships that match your profile",
+      "processingTime": "Processed in {time} seconds",
+      "runAgain": "Run Again",
+      "viewHistory": "View History",
+      "noMatches": "No Matching Scholarships Found",
+      "noMatchesDesc": "Try adjusting your GPA or preferences to get more results",
+      "editProfile": "Edit Profile",
+      "details": "Details",
+      "apply": "Apply",
+      "matchScore": "Match Score",
+      "excellentMatch": "Excellent Match",
+      "goodMatch": "Good Match",
+      "fairMatch": "Fair Match"
+    },
+    "history": {
+      "title": "Match History",
+      "subtitle": "View your previous match results",
+      "newMatch": "New Match",
+      "noHistory": "No History Yet",
+      "noHistoryDesc": "Run the matcher to find scholarships that fit you",
+      "startMatching": "Start Matching",
+      "view": "View",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this result?",
+      "scholarships": "scholarships",
+      "topMatches": "Top matches:",
+      "note": "Note",
+      "historyLimit": "The last 10 match results are saved. Older results are automatically deleted when the limit is exceeded."
+    },
+    "factors": {
+      "gpa": "GPA",
+      "field": "Field",
+      "level": "Level",
+      "funding": "Funding",
+      "country": "Country"
+    },
+    "levels": {
+      "HIGH_SCHOOL": "High School",
+      "BACHELOR": "Bachelor's",
+      "MASTER": "Master's",
+      "PHD": "PhD"
+    },
+    "fields": {
+      "ENGINEERING": "Engineering",
+      "MEDICINE": "Medicine",
+      "BUSINESS": "Business",
+      "COMPUTER_SCIENCE": "Computer Science",
+      "LAW": "Law",
+      "ARTS": "Arts & Humanities",
+      "SCIENCES": "Sciences",
+      "SOCIAL_SCIENCES": "Social Sciences",
+      "EDUCATION": "Education",
+      "OTHER": "Other"
+    },
+    "funding": {
+      "FULLY_FUNDED_ONLY": "Fully Funded Only",
+      "ANY": "All Scholarships"
+    },
+    "errors": {
+      "fetchFailed": "Failed to load results",
+      "noResults": "No results specified",
+      "matchFailed": "Matching failed. Please try again.",
+      "rateLimit": "Too many requests. Please wait a few minutes."
+    }
   }
 }
