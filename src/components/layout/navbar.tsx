@@ -118,18 +118,37 @@ export function Navbar({ locale }: NavbarProps) {
           scrolled ? "h-14" : "h-16"
         )}>
           {/* Logo */}
-          <Link href={`/${locale}`} className="group flex items-center gap-2.5 shrink-0">
-            {/* Icon with glow effect */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl blur-lg opacity-0 group-hover:opacity-50 transition-all duration-500" />
-              <div className="relative bg-gradient-to-br from-primary-500 to-primary-600 p-2.5 rounded-xl shadow-lg shadow-primary-500/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                <GraduationCap className="h-6 w-6 text-white" />
-              </div>
+          <Link href={`/${locale}`} className="group flex items-center shrink-0">
+            {/* Mobile: Icon only */}
+            <div className="relative md:hidden">
+              <Image
+                src="/images/logo-icon.webp"
+                alt="Sudan Scholars Hub"
+                width={40}
+                height={40}
+                className="rounded-lg group-hover:scale-105 transition-transform duration-300"
+                priority
+              />
             </div>
-            {/* Text with gradient on hover */}
-            <span className="text-lg lg:text-xl font-bold hidden lg:block whitespace-nowrap bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent group-hover:from-primary-600 group-hover:to-secondary-500 transition-all duration-300">
-              {locale === 'ar' ? 'بوابة منح السودان' : 'Sudan Scholars Hub'}
-            </span>
+            {/* Desktop: Full horizontal logo */}
+            <div className="hidden md:block">
+              <Image
+                src="/images/logo-horizontal.webp"
+                alt="Sudan Scholars Hub"
+                width={180}
+                height={45}
+                className="h-9 lg:h-10 w-auto dark:hidden group-hover:scale-[1.02] transition-transform duration-300"
+                priority
+              />
+              <Image
+                src="/images/logo-horizontal-dark.png"
+                alt="Sudan Scholars Hub"
+                width={180}
+                height={45}
+                className="h-9 lg:h-10 w-auto hidden dark:block group-hover:scale-[1.02] transition-transform duration-300"
+                priority
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

@@ -20,6 +20,16 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   description: 'Your gateway to scholarships and study opportunities for Sudanese students. Find fully funded scholarships in Turkey, UK, USA, Germany and more. | بوابتك للمنح الدراسية وفرص الدراسة للطلاب السودانيين',
   keywords: [
     'scholarships for Sudanese students',

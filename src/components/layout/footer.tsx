@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { GraduationCap, Facebook, Twitter, Linkedin, Github, Globe } from 'lucide-react';
 import { Container } from './container';
@@ -42,10 +43,14 @@ export function Footer({ locale }: FooterProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Brand */}
             <div className="lg:col-span-1">
-              <Link href={`/${locale}`} className="flex items-center gap-2 mb-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
-                  <GraduationCap className="h-6 w-6 text-white" />
-                </div>
+              <Link href={`/${locale}`} className="flex items-center gap-3 mb-4">
+                <Image
+                  src="/images/logo-icon.webp"
+                  alt="Sudan Scholars Hub"
+                  width={44}
+                  height={44}
+                  className="rounded-lg"
+                />
                 <span className="text-xl font-bold text-white">
                   {locale === 'ar' ? 'بوابة منح السودان' : 'Sudan Scholars Hub'}
                 </span>
