@@ -90,6 +90,19 @@ export function MatcherWizard({ locale, existingProfile }: MatcherWizardProps) {
 
       const matchData = await matchResponse.json();
 
+      // Check if we have results
+      if (!matchData.resultId) {
+        // No matches found - show message
+        setError(
+          matchData.message ||
+            (isRTL
+              ? 'لم يتم العثور على منح تتطابق مع ملفك الشخصي. جرب تعديل تفضيلاتك.'
+              : 'No scholarships match your profile. Try adjusting your preferences.')
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
       // Redirect to results page
       router.push(`/${locale}/matcher/results?id=${matchData.resultId}`);
     } catch (err) {
