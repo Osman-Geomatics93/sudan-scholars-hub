@@ -216,7 +216,7 @@ export function GPAConverter({ locale, onGPAChange }: GPAConverterProps) {
 
       {/* Reference Table */}
       {showTable && (
-        <Card>
+        <Card className="overflow-hidden">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">
               {isRTL ? 'جدول المرجع السريع' : 'Quick Reference Table'}
@@ -225,9 +225,9 @@ export function GPAConverter({ locale, onGPAChange }: GPAConverterProps) {
               {isRTL ? '← اسحب للمزيد' : 'Swipe for more →'}
             </p>
           </CardHeader>
-          <CardContent className="px-0 sm:px-6">
-            <div className="overflow-x-auto -mx-0 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-              <table className="w-full text-xs sm:text-sm min-w-[500px]">
+          <CardContent className="p-0 sm:p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm" style={{ minWidth: '480px' }}>
                 <thead>
                   <tr className="border-b dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
                     <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">4.0 GPA</th>
