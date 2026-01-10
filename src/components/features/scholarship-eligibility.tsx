@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
-import { CheckCircle2, XCircle, AlertCircle, Trophy, GraduationCap, MapPin } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { CheckCircle2, XCircle, AlertCircle, Trophy, GraduationCap, MapPin, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -19,6 +19,7 @@ interface ScholarshipEligibilityProps {
 
 export function ScholarshipEligibility({ locale, gpaPercent, level }: ScholarshipEligibilityProps) {
   const isRTL = locale === 'ar';
+  const [showAllNotEligible, setShowAllNotEligible] = useState(false);
 
   // Calculate eligibility
   const eligibility = useMemo(() => {
@@ -97,15 +98,28 @@ export function ScholarshipEligibility({ locale, gpaPercent, level }: Scholarshi
               {isRTL ? scholarship.note.ar : scholarship.note.en}
             </p>
 
-            <div className="mt-2 flex flex-wrap gap-1">
-              {scholarship.levels.map((lvl) => (
-                <span
-                  key={lvl}
-                  className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300"
+            <div className="mt-2 flex items-center justify-between flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1">
+                {scholarship.levels.map((lvl) => (
+                  <span
+                    key={lvl}
+                    className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300"
+                  >
+                    {getLevelLabel(lvl)}
+                  </span>
+                ))}
+              </div>
+              {scholarship.website && (
+                <a
+                  href={scholarship.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                 >
-                  {getLevelLabel(lvl)}
-                </span>
-              ))}
+                  {isRTL ? 'الموقع' : 'Website'}
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -195,8 +209,26 @@ export function ScholarshipEligibility({ locale, gpaPercent, level }: Scholarshi
                   {isRTL ? `${eligibility.notEligible.length} منح أخرى` : `${eligibility.notEligible.length} Other Scholarships`}
                 </h3>
                 <div className="space-y-3">
-                  {eligibility.notEligible.map((s) => renderScholarship(s, 'notEligible'))}
+                  {(showAllNotEligible ? eligibility.notEligible : eligibility.notEligible.slice(0, 3)).map((s) => renderScholarship(s, 'notEligible'))}
                 </div>
+                {eligibility.notEligible.length > 3 && (
+                  <button
+                    onClick={() => setShowAllNotEligible(!showAllNotEligible)}
+                    className="mt-3 w-full py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary flex items-center justify-center gap-1 transition-colors"
+                  >
+                    {showAllNotEligible ? (
+                      <>
+                        {isRTL ? 'عرض أقل' : 'Show Less'}
+                        <ChevronUp className="w-4 h-4" />
+                      </>
+                    ) : (
+                      <>
+                        {isRTL ? `عرض ${eligibility.notEligible.length - 3} المزيد` : `Show ${eligibility.notEligible.length - 3} More`}
+                        <ChevronDown className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             )}
 

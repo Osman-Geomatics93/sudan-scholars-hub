@@ -257,6 +257,7 @@ export interface ScholarshipRequirement {
 
 // Pre-defined scholarship requirements
 export const SCHOLARSHIP_REQUIREMENTS: ScholarshipRequirement[] = [
+  // === EUROPE ===
   {
     id: 'turkish',
     name: { en: 'Turkish Government Scholarship', ar: 'المنحة التركية الحكومية' },
@@ -267,6 +268,7 @@ export const SCHOLARSHIP_REQUIREMENTS: ScholarshipRequirement[] = [
       ar: '70% للبكالوريوس، 75% للماجستير/الدكتوراه'
     },
     country: 'Turkey',
+    website: 'https://turkiyeburslari.gov.tr',
   },
   {
     id: 'daad',
@@ -278,6 +280,7 @@ export const SCHOLARSHIP_REQUIREMENTS: ScholarshipRequirement[] = [
       ar: 'يتطلب درجة "جيد" (2.5 في النظام الألماني)'
     },
     country: 'Germany',
+    website: 'https://www.daad.de',
   },
   {
     id: 'chevening',
@@ -289,50 +292,7 @@ export const SCHOLARSHIP_REQUIREMENTS: ScholarshipRequirement[] = [
       ar: 'يتطلب تصنيف 2:1 أو ما يعادله'
     },
     country: 'UK',
-  },
-  {
-    id: 'fulbright',
-    name: { en: 'Fulbright Scholarship', ar: 'منحة فولبرايت الأمريكية' },
-    minPercent: 75,
-    levels: ['MASTER', 'PHD'],
-    note: {
-      en: 'Minimum 3.0 GPA on 4.0 scale',
-      ar: 'الحد الأدنى 3.0 من 4.0'
-    },
-    country: 'USA',
-  },
-  {
-    id: 'mext',
-    name: { en: 'MEXT Scholarship', ar: 'منحة MEXT اليابانية' },
-    minPercent: 80,
-    levels: ['BACHELOR', 'MASTER', 'PHD'],
-    note: {
-      en: 'Competitive, higher GPA recommended',
-      ar: 'تنافسية، يُفضل معدل أعلى'
-    },
-    country: 'Japan',
-  },
-  {
-    id: 'kgsp',
-    name: { en: 'KGSP (Korean Government)', ar: 'منحة الحكومة الكورية' },
-    minPercent: 80,
-    levels: ['BACHELOR', 'MASTER', 'PHD'],
-    note: {
-      en: 'GPA of 80% or above in last degree',
-      ar: 'معدل 80% أو أعلى في آخر شهادة'
-    },
-    country: 'South Korea',
-  },
-  {
-    id: 'csc',
-    name: { en: 'CSC Scholarship (China)', ar: 'منحة CSC الصينية' },
-    minPercent: 75,
-    levels: ['BACHELOR', 'MASTER', 'PHD'],
-    note: {
-      en: 'Minimum 75% or equivalent',
-      ar: 'الحد الأدنى 75% أو ما يعادله'
-    },
-    country: 'China',
+    website: 'https://www.chevening.org',
   },
   {
     id: 'hungarian',
@@ -344,6 +304,359 @@ export const SCHOLARSHIP_REQUIREMENTS: ScholarshipRequirement[] = [
       ar: 'يختلف حسب البرنامج، عادة 70%+'
     },
     country: 'Hungary',
+    website: 'https://stipendiumhungaricum.hu',
+  },
+  {
+    id: 'erasmus',
+    name: { en: 'Erasmus Mundus', ar: 'منحة إيراسموس موندوس' },
+    minPercent: 75,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'EU-funded, study in multiple European countries',
+      ar: 'ممولة من الاتحاد الأوروبي، الدراسة في عدة دول أوروبية'
+    },
+    country: 'European Union',
+    website: 'https://erasmus-plus.ec.europa.eu',
+  },
+  {
+    id: 'gates-cambridge',
+    name: { en: 'Gates Cambridge Scholarship', ar: 'منحة غيتس كامبريدج' },
+    minPercent: 90,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Highly competitive, outstanding academics required',
+      ar: 'تنافسية للغاية، تتطلب تفوق أكاديمي عالي'
+    },
+    country: 'UK',
+    website: 'https://www.gatescambridge.org',
+  },
+  {
+    id: 'rhodes',
+    name: { en: 'Rhodes Scholarship', ar: 'منحة رودس (أكسفورد)' },
+    minPercent: 90,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Most prestigious scholarship, top academics required',
+      ar: 'أرقى منحة في العالم، تتطلب تفوق أكاديمي استثنائي'
+    },
+    country: 'UK',
+    website: 'https://www.rhodeshouse.ox.ac.uk',
+  },
+  {
+    id: 'commonwealth',
+    name: { en: 'Commonwealth Scholarship', ar: 'منحة الكومنولث' },
+    minPercent: 60,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'For Commonwealth countries citizens, UK 2:1 required',
+      ar: 'لمواطني دول الكومنولث، يتطلب تصنيف 2:1'
+    },
+    country: 'UK',
+    website: 'https://cscuk.fcdo.gov.uk',
+  },
+  {
+    id: 'swedish-si',
+    name: { en: 'Swedish Institute Scholarship', ar: 'منحة المعهد السويدي' },
+    minPercent: 75,
+    levels: ['MASTER'],
+    note: {
+      en: 'For global professionals, leadership experience valued',
+      ar: 'للمهنيين العالميين، تُقدّر الخبرة القيادية'
+    },
+    country: 'Sweden',
+    website: 'https://si.se/en/apply/scholarships',
+  },
+  {
+    id: 'netherlands',
+    name: { en: 'Holland Scholarship', ar: 'منحة هولندا' },
+    minPercent: 75,
+    levels: ['BACHELOR', 'MASTER'],
+    note: {
+      en: '€5,000 for first year, non-EEA students',
+      ar: '5,000 يورو للسنة الأولى، للطلاب من خارج المنطقة الاقتصادية الأوروبية'
+    },
+    country: 'Netherlands',
+    website: 'https://www.studyinholland.nl',
+  },
+  {
+    id: 'italy-gov',
+    name: { en: 'Italian Government Scholarship', ar: 'منحة الحكومة الإيطالية' },
+    minPercent: 70,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Covers tuition and living expenses',
+      ar: 'تغطي الرسوم الدراسية ونفقات المعيشة'
+    },
+    country: 'Italy',
+    website: 'https://studyinitaly.esteri.it',
+  },
+  {
+    id: 'russia-gov',
+    name: { en: 'Russian Government Scholarship', ar: 'منحة الحكومة الروسية' },
+    minPercent: 65,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'Fully funded, various programs available',
+      ar: 'ممولة بالكامل، برامج متنوعة متاحة'
+    },
+    country: 'Russia',
+    website: 'https://education-in-russia.com',
+  },
+  {
+    id: 'poland-gov',
+    name: { en: 'Poland Ignacy Lukasiewicz Scholarship', ar: 'منحة بولندا الحكومية' },
+    minPercent: 70,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'For developing countries, STEM focus',
+      ar: 'للدول النامية، تركيز على العلوم والتكنولوجيا'
+    },
+    country: 'Poland',
+    website: 'https://nawa.gov.pl',
+  },
+  // === AMERICAS ===
+  {
+    id: 'fulbright',
+    name: { en: 'Fulbright Scholarship', ar: 'منحة فولبرايت الأمريكية' },
+    minPercent: 75,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Minimum 3.0 GPA on 4.0 scale',
+      ar: 'الحد الأدنى 3.0 من 4.0'
+    },
+    country: 'USA',
+    website: 'https://foreign.fulbrightonline.org',
+  },
+  {
+    id: 'vanier',
+    name: { en: 'Vanier Canada Graduate Scholarship', ar: 'منحة فانير الكندية' },
+    minPercent: 85,
+    levels: ['PHD'],
+    note: {
+      en: '$50,000/year for 3 years, highly competitive',
+      ar: '50,000 دولار/سنة لمدة 3 سنوات، تنافسية للغاية'
+    },
+    country: 'Canada',
+    website: 'https://vanier.gc.ca',
+  },
+  {
+    id: 'canada-lester',
+    name: { en: 'Lester B. Pearson Scholarship', ar: 'منحة ليستر بيرسون (تورنتو)' },
+    minPercent: 90,
+    levels: ['BACHELOR'],
+    note: {
+      en: 'Full scholarship at University of Toronto',
+      ar: 'منحة كاملة في جامعة تورنتو'
+    },
+    country: 'Canada',
+    website: 'https://future.utoronto.ca/pearson',
+  },
+  {
+    id: 'oas',
+    name: { en: 'OAS Academic Scholarship', ar: 'منحة منظمة الدول الأمريكية' },
+    minPercent: 75,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'Study in OAS member countries',
+      ar: 'الدراسة في دول منظمة الدول الأمريكية'
+    },
+    country: 'Americas',
+    website: 'https://www.oas.org/en/scholarships',
+  },
+  // === ASIA ===
+  {
+    id: 'mext',
+    name: { en: 'MEXT Scholarship', ar: 'منحة MEXT اليابانية' },
+    minPercent: 80,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'Competitive, higher GPA recommended',
+      ar: 'تنافسية، يُفضل معدل أعلى'
+    },
+    country: 'Japan',
+    website: 'https://www.mext.go.jp',
+  },
+  {
+    id: 'kgsp',
+    name: { en: 'KGSP (Korean Government)', ar: 'منحة الحكومة الكورية' },
+    minPercent: 80,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'GPA of 80% or above in last degree',
+      ar: 'معدل 80% أو أعلى في آخر شهادة'
+    },
+    country: 'South Korea',
+    website: 'https://www.studyinkorea.go.kr',
+  },
+  {
+    id: 'csc',
+    name: { en: 'CSC Scholarship (China)', ar: 'منحة CSC الصينية' },
+    minPercent: 75,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'Minimum 75% or equivalent',
+      ar: 'الحد الأدنى 75% أو ما يعادله'
+    },
+    country: 'China',
+    website: 'https://www.campuschina.org',
+  },
+  {
+    id: 'schwarzman',
+    name: { en: 'Schwarzman Scholars', ar: 'منحة شوارزمان (الصين)' },
+    minPercent: 85,
+    levels: ['MASTER'],
+    note: {
+      en: 'Leadership program at Tsinghua University',
+      ar: 'برنامج قيادي في جامعة تسينغهوا'
+    },
+    country: 'China',
+    website: 'https://www.schwarzmanscholars.org',
+  },
+  {
+    id: 'malaysia-mis',
+    name: { en: 'Malaysia International Scholarship', ar: 'منحة ماليزيا الدولية' },
+    minPercent: 75,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Covers tuition and monthly allowance',
+      ar: 'تغطي الرسوم الدراسية والبدل الشهري'
+    },
+    country: 'Malaysia',
+    website: 'https://biasiswa.mohe.gov.my',
+  },
+  {
+    id: 'singapore-singa',
+    name: { en: 'Singapore SINGA Award', ar: 'منحة سينغا (سنغافورة)' },
+    minPercent: 80,
+    levels: ['PHD'],
+    note: {
+      en: 'PhD in science and engineering',
+      ar: 'دكتوراه في العلوم والهندسة'
+    },
+    country: 'Singapore',
+    website: 'https://www.a-star.edu.sg/singa',
+  },
+  {
+    id: 'taiwan-icdf',
+    name: { en: 'Taiwan ICDF Scholarship', ar: 'منحة تايوان ICDF' },
+    minPercent: 70,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'For developing countries, focus on development',
+      ar: 'للدول النامية، تركيز على التنمية'
+    },
+    country: 'Taiwan',
+    website: 'https://www.icdf.org.tw',
+  },
+  {
+    id: 'india-iccr',
+    name: { en: 'ICCR Scholarship (India)', ar: 'منحة ICCR الهندية' },
+    minPercent: 60,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'Covers tuition and living expenses',
+      ar: 'تغطي الرسوم الدراسية ونفقات المعيشة'
+    },
+    country: 'India',
+    website: 'https://www.iccr.gov.in',
+  },
+  // === OCEANIA ===
+  {
+    id: 'australia-awards',
+    name: { en: 'Australia Awards Scholarship', ar: 'منحة أستراليا أواردز' },
+    minPercent: 75,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Fully funded, 2 years work experience preferred',
+      ar: 'ممولة بالكامل، يُفضل خبرة عملية سنتين'
+    },
+    country: 'Australia',
+    website: 'https://www.australiaawards.gov.au',
+  },
+  {
+    id: 'nz-scholarship',
+    name: { en: 'New Zealand Scholarships', ar: 'منح نيوزيلندا' },
+    minPercent: 70,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'For developing countries, various programs',
+      ar: 'للدول النامية، برامج متنوعة'
+    },
+    country: 'New Zealand',
+    website: 'https://www.nzscholarships.govt.nz',
+  },
+  // === AFRICA & MIDDLE EAST ===
+  {
+    id: 'mastercard',
+    name: { en: 'Mastercard Foundation Scholars', ar: 'منحة ماستركارد للقادة الأفارقة' },
+    minPercent: 70,
+    levels: ['BACHELOR', 'MASTER'],
+    note: {
+      en: 'For African students, leadership potential required',
+      ar: 'للطلاب الأفارقة، تتطلب إمكانات قيادية'
+    },
+    country: 'Various',
+    website: 'https://mastercardfdn.org/all/scholars',
+  },
+  {
+    id: 'mofaic-uae',
+    name: { en: 'UAE Government Scholarship', ar: 'منحة حكومة الإمارات' },
+    minPercent: 80,
+    levels: ['BACHELOR', 'MASTER'],
+    note: {
+      en: 'For outstanding students from partner countries',
+      ar: 'للطلاب المتفوقين من الدول الشريكة'
+    },
+    country: 'UAE',
+    website: 'https://www.mofaic.gov.ae',
+  },
+  {
+    id: 'qatar-foundation',
+    name: { en: 'Qatar Foundation Scholarship', ar: 'منحة مؤسسة قطر' },
+    minPercent: 85,
+    levels: ['BACHELOR'],
+    note: {
+      en: 'Study at Education City partner universities',
+      ar: 'الدراسة في جامعات المدينة التعليمية'
+    },
+    country: 'Qatar',
+    website: 'https://www.qf.org.qa',
+  },
+  {
+    id: 'kaust',
+    name: { en: 'KAUST Fellowship (Saudi)', ar: 'منحة كاوست السعودية' },
+    minPercent: 85,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Full funding for STEM programs',
+      ar: 'تمويل كامل لبرامج العلوم والتكنولوجيا'
+    },
+    country: 'Saudi Arabia',
+    website: 'https://www.kaust.edu.sa',
+  },
+  {
+    id: 'egypt-gov',
+    name: { en: 'Egyptian Government Scholarship', ar: 'منحة الحكومة المصرية' },
+    minPercent: 65,
+    levels: ['BACHELOR', 'MASTER', 'PHD'],
+    note: {
+      en: 'For African and Asian students',
+      ar: 'للطلاب الأفارقة والآسيويين'
+    },
+    country: 'Egypt',
+    website: 'https://www.mohesr.gov.eg',
+  },
+  {
+    id: 'african-union',
+    name: { en: 'African Union Mwalimu Nyerere', ar: 'منحة الاتحاد الأفريقي' },
+    minPercent: 70,
+    levels: ['MASTER', 'PHD'],
+    note: {
+      en: 'Study at African universities',
+      ar: 'الدراسة في الجامعات الأفريقية'
+    },
+    country: 'Africa',
+    website: 'https://au.int',
   },
 ];
 
