@@ -61,6 +61,20 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
+    // Get all scholarship IDs from results to fetch titles
+    const allScholarshipIds = new Set<string>();
+    results.forEach((result) => {
+      const matches = result.matches as Array<{ scholarshipId: string }>;
+      matches.forEach((m) => allScholarshipIds.add(m.scholarshipId));
+    });
+
+    // Fetch scholarship titles
+    const scholarships = await prisma.scholarship.findMany({
+      where: { id: { in: Array.from(allScholarshipIds) } },
+      select: { id: true, title: true },
+    });
+    const scholarshipMap = new Map(scholarships.map((s) => [s.id, s.title]));
+
     // Transform results to include top matches summary
     const history = results.map((result) => {
       const matches = result.matches as Array<{
@@ -77,6 +91,7 @@ export async function GET(request: NextRequest) {
         processingTimeMs: result.processingTimeMs,
         topMatches: matches.slice(0, 3).map((m) => ({
           scholarshipId: m.scholarshipId,
+          scholarshipTitle: scholarshipMap.get(m.scholarshipId) || 'Unknown',
           score: m.score,
           matchLevel: m.matchLevel,
         })),
