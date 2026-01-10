@@ -217,22 +217,25 @@ export function GPAConverter({ locale, onGPAChange }: GPAConverterProps) {
       {/* Reference Table */}
       {showTable && (
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-2">
             <CardTitle className="text-lg">
               {isRTL ? 'جدول المرجع السريع' : 'Quick Reference Table'}
             </CardTitle>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 sm:hidden">
+              {isRTL ? '← اسحب للمزيد' : 'Swipe for more →'}
+            </p>
           </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+          <CardContent className="px-0 sm:px-6">
+            <div className="overflow-x-auto -mx-0 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+              <table className="w-full text-xs sm:text-sm min-w-[500px]">
                 <thead>
-                  <tr className="border-b dark:border-gray-700">
-                    <th className="px-3 py-2 text-start font-semibold">4.0 GPA</th>
-                    <th className="px-3 py-2 text-start font-semibold">{isRTL ? 'النسبة' : 'Percent'}</th>
-                    <th className="px-3 py-2 text-start font-semibold">{isRTL ? 'الحرف' : 'Letter'}</th>
-                    <th className="px-3 py-2 text-start font-semibold">UK</th>
-                    <th className="px-3 py-2 text-start font-semibold">{isRTL ? 'ألماني' : 'German'}</th>
-                    <th className="px-3 py-2 text-start font-semibold">{isRTL ? 'فرنسي' : 'French'}</th>
+                  <tr className="border-b dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
+                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">4.0 GPA</th>
+                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'النسبة' : 'Percent'}</th>
+                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'الحرف' : 'Letter'}</th>
+                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">UK</th>
+                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'ألماني' : 'German'}</th>
+                    <th className="px-2 sm:px-3 py-2 text-start font-semibold whitespace-nowrap">{isRTL ? 'فرنسي' : 'French'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -243,12 +246,12 @@ export function GPAConverter({ locale, onGPAChange }: GPAConverterProps) {
                         idx % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800/50' : ''
                       }`}
                     >
-                      <td className="px-3 py-2">{row.gpa40}</td>
-                      <td className="px-3 py-2">{row.percent}%</td>
-                      <td className="px-3 py-2">{row.letter}</td>
-                      <td className="px-3 py-2">{row.uk}</td>
-                      <td className="px-3 py-2">{row.german}</td>
-                      <td className="px-3 py-2">{row.french}</td>
+                      <td className="px-2 sm:px-3 py-2 font-medium">{row.gpa40}</td>
+                      <td className="px-2 sm:px-3 py-2">{row.percent}%</td>
+                      <td className="px-2 sm:px-3 py-2">{row.letter}</td>
+                      <td className="px-2 sm:px-3 py-2">{row.uk}</td>
+                      <td className="px-2 sm:px-3 py-2">{row.german}</td>
+                      <td className="px-2 sm:px-3 py-2">{row.french}</td>
                     </tr>
                   ))}
                 </tbody>
