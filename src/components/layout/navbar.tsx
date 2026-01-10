@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2, FileQuestion } from 'lucide-react';
+import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2, FileQuestion, Calculator } from 'lucide-react';
 import { Container } from './container';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/features/language-switcher';
@@ -94,6 +94,7 @@ export function Navbar({ locale }: NavbarProps) {
   ];
 
   const resourceLinks = [
+    { href: `/${locale}/gpa-calculator`, label: isRTL ? 'حاسبة المعدل' : 'GPA Calculator', icon: Calculator },
     { href: `/${locale}/blog`, label: isRTL ? 'المدونة' : 'Blog', icon: BookOpen },
     { href: `/${locale}/faq`, label: isRTL ? 'الأسئلة الشائعة' : 'FAQ', icon: HelpCircle },
     { href: `/${locale}/application-tips`, label: isRTL ? 'نصائح التقديم' : 'Application Tips', icon: Lightbulb },

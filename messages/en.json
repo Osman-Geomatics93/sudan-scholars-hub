@@ -437,5 +437,81 @@
       "SUCCESS_STORIES": "Success Stories",
       "GENERAL": "General"
     }
+  },
+  "gpaCalculator": {
+    "title": "Smart GPA Calculator",
+    "subtitle": "Convert your grades and check scholarship eligibility",
+    "tabs": {
+      "converter": "Converter",
+      "calculator": "Calculator",
+      "eligibility": "Eligibility"
+    },
+    "converter": {
+      "fromSystem": "From System",
+      "toSystem": "To System",
+      "enterValue": "Enter Value",
+      "result": "Result",
+      "convert": "Convert",
+      "swap": "Swap",
+      "showTable": "Show Quick Reference Table",
+      "hideTable": "Hide Reference Table"
+    },
+    "systems": {
+      "us40": "US 4.0 Scale",
+      "us50": "US 5.0 Scale",
+      "percentage": "Percentage (0-100)",
+      "letter": "Letter Grade (A-F)",
+      "uk": "UK Classification",
+      "german": "German Scale (1-5)",
+      "french": "French Scale (0-20)"
+    },
+    "calculator": {
+      "title": "Calculate GPA from Courses",
+      "courseName": "Course Name",
+      "credits": "Credits",
+      "grade": "Grade",
+      "addCourse": "Add Course",
+      "removeCourse": "Remove",
+      "totalCredits": "Total Credits",
+      "calculatedGPA": "Calculated GPA",
+      "equivalent": "Equivalent in other systems"
+    },
+    "eligibility": {
+      "title": "Scholarship Eligibility",
+      "basedOn": "Based on your GPA",
+      "yourGPA": "Your Current GPA",
+      "eligible": "Eligible",
+      "notEligible": "Not Eligible",
+      "close": "Close to qualifying",
+      "eligibleFor": "Eligible for",
+      "closeTo": "Close to",
+      "otherScholarships": "Other Scholarships",
+      "minimum": "Min",
+      "total": "Total"
+    },
+    "scholarships": {
+      "turkish": "Turkish Government Scholarship",
+      "daad": "DAAD Germany",
+      "chevening": "Chevening UK",
+      "fulbright": "Fulbright USA",
+      "mext": "MEXT Japan",
+      "kgsp": "Korean Government Scholarship",
+      "csc": "CSC China",
+      "hungarian": "Stipendium Hungaricum"
+    },
+    "tips": {
+      "title": "Important Tips",
+      "turkishTitle": "Turkish Scholarship",
+      "turkishDesc": "Minimum 70% for Bachelor and 75% for Master/PhD programs",
+      "conversionTitle": "Conversion System",
+      "conversionDesc": "Conversions are approximate and may vary by university",
+      "germanTitle": "German System",
+      "germanDesc": "In German system, 1.0 is the best and 5.0 is failing"
+    },
+    "levels": {
+      "bachelor": "Bachelor",
+      "master": "Master",
+      "phd": "PhD"
+    }
   }
 }

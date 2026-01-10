@@ -437,5 +437,81 @@
       "SUCCESS_STORIES": "قصص النجاح",
       "GENERAL": "عام"
     }
+  },
+  "gpaCalculator": {
+    "title": "حاسبة المعدل الذكية",
+    "subtitle": "حوّل درجاتك وتحقق من أهلية المنح الدراسية",
+    "tabs": {
+      "converter": "المحول",
+      "calculator": "الحاسبة",
+      "eligibility": "الأهلية"
+    },
+    "converter": {
+      "fromSystem": "من نظام",
+      "toSystem": "إلى نظام",
+      "enterValue": "أدخل القيمة",
+      "result": "النتيجة",
+      "convert": "تحويل",
+      "swap": "تبديل",
+      "showTable": "عرض جدول المرجع السريع",
+      "hideTable": "إخفاء جدول المرجع"
+    },
+    "systems": {
+      "us40": "النظام الأمريكي 4.0",
+      "us50": "النظام الأمريكي 5.0",
+      "percentage": "النسبة المئوية (0-100)",
+      "letter": "الحروف (A-F)",
+      "uk": "التصنيف البريطاني",
+      "german": "النظام الألماني (1-5)",
+      "french": "النظام الفرنسي (0-20)"
+    },
+    "calculator": {
+      "title": "حساب المعدل من المواد",
+      "courseName": "اسم المادة",
+      "credits": "الساعات",
+      "grade": "الدرجة",
+      "addCourse": "إضافة مادة",
+      "removeCourse": "حذف",
+      "totalCredits": "إجمالي الساعات",
+      "calculatedGPA": "المعدل المحسوب",
+      "equivalent": "المعادل في أنظمة أخرى"
+    },
+    "eligibility": {
+      "title": "أهلية المنح الدراسية",
+      "basedOn": "بناءً على معدلك",
+      "yourGPA": "معدلك الحالي",
+      "eligible": "مؤهل",
+      "notEligible": "غير مؤهل",
+      "close": "قريب من التأهل",
+      "eligibleFor": "مؤهل لـ",
+      "closeTo": "قريب من",
+      "otherScholarships": "منح أخرى",
+      "minimum": "الحد الأدنى",
+      "total": "إجمالي"
+    },
+    "scholarships": {
+      "turkish": "المنحة التركية الحكومية",
+      "daad": "منحة DAAD الألمانية",
+      "chevening": "منحة تشيفنينج البريطانية",
+      "fulbright": "منحة فولبرايت الأمريكية",
+      "mext": "منحة MEXT اليابانية",
+      "kgsp": "منحة الحكومة الكورية",
+      "csc": "منحة CSC الصينية",
+      "hungarian": "منحة المجر الحكومية"
+    },
+    "tips": {
+      "title": "نصائح مهمة",
+      "turkishTitle": "المنحة التركية",
+      "turkishDesc": "الحد الأدنى 70% للبكالوريوس و75% للماجستير والدكتوراه",
+      "conversionTitle": "نظام التحويل",
+      "conversionDesc": "التحويلات تقريبية وقد تختلف حسب الجامعة",
+      "germanTitle": "النظام الألماني",
+      "germanDesc": "في النظام الألماني، 1.0 هو الأفضل و5.0 هو الراسب"
+    },
+    "levels": {
+      "bachelor": "بكالوريوس",
+      "master": "ماجستير",
+      "phd": "دكتوراه"
+    }
   }
 }

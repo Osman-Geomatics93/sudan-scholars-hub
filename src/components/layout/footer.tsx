@@ -22,6 +22,7 @@ export function Footer({ locale }: FooterProps) {
   ];
 
   const resources = [
+    { href: `/${locale}/gpa-calculator`, label: locale === 'ar' ? 'حاسبة المعدل' : 'GPA Calculator' },
     { href: `/${locale}/blog`, label: t('blog') },
     { href: `/${locale}/faq`, label: t('faq') },
     { href: `/${locale}/application-tips`, label: t('tips') },
