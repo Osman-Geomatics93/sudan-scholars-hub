@@ -6,6 +6,7 @@ import { Save, ArrowLeft, Loader2, School, Calendar, GraduationCap, Sun } from '
 import {
   turkishCities,
   certificateTypes,
+  certificateCategories,
   applicationTypes,
   calendarTypes,
   programDurations,
@@ -26,7 +27,7 @@ interface UniversityAdmissionFormData {
   resultsDate: string;
   acceptedCertificates: string[];
   detailsUrl: string;
-  applicationType: 'yos' | 'direct' | 'sat' | 'turkiye-burslari';
+  applicationType: 'yos' | 'direct' | 'sat' | 'turkiye-burslari' | 'graduate-institute' | 'online-portal' | 'ales-based';
   localRanking: number;
   applicationFee: number | null;
   applicationFeeCurrency: 'TRY' | 'USD' | 'EUR';
@@ -525,35 +526,56 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
           Accepted Certificates *
         </h2>
         <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">
-          Select all certificates accepted by this university
+          Select all certificates accepted by this university. Categories are shown based on the selected calendar type.
         </p>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {certificateTypes.map((cert) => (
-            <label
-              key={cert.value}
-              className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition-colors ${
-                formData.acceptedCertificates.includes(cert.value)
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border-gray-200 hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500'
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={formData.acceptedCertificates.includes(cert.value)}
-                onChange={() => handleCertificateToggle(cert.value)}
-                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-              />
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {cert.labelEn}
-                </p>
-                <p className="truncate text-xs text-gray-500 dark:text-gray-400" dir="rtl">
-                  {cert.labelAr}
-                </p>
-              </div>
-            </label>
-          ))}
+        <div className="space-y-6">
+          {certificateCategories
+            .filter((category) => category.forCalendarTypes.includes(formData.calendarType))
+            .map((category) => {
+              const categoryCerts = certificateTypes.filter((cert) =>
+                category.certificates.includes(cert.value)
+              );
+              if (categoryCerts.length === 0) return null;
+
+              return (
+                <div key={category.category} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                  <h3 className="mb-3 flex items-center gap-2 font-medium text-gray-900 dark:text-gray-100">
+                    <span>{category.labelEn}</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400" dir="rtl">
+                      ({category.labelAr})
+                    </span>
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                    {categoryCerts.map((cert) => (
+                      <label
+                        key={cert.value}
+                        className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition-colors ${
+                          formData.acceptedCertificates.includes(cert.value)
+                            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                            : 'border-gray-200 hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.acceptedCertificates.includes(cert.value)}
+                          onChange={() => handleCertificateToggle(cert.value)}
+                          className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                        />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            {cert.labelEn}
+                          </p>
+                          <p className="truncate text-xs text-gray-500 dark:text-gray-400" dir="rtl">
+                            {cert.labelAr}
+                          </p>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
         </div>
         {formData.acceptedCertificates.length === 0 && (
           <p className="mt-2 text-sm text-red-500">Please select at least one certificate</p>

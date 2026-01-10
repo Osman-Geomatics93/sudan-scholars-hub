@@ -76,13 +76,41 @@ export const certificateTypes = [
   // Turkish National Exams
   { value: 'TYT', labelEn: 'TYT (Turkish)', labelAr: 'تي واي تي (TYT)' },
   { value: 'AYT', labelEn: 'AYT (Turkish)', labelAr: 'اي واي تي (AYT)' },
+
+  // ========== GRADUATE PROGRAM REQUIREMENTS (Masters/PhD) ==========
+
+  // Language Proficiency Exams
+  { value: 'YDS', labelEn: 'YDS', labelAr: 'يدس (YDS)' },
+  { value: 'YOKDIL', labelEn: 'YÖKDİL', labelAr: 'يوكديل (YÖKDİL)' },
+  { value: 'TOEFL', labelEn: 'TOEFL iBT', labelAr: 'توفل (TOEFL)' },
+  { value: 'IELTS', labelEn: 'IELTS', labelAr: 'آيلتس (IELTS)' },
+  { value: 'PTE', labelEn: 'PTE Academic', labelAr: 'بي تي إي أكاديمي' },
+  { value: 'TOMER', labelEn: 'TÖMER', labelAr: 'تومر (TÖMER)' },
+  { value: 'DUOLINGO', labelEn: 'Duolingo English Test', labelAr: 'دولينجو' },
+
+  // Graduate Admission Exams
+  { value: 'ALES', labelEn: 'ALES', labelAr: 'أليس (ALES)' },
+  { value: 'GRE', labelEn: 'GRE General', labelAr: 'جي آر إي (GRE)' },
+  { value: 'GRE_SUBJECT', labelEn: 'GRE Subject', labelAr: 'جي آر إي تخصصي' },
+  { value: 'GMAT', labelEn: 'GMAT', labelAr: 'جيمات (GMAT)' },
+
+  // Degree/Diploma Requirements
+  { value: 'BACHELOR_DEGREE', labelEn: "Bachelor's Degree", labelAr: 'شهادة البكالوريوس' },
+  { value: 'MASTER_DEGREE', labelEn: "Master's Degree", labelAr: 'شهادة الماجستير' },
+  { value: 'TRANSCRIPT', labelEn: 'Official Transcript', labelAr: 'كشف الدرجات الرسمي' },
 ];
 
 export const applicationTypes = [
+  // Bachelor Application Types
   { value: 'yos', labelEn: 'YOS Exam', labelAr: 'امتحان يوس' },
   { value: 'direct', labelEn: 'Direct Application', labelAr: 'تقديم مباشر' },
   { value: 'sat', labelEn: 'SAT Based', labelAr: 'بناءً على سات' },
   { value: 'turkiye-burslari', labelEn: 'Türkiye Burslari', labelAr: 'المنحة التركية' },
+
+  // Graduate Application Types
+  { value: 'graduate-institute', labelEn: 'Graduate Institute', labelAr: 'معهد الدراسات العليا' },
+  { value: 'online-portal', labelEn: 'Online Portal', labelAr: 'بوابة إلكترونية' },
+  { value: 'ales-based', labelEn: 'ALES Based', labelAr: 'بناءً على أليس' },
 ];
 
 // All 81 Turkish provinces organized by region
@@ -207,6 +235,71 @@ export const instructionLanguages = [
   { value: 'Arabic', labelEn: 'Arabic', labelAr: 'العربية' },
   { value: 'German', labelEn: 'German', labelAr: 'الألمانية' },
   { value: 'French', labelEn: 'French', labelAr: 'الفرنسية' },
+];
+
+// Certificate categories for grouped display in forms
+export const certificateCategories = [
+  {
+    category: 'yos',
+    labelEn: 'YÖS Exams',
+    labelAr: 'امتحانات يوس',
+    forCalendarTypes: ['bachelor'],
+    certificates: ['TR-YOS', 'AYOS', 'TYOS', 'IUYOS', 'AUYOS', 'UNIYOS'],
+  },
+  {
+    category: 'highschool',
+    labelEn: 'High School Certificates',
+    labelAr: 'شهادات الثانوية',
+    forCalendarTypes: ['bachelor'],
+    certificates: [
+      'THANAWEYA', 'THANAWEYA_TR', 'THANAWEYA_SY', 'THANAWEYA_EG',
+      'THANAWEYA_JO', 'THANAWEYA_PS', 'THANAWEYA_IQ', 'THANAWEYA_LB',
+      'THANAWEYA_SA', 'THANAWEYA_KW', 'THANAWEYA_AE', 'THANAWEYA_LY',
+      'THANAWEYA_DZ', 'THANAWEYA_MA', 'THANAWEYA_TN', 'THANAWEYA_SD', 'THANAWEYA_YE',
+    ],
+  },
+  {
+    category: 'international',
+    labelEn: 'International Exams',
+    labelAr: 'الامتحانات الدولية',
+    forCalendarTypes: ['bachelor'],
+    certificates: ['SAT', 'ACT', 'IB', 'AP', 'ABITUR', 'GCE', 'BACCALAUREAT_FR', 'MATURA'],
+  },
+  {
+    category: 'other-countries',
+    labelEn: 'Other Countries',
+    labelAr: 'دول أخرى',
+    forCalendarTypes: ['bachelor'],
+    certificates: ['BAGRUT', 'GAOKAO', 'INDIAN_12', 'IRANIAN', 'AFGHAN', 'PAKISTAN'],
+  },
+  {
+    category: 'turkish-national',
+    labelEn: 'Turkish National Exams',
+    labelAr: 'الامتحانات التركية الوطنية',
+    forCalendarTypes: ['bachelor'],
+    certificates: ['TYT', 'AYT'],
+  },
+  {
+    category: 'language',
+    labelEn: 'Language Proficiency',
+    labelAr: 'إثبات اللغة',
+    forCalendarTypes: ['masters-phd', 'summer'],
+    certificates: ['YDS', 'YOKDIL', 'TOEFL', 'IELTS', 'PTE', 'TOMER', 'DUOLINGO'],
+  },
+  {
+    category: 'graduate',
+    labelEn: 'Graduate Exams',
+    labelAr: 'امتحانات الدراسات العليا',
+    forCalendarTypes: ['masters-phd'],
+    certificates: ['ALES', 'GRE', 'GRE_SUBJECT', 'GMAT'],
+  },
+  {
+    category: 'degree',
+    labelEn: 'Degree Requirements',
+    labelAr: 'متطلبات الشهادة',
+    forCalendarTypes: ['masters-phd'],
+    certificates: ['BACHELOR_DEGREE', 'MASTER_DEGREE', 'TRANSCRIPT'],
+  },
 ];
 
 // Sample admissions data - This would typically come from an API/database

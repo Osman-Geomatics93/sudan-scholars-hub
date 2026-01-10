@@ -20,7 +20,7 @@ export const universityAdmissionSchema = z.object({
   // Certificates & Application
   acceptedCertificates: z.array(z.string()).min(1, 'At least one certificate is required'),
   detailsUrl: z.string().url('Valid URL is required'),
-  applicationType: z.enum(['yos', 'direct', 'sat', 'turkiye-burslari']),
+  applicationType: z.enum(['yos', 'direct', 'sat', 'turkiye-burslari', 'graduate-institute', 'online-portal', 'ales-based']),
   localRanking: z.number().int().positive('Ranking must be positive'),
 
   // Application Fee
