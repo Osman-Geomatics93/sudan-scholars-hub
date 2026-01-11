@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { User, MapPin, Languages, Calendar, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { SimpleSelect as Select } from '@/components/ui/select';
 import { SUPPORTED_LANGUAGES, LANGUAGE_LABELS, type MatcherProfileInput } from '@/lib/validations/matcher';
 
 // Common countries for Sudan Scholars Hub

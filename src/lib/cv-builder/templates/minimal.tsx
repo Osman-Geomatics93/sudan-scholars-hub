@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function formatDate(date: Date | string | null, locale: string): string {
+function formatDate(date: Date | string | null | undefined, locale: string): string {
   if (!date) return '';
   const d = new Date(date);
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short' };

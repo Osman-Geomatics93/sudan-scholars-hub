@@ -48,8 +48,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const body = await request.json().catch(() => ({}));
     const locale = (body.locale as string) || 'en';
 
-    // Generate PDF
-    const pdfBuffer = await generateResumePDF(resume, locale);
+    // Generate PDF (Prisma types are compatible at runtime)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pdfBuffer = await generateResumePDF(resume as any, locale);
 
     // Ensure we have a proper Buffer with data
     if (!pdfBuffer || pdfBuffer.length === 0) {

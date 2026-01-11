@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { BookOpen, Check } from 'lucide-react';
-import { Select } from '@/components/ui/select';
+import { SimpleSelect as Select } from '@/components/ui/select';
 import {
   LEVEL_LABELS,
   FIELD_LABELS,

@@ -5,7 +5,7 @@ import { ArrowRight, ArrowLeftRight, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { SimpleSelect as Select } from '@/components/ui/select';
 import {
   GPA_SYSTEMS,
   GPASystem,

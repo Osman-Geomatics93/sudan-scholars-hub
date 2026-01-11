@@ -7,7 +7,7 @@ import { Filter, ChevronLeft, ChevronRight, Search, X, Calendar, LayoutGrid } fr
 import { Container } from '@/components/layout/container';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { SimpleSelect as Select } from '@/components/ui/select';
 import { ScholarshipCard } from '@/components/features/scholarship-card';
 import { FilterSidebar } from '@/components/features/filter-sidebar';
 import { EmptyState } from '@/components/features/empty-state';

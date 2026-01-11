@@ -20,7 +20,7 @@ import { Container } from '@/components/layout/container';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Select } from '@/components/ui/select';
+import { SimpleSelect as Select } from '@/components/ui/select';
 import { ProfileEditForm } from '@/components/features/profile-edit-form';
 import { SkeletonProfile } from '@/components/ui/skeleton';
 

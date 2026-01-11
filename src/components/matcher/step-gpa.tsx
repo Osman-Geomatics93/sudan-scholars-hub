@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { GraduationCap, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { SimpleSelect as Select } from '@/components/ui/select';
 import { GPA_SYSTEMS, type GPASystem, toPercentage } from '@/lib/gpa-utils';
 import { validateGPAInput } from '@/lib/validations/gpa';
 import type { MatcherProfileInput } from '@/lib/validations/matcher';
