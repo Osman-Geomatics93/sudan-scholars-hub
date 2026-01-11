@@ -661,5 +661,157 @@
       "matchFailed": "فشلت المطابقة. يرجى المحاولة مرة أخرى.",
       "rateLimit": "طلبات كثيرة جداً. يرجى الانتظار بضع دقائق."
     }
+  },
+  "cvBuilder": {
+    "title": "مُنشئ السيرة الذاتية",
+    "subtitle": "أنشئ سيرة ذاتية احترافية متوافقة مع أنظمة تتبع المتقدمين",
+    "createNew": "إنشاء سيرة ذاتية جديدة",
+    "noResumes": "لم يتم إنشاء سير ذاتية بعد",
+    "startCreating": "ابدأ بإنشاء سيرتك الذاتية الأولى",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "download": "تحميل PDF",
+    "preview": "معاينة",
+    "share": "مشاركة",
+    "public": "عام",
+    "private": "خاص",
+    "views": "مشاهدات",
+    "lastUpdated": "آخر تحديث",
+    "loginRequired": "يرجى تسجيل الدخول لإنشاء سيرة ذاتية",
+    "login": "تسجيل الدخول",
+    "back": "العودة",
+    "save": "حفظ السيرة الذاتية",
+    "saving": "جاري الحفظ...",
+    "next": "التالي",
+    "previous": "السابق",
+    "findingMatches": "جاري البحث...",
+    "steps": {
+      "personal": "الشخصية",
+      "education": "التعليم",
+      "experience": "الخبرة",
+      "skills": "المهارات",
+      "extras": "إضافات",
+      "template": "القالب"
+    },
+    "personal": {
+      "title": "المعلومات الشخصية",
+      "subtitle": "أدخل معلومات الاتصال الخاصة بك",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "location": "الموقع",
+      "linkedIn": "رابط لينكد إن",
+      "website": "الموقع الإلكتروني",
+      "optional": "(اختياري)"
+    },
+    "education": {
+      "title": "التعليم",
+      "subtitle": "أضف خلفيتك التعليمية",
+      "addEducation": "إضافة تعليم",
+      "institution": "المؤسسة التعليمية",
+      "degree": "الدرجة العلمية",
+      "field": "مجال الدراسة",
+      "location": "الموقع",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "current": "أدرس حالياً",
+      "gpa": "المعدل",
+      "achievements": "الإنجازات",
+      "noEducation": "لم تتم إضافة أي تعليم بعد"
+    },
+    "experience": {
+      "title": "الخبرة المهنية",
+      "subtitle": "أضف خبراتك المهنية السابقة",
+      "addExperience": "إضافة خبرة",
+      "company": "الشركة",
+      "position": "المنصب",
+      "location": "الموقع",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "current": "أعمل هنا حالياً",
+      "description": "الوصف",
+      "descriptionHint": "صف مسؤولياتك وإنجازاتك. استخدم النقاط عند الإمكان.",
+      "noExperience": "لم تتم إضافة أي خبرة بعد",
+      "skipNote": "إذا لم تكن لديك خبرة مهنية، يمكنك تخطي هذه الخطوة"
+    },
+    "skills": {
+      "title": "المهارات واللغات",
+      "subtitle": "أضف مهاراتك واللغات التي تتقنها",
+      "skills": "المهارات",
+      "addSkill": "إضافة مهارة",
+      "skillName": "اسم المهارة",
+      "skillLevel": "المستوى",
+      "languages": "اللغات",
+      "addLanguage": "إضافة لغة",
+      "languageName": "اللغة",
+      "proficiency": "الإتقان",
+      "noSkills": "لم تتم إضافة مهارات",
+      "noLanguages": "لم تتم إضافة لغات",
+      "levels": {
+        "beginner": "مبتدئ",
+        "intermediate": "متوسط",
+        "advanced": "متقدم",
+        "expert": "خبير"
+      },
+      "proficiencies": {
+        "native": "لغة أم",
+        "fluent": "طلاقة",
+        "advanced": "متقدم",
+        "intermediate": "متوسط",
+        "basic": "أساسي"
+      }
+    },
+    "extras": {
+      "title": "معلومات إضافية",
+      "subtitle": "أضف الشهادات والملخص المهني",
+      "certifications": "الشهادات",
+      "addCertification": "إضافة شهادة",
+      "certName": "اسم الشهادة",
+      "issuer": "الجهة المانحة",
+      "issueDate": "تاريخ الإصدار",
+      "expiryDate": "تاريخ الانتهاء",
+      "credentialId": "رقم الشهادة",
+      "credentialUrl": "رابط التحقق",
+      "noCertifications": "لم تتم إضافة شهادات",
+      "summary": "الملخص المهني",
+      "summaryPlaceholder": "اكتب ملخصاً موجزاً عن خبراتك ومهاراتك ومؤهلاتك...",
+      "generateWithAI": "إنشاء بالذكاء الاصطناعي",
+      "generatingSummary": "جاري الإنشاء...",
+      "summaryTip": "نصيحة: يمكنك استخدام الذكاء الاصطناعي لإنشاء ملخص مهني بناءً على تعليمك وخبراتك."
+    },
+    "template": {
+      "title": "اختر القالب",
+      "subtitle": "اختر تصميم سيرتك الذاتية وخصص الألوان",
+      "selectTemplate": "اختر القالب",
+      "customizeColor": "تخصيص اللون",
+      "primaryColor": "اللون الأساسي",
+      "templates": {
+        "modern": {
+          "name": "حديث",
+          "description": "تخطيط من عمودين مع شريط جانبي ملون. مثالي للأدوار التقنية والإبداعية."
+        },
+        "classic": {
+          "name": "كلاسيكي",
+          "description": "تنسيق تقليدي من عمود واحد. مثالي للتطبيقات الأكاديمية والشركات."
+        },
+        "minimal": {
+          "name": "بسيط",
+          "description": "تصميم نظيف وبسيط. أقصى توافق مع أنظمة تتبع المتقدمين."
+        }
+      }
+    },
+    "shareSettings": {
+      "title": "إعدادات المشاركة",
+      "makePublic": "اجعل السيرة الذاتية عامة",
+      "publicDescription": "سيتمكن أي شخص من رؤية سيرتك الذاتية عبر الرابط العام",
+      "shareLink": "رابط المشاركة",
+      "copyLink": "نسخ الرابط",
+      "copied": "تم النسخ!"
+    },
+    "publicView": {
+      "notFound": "لم يتم العثور على السيرة الذاتية",
+      "notPublic": "هذه السيرة الذاتية غير متاحة للعرض العام",
+      "poweredBy": "تم الإنشاء بواسطة"
+    }
   }
 }

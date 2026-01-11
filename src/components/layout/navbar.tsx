@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2, FileQuestion, Calculator, Sparkles } from 'lucide-react';
+import { Menu, X, GraduationCap, User, Bookmark, LogOut, ChevronDown, BookOpen, HelpCircle, Lightbulb, Globe, Calendar, Building2, FileQuestion, Calculator, Sparkles, FileText } from 'lucide-react';
 import { Container } from './container';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/features/language-switcher';
@@ -95,6 +95,7 @@ export function Navbar({ locale }: NavbarProps) {
 
   const resourceLinks = [
     { href: `/${locale}/matcher`, label: isRTL ? 'مطابق المنح الذكي' : 'AI Matcher', icon: Sparkles },
+    { href: `/${locale}/cv-builder`, label: isRTL ? 'منشئ السيرة الذاتية' : 'CV Builder', icon: FileText },
     { href: `/${locale}/gpa-calculator`, label: isRTL ? 'حاسبة المعدل' : 'GPA Calculator', icon: Calculator },
     { href: `/${locale}/blog`, label: isRTL ? 'المدونة' : 'Blog', icon: BookOpen },
     { href: `/${locale}/faq`, label: isRTL ? 'الأسئلة الشائعة' : 'FAQ', icon: HelpCircle },

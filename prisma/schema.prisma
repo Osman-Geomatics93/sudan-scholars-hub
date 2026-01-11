@@ -49,6 +49,7 @@ model User {
   accounts          Account[]
   savedScholarships SavedScholarship[]
   matcherProfile    MatcherProfile?
+  resumes           Resume[]
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -487,4 +488,167 @@ model MatchResult {
 
   @@index([profileId])
   @@index([createdAt])
+}
+
+// ============ CV/RESUME BUILDER ============
+model Resume {
+  id              String   @id @default(cuid())
+  userId          String
+
+  // Basic Info
+  title           String   @default("My Resume") // Internal name for user
+  slug            String   @unique // For public sharing URL
+
+  // Personal Information
+  fullName        String
+  email           String
+  phone           String?
+  location        String?  // City, Country
+  linkedIn        String?
+  website         String?
+
+  // Professional Summary (AI can generate this)
+  summary         String?  @db.Text
+  summaryAr       String?  @db.Text
+
+  // Template & Settings
+  template        String   @default("modern") // modern, classic, minimal
+  isPublic        Boolean  @default(false)
+  primaryColor    String   @default("#2563eb") // Theme color
+
+  // Metadata
+  lastExportedAt  DateTime?
+  viewCount       Int      @default(0)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  education       ResumeEducation[]
+  experience      ResumeExperience[]
+  skills          ResumeSkill[]
+  languages       ResumeLanguage[]
+  certifications  ResumeCertification[]
+  projects        ResumeProject[]
+  awards          ResumeAward[]
+
+  @@index([userId])
+  @@index([slug])
+  @@index([isPublic])
+}
+
+model ResumeEducation {
+  id           String   @id @default(cuid())
+  resumeId     String
+
+  institution  String
+  degree       String   // Bachelor's, Master's, PhD, etc.
+  field        String   // Field of study
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  current      Boolean  @default(false)
+  gpa          String?
+  achievements String?  @db.Text
+  order        Int      @default(0)
+
+  resume       Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId])
+}
+
+model ResumeExperience {
+  id           String   @id @default(cuid())
+  resumeId     String
+
+  company      String
+  position     String
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  current      Boolean  @default(false)
+  description  String?  @db.Text // Bullet points / responsibilities
+  order        Int      @default(0)
+
+  resume       Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId])
+}
+
+model ResumeSkill {
+  id        String @id @default(cuid())
+  resumeId  String
+
+  name      String
+  level     String? // Beginner, Intermediate, Advanced, Expert
+  category  String? // Technical, Soft Skills, Tools, etc.
+  order     Int    @default(0)
+
+  resume    Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId])
+}
+
+model ResumeLanguage {
+  id           String @id @default(cuid())
+  resumeId     String
+
+  language     String
+  proficiency  String // Native, Fluent, Advanced, Intermediate, Basic
+  order        Int    @default(0)
+
+  resume       Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId])
+}
+
+model ResumeCertification {
+  id           String   @id @default(cuid())
+  resumeId     String
+
+  name         String
+  issuer       String
+  issueDate    DateTime?
+  expiryDate   DateTime?
+  credentialId String?
+  url          String?
+  order        Int      @default(0)
+
+  resume       Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId])
+}
+
+model ResumeProject {
+  id           String   @id @default(cuid())
+  resumeId     String
+
+  name         String
+  description  String?  @db.Text  // Project description and key achievements
+  technologies String[] // Technologies/tools used
+  url          String?  // Project link (GitHub, live demo, etc.)
+  startDate    DateTime?
+  endDate      DateTime?
+  current      Boolean  @default(false)
+  order        Int      @default(0)
+
+  resume       Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId])
+}
+
+model ResumeAward {
+  id           String   @id @default(cuid())
+  resumeId     String
+
+  title        String   // Award/honor name
+  issuer       String   // Organization that gave the award
+  date         DateTime?
+  description  String?  @db.Text  // Brief description of the achievement
+  order        Int      @default(0)
+
+  resume       Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId])
 }

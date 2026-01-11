@@ -661,5 +661,157 @@
       "matchFailed": "Matching failed. Please try again.",
       "rateLimit": "Too many requests. Please wait a few minutes."
     }
+  },
+  "cvBuilder": {
+    "title": "CV Builder",
+    "subtitle": "Create professional ATS-friendly resumes",
+    "createNew": "Create New Resume",
+    "noResumes": "No resumes created yet",
+    "startCreating": "Start by creating your first resume",
+    "edit": "Edit",
+    "delete": "Delete",
+    "download": "Download PDF",
+    "preview": "Preview",
+    "share": "Share",
+    "public": "Public",
+    "private": "Private",
+    "views": "views",
+    "lastUpdated": "Last updated",
+    "loginRequired": "Please log in to create a resume",
+    "login": "Log In",
+    "back": "Back",
+    "save": "Save Resume",
+    "saving": "Saving...",
+    "next": "Next",
+    "previous": "Back",
+    "findingMatches": "Finding Matches...",
+    "steps": {
+      "personal": "Personal",
+      "education": "Education",
+      "experience": "Experience",
+      "skills": "Skills",
+      "extras": "Extras",
+      "template": "Template"
+    },
+    "personal": {
+      "title": "Personal Information",
+      "subtitle": "Enter your contact information",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "location": "Location",
+      "linkedIn": "LinkedIn URL",
+      "website": "Website/Portfolio",
+      "optional": "(Optional)"
+    },
+    "education": {
+      "title": "Education",
+      "subtitle": "Add your educational background",
+      "addEducation": "Add Education",
+      "institution": "Institution",
+      "degree": "Degree",
+      "field": "Field of Study",
+      "location": "Location",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "current": "Currently studying here",
+      "gpa": "GPA",
+      "achievements": "Achievements/Activities",
+      "noEducation": "No education added yet"
+    },
+    "experience": {
+      "title": "Work Experience",
+      "subtitle": "Add your professional experience",
+      "addExperience": "Add Experience",
+      "company": "Company",
+      "position": "Position/Title",
+      "location": "Location",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "current": "Currently working here",
+      "description": "Description",
+      "descriptionHint": "Describe your responsibilities and achievements. Use bullet points when possible.",
+      "noExperience": "No experience added yet",
+      "skipNote": "If you have no work experience, you can skip this step"
+    },
+    "skills": {
+      "title": "Skills & Languages",
+      "subtitle": "Add your skills and languages you speak",
+      "skills": "Skills",
+      "addSkill": "Add Skill",
+      "skillName": "Skill Name",
+      "skillLevel": "Level",
+      "languages": "Languages",
+      "addLanguage": "Add Language",
+      "languageName": "Language",
+      "proficiency": "Proficiency",
+      "noSkills": "No skills added",
+      "noLanguages": "No languages added",
+      "levels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert"
+      },
+      "proficiencies": {
+        "native": "Native",
+        "fluent": "Fluent",
+        "advanced": "Advanced",
+        "intermediate": "Intermediate",
+        "basic": "Basic"
+      }
+    },
+    "extras": {
+      "title": "Additional Information",
+      "subtitle": "Add certifications and professional summary",
+      "certifications": "Certifications",
+      "addCertification": "Add Certification",
+      "certName": "Certification Name",
+      "issuer": "Issuing Organization",
+      "issueDate": "Issue Date",
+      "expiryDate": "Expiry Date",
+      "credentialId": "Credential ID",
+      "credentialUrl": "Credential URL",
+      "noCertifications": "No certifications added",
+      "summary": "Professional Summary",
+      "summaryPlaceholder": "Write a brief summary of your experience, skills, and qualifications...",
+      "generateWithAI": "Generate with AI",
+      "generatingSummary": "Generating...",
+      "summaryTip": "Tip: You can use AI to generate a professional summary based on your education and experience."
+    },
+    "template": {
+      "title": "Choose Template",
+      "subtitle": "Select your resume design and customize colors",
+      "selectTemplate": "Select Template",
+      "customizeColor": "Customize Color",
+      "primaryColor": "Primary Color",
+      "templates": {
+        "modern": {
+          "name": "Modern",
+          "description": "Two-column layout with a colored sidebar. Great for tech and creative roles."
+        },
+        "classic": {
+          "name": "Classic",
+          "description": "Traditional single-column format. Perfect for academic and corporate applications."
+        },
+        "minimal": {
+          "name": "Minimal",
+          "description": "Clean and simple design. Maximum ATS compatibility."
+        }
+      }
+    },
+    "shareSettings": {
+      "title": "Share Settings",
+      "makePublic": "Make resume public",
+      "publicDescription": "Anyone with the link can view your resume",
+      "shareLink": "Share Link",
+      "copyLink": "Copy Link",
+      "copied": "Copied!"
+    },
+    "publicView": {
+      "notFound": "Resume not found",
+      "notPublic": "This resume is not publicly available",
+      "poweredBy": "Built with"
+    }
   }
 }
