@@ -41,7 +41,6 @@ export function WizardStepTabs({
     const isScrollable = scrollWidth > clientWidth;
 
     if (isRTL) {
-      // RTL: scrollLeft behavior differs
       setShowRightArrow(isScrollable && scrollLeft < 0);
       setShowLeftArrow(
         isScrollable && scrollLeft > -(scrollWidth - clientWidth)
@@ -119,11 +118,11 @@ export function WizardStepTabs({
 
   return (
     <div className="relative mb-8" dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* Left scroll arrow (mobile) */}
+      {/* Left scroll arrow */}
       {showLeftArrow && (
         <button
           onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md rounded-full border border-gray-200 dark:border-gray-700 md:hidden"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md rounded-full border border-gray-200 dark:border-gray-700 lg:hidden"
           aria-label={isRTL ? 'تمرير لليسار' : 'Scroll left'}
         >
           <ChevronLeft className="w-4 h-4" />
@@ -133,7 +132,7 @@ export function WizardStepTabs({
       {/* Tabs container */}
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto scrollbar-hide gap-1 px-8 md:px-0 md:gap-2 md:justify-center"
+        className="flex overflow-x-auto scrollbar-hide gap-2 px-8 lg:px-0 lg:flex-wrap lg:justify-center"
         role="tablist"
         aria-label={isRTL ? 'خطوات بناء السيرة الذاتية' : 'CV Builder Steps'}
       >
@@ -156,7 +155,7 @@ export function WizardStepTabs({
               disabled={disabled}
               className={cn(
                 // Base styles
-                'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium',
+                'flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium',
                 'transition-all duration-200 ease-in-out',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
                 'whitespace-nowrap flex-shrink-0',
@@ -184,7 +183,7 @@ export function WizardStepTabs({
               {/* Step indicator */}
               <span
                 className={cn(
-                  'flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold',
+                  'flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-semibold',
                   'transition-all duration-200',
                   isCurrent && 'bg-white/20 text-white',
                   isCompleted && 'bg-primary-600 text-white dark:bg-primary-500',
@@ -192,10 +191,10 @@ export function WizardStepTabs({
                     'bg-gray-300 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
                 )}
               >
-                {isCompleted ? <Check className="w-3.5 h-3.5" /> : index + 1}
+                {isCompleted ? <Check className="w-3 h-3" /> : index + 1}
               </span>
 
-              {/* Step label - hidden on mobile for compact mode */}
+              {/* Step label */}
               <span className="hidden sm:inline">
                 {isRTL ? step.label.ar : step.label.en}
               </span>
@@ -204,32 +203,32 @@ export function WizardStepTabs({
         })}
       </div>
 
-      {/* Right scroll arrow (mobile) */}
+      {/* Right scroll arrow */}
       {showRightArrow && (
         <button
           onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md rounded-full border border-gray-200 dark:border-gray-700 md:hidden"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md rounded-full border border-gray-200 dark:border-gray-700 lg:hidden"
           aria-label={isRTL ? 'تمرير لليمين' : 'Scroll right'}
         >
           <ChevronRight className="w-4 h-4" />
         </button>
       )}
 
-      {/* Progress line under tabs */}
-      <div className="hidden md:flex gap-1 mt-3 px-4">
-        {steps.map((_, idx) => (
-          <div
-            key={idx}
-            className={cn(
-              'flex-1 h-1 rounded-full transition-colors duration-300',
-              stepStatuses[idx] === 'completed' &&
-                'bg-primary-600 dark:bg-primary-500',
-              stepStatuses[idx] === 'current' &&
-                'bg-primary-400 dark:bg-primary-600',
-              stepStatuses[idx] === 'pending' && 'bg-gray-200 dark:bg-gray-700'
-            )}
-          />
-        ))}
+      {/* Progress bar - full width below tabs */}
+      <div className="mt-4 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-primary-600 dark:bg-primary-500 rounded-full transition-all duration-300 ease-out"
+          style={{
+            width: `${((stepStatuses.filter((s) => s === 'completed').length + (stepStatuses.includes('current') ? 0.5 : 0)) / steps.length) * 100}%`,
+          }}
+        />
+      </div>
+
+      {/* Step counter */}
+      <div className="mt-2 text-center text-xs text-gray-500 dark:text-gray-400">
+        {isRTL
+          ? `الخطوة ${currentStep + 1} من ${steps.length}`
+          : `Step ${currentStep + 1} of ${steps.length}`}
       </div>
     </div>
   );
