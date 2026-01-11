@@ -2,9 +2,12 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Loader2, FileText, Save } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { WizardStepTabs } from './wizard-step-tabs';
+import { useStepCompletion } from './use-step-completion';
 import { StepPersonal } from './step-personal';
 import { StepEducation } from './step-education';
 import { StepExperience } from './step-experience';
@@ -65,6 +68,10 @@ export function CVWizard({ locale, existingData, resumeId }: CVWizardProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Track step completion status
+  const { stepStatuses } = useStepCompletion(formData, currentStep);
 
   // Handle step data updates
   const handleStepData = useCallback((stepData: Partial<CVWizardData>) => {
@@ -72,19 +79,34 @@ export function CVWizard({ locale, existingData, resumeId }: CVWizardProps) {
     setError(null);
   }, []);
 
+  // Navigate to any step (clickable tabs)
+  const handleStepClick = useCallback(
+    (stepIndex: number) => {
+      if (stepIndex !== currentStep && !isSubmitting) {
+        setIsTransitioning(true);
+        // Small delay for animation
+        setTimeout(() => {
+          setCurrentStep(stepIndex);
+          setIsTransitioning(false);
+        }, 150);
+      }
+    },
+    [currentStep, isSubmitting]
+  );
+
   // Navigate to next step
   const handleNext = useCallback(() => {
     if (currentStep < STEPS.length - 1) {
-      setCurrentStep((prev) => prev + 1);
+      handleStepClick(currentStep + 1);
     }
-  }, [currentStep]);
+  }, [currentStep, handleStepClick]);
 
   // Navigate to previous step
   const handleBack = useCallback(() => {
     if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
+      handleStepClick(currentStep - 1);
     }
-  }, [currentStep]);
+  }, [currentStep, handleStepClick]);
 
   // Submit/Save resume
   const handleSubmit = async () => {
@@ -131,46 +153,24 @@ export function CVWizard({ locale, existingData, resumeId }: CVWizardProps) {
   const isLastStep = currentStep === STEPS.length - 1;
 
   return (
-    <div className="max-w-3xl mx-auto">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between mb-2">
-          {STEPS.map((step, idx) => (
-            <div
-              key={step.id}
-              className="flex flex-col items-center flex-1"
-            >
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                  idx < currentStep
-                    ? 'bg-primary text-white'
-                    : idx === currentStep
-                    ? 'bg-primary text-white ring-4 ring-primary/20'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-500'
-                }`}
-              >
-                {idx + 1}
-              </div>
-              <span className="text-xs mt-1 text-gray-600 dark:text-gray-400 hidden sm:block">
-                {isRTL ? step.label.ar : step.label.en}
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="flex gap-1">
-          {STEPS.map((_, idx) => (
-            <div
-              key={idx}
-              className={`flex-1 h-1 rounded ${
-                idx <= currentStep ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+    <div className="max-w-4xl mx-auto">
+      {/* Clickable Step Tabs */}
+      <WizardStepTabs
+        steps={STEPS}
+        currentStep={currentStep}
+        stepStatuses={stepStatuses}
+        onStepClick={handleStepClick}
+        locale={locale}
+        disabled={isSubmitting}
+      />
 
-      {/* Step Content */}
-      <Card>
+      {/* Step Content with transition */}
+      <Card
+        className={cn(
+          'transition-opacity duration-150',
+          isTransitioning ? 'opacity-50' : 'opacity-100'
+        )}
+      >
         <CardContent className="p-6">
           <CurrentStepComponent
             locale={locale}
@@ -187,7 +187,7 @@ export function CVWizard({ locale, existingData, resumeId }: CVWizardProps) {
         </div>
       )}
 
-      {/* Navigation Buttons */}
+      {/* Navigation Buttons (Secondary) */}
       <div className="flex justify-between mt-6">
         <Button
           variant="outline"
@@ -198,7 +198,7 @@ export function CVWizard({ locale, existingData, resumeId }: CVWizardProps) {
           {isRTL ? (
             <>
               <ArrowRight className="w-4 h-4" />
-              {isRTL ? 'السابق' : 'Back'}
+              السابق
             </>
           ) : (
             <>
@@ -234,7 +234,7 @@ export function CVWizard({ locale, existingData, resumeId }: CVWizardProps) {
           >
             {isRTL ? (
               <>
-                {isRTL ? 'التالي' : 'Next'}
+                التالي
                 <ArrowLeft className="w-4 h-4" />
               </>
             ) : (
