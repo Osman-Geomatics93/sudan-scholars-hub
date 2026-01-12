@@ -55,7 +55,7 @@ export default function LOIBuilderPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <div className="container-custom py-8">
+      <div className="container-custom pt-20 pb-8">
         <LOIWizard locale={locale} />
       </div>
     </main>
