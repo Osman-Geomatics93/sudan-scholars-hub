@@ -813,5 +813,10 @@
       "notPublic": "This resume is not publicly available",
       "poweredBy": "Built with"
     }
+  },
+  "loiBuilder": {
+    "title": "Letter of Intent Builder",
+    "subtitle": "Create a compelling motivation letter for Turkiye Scholarships",
+    "navLabel": "LOI Builder"
   }
 }
