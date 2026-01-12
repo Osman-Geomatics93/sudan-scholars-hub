@@ -1,12 +1,13 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
-import { useSearchParams, usePathname } from 'next/navigation';
-import { useState, Suspense } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useState, Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/layout/container';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 function LoginContent() {
   const pathname = usePathname();
@@ -14,8 +15,35 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || `/${locale}`;
   const [isLoading, setIsLoading] = useState(false);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const isRTL = locale === 'ar';
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (status === 'authenticated' && session) {
+      router.replace(callbackUrl);
+    }
+  }, [status, session, router, callbackUrl]);
+
+  // Show loading while checking auth status or redirecting
+  if (status === 'loading' || (status === 'authenticated' && session)) {
+    return (
+      <section className="min-h-screen gradient-hero flex items-center justify-center py-16">
+        <Container size="sm">
+          <Card className="p-8 md:p-12 max-w-md mx-auto">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
+              <p className="mt-4 text-gray-500">
+                {isRTL ? 'جاري التحميل...' : 'Loading...'}
+              </p>
+            </div>
+          </Card>
+        </Container>
+      </section>
+    );
+  }
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
