@@ -168,6 +168,7 @@ export function StepClosing({ locale, data, onDataChange }: StepClosingProps) {
             >
               <option value="en">English</option>
               <option value="tr">Türkçe</option>
+              <option value="ar">العربية</option>
             </select>
           </div>
 

@@ -6,7 +6,7 @@ import { detectCliches, detectGenericPhrases, calculateSpecificityScore, getImpr
 interface QualityHintProps {
   text: string;
   fieldType: string;
-  language?: 'en' | 'tr';
+  language?: 'en' | 'tr' | 'ar';
 }
 
 export function QualityHint({ text, fieldType, language = 'en' }: QualityHintProps) {

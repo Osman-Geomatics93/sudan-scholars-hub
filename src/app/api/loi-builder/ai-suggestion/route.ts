@@ -11,7 +11,7 @@ const requestSchema = z.object({
   fieldOfStudy: z.string().optional(),
   universityName: z.string().optional(),
   programName: z.string().optional(),
-  language: z.enum(['en', 'tr']).default('en'),
+  language: z.enum(['en', 'tr', 'ar']).default('en'),
 });
 
 export async function POST(request: NextRequest) {

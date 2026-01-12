@@ -19,6 +19,14 @@ const TRANSITIONS = {
       future: 'Gelecegim icin net bir vizyonla, somut hedefler belirledim.',
       closing: 'Turkiye Burslari alicisi olarak secilmekten onur duyarim.',
     },
+    ar: {
+      academic: 'لقد أعدتني خلفيتي الأكاديمية بشكل شامل لهذه الفرصة.',
+      scholarship: 'ينجذب اهتمامي إلى برنامج المنح التركية لأن',
+      turkey: 'اخترت متابعة دراستي في تركيا، وتحديداً في',
+      leadership: 'تجربة مهمة تُظهر قدراتي حدثت',
+      future: 'مع رؤية واضحة لمستقبلي، وضعت أهدافاً ملموسة.',
+      closing: 'سأكون فخوراً باختياري كمستفيد من المنح التركية.',
+    },
   },
   balanced: {
     en: {
@@ -37,6 +45,14 @@ const TRANSITIONS = {
       future: 'Ileriye baktigimda, gelecegim icin net hedeflerim var.',
       closing: 'Bu programa katkida bulunmak ve ondan ogrenmek icin heyecanlaniyorum.',
     },
+    ar: {
+      academic: 'أعدتني رحلتي الأكاديمية جيداً لهذه الفرصة.',
+      scholarship: 'يبرز برنامج المنح التركية بالنسبة لي لأن',
+      turkey: 'تركيا، وتحديداً',
+      leadership: 'تجربة محددة شكلت من أكون اليوم حدثت عندما',
+      future: 'بالنظر إلى المستقبل، لدي أهداف واضحة.',
+      closing: 'أنا متحمس للفرصة للمساهمة في هذا البرنامج والتعلم منه.',
+    },
   },
   personal: {
     en: {
@@ -54,6 +70,14 @@ const TRANSITIONS = {
       leadership: 'Karakterimi gercekten tanimlayan bir deneyim',
       future: 'Gelecegim ve basarmak istediklerim hakkinda derinden dusundum.',
       closing: 'Bu toplulugun parcasi olma firsati icin minnettar olurum.',
+    },
+    ar: {
+      academic: 'كانت رحلتي التعليمية تحويلية.',
+      scholarship: 'ما يجذبني إلى المنح التركية هو',
+      turkey: 'تركيا استحوذت على اهتمامي لأن',
+      leadership: 'تجربة واحدة حددت شخصيتي حقاً كانت',
+      future: 'لقد فكرت بعمق في مستقبلي وما أريد تحقيقه.',
+      closing: 'سأكون ممتناً للفرصة لأكون جزءاً من هذا المجتمع.',
     },
   },
 };
@@ -274,9 +298,11 @@ export function assembleLetter(data: LOIWizardData): string {
   const transitions = TRANSITIONS[tone][lang];
 
   // Salutation
-  const salutation = lang === 'en'
-    ? 'Dear Turkiye Scholarships Selection Committee,'
-    : 'Sayin Turkiye Burslari Secim Komitesi,';
+  const salutation = lang === 'ar'
+    ? 'السادة الأفاضل في لجنة اختيار المنح التركية،'
+    : lang === 'en'
+      ? 'Dear Turkiye Scholarships Selection Committee,'
+      : 'Sayin Turkiye Burslari Secim Komitesi,';
 
   // Build paragraphs
   const paragraphs: string[] = [];
@@ -324,9 +350,11 @@ export function assembleLetter(data: LOIWizardData): string {
   }
 
   // Signature
-  const signature = lang === 'en'
-    ? `Sincerely,\n${settings.fullName || '[Your Name]'}`
-    : `Saygilarimla,\n${settings.fullName || '[Adiniz]'}`;
+  const signature = lang === 'ar'
+    ? `مع خالص التقدير،\n${settings.fullName || '[اسمك]'}`
+    : lang === 'en'
+      ? `Sincerely,\n${settings.fullName || '[Your Name]'}`
+      : `Saygilarimla,\n${settings.fullName || '[Adiniz]'}`;
 
   // Assemble the letter
   const letter = [

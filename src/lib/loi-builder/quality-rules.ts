@@ -55,6 +55,24 @@ export const CLICHES: Record<string, string[]> = {
     'altin firsat',
     'omur boyu firsat',
   ],
+  ar: [
+    'منذ الطفولة',
+    'منذ صغري',
+    'حلمي',
+    'أفضل دولة',
+    'فرصة عظيمة',
+    'تجربة رائعة',
+    'تغيير العالم',
+    'إحداث فرق',
+    'رد الجميل للمجتمع',
+    'السعي وراء أحلامي',
+    'فرصة ذهبية',
+    'فرصة العمر',
+    'شغفي',
+    'طموحي الكبير',
+    'أنا متحمس جدا',
+    'أنا مؤهل تماما',
+  ],
 };
 
 // Generic phrases that should be made more specific
@@ -96,7 +114,7 @@ export const SPECIFICITY_INDICATORS: RegExp[] = [
 // Detect cliches in text
 export function detectCliches(
   text: string,
-  language: 'en' | 'tr' = 'en'
+  language: 'en' | 'tr' | 'ar' = 'en'
 ): string[] {
   const found: string[] = [];
   const lowerText = text.toLowerCase();

@@ -139,7 +139,7 @@ export const settingsSchema = z.object({
     .min(2, 'Full name is required')
     .max(100, 'Name should not exceed 100 characters'),
   tone: z.enum(['formal', 'balanced', 'personal']),
-  language: z.enum(['en', 'tr']),
+  language: z.enum(['en', 'tr', 'ar']),
   targetWordCount: z.number().min(500).max(900),
 });
 

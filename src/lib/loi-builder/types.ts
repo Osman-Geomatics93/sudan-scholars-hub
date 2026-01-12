@@ -50,7 +50,7 @@ export interface ClosingData {
 export interface SettingsData {
   fullName: string;
   tone: 'formal' | 'balanced' | 'personal';
-  language: 'en' | 'tr';
+  language: 'en' | 'tr' | 'ar';
   targetWordCount: number;
 }
 
