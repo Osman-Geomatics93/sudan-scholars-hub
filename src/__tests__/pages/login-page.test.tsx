@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import LoginPage from '../page';
+import LoginPage from '@/app/[locale]/login/page';
 
 // Override the global mocks for these tests
 jest.mock('next-auth/react', () => ({
