@@ -43,6 +43,15 @@ export async function POST(request: NextRequest) {
     // Generate 6-digit OTP
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
+    // Log OTP in development mode for testing
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`\n========================================`);
+      console.log(`🔐 ADMIN OTP CODE: ${otpCode}`);
+      console.log(`   For: ${email}`);
+      console.log(`   Expires in 5 minutes`);
+      console.log(`========================================\n`);
+    }
+
     // Hash the OTP for storage
     const hashedOtp = await bcrypt.hash(otpCode, 10);
 
