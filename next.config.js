@@ -138,6 +138,7 @@ const securityHeaders = [
       "img-src 'self' data: https: blob:",
       "font-src 'self' data: https://fonts.gstatic.com",
       "connect-src 'self' https://www.google-analytics.com https://api.groq.com https://generativelanguage.googleapis.com https://cloudflareinsights.com",
+      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
       "frame-ancestors 'self'"
     ].join('; ')
   }
