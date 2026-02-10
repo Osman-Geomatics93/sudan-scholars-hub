@@ -106,6 +106,9 @@ export async function POST(request: NextRequest) {
         applicationFeeCurrency: data.applicationFeeCurrency || null,
         isFreeApplication: data.isFreeApplication,
         isActive: data.isActive ?? true,
+        calendarType: data.calendarType || 'bachelor',
+        programDuration: data.programDuration || null,
+        languageOfInstruction: data.languageOfInstruction || ['Turkish'],
       },
     });
 

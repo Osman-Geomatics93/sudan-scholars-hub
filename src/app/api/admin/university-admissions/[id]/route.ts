@@ -82,6 +82,9 @@ export async function PUT(
     if (body.applicationFeeCurrency !== undefined) updateData.applicationFeeCurrency = body.applicationFeeCurrency || null;
     if (body.isFreeApplication !== undefined) updateData.isFreeApplication = body.isFreeApplication;
     if (body.isActive !== undefined) updateData.isActive = body.isActive;
+    if (body.calendarType !== undefined) updateData.calendarType = body.calendarType;
+    if (body.programDuration !== undefined) updateData.programDuration = body.programDuration || null;
+    if (body.languageOfInstruction !== undefined) updateData.languageOfInstruction = body.languageOfInstruction;
 
     const admission = await prisma.universityAdmission.update({
       where: { id },
