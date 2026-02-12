@@ -477,6 +477,95 @@ const T = {
     statusPending: "Pending Review",
     statusRejected: "Rejected",
     statusApproved: "Approved",
+    // Bookmarks
+    bookmark: "Bookmark",
+    bookmarked: "Bookmarked",
+    savedMaterials: "Saved Materials",
+    noSavedMaterials: "No saved materials yet",
+    saveMaterialSuccess: "Material saved!",
+    removeMaterialSuccess: "Material removed from saved",
+    uploaded: "Uploaded",
+    saved: "Saved",
+    // Counters
+    views: "views",
+    downloads: "downloads",
+    // Reviews
+    rate: "Rate",
+    reviewsLabel: "Reviews",
+    writeReview: "Write a Review",
+    yourRating: "Your Rating",
+    addComment: "Add a comment (optional)",
+    submitReview: "Submit Review",
+    reviewSuccess: "Review submitted!",
+    noReviews: "No reviews yet",
+    beFirstReviewer: "Be the first to review this material!",
+    stars: "stars",
+    averageRating: "avg",
+    // Preview
+    preview: "Preview",
+    closePreview: "Close Preview",
+    cannotPreview: "Preview not available for this file type",
+    // Notifications
+    notifications: "Notifications",
+    noNotifications: "No notifications",
+    markAllRead: "Mark all read",
+    // Requests
+    requestMaterial: "Request Material",
+    requests: "Requests",
+    requestTitle: "What do you need?",
+    requestDesc: "Describe what you're looking for",
+    submitRequest: "Submit Request",
+    requestSuccess: "Request submitted!",
+    openRequests: "Open Requests",
+    fulfillRequest: "Fulfill",
+    closeRequest: "Close",
+    requestFulfilled: "Request fulfilled!",
+    noRequests: "No requests yet",
+    // Points
+    points: "Points",
+    leaderboard: "Leaderboard",
+    yourPoints: "Your Points",
+    rank: "Rank",
+    topContributors: "Top Contributors",
+    pointsEarned: "points earned",
+    // Search
+    sortBy: "Sort by",
+    newest: "Newest",
+    mostDownloaded: "Most Downloaded",
+    highestRated: "Highest Rated",
+    filterByRating: "Min Rating",
+    filterByFaculty: "Faculty",
+    filterByRole: "Uploader Role",
+    clearFilters: "Clear Filters",
+    advancedFilters: "Advanced Filters",
+    // Groups
+    studyGroups: "Study Groups",
+    createGroup: "Create Group",
+    groupName: "Group Name",
+    groupDesc: "Description",
+    chatPlatform: "Platform",
+    chatLink: "Chat Link",
+    joinGroup: "Join",
+    createGroupSuccess: "Group created!",
+    noGroups: "No study groups yet",
+    members: "members",
+    // Collections
+    collections: "Collections",
+    createCollection: "Create Collection",
+    collectionName: "Collection Name",
+    addToCollection: "Add to Collection",
+    removeFromCollection: "Remove",
+    publicCollection: "Public",
+    privateCollection: "Private",
+    noCollections: "No collections yet",
+    createCollectionSuccess: "Collection created!",
+    editCollection: "Edit Collection",
+    editCollectionSuccess: "Collection updated!",
+    deleteCollection: "Delete Collection",
+    deleteCollectionSuccess: "Collection deleted!",
+    deleteCollectionMsg: "Are you sure you want to delete this collection?",
+    saveChanges: "Save Changes",
+    viewCollection: "View Collection",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -620,6 +709,95 @@ const T = {
     statusPending: "قيد المراجعة",
     statusRejected: "مرفوض",
     statusApproved: "مقبول",
+    // Bookmarks
+    bookmark: "حفظ",
+    bookmarked: "محفوظ",
+    savedMaterials: "المواد المحفوظة",
+    noSavedMaterials: "لا توجد مواد محفوظة بعد",
+    saveMaterialSuccess: "تم حفظ المادة!",
+    removeMaterialSuccess: "تم إزالة المادة من المحفوظات",
+    uploaded: "المرفوعة",
+    saved: "المحفوظة",
+    // Counters
+    views: "مشاهدات",
+    downloads: "تحميلات",
+    // Reviews
+    rate: "تقييم",
+    reviewsLabel: "التقييمات",
+    writeReview: "اكتب تقييماً",
+    yourRating: "تقييمك",
+    addComment: "أضف تعليقاً (اختياري)",
+    submitReview: "إرسال التقييم",
+    reviewSuccess: "تم إرسال التقييم!",
+    noReviews: "لا توجد تقييمات بعد",
+    beFirstReviewer: "كن أول من يقيّم هذه المادة!",
+    stars: "نجوم",
+    averageRating: "متوسط",
+    // Preview
+    preview: "معاينة",
+    closePreview: "إغلاق المعاينة",
+    cannotPreview: "المعاينة غير متوفرة لهذا النوع من الملفات",
+    // Notifications
+    notifications: "الإشعارات",
+    noNotifications: "لا توجد إشعارات",
+    markAllRead: "تحديد الكل كمقروء",
+    // Requests
+    requestMaterial: "طلب مادة",
+    requests: "الطلبات",
+    requestTitle: "ماذا تحتاج؟",
+    requestDesc: "صف ما تبحث عنه",
+    submitRequest: "إرسال الطلب",
+    requestSuccess: "تم إرسال الطلب!",
+    openRequests: "الطلبات المفتوحة",
+    fulfillRequest: "تلبية",
+    closeRequest: "إغلاق",
+    requestFulfilled: "تم تلبية الطلب!",
+    noRequests: "لا توجد طلبات بعد",
+    // Points
+    points: "نقاط",
+    leaderboard: "لوحة المتصدرين",
+    yourPoints: "نقاطك",
+    rank: "الترتيب",
+    topContributors: "أبرز المساهمين",
+    pointsEarned: "نقاط مكتسبة",
+    // Search
+    sortBy: "ترتيب حسب",
+    newest: "الأحدث",
+    mostDownloaded: "الأكثر تحميلاً",
+    highestRated: "الأعلى تقييماً",
+    filterByRating: "أقل تقييم",
+    filterByFaculty: "الكلية",
+    filterByRole: "دور الرافع",
+    clearFilters: "مسح الفلاتر",
+    advancedFilters: "فلاتر متقدمة",
+    // Groups
+    studyGroups: "مجموعات الدراسة",
+    createGroup: "إنشاء مجموعة",
+    groupName: "اسم المجموعة",
+    groupDesc: "الوصف",
+    chatPlatform: "المنصة",
+    chatLink: "رابط المحادثة",
+    joinGroup: "انضمام",
+    createGroupSuccess: "تم إنشاء المجموعة!",
+    noGroups: "لا توجد مجموعات دراسية بعد",
+    members: "أعضاء",
+    // Collections
+    collections: "المجموعات",
+    createCollection: "إنشاء مجموعة",
+    collectionName: "اسم المجموعة",
+    addToCollection: "إضافة إلى مجموعة",
+    removeFromCollection: "إزالة",
+    publicCollection: "عامة",
+    privateCollection: "خاصة",
+    noCollections: "لا توجد مجموعات بعد",
+    createCollectionSuccess: "تم إنشاء المجموعة!",
+    editCollection: "تعديل المجموعة",
+    editCollectionSuccess: "تم تحديث المجموعة!",
+    deleteCollection: "حذف المجموعة",
+    deleteCollectionSuccess: "تم حذف المجموعة!",
+    deleteCollectionMsg: "هل أنت متأكد من حذف هذه المجموعة؟",
+    saveChanges: "حفظ التغييرات",
+    viewCollection: "عرض المجموعة",
   },
 };
 
@@ -911,6 +1089,49 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [materialCountData, setMaterialCountData] = useState([]);
   const userMenuRef = useRef(null);
 
+  // === NEW FEATURE STATE ===
+  // Bookmarks
+  const [savedMaterialIds, setSavedMaterialIds] = useState(new Set());
+  const [savedMaterialsList, setSavedMaterialsList] = useState([]);
+  const [myMaterialsTab, setMyMaterialsTab] = useState("uploaded");
+  // Reviews
+  const [showReviewModal, setShowReviewModal] = useState(null); // materialId or null
+  const [reviewForm, setReviewForm] = useState({ rating: 0, comment: "" });
+  const [materialReviews, setMaterialReviews] = useState({});
+  // Preview
+  const [previewMaterial, setPreviewMaterial] = useState(null);
+  // Notifications
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notificationsList, setNotificationsList] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const notifRef = useRef(null);
+  // Requests
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [requestForm, setRequestForm] = useState({ title: "", description: "", subject: "" });
+  const [requestsList, setRequestsList] = useState([]);
+  const [requestsLoading, setRequestsLoading] = useState(false);
+  // Leaderboard
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [userPoints, setUserPoints] = useState(0);
+  const [userBadge, setUserBadge] = useState(null);
+  // Search
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [advancedFilters, setAdvancedFilters] = useState({ minRating: "", facultyId: "", uploaderRole: "" });
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  // Groups
+  const [showGroupModal, setShowGroupModal] = useState(false);
+  const [groupForm, setGroupForm] = useState({ name: "", description: "", platform: "whatsapp", chatLink: "" });
+  const [groupsList, setGroupsList] = useState([]);
+  const [groupsLoading, setGroupsLoading] = useState(false);
+  // Collections
+  const [showCollectionModal, setShowCollectionModal] = useState(false);
+  const [collectionForm, setCollectionForm] = useState({ name: "", description: "", isPublic: false });
+  const [myCollections, setMyCollections] = useState([]);
+  const [showAddToCollectionPopup, setShowAddToCollectionPopup] = useState(null); // materialId or null
+  const [selectedCollectionView, setSelectedCollectionView] = useState(null);
+  const [editingCollection, setEditingCollection] = useState(null); // collection object when editing
+  const [deleteCollectionConfirm, setDeleteCollectionConfirm] = useState(null); // { id, name }
+
   // Auth session
   const { data: session, status: authStatus } = useSession();
   const isLoggedIn = authStatus === "authenticated" && !!session?.user;
@@ -1006,6 +1227,8 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
   useEffect(() => {
     fetchAllMaterials();
+    // Also fetch requests for home page teaser
+    fetch("/api/study-hub/requests?status=OPEN").then(r => r.ok ? r.json() : { requests: [] }).then(d => setRequestsList(d.requests || [])).catch(() => {});
   }, [fetchAllMaterials]);
 
   // Fetch materials for the "browse-all" view with search/filter/pagination
@@ -1020,6 +1243,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       if (list.length > 0) params.set("offset", String(list.length));
       if (s) params.set("search", s);
       if (tp !== "all") params.set("type", tp);
+      if (sortOrder) params.set("orderBy", sortOrder);
+      if (advancedFilters.minRating) params.set("minRating", advancedFilters.minRating);
+      if (advancedFilters.facultyId) params.set("facultyId", advancedFilters.facultyId);
+      if (advancedFilters.uploaderRole) params.set("uploaderRole", advancedFilters.uploaderRole);
       const res = await fetch(`/api/study-hub/materials?${params}`);
       if (res.ok) {
         const data = await res.json();
@@ -1244,6 +1471,298 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     setDuplicateWarning(null);
   };
 
+  // === NEW FEATURE HANDLERS ===
+
+  // Bookmarks
+  const fetchSavedMaterialIds = useCallback(async () => {
+    if (!isLoggedIn) return;
+    try {
+      const res = await fetch("/api/study-hub/materials/save/list");
+      if (res.ok) {
+        const data = await res.json();
+        setSavedMaterialIds(new Set(data.materialIds || []));
+        setSavedMaterialsList(data.materials || []);
+      }
+    } catch (err) { console.error("Failed to fetch saved materials:", err); }
+  }, [isLoggedIn]);
+
+  useEffect(() => { fetchSavedMaterialIds(); }, [fetchSavedMaterialIds]);
+
+  const handleToggleBookmark = async (materialId) => {
+    if (requireLogin()) return;
+    try {
+      const res = await fetch("/api/study-hub/materials/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ materialId }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSavedMaterialIds((prev) => {
+          const next = new Set(prev);
+          if (data.saved) next.add(materialId); else next.delete(materialId);
+          return next;
+        });
+        showNotif(data.saved ? t.saveMaterialSuccess : t.removeMaterialSuccess);
+        fetchSavedMaterialIds();
+      }
+    } catch (err) { console.error("Bookmark error:", err); }
+  };
+
+  // Track view/download
+  const handleTrackAction = async (materialId, action) => {
+    try {
+      await fetch(`/api/study-hub/materials/${materialId}/track`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+    } catch (err) { console.error("Track error:", err); }
+  };
+
+  // Reviews
+  const fetchReviews = async (materialId) => {
+    try {
+      const res = await fetch(`/api/study-hub/materials/${materialId}/reviews`);
+      if (res.ok) {
+        const data = await res.json();
+        setMaterialReviews((prev) => ({ ...prev, [materialId]: data }));
+      }
+    } catch (err) { console.error("Failed to fetch reviews:", err); }
+  };
+
+  const handleSubmitReview = async () => {
+    if (!showReviewModal || reviewForm.rating === 0) return;
+    try {
+      const res = await fetch(`/api/study-hub/materials/${showReviewModal}/reviews`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewForm),
+      });
+      if (res.ok) {
+        showNotif(t.reviewSuccess);
+        fetchReviews(showReviewModal);
+        setShowReviewModal(null);
+        setReviewForm({ rating: 0, comment: "" });
+      }
+    } catch (err) { console.error("Review error:", err); }
+  };
+
+  // Notifications
+  const fetchNotifications = useCallback(async () => {
+    if (!isLoggedIn) return;
+    try {
+      const res = await fetch("/api/user/notifications");
+      if (res.ok) {
+        const data = await res.json();
+        setNotificationsList(data.notifications || []);
+        setUnreadCount(data.unreadCount || 0);
+      }
+    } catch (err) { console.error("Failed to fetch notifications:", err); }
+  }, [isLoggedIn]);
+
+  useEffect(() => { fetchNotifications(); }, [fetchNotifications]);
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [isLoggedIn, fetchNotifications]);
+
+  // Close notification dropdown on outside click
+  useEffect(() => {
+    if (!showNotifications) return;
+    const handler = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) setShowNotifications(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showNotifications]);
+
+  const handleMarkAllRead = async () => {
+    try {
+      await fetch("/api/user/notifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ markAll: true }),
+      });
+      setUnreadCount(0);
+      setNotificationsList((prev) => prev.map((n) => ({ ...n, read: true })));
+    } catch (err) { console.error("Mark read error:", err); }
+  };
+
+  // Requests
+  const fetchRequests = useCallback(async () => {
+    setRequestsLoading(true);
+    try {
+      const res = await fetch("/api/study-hub/requests?status=OPEN");
+      if (res.ok) {
+        const data = await res.json();
+        setRequestsList(data.requests || []);
+      }
+    } catch (err) { console.error("Failed to fetch requests:", err); }
+    finally { setRequestsLoading(false); }
+  }, []);
+
+  const handleSubmitRequest = async () => {
+    if (!requestForm.title) { showNotif(t.fillRequired, "error"); return; }
+    try {
+      const res = await fetch("/api/study-hub/requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestForm),
+      });
+      if (res.ok) {
+        showNotif(t.requestSuccess);
+        setShowRequestModal(false);
+        setRequestForm({ title: "", description: "", subject: "" });
+        fetchRequests();
+      }
+    } catch (err) { console.error("Request error:", err); }
+  };
+
+  // Leaderboard
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const res = await fetch("/api/study-hub/leaderboard");
+      if (res.ok) {
+        const data = await res.json();
+        setLeaderboardData(data.users || []);
+        if (isLoggedIn && currentUserId) {
+          const me = data.users.find((u) => u.id === currentUserId);
+          if (me) { setUserPoints(me.points); setUserBadge(me.badge); }
+        }
+      }
+    } catch (err) { console.error("Failed to fetch leaderboard:", err); }
+  }, [isLoggedIn, currentUserId]);
+
+  useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
+
+  // Groups
+  const fetchGroups = useCallback(async () => {
+    setGroupsLoading(true);
+    try {
+      const res = await fetch("/api/study-hub/groups");
+      if (res.ok) {
+        const data = await res.json();
+        setGroupsList(data.groups || []);
+      }
+    } catch (err) { console.error("Failed to fetch groups:", err); }
+    finally { setGroupsLoading(false); }
+  }, []);
+
+  const handleSubmitGroup = async () => {
+    if (!groupForm.name || !groupForm.chatLink) { showNotif(t.fillRequired, "error"); return; }
+    try {
+      const res = await fetch("/api/study-hub/groups", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(groupForm),
+      });
+      if (res.ok) {
+        showNotif(t.createGroupSuccess);
+        setShowGroupModal(false);
+        setGroupForm({ name: "", description: "", platform: "whatsapp", chatLink: "" });
+        fetchGroups();
+      }
+    } catch (err) { console.error("Group error:", err); }
+  };
+
+  // Collections
+  const fetchCollections = useCallback(async () => {
+    if (!isLoggedIn) return;
+    try {
+      const res = await fetch("/api/study-hub/collections");
+      if (res.ok) {
+        const data = await res.json();
+        setMyCollections(data.collections || []);
+      }
+    } catch (err) { console.error("Failed to fetch collections:", err); }
+  }, [isLoggedIn]);
+
+  useEffect(() => { fetchCollections(); }, [fetchCollections]);
+
+  const handleCreateCollection = async () => {
+    if (!collectionForm.name) { showNotif(t.fillRequired, "error"); return; }
+    try {
+      const res = await fetch("/api/study-hub/collections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(collectionForm),
+      });
+      if (res.ok) {
+        showNotif(t.createCollectionSuccess);
+        setShowCollectionModal(false);
+        setCollectionForm({ name: "", description: "", isPublic: false });
+        fetchCollections();
+      }
+    } catch (err) { console.error("Collection error:", err); }
+  };
+
+  const handleAddToCollection = async (collectionId, materialId) => {
+    try {
+      const res = await fetch(`/api/study-hub/collections/${collectionId}/items`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ materialId }),
+      });
+      if (res.ok) {
+        showNotif(t.saveMaterialSuccess);
+        setShowAddToCollectionPopup(null);
+      }
+    } catch (err) { console.error("Add to collection error:", err); }
+  };
+
+  const handleEditCollection = (col) => {
+    setEditingCollection(col);
+    setCollectionForm({ name: col.name, description: col.description || "", isPublic: col.isPublic });
+    setShowCollectionModal(true);
+  };
+
+  const handleUpdateCollection = async () => {
+    if (!collectionForm.name) { showNotif(t.fillRequired, "error"); return; }
+    try {
+      const res = await fetch(`/api/study-hub/collections/${editingCollection.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(collectionForm),
+      });
+      if (res.ok) {
+        showNotif(t.editCollectionSuccess);
+        setShowCollectionModal(false);
+        setEditingCollection(null);
+        setCollectionForm({ name: "", description: "", isPublic: false });
+        fetchCollections();
+      }
+    } catch (err) { console.error("Update collection error:", err); }
+  };
+
+  const handleDeleteCollection = async () => {
+    if (!deleteCollectionConfirm) return;
+    try {
+      const res = await fetch(`/api/study-hub/collections/${deleteCollectionConfirm.id}`, { method: "DELETE" });
+      if (res.ok) {
+        showNotif(t.deleteCollectionSuccess);
+        setMyCollections(myCollections.filter((c) => c.id !== deleteCollectionConfirm.id));
+        if (selectedCollectionView?.collection?.id === deleteCollectionConfirm.id) {
+          setSelectedCollectionView(null);
+        }
+      }
+    } catch (err) { console.error("Delete collection error:", err); }
+    setDeleteCollectionConfirm(null);
+  };
+
+  // Preview helpers
+  const getPreviewUrl = (url) => {
+    if (!url) return null;
+    // YouTube
+    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+    if (ytMatch) return { type: "youtube", embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}` };
+    // Google Drive
+    const driveMatch = url.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+    if (driveMatch) return { type: "drive", embedUrl: `https://drive.google.com/file/d/${driveMatch[1]}/preview` };
+    return null;
+  };
+
   const handleShareToggle = (matId) => {
     setSharePopup(sharePopup === matId ? null : matId);
   };
@@ -1332,8 +1851,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       setBrowseMatSearch("");
       setBrowseMatType("all");
       setBrowseMatTotal(0);
+      setSortOrder("newest");
+      setAdvancedFilters({ minRating: "", facultyId: "", uploaderRole: "" });
+      setShowAdvancedFilters(false);
       fetchBrowseMaterials("", "all");
     }
+    if (newView === "requests") fetchRequests();
+    if (newView === "groups") fetchGroups();
+    if (newView === "collections") fetchCollections();
   };
 
   const countMats = (cId, uId, dId, sem) => {
@@ -1386,6 +1911,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           <div style={S.matMeta}>
             <span style={{ ...S.matBadge, background: ti.color }}>{fileTypeLabel(ti)}</span>
             <span style={{ ...S.matBadge, background: ri.color }}>{ri.icon} {roleLabel(ri)}</span>
+            {mat.viewCount > 0 && <span style={S.counterBadge}>👁 {mat.viewCount}</span>}
+            {mat.downloadCount > 0 && <span style={S.counterBadge}>📥 {mat.downloadCount}</span>}
+            {mat.averageRating > 0 && <span style={S.counterBadge}>⭐ {mat.averageRating} ({mat.reviewCount})</span>}
             <span style={S.matDate}>🕐 {new Date(mat.uploadedAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
             {mat.editedAt && <span style={S.matDate}>✏️ {t.edited}</span>}
           </div>
@@ -1401,10 +1929,60 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               {mat.status === "APPROVED" ? `✅ ${t.statusApproved}` : mat.status === "PENDING" ? `⏳ ${t.statusPending}` : `❌ ${t.statusRejected}`}
             </span>
           )}
-          <a href={mat.url} target="_blank" rel="noopener noreferrer" style={S.dlBtn}>
+          <a href={mat.url} target="_blank" rel="noopener noreferrer" style={S.dlBtn}
+            onClick={() => handleTrackAction(mat.id, mat.type === "video" ? "view" : "download")}
+          >
             {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
           </a>
-          <div style={{ display: "flex", gap: 6 }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
+            {/* Bookmark */}
+            <button
+              onClick={() => handleToggleBookmark(mat.id)}
+              style={{ ...S.bookmarkBtn, ...(savedMaterialIds.has(mat.id) ? S.bookmarkActive : {}) }}
+              title={savedMaterialIds.has(mat.id) ? t.bookmarked : t.bookmark}
+            >{savedMaterialIds.has(mat.id) ? "📑" : "🔖"}</button>
+            {/* Rate */}
+            <button
+              onClick={() => { if (!requireLogin()) { setShowReviewModal(mat.id); fetchReviews(mat.id); } }}
+              style={S.editBtn} title={t.rate}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#f0e8df"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+            >⭐</button>
+            {/* Preview */}
+            {getPreviewUrl(mat.url) && (
+              <button
+                onClick={() => setPreviewMaterial(mat)}
+                style={S.editBtn} title={t.preview}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#f0e8df"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+              >👁</button>
+            )}
+            {/* Add to Collection */}
+            {isLoggedIn && (
+              <div style={{ position: "relative" }}>
+                <button
+                  onClick={() => { fetchCollections(); setShowAddToCollectionPopup(showAddToCollectionPopup === mat.id ? null : mat.id); }}
+                  style={S.editBtn} title={t.addToCollection}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "#f0e8df"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                >📂</button>
+                {showAddToCollectionPopup === mat.id && (
+                  <div style={{ ...S.sharePopup, ...(isRTL ? { left: 0, right: "auto" } : { right: 0, left: "auto" }), minWidth: 200 }}>
+                    {myCollections.length === 0 ? (
+                      <div style={{ padding: "12px 14px", fontSize: 12, color: "#888" }}>{t.noCollections}</div>
+                    ) : myCollections.map((col) => (
+                      <button key={col.id} onClick={() => handleAddToCollection(col.id, mat.id)} style={S.shareOption}>
+                        📁 {col.name} ({col._count?.items || 0})
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => { setShowAddToCollectionPopup(null); setShowCollectionModal(true); }}
+                      style={{ ...S.shareOption, borderTop: "1px solid #ede5da", color: "#C8956C", fontWeight: 700 }}
+                    >+ {t.createCollection}</button>
+                  </div>
+                )}
+              </div>
+            )}
             {isLoggedIn && currentUserId && mat.userId === currentUserId && (
               <button
                 onClick={() => handleEdit(mat)} style={S.editBtn} title={t.editMaterial}
@@ -1454,7 +2032,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       <div style={S.bgPattern} />
 
       {/* Comprehensive responsive styles */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         /* === BASE RULES (all viewports) === */
         .studyhub-main {
           padding-left: max(env(safe-area-inset-left, 0px), clamp(12px, 3vw, 24px)) !important;
@@ -1471,6 +2049,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         }
         @supports (max-height: 1dvh) {
           .studyhub-modal { max-height: 90dvh !important; }
+        }
+
+        /* How It Works connector lines (desktop only) */
+        @media (min-width: 1024px) {
+          .studyhub-how-connector { display: block !important; }
+        }
+        .studyhub-how-card {
+          overflow: visible !important;
         }
 
         /* Hover animations (preserved) */
@@ -1512,6 +2098,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           .studyhub-degree-cards {
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
           }
+          .studyhub-how-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+          }
+          .studyhub-how-connector { display: none !important; }
           .studyhub-hero-nav { gap: 8px !important; }
           .studyhub-section { margin-bottom: 40px !important; }
         }
@@ -1579,6 +2170,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
           }
           .studyhub-recent-grid { grid-template-columns: 1fr !important; }
+          .studyhub-notif-dropdown { width: calc(100vw - 32px) !important; right: -60px !important; }
+          .studyhub-preview-frame { height: 280px !important; }
+          .studyhub-advanced-filters { grid-template-columns: 1fr !important; }
+          .studyhub-sort-row { flex-direction: column !important; align-items: stretch !important; }
 
           /* View Header */
           .studyhub-view-header {
@@ -1957,7 +2552,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             border-radius: 12px !important;
           }
         }
-      `}</style>
+      ` }} />
 
       {notification && (
         <div className="studyhub-notification" style={{
@@ -2073,6 +2668,51 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               />
             </div>
 
+            {/* Notification Bell */}
+            {isLoggedIn && (
+              <div ref={notifRef} style={{ position: "relative" }}>
+                <button
+                  onClick={() => { setShowNotifications(!showNotifications); if (!showNotifications) fetchNotifications(); }}
+                  className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  style={{ position: "relative" }}
+                  title={t.notifications}
+                >
+                  <span style={{ fontSize: 18 }}>🔔</span>
+                  {unreadCount > 0 && (
+                    <span style={{
+                      position: "absolute", top: 2, right: 2, background: "#ef4444", color: "white",
+                      fontSize: 9, fontWeight: 800, borderRadius: "50%", width: 16, height: 16,
+                      display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1,
+                    }}>{unreadCount > 9 ? "9+" : unreadCount}</span>
+                  )}
+                </button>
+                {showNotifications && (
+                  <div className="studyhub-notif-dropdown" style={S.notifDropdown}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderBottom: "1px solid #ede5da" }}>
+                      <span style={{ fontWeight: 800, fontSize: 14, color: "#1B3A4B" }}>🔔 {t.notifications}</span>
+                      {unreadCount > 0 && (
+                        <button onClick={handleMarkAllRead} style={{ background: "none", border: "none", color: "#C8956C", fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>{t.markAllRead}</button>
+                      )}
+                    </div>
+                    <div style={{ maxHeight: 320, overflowY: "auto" }}>
+                      {notificationsList.length === 0 ? (
+                        <div style={{ padding: "24px 16px", textAlign: "center", color: "#888", fontSize: 13 }}>
+                          <span style={{ fontSize: 32, display: "block", marginBottom: 8 }}>🔕</span>
+                          {t.noNotifications}
+                        </div>
+                      ) : notificationsList.map((n) => (
+                        <div key={n.id} style={{ ...S.notifItem, ...(n.read ? {} : S.notifItemUnread) }}>
+                          <div style={{ fontSize: 13, fontWeight: n.read ? 500 : 700, color: "#1B3A4B" }}>{n.title}</div>
+                          <div style={{ fontSize: 12, color: "#888", marginTop: 2 }}>{n.message}</div>
+                          <div style={{ fontSize: 10, color: "#bbb", marginTop: 4 }}>{new Date(n.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Dark Mode Toggle */}
             <button
               onClick={() => toggleDarkMode()}
@@ -2138,6 +2778,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     >
                       <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                       {t.myMaterials}
+                    </button>
+                    <button
+                      onClick={() => { navigate("collections"); setIsUserDropdownOpen(false); }}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 w-full transition-colors"
+                    >
+                      <span className="w-4 h-4 text-gray-400 text-center">📁</span>
+                      {t.collections}
                     </button>
                     <div className="border-t border-gray-100 dark:border-gray-800" />
                     <button
@@ -2302,7 +2949,25 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>📋 {t.myMaterials}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && (
+          {view === "requests" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📋 {t.requests}</span>
+            </>
+          )}
+          {view === "groups" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>👥 {t.studyGroups}</span>
+            </>
+          )}
+          {view === "collections" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📁 {t.collections}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -2376,6 +3041,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >⬆️ {t.upload}</button>
+                <button style={S.heroQuickPill} onClick={() => navigate("requests")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >📋 {t.requests}</button>
+                <button style={S.heroQuickPill} onClick={() => navigate("groups")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >👥 {t.studyGroups}</button>
               </div>
 
               {/* Inline Platform Stats */}
@@ -2401,7 +3074,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             </div>
 
-            {/* ══════ 2. HOW IT WORKS — moved up for new user onboarding ══════ */}
+            {/* ══════ 2. HOW IT WORKS — modern connected steps ══════ */}
             <div className="studyhub-section studyhub-card-section" style={S.howSectionRedesign}>
               <div style={S.sectionHead}>
                 <h3 style={S.sectionHeadTitle}>📖 {t.howItWorks}</h3>
@@ -2412,19 +3085,26 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
               <div className="studyhub-how-grid" style={S.howGrid}>
                 {[
-                  { step: "1", icon: "🌍", title: t.step1Title, desc: t.step1Desc },
-                  { step: "2", icon: "🏛️", title: t.step2Title, desc: t.step2Desc },
-                  { step: "3", icon: "🎓", title: t.step3Title, desc: t.step3Desc },
-                  { step: "4", icon: "📚", title: t.step4Title, desc: t.step4Desc },
-                ].map((h) => (
-                  <div key={h.step} style={S.howCardRedesign}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 25px rgba(0,0,0,0.08)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                  { step: "1", icon: "🌍", title: t.step1Title, desc: t.step1Desc, color: "#3B82F6" },
+                  { step: "2", icon: "🏛️", title: t.step2Title, desc: t.step2Desc, color: "#8B5CF6" },
+                  { step: "3", icon: "🎓", title: t.step3Title, desc: t.step3Desc, color: "#F59E0B" },
+                  { step: "4", icon: "📚", title: t.step4Title, desc: t.step4Desc, color: "#10B981" },
+                ].map((h, idx) => (
+                  <div key={h.step} className="studyhub-how-card" style={S.howCardRedesign}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.1)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.04)"; }}
                   >
-                    <div style={{ ...S.howStep, ...(isRTL ? { left: "auto", right: 16 } : {}) }}>{h.step}</div>
-                    <span style={{ fontSize: 36, display: "block", marginBottom: 4 }}>{h.icon}</span>
-                    <h4 style={{ margin: "8px 0 6px", color: "#1B3A4B", fontWeight: 800, fontSize: 16 }}>{h.title}</h4>
-                    <p style={{ margin: 0, fontSize: 13, color: "#777", lineHeight: 1.5 }}>{h.desc}</p>
+                    {/* Connector line between cards */}
+                    {idx < 3 && <div className="studyhub-how-connector" style={{ position: "absolute", top: 40, [isRTL ? "left" : "right"]: -24, width: 32, height: 2, background: "linear-gradient(90deg, #C8956C 40%, transparent)", zIndex: 1, display: "none" }} />}
+                    {/* Step number badge */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                      <div style={{ width: 48, height: 48, borderRadius: 16, background: `linear-gradient(135deg, ${h.color}15, ${h.color}25)`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                        <span style={{ fontSize: 28, lineHeight: 1 }}>{h.icon}</span>
+                        <div style={{ position: "absolute", top: -6, [isRTL ? "left" : "right"]: -6, width: 22, height: 22, borderRadius: "50%", background: `linear-gradient(135deg, ${h.color}, ${h.color}CC)`, color: "white", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 2px 8px ${h.color}40` }}>{h.step}</div>
+                      </div>
+                    </div>
+                    <h4 style={{ margin: "0 0 8px", color: "#1B3A4B", fontWeight: 800, fontSize: 15, lineHeight: 1.4 }}>{h.title}</h4>
+                    <p style={{ margin: 0, fontSize: 13, color: "#8896A6", lineHeight: 1.6, maxWidth: 200, marginInline: "auto" }}>{h.desc}</p>
                   </div>
                 ))}
               </div>
@@ -2576,6 +3256,55 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     </button>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* ══════ 6. TOP CONTRIBUTORS — Leaderboard teaser ══════ */}
+            {leaderboardData.length > 0 && (
+              <div className="studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
+                <div style={S.sectionHead}>
+                  <h3 style={S.sectionHeadTitle}>🏆 {t.topContributors}</h3>
+                  <div style={S.sectionDivider} />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {leaderboardData.slice(0, 5).map((user, idx) => (
+                    <div key={user.id} style={{ ...S.leaderRow, ...(idx === 0 ? S.leaderRowFirst : {}) }}>
+                      <span style={S.leaderRank}>{idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`}</span>
+                      {user.image ? (
+                        <img src={user.image} alt="" style={S.leaderAvatar} referrerPolicy="no-referrer" />
+                      ) : (
+                        <div style={{ ...S.leaderAvatar, background: "#C8956C", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800 }}>
+                          {(user.name || "U").charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <span style={{ flex: 1, fontWeight: 700, fontSize: 14, color: "#1B3A4B" }}>{user.name || "Anonymous"}</span>
+                      <span style={S.leaderPoints}>{user.points} {t.points}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ══════ 7. OPEN REQUESTS — teaser ══════ */}
+            {requestsList.length > 0 && (
+              <div className="studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
+                <div style={{ ...S.sectionHead, marginBottom: 16 }}>
+                  <h3 style={S.sectionHeadTitle}>📋 {t.openRequests}</h3>
+                  <div style={S.sectionDivider} />
+                </div>
+                {requestsList.slice(0, 3).map((req) => (
+                  <div key={req.id} style={{ padding: "12px 16px", borderBottom: "1px solid #ede5da", display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{ fontSize: 20 }}>📌</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: "#1B3A4B" }}>{req.title}</div>
+                      {req.subject && <div style={{ fontSize: 12, color: "#888" }}>📖 {req.subject}</div>}
+                    </div>
+                    <span style={{ fontSize: 11, color: "#aaa" }}>{new Date(req.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
+                  </div>
+                ))}
+                <div style={{ textAlign: "center", marginTop: 16 }}>
+                  <button style={S.viewAllBtn} onClick={() => navigate("requests")}>{t.requests} →</button>
+                </div>
               </div>
             )}
           </div>
@@ -2815,7 +3544,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             </div>
 
             {/* Type filter tabs */}
-            <div className="studyhub-filter-row" style={{ ...S.filterRow, marginBottom: 20 }}>
+            <div className="studyhub-filter-row" style={{ ...S.filterRow, marginBottom: 12 }}>
               <button
                 onClick={() => { setBrowseMatType("all"); setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, "all"); }}
                 style={{ ...S.filterBtn, ...(browseMatType === "all" ? S.filterActive : {}) }}
@@ -2828,6 +3557,58 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 >{ft.icon} {fileTypeLabel(ft)}</button>
               ))}
             </div>
+
+            {/* Sort row */}
+            <div className="studyhub-sort-row" style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#888" }}>{t.sortBy}:</span>
+              {[
+                { id: "newest", label: t.newest },
+                { id: "downloads", label: t.mostDownloaded },
+                { id: "rating", label: t.highestRated },
+              ].map((s) => (
+                <button key={s.id}
+                  onClick={() => { setSortOrder(s.id); setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, browseMatType); }}
+                  style={{ ...S.filterBtn, fontSize: 11, padding: "5px 12px", ...(sortOrder === s.id ? S.filterActive : {}) }}
+                >{s.label}</button>
+              ))}
+              <button
+                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                style={{ ...S.filterBtn, fontSize: 11, padding: "5px 12px", marginLeft: "auto" }}
+              >🔧 {t.advancedFilters}</button>
+            </div>
+
+            {/* Advanced filters panel */}
+            {showAdvancedFilters && (
+              <div className="studyhub-advanced-filters" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 16, padding: "14px 16px", background: "#FAF6F1", borderRadius: 14, border: "1px solid #ede5da" }}>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "#888", display: "block", marginBottom: 4 }}>{t.filterByRating}</label>
+                  <select value={advancedFilters.minRating} onChange={(e) => setAdvancedFilters({ ...advancedFilters, minRating: e.target.value })} style={{ ...S.input, padding: "8px 10px", fontSize: 12 }}>
+                    <option value="">-</option>
+                    <option value="3">3+ ⭐</option>
+                    <option value="4">4+ ⭐</option>
+                    <option value="4.5">4.5+ ⭐</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "#888", display: "block", marginBottom: 4 }}>{t.filterByFaculty}</label>
+                  <select value={advancedFilters.facultyId} onChange={(e) => setAdvancedFilters({ ...advancedFilters, facultyId: e.target.value })} style={{ ...S.input, padding: "8px 10px", fontSize: 12 }}>
+                    <option value="">-</option>
+                    {FACULTIES.map((fac) => <option key={fac.id} value={fac.id}>{fac.icon} {facultyName(fac)}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "#888", display: "block", marginBottom: 4 }}>{t.filterByRole}</label>
+                  <select value={advancedFilters.uploaderRole} onChange={(e) => setAdvancedFilters({ ...advancedFilters, uploaderRole: e.target.value })} style={{ ...S.input, padding: "8px 10px", fontSize: 12 }}>
+                    <option value="">-</option>
+                    {UPLOADER_ROLES.map((r) => <option key={r.id} value={r.id}>{r.icon} {roleLabel(r)}</option>)}
+                  </select>
+                </div>
+                <div style={{ gridColumn: "1 / -1", display: "flex", gap: 8 }}>
+                  <button onClick={() => { setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, browseMatType); }} style={{ ...S.viewAllBtn, padding: "8px 20px", fontSize: 12 }}>🔍 {t.search}</button>
+                  <button onClick={() => { setAdvancedFilters({ minRating: "", facultyId: "", uploaderRole: "" }); setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, browseMatType); }} style={{ ...S.cancelBtn, fontSize: 12, padding: "8px 16px" }}>{t.clearFilters}</button>
+                </div>
+              </div>
+            )}
 
             {/* Results count */}
             {browseMatTotal > 0 && (
@@ -2898,6 +3679,20 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               )}
             </div>
 
+            {/* Uploaded / Saved tab switcher */}
+            {isLoggedIn && (
+              <div style={{ ...S.filterRow, marginBottom: 20 }}>
+                <button
+                  onClick={() => setMyMaterialsTab("uploaded")}
+                  style={{ ...S.filterBtn, ...(myMaterialsTab === "uploaded" ? S.filterActive : {}) }}
+                >📤 {t.uploaded} ({myMaterials.length})</button>
+                <button
+                  onClick={() => { setMyMaterialsTab("saved"); fetchSavedMaterialIds(); }}
+                  style={{ ...S.filterBtn, ...(myMaterialsTab === "saved" ? S.filterActive : {}) }}
+                >🔖 {t.saved} ({savedMaterialsList.length})</button>
+              </div>
+            )}
+
             {!isLoggedIn ? (
               <div style={S.empty}>
                 <span style={{ fontSize: 64 }}>🔒</span>
@@ -2909,6 +3704,17 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   {t.signIn}
                 </a>
               </div>
+            ) : myMaterialsTab === "saved" ? (
+              savedMaterialsList.length === 0 ? (
+                <div style={S.myEmptyCard}>
+                  <span style={{ fontSize: 52, display: "block", marginBottom: 12, opacity: 0.5 }}>🔖</span>
+                  <h3 style={{ color: "#1B3A4B", margin: "0 0 8px", fontSize: 18, fontWeight: 800 }}>{t.noSavedMaterials}</h3>
+                </div>
+              ) : (
+                <div className="studyhub-mat-list" style={S.matList}>
+                  {savedMaterialsList.map((mat) => renderMaterialCard(mat, true))}
+                </div>
+              )
             ) : loadingMyMaterials ? (
               <LoadingSpinner text={t.loadingUniversities} />
             ) : myMaterials.length === 0 ? (
@@ -2971,6 +3777,205 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     );
                   });
                 })()}
+              </div>
+            )}
+          </div>
+        )}
+        {/* === REQUESTS VIEW === */}
+        {view === "requests" && (
+          <div>
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, marginBottom: 24 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>📋</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>📋</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.requests}</h2>
+                  <p style={S.myMatBannerSub}>{t.requestDesc}</p>
+                </div>
+              </div>
+            </div>
+            {isLoggedIn && (
+              <button onClick={() => setShowRequestModal(true)} style={{ ...S.uploadBtn, marginBottom: 20, marginLeft: 0 }}>
+                + {t.requestMaterial}
+              </button>
+            )}
+            {requestsLoading ? <LoadingSpinner text="..." /> : requestsList.length === 0 ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 48 }}>📭</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noRequests}</h3>
+              </div>
+            ) : (
+              <div style={S.matList}>
+                {requestsList.map((req) => (
+                  <div key={req.id} style={{ ...S.matCard, borderLeft: "4px solid #f59e0b" }}>
+                    <div style={{ ...S.matIcon, background: "#f59e0b15", color: "#f59e0b" }}>📌</div>
+                    <div style={S.matInfo}>
+                      <h4 style={S.matTitle}>{req.title}</h4>
+                      {req.subject && <p style={S.matSubject}>📖 {req.subject}</p>}
+                      {req.description && <p style={S.matDesc}>{req.description}</p>}
+                      <div style={S.matMeta}>
+                        <span style={{ ...S.matBadge, background: req.status === "OPEN" ? "#f59e0b" : "#10b981" }}>{req.status}</span>
+                        {req.user && <span style={{ fontSize: 12, color: "#888" }}>👤 {req.user.name}</span>}
+                        <span style={S.matDate}>{new Date(req.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
+                      </div>
+                    </div>
+                    {isLoggedIn && req.status === "OPEN" && req.userId !== currentUserId && (
+                      <button
+                        onClick={async () => {
+                          await fetch(`/api/study-hub/requests/${req.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: "FULFILLED" }) });
+                          showNotif(t.requestFulfilled);
+                          fetchRequests();
+                        }}
+                        style={{ ...S.viewAllBtn, padding: "8px 16px", fontSize: 12 }}
+                      >{t.fulfillRequest}</button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* === STUDY GROUPS VIEW === */}
+        {view === "groups" && (
+          <div>
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, marginBottom: 24 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>👥</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>👥</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.studyGroups}</h2>
+                  <p style={S.myMatBannerSub}>{isRTL ? "انضم إلى مجموعات الدراسة أو أنشئ مجموعتك" : "Join study groups or create your own"}</p>
+                </div>
+              </div>
+            </div>
+            {isLoggedIn && (
+              <button onClick={() => setShowGroupModal(true)} style={{ ...S.uploadBtn, marginBottom: 20, marginLeft: 0 }}>
+                + {t.createGroup}
+              </button>
+            )}
+            {groupsLoading ? <LoadingSpinner text="..." /> : groupsList.length === 0 ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 48 }}>👥</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noGroups}</h3>
+              </div>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+                {groupsList.map((group) => {
+                  const platformIcons = { whatsapp: "💬", telegram: "📱", discord: "🎮" };
+                  return (
+                    <div key={group.id} style={{ ...S.recentCard, borderTop: "3px solid #C8956C" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 28 }}>{platformIcons[group.platform] || "💬"}</span>
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: 0 }}>{group.name}</h4>
+                          {group.description && <p style={{ fontSize: 12, color: "#888", margin: "4px 0 0" }}>{group.description}</p>}
+                        </div>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#888" }}>
+                        <span>{platformIcons[group.platform]} {group.platform}</span>
+                        <span>👤 {group.memberCount} {t.members}</span>
+                        {group.creator && <span>by {group.creator.name}</span>}
+                      </div>
+                      <a href={group.chatLink} target="_blank" rel="noopener noreferrer" style={{ ...S.dlBtn, textAlign: "center", display: "block", fontSize: 13 }}>
+                        {t.joinGroup} →
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* === COLLECTIONS VIEW === */}
+        {view === "collections" && (
+          <div>
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, marginBottom: 24 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>📁</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>📁</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.collections}</h2>
+                  <p style={S.myMatBannerSub}>{isRTL ? "نظّم موادك في مجموعات" : "Organize your materials into collections"}</p>
+                </div>
+              </div>
+            </div>
+            {isLoggedIn && (
+              <button onClick={() => setShowCollectionModal(true)} style={{ ...S.uploadBtn, marginBottom: 20, marginLeft: 0 }}>
+                + {t.createCollection}
+              </button>
+            )}
+            {!isLoggedIn ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 64 }}>🔒</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.loginToUpload}</h3>
+              </div>
+            ) : myCollections.length === 0 ? (
+              <div style={S.myEmptyCard}>
+                <span style={{ fontSize: 52, display: "block", marginBottom: 12, opacity: 0.5 }}>📁</span>
+                <h3 style={{ color: "#1B3A4B", margin: "0 0 8px", fontSize: 18, fontWeight: 800 }}>{t.noCollections}</h3>
+              </div>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+                {myCollections.map((col) => (
+                  <div key={col.id} style={{ ...S.recentCard, borderTop: "3px solid #1B3A4B", cursor: "pointer", position: "relative" }}
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(`/api/study-hub/collections/${col.id}`);
+                        if (res.ok) {
+                          const data = await res.json();
+                          setSelectedCollectionView(data);
+                        }
+                      } catch (err) { console.error(err); }
+                    }}
+                  >
+                    {/* Edit / Delete actions */}
+                    <div style={{ position: "absolute", top: 12, [isRTL ? "left" : "right"]: 12, display: "flex", gap: 4, zIndex: 2 }}>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleEditCollection(col); }}
+                        title={t.editCollection}
+                        style={{ width: 32, height: 32, borderRadius: 8, border: "1px solid #e8ddd0", background: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, transition: "all 0.2s" }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "#FEF9F3"; e.currentTarget.style.borderColor = "#C8956C"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "white"; e.currentTarget.style.borderColor = "#e8ddd0"; }}
+                      >✏️</button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setDeleteCollectionConfirm({ id: col.id, name: col.name }); }}
+                        title={t.deleteCollection}
+                        style={{ width: 32, height: 32, borderRadius: 8, border: "1px solid #e8ddd0", background: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, transition: "all 0.2s" }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "#FEF2F2"; e.currentTarget.style.borderColor = "#ef4444"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "white"; e.currentTarget.style.borderColor = "#e8ddd0"; }}
+                      >🗑️</button>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: isRTL ? 0 : 76, paddingLeft: isRTL ? 76 : 0 }}>
+                      <span style={{ fontSize: 28 }}>📁</span>
+                      <div>
+                        <h4 style={{ fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: 0 }}>{col.name}</h4>
+                        {col.description && <p style={{ fontSize: 12, color: "#888", margin: "4px 0 0" }}>{col.description}</p>}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#888" }}>
+                      <span>{col._count?.items || 0} {t.materials}</span>
+                      <span style={{ ...S.matBadge, background: col.isPublic ? "#10b981" : "#6b7280" }}>{col.isPublic ? t.publicCollection : t.privateCollection}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Collection detail view */}
+            {selectedCollectionView && (
+              <div style={{ marginTop: 24 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                  <button onClick={() => setSelectedCollectionView(null)} style={S.cancelBtn}>← {isRTL ? "رجوع" : "Back"}</button>
+                  <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: "#1B3A4B" }}>📁 {selectedCollectionView.collection?.name}</h3>
+                </div>
+                {selectedCollectionView.materials?.length > 0 ? (
+                  <div style={S.matList}>
+                    {selectedCollectionView.materials.map((mat) => renderMaterialCard(mat, true))}
+                  </div>
+                ) : (
+                  <div style={S.empty}><span style={{ fontSize: 48 }}>📭</span><p>{t.noMaterials}</p></div>
+                )}
               </div>
             )}
           </div>
@@ -3147,6 +4152,22 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         </div>
       )}
 
+      {/* DELETE COLLECTION CONFIRMATION MODAL */}
+      {deleteCollectionConfirm && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => setDeleteCollectionConfirm(null)}>
+          <div className="studyhub-confirm-modal" style={S.confirmModal} onClick={(e) => e.stopPropagation()}>
+            <div style={S.confirmIcon}>🗑️</div>
+            <h3 style={S.confirmTitle}>{t.deleteCollection}</h3>
+            <p style={S.confirmMsg}>{t.deleteCollectionMsg}</p>
+            <p style={{ margin: "8px 0 0", fontSize: 15, fontWeight: 700, color: "#1B3A4B", textAlign: "center" }}>&quot;{deleteCollectionConfirm.name}&quot;</p>
+            <div style={S.confirmActions}>
+              <button onClick={() => setDeleteCollectionConfirm(null)} style={S.cancelBtn}>{t.cancel}</button>
+              <button onClick={handleDeleteCollection} style={S.confirmDeleteBtn}>{t.yesDelete}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* DUPLICATE WARNING MODAL */}
       {duplicateWarning && (
         <div style={S.overlay} onClick={handleDuplicateCancel}>
@@ -3171,6 +4192,157 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             <div className="studyhub-dup-actions" style={S.confirmActions}>
               <button onClick={handleDuplicateCancel} style={S.cancelBtn}>{t.cancel}</button>
               <button onClick={handleDuplicateConfirm} style={S.duplicateConfirmBtn}>{t.uploadAnyway}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* REVIEW MODAL */}
+      {showReviewModal && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowReviewModal(null); setReviewForm({ rating: 0, comment: "" }); }}>
+          <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 460 }} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={S.modalHead}>
+              <h3 style={S.modalTitle}>⭐ {t.writeReview}</h3>
+              <button onClick={() => { setShowReviewModal(null); setReviewForm({ rating: 0, comment: "" }); }} style={S.modalX}>✕</button>
+            </div>
+            <div style={S.modalBody}>
+              <label style={{ ...S.label, marginTop: 0 }}>{t.yourRating}</label>
+              <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button key={star} onClick={() => setReviewForm({ ...reviewForm, rating: star })}
+                    style={{ ...S.starBtn, ...(reviewForm.rating >= star ? S.starActive : S.starInactive) }}
+                  >⭐</button>
+                ))}
+              </div>
+              <label style={S.label}>{t.addComment}</label>
+              <textarea
+                value={reviewForm.comment}
+                onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                style={{ ...S.input, height: 80, resize: "vertical" }}
+                placeholder={t.addComment}
+              />
+              <button onClick={handleSubmitReview} style={S.submitBtn} disabled={reviewForm.rating === 0}>
+                {t.submitReview}
+              </button>
+              {/* Existing reviews */}
+              {materialReviews[showReviewModal] && (
+                <div style={{ marginTop: 20 }}>
+                  <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: "#1B3A4B" }}>{t.reviewsLabel} ({materialReviews[showReviewModal].reviewCount})</h4>
+                  {materialReviews[showReviewModal].reviews?.length > 0 ? (
+                    materialReviews[showReviewModal].reviews.map((rev) => (
+                      <div key={rev.id} style={{ padding: "10px 0", borderBottom: "1px solid #ede5da" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                          {rev.user?.image ? <img src={rev.user.image} alt="" style={{ width: 24, height: 24, borderRadius: "50%" }} referrerPolicy="no-referrer" /> : <span>👤</span>}
+                          <span style={{ fontWeight: 700, fontSize: 13, color: "#1B3A4B" }}>{rev.user?.name || "Anonymous"}</span>
+                          <span style={{ fontSize: 12, color: "#C8956C" }}>{"⭐".repeat(rev.rating)}</span>
+                        </div>
+                        {rev.comment && <p style={{ fontSize: 13, color: "#666", margin: "4px 0 0" }}>{rev.comment}</p>}
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{ fontSize: 13, color: "#888" }}>{t.noReviews}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PREVIEW MODAL */}
+      {previewMaterial && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => setPreviewMaterial(null)}>
+          <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 720 }} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={S.modalHead}>
+              <h3 style={S.modalTitle}>👁 {t.preview}: {previewMaterial.title}</h3>
+              <button onClick={() => setPreviewMaterial(null)} style={S.modalX}>✕</button>
+            </div>
+            <div style={{ ...S.modalBody, padding: 0 }}>
+              {(() => {
+                const pv = getPreviewUrl(previewMaterial.url);
+                if (!pv) return <div style={{ padding: 40, textAlign: "center", color: "#888" }}>{t.cannotPreview}</div>;
+                return <iframe className="studyhub-preview-frame" src={pv.embedUrl} style={S.previewFrame} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="Preview" />;
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* REQUEST MODAL */}
+      {showRequestModal && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => setShowRequestModal(false)}>
+          <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 460 }} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={S.modalHead}>
+              <h3 style={S.modalTitle}>📋 {t.requestMaterial}</h3>
+              <button onClick={() => setShowRequestModal(false)} style={S.modalX}>✕</button>
+            </div>
+            <div style={S.modalBody}>
+              <label style={{ ...S.label, marginTop: 0 }}>{t.requestTitle} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="text" value={requestForm.title} onChange={(e) => setRequestForm({ ...requestForm, title: e.target.value })} style={S.input} placeholder={t.requestTitle} />
+              <label style={S.label}>{t.subjectCourse}</label>
+              <input type="text" value={requestForm.subject} onChange={(e) => setRequestForm({ ...requestForm, subject: e.target.value })} style={S.input} placeholder={t.subjectPlaceholder} />
+              <label style={S.label}>{t.description}</label>
+              <textarea value={requestForm.description} onChange={(e) => setRequestForm({ ...requestForm, description: e.target.value })} style={{ ...S.input, height: 80, resize: "vertical" }} placeholder={t.requestDesc} />
+              <button onClick={handleSubmitRequest} style={S.submitBtn}>{t.submitRequest}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* GROUP CREATION MODAL */}
+      {showGroupModal && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => setShowGroupModal(false)}>
+          <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 460 }} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={S.modalHead}>
+              <h3 style={S.modalTitle}>👥 {t.createGroup}</h3>
+              <button onClick={() => setShowGroupModal(false)} style={S.modalX}>✕</button>
+            </div>
+            <div style={S.modalBody}>
+              <label style={{ ...S.label, marginTop: 0 }}>{t.groupName} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="text" value={groupForm.name} onChange={(e) => setGroupForm({ ...groupForm, name: e.target.value })} style={S.input} placeholder={t.groupName} />
+              <label style={S.label}>{t.groupDesc}</label>
+              <textarea value={groupForm.description} onChange={(e) => setGroupForm({ ...groupForm, description: e.target.value })} style={{ ...S.input, height: 60, resize: "vertical" }} placeholder={t.groupDesc} />
+              <label style={S.label}>{t.chatPlatform} <span style={{ color: "#C8956C" }}>*</span></label>
+              <div style={S.typeSelector}>
+                {[
+                  { id: "whatsapp", icon: "💬", label: "WhatsApp" },
+                  { id: "telegram", icon: "📱", label: "Telegram" },
+                  { id: "discord", icon: "🎮", label: "Discord" },
+                ].map((p) => (
+                  <button key={p.id} onClick={() => setGroupForm({ ...groupForm, platform: p.id })}
+                    style={{ ...S.typeOpt, borderColor: groupForm.platform === p.id ? "#C8956C" : "#e8ddd0", background: groupForm.platform === p.id ? "#C8956C15" : "white" }}
+                  >
+                    <span style={{ fontSize: 24 }}>{p.icon}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: groupForm.platform === p.id ? "#C8956C" : "#666" }}>{p.label}</span>
+                  </button>
+                ))}
+              </div>
+              <label style={S.label}>{t.chatLink} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="url" value={groupForm.chatLink} onChange={(e) => setGroupForm({ ...groupForm, chatLink: e.target.value })} style={S.input} placeholder="https://..." />
+              <button onClick={handleSubmitGroup} style={S.submitBtn}>{t.createGroup}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* COLLECTION CREATION MODAL */}
+      {showCollectionModal && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowCollectionModal(false); setEditingCollection(null); setCollectionForm({ name: "", description: "", isPublic: false }); }}>
+          <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 420 }} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={S.modalHead}>
+              <h3 style={S.modalTitle}>📁 {editingCollection ? t.editCollection : t.createCollection}</h3>
+              <button onClick={() => { setShowCollectionModal(false); setEditingCollection(null); setCollectionForm({ name: "", description: "", isPublic: false }); }} style={S.modalX}>✕</button>
+            </div>
+            <div style={S.modalBody}>
+              <label style={{ ...S.label, marginTop: 0 }}>{t.collectionName} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="text" value={collectionForm.name} onChange={(e) => setCollectionForm({ ...collectionForm, name: e.target.value })} style={S.input} placeholder={t.collectionName} />
+              <label style={S.label}>{t.description}</label>
+              <textarea value={collectionForm.description} onChange={(e) => setCollectionForm({ ...collectionForm, description: e.target.value })} style={{ ...S.input, height: 60, resize: "vertical" }} placeholder={t.descPlaceholder} />
+              <label style={{ ...S.label, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                <input type="checkbox" checked={collectionForm.isPublic} onChange={(e) => setCollectionForm({ ...collectionForm, isPublic: e.target.checked })} />
+                {t.publicCollection}
+              </label>
+              <button onClick={editingCollection ? handleUpdateCollection : handleCreateCollection} style={S.submitBtn}>{editingCollection ? t.saveChanges : t.createCollection}</button>
             </div>
           </div>
         </div>
@@ -3228,7 +4400,7 @@ const S = {
   countryInfo: { fontSize: 12, color: "#888", margin: 0 },
   countryMats: { fontSize: 11, color: "#C8956C", fontWeight: 700, marginTop: 6, display: "inline-block", background: "#C8956C15", padding: "2px 10px", borderRadius: 20 },
   howSection: { background: "white", borderRadius: 24, padding: "32px 24px", border: "1px solid #ede5da", marginBottom: 44, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
-  howGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 },
+  howGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 },
   howCard: { background: "#FAF6F1", borderRadius: 16, padding: "24px 20px", textAlign: "center", position: "relative" },
   howStep: { position: "absolute", top: 12, left: 16, background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", width: 34, height: 34, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 15, boxShadow: "0 3px 10px rgba(200,149,108,0.3)" },
   viewHeader: { display: "flex", alignItems: "center", gap: 16, marginBottom: 28, flexWrap: "wrap" },
@@ -3347,9 +4519,25 @@ const S = {
   heroInlineStat: { display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "0 clamp(14px, 3vw, 28px)" },
   heroInlineStatNum: { fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 900, color: "#F5E6D3", lineHeight: 1.1 },
   heroInlineStatLabel: { fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.8px" },
-  howSectionRedesign: { background: "white", borderRadius: 24, padding: "44px clamp(16px, 3vw, 32px)", border: "1px solid #ede5da", marginBottom: 48, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
-  howCardRedesign: { background: "#FAF6F1", borderRadius: 20, padding: "28px 22px", textAlign: "center", position: "relative", border: "1px solid #ede5da", transition: "all 0.3s ease" },
+  howSectionRedesign: { background: "linear-gradient(180deg, #FDFBF9 0%, #F9F5F0 100%)", borderRadius: 24, padding: "48px clamp(20px, 3vw, 40px)", border: "1px solid #ede5da", marginBottom: 48, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
+  howCardRedesign: { background: "white", borderRadius: 20, padding: "32px 20px 28px", textAlign: "center", position: "relative", border: "1px solid #f0ebe4", transition: "all 0.35s cubic-bezier(0.4,0,0.2,1)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)", cursor: "default" },
   countrySectionWrap: { marginBottom: 48 },
   countrySearchRow: { display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 },
   countrySearchInner: { display: "flex", alignItems: "center", maxWidth: 420, width: "100%", background: "white", borderRadius: 50, padding: "6px 8px 6px 20px", border: "2px solid #e8ddd0", transition: "border-color 0.2s, box-shadow 0.2s" },
+  // === NEW FEATURE STYLES ===
+  notifDropdown: { position: "absolute", top: "calc(100% + 8px)", right: 0, width: 340, background: "white", borderRadius: 16, boxShadow: "0 12px 40px rgba(0,0,0,0.15)", border: "1px solid #ede5da", zIndex: 100, overflow: "hidden" },
+  notifItem: { padding: "12px 16px", borderBottom: "1px solid #f5f0eb", transition: "background 0.15s", cursor: "default" },
+  notifItemUnread: { background: "#FEF9F3", borderLeft: "3px solid #C8956C" },
+  starBtn: { width: 40, height: 40, borderRadius: 10, border: "2px solid #e8ddd0", cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", background: "white", fontFamily: "inherit" },
+  starActive: { background: "#FEF3C7", borderColor: "#F59E0B", transform: "scale(1.1)" },
+  starInactive: { opacity: 0.4 },
+  bookmarkBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
+  bookmarkActive: { background: "#FEF3C7", borderColor: "#F59E0B" },
+  leaderRow: { display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 12, background: "#FAF6F1", transition: "background 0.15s" },
+  leaderRowFirst: { background: "linear-gradient(135deg, #FEF3C7, #FDE68A)", border: "1px solid #F59E0B40" },
+  leaderRank: { fontWeight: 900, fontSize: 18, width: 32, textAlign: "center", flexShrink: 0 },
+  leaderAvatar: { width: 36, height: 36, borderRadius: "50%", objectFit: "cover", flexShrink: 0 },
+  leaderPoints: { fontSize: 13, fontWeight: 800, color: "#C8956C", whiteSpace: "nowrap" },
+  counterBadge: { fontSize: 11, color: "#888", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 3 },
+  previewFrame: { width: "100%", height: 420, border: "none", borderRadius: "0 0 24px 24px" },
 };

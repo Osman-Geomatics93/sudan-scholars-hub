@@ -1,9 +1,16 @@
 import OpenAI from 'openai';
+import { getGroqApiKey } from './env';
 
-const client = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY || '',
-  baseURL: 'https://api.groq.com/openai/v1',
-});
+let client: OpenAI | null = null;
+function getClient(): OpenAI {
+  if (!client) {
+    client = new OpenAI({
+      apiKey: getGroqApiKey(),
+      baseURL: 'https://api.groq.com/openai/v1',
+    });
+  }
+  return client;
+}
 
 const SYSTEM_PROMPT = `You are a helpful scholarship assistant for Sudan Scholars Hub - a website that helps Sudanese students find and apply for international scholarships.
 
@@ -41,15 +48,11 @@ Remember: You're helping students achieve their dreams of studying abroad!`;
 
 export async function generateChatResponse(message: string, locale: string = 'en'): Promise<string> {
   try {
-    if (!process.env.GROQ_API_KEY) {
-      throw new Error('Groq API key not configured');
-    }
-
     const languageInstruction = locale === 'ar'
       ? 'The user is writing in Arabic. Please respond in Arabic.'
       : 'The user is writing in English. Please respond in English.';
 
-    const completion = await client.chat.completions.create({
+    const completion = await getClient().chat.completions.create({
       model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: `${SYSTEM_PROMPT}\n\n${languageInstruction}` },

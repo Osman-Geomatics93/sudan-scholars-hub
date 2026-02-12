@@ -46,11 +46,21 @@ model User {
   socialLinks    Json?     // { twitter?: string, linkedin?: string, facebook?: string, website?: string }
   profileImage   String?   // Custom uploaded profile picture (overrides Google image)
 
+  // Study Hub gamification
+  points         Int       @default(0)
+  badge          String?
+
   accounts          Account[]
   savedScholarships SavedScholarship[]
   matcherProfile    MatcherProfile?
   resumes           Resume[]
   studyMaterials    StudyMaterial[]
+  savedMaterials    SavedMaterial[]
+  materialReviews   MaterialReview[]
+  notifications     Notification[]
+  materialRequests  MaterialRequest[]
+  studyGroups       StudyGroup[]
+  collections       MaterialCollection[]
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -686,14 +696,163 @@ model StudyMaterial {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 
+  // Counters & ratings
+  viewCount      Int            @default(0)
+  downloadCount  Int            @default(0)
+  averageRating  Float          @default(0)
+  reviewCount    Int            @default(0)
+
   // User ownership (nullable for existing records)
   userId         String?
   userEmail      String?
   userName       String?
   user           User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
 
+  savedBy         SavedMaterial[]
+  reviews         MaterialReview[]
+  collectionItems CollectionItem[]
+
   @@index([status])
   @@index([countryId, universityId, degreeId])
   @@index([uploadedAt])
   @@index([userId])
+}
+
+// ============ SAVED MATERIALS (Bookmarks) ============
+model SavedMaterial {
+  id         String   @id @default(cuid())
+  userId     String
+  materialId String
+  savedAt    DateTime @default(now())
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  material StudyMaterial  @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, materialId])
+  @@index([userId])
+  @@index([materialId])
+}
+
+// ============ MATERIAL REVIEWS ============
+model MaterialReview {
+  id         String   @id @default(cuid())
+  userId     String
+  materialId String
+  rating     Int      // 1-5
+  comment    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  material StudyMaterial  @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, materialId])
+  @@index([materialId])
+  @@index([userId])
+}
+
+// ============ NOTIFICATIONS ============
+enum NotificationType {
+  MATERIAL_APPROVED
+  MATERIAL_REJECTED
+  NEW_REVIEW
+  MATERIAL_SAVED
+  REQUEST_FULFILLED
+  POINTS_EARNED
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  relatedId String?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([createdAt])
+}
+
+// ============ MATERIAL REQUESTS ============
+enum RequestStatus {
+  OPEN
+  FULFILLED
+  CLOSED
+}
+
+model MaterialRequest {
+  id           String        @id @default(cuid())
+  userId       String
+  title        String
+  description  String?       @db.Text
+  countryId    String?
+  universityId String?
+  degreeId     String?
+  semester     String?
+  subject      String?
+  status       RequestStatus @default(OPEN)
+  fulfilledBy  String?
+  createdAt    DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ============ STUDY GROUPS ============
+model StudyGroup {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  countryId   String?
+  universityId String?
+  degreeId    String?
+  semester    String?
+  chatLink    String
+  platform    String   // whatsapp, telegram, discord
+  createdBy   String
+  memberCount Int      @default(1)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  creator User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@index([countryId])
+  @@index([universityId])
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+// ============ MATERIAL COLLECTIONS ============
+model MaterialCollection {
+  id          String  @id @default(cuid())
+  userId      String
+  name        String
+  description String? @db.Text
+  isPublic    Boolean @default(false)
+  createdAt   DateTime @default(now())
+
+  user  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CollectionItem[]
+
+  @@index([userId])
+  @@index([isPublic])
+}
+
+model CollectionItem {
+  id           String @id @default(cuid())
+  collectionId String
+  materialId   String
+  order        Int    @default(0)
+
+  collection MaterialCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  material   StudyMaterial      @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, materialId])
+  @@index([collectionId])
 }

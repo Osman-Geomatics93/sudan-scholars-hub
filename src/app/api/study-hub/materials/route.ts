@@ -18,6 +18,13 @@ export async function GET(request: NextRequest) {
     const offset = searchParams.get('offset');
     const search = searchParams.get('search');
     const type = searchParams.get('type');
+    // Advanced search params
+    const orderBy = searchParams.get('orderBy'); // newest, downloads, rating
+    const minRating = searchParams.get('minRating');
+    const facultyId = searchParams.get('facultyId');
+    const uploaderRole = searchParams.get('uploaderRole');
+    const dateFrom = searchParams.get('dateFrom');
+    const dateTo = searchParams.get('dateTo');
 
     const where: Record<string, unknown> = {};
 
@@ -41,6 +48,15 @@ export async function GET(request: NextRequest) {
         { description: { contains: search, mode: 'insensitive' } },
       ];
     }
+    if (facultyId) where.facultyId = facultyId;
+    if (uploaderRole) where.uploaderRole = uploaderRole;
+    if (minRating) where.averageRating = { gte: parseFloat(minRating) };
+    if (dateFrom || dateTo) {
+      where.uploadedAt = {
+        ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
+        ...(dateTo ? { lte: new Date(dateTo) } : {}),
+      };
+    }
 
     // Lightweight mode: return only categorization fields for client-side counting
     const fieldsOnly = searchParams.get('fieldsOnly');
@@ -52,10 +68,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ materials: items, total: items.length });
     }
 
+    // Determine sort order
+    let sortOrder: Record<string, string> = { uploadedAt: 'desc' };
+    if (orderBy === 'downloads') sortOrder = { downloadCount: 'desc' };
+    else if (orderBy === 'rating') sortOrder = { averageRating: 'desc' };
+    else if (orderBy === 'newest') sortOrder = { uploadedAt: 'desc' };
+
     const [materials, total] = await Promise.all([
       prisma.studyMaterial.findMany({
         where,
-        orderBy: { uploadedAt: 'desc' },
+        orderBy: sortOrder,
         ...(limit ? { take: parseInt(limit, 10) } : {}),
         ...(offset ? { skip: parseInt(offset, 10) } : {}),
       }),

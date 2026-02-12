@@ -1,6 +1,13 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { getGeminiApiKey } from './env';
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
+let genAI: GoogleGenerativeAI | null = null;
+function getGenAI(): GoogleGenerativeAI {
+  if (!genAI) {
+    genAI = new GoogleGenerativeAI(getGeminiApiKey());
+  }
+  return genAI;
+}
 
 const SYSTEM_PROMPT = `You are a helpful scholarship assistant for Sudan Scholars Hub - a website that helps Sudanese students find and apply for international scholarships.
 
@@ -38,11 +45,7 @@ Remember: You're helping students achieve their dreams of studying abroad!`;
 
 export async function generateChatResponse(message: string, locale: string = 'en'): Promise<string> {
   try {
-    if (!process.env.GOOGLE_GEMINI_API_KEY) {
-      throw new Error('Gemini API key not configured');
-    }
-
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = getGenAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const languageInstruction = locale === 'ar'
       ? 'The user is writing in Arabic. Please respond in Arabic.'

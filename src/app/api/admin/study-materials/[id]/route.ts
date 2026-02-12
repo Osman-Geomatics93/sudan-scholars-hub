@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth-utils';
 import { sendMaterialReviewNotification } from '@/lib/email';
+import { awardPoints, POINT_VALUES } from '@/lib/points';
+import { createNotification } from '@/lib/notifications';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +31,7 @@ export async function PATCH(
     // Fetch the material first to get uploader info for the notification email
     const existingMaterial = await prisma.studyMaterial.findUnique({
       where: { id },
-      select: { userEmail: true, userName: true, title: true },
+      select: { userEmail: true, userName: true, title: true, userId: true },
     });
 
     const material = await prisma.studyMaterial.update({
@@ -40,6 +42,35 @@ export async function PATCH(
         reviewedAt: new Date(),
       },
     });
+
+    // Award points & create in-app notification on approval/rejection
+    if (existingMaterial?.userId) {
+      if (status === 'APPROVED') {
+        await awardPoints(existingMaterial.userId, POINT_VALUES.UPLOAD_APPROVED);
+        await createNotification({
+          userId: existingMaterial.userId,
+          type: 'MATERIAL_APPROVED',
+          title: 'Material Approved',
+          message: `Your material "${existingMaterial.title}" has been approved and is now visible to everyone!`,
+          relatedId: id,
+        });
+        await createNotification({
+          userId: existingMaterial.userId,
+          type: 'POINTS_EARNED',
+          title: 'Points Earned',
+          message: `You earned ${POINT_VALUES.UPLOAD_APPROVED} points for your approved material!`,
+          relatedId: id,
+        });
+      } else if (status === 'REJECTED') {
+        await createNotification({
+          userId: existingMaterial.userId,
+          type: 'MATERIAL_REJECTED',
+          title: 'Material Rejected',
+          message: `Your material "${existingMaterial.title}" was not approved.${rejectionNote ? ` Reason: ${rejectionNote}` : ''}`,
+          relatedId: id,
+        });
+      }
+    }
 
     // Send notification email to the uploader (best-effort)
     let emailSent = false;

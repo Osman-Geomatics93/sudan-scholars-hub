@@ -3,13 +3,14 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
+import { getGoogleClientId, getGoogleClientSecret } from './env';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     // Google OAuth for regular users
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: getGoogleClientId(),
+      clientSecret: getGoogleClientSecret(),
       authorization: {
         params: {
           prompt: 'consent',
@@ -74,6 +75,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // For Google OAuth, create or update user in database
       if (account?.provider === 'google' && profile?.email) {
         try {
+          const googleProfile = profile as typeof profile & { picture?: string };
           const existingUser = await prisma.user.findUnique({
             where: { email: profile.email },
           });
@@ -84,7 +86,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               data: {
                 email: profile.email,
                 name: profile.name || null,
-                image: (profile as any).picture || null,
+                image: googleProfile.picture || null,
                 emailVerified: new Date(),
               },
             });
@@ -95,7 +97,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               where: { email: profile.email },
               data: {
                 name: profile.name || existingUser.name,
-                image: (profile as any).picture || existingUser.image,
+                image: googleProfile.picture || existingUser.image,
               },
             });
             user.id = existingUser.id;
@@ -111,8 +113,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         // Check if this is an admin login (credentials provider)
-        if ((user as any).isAdmin) {
-          token.role = (user as any).role;
+        if (user.isAdmin) {
+          token.role = user.role;
           token.isAdmin = true;
         } else {
           // Regular user via Google OAuth
@@ -121,15 +123,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       // Store Google profile data
       if (account?.provider === 'google' && profile) {
-        token.picture = (profile as any).picture;
+        token.picture = (profile as typeof profile & { picture?: string }).picture;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
-        (session.user as any).id = token.id as string;
-        (session.user as any).role = token.role as string;
-        (session.user as any).isAdmin = token.isAdmin as boolean;
+        session.user.id = token.id as string;
+        session.user.role = token.role as string | undefined;
+        session.user.isAdmin = token.isAdmin as boolean | undefined;
         if (token.picture) {
           session.user.image = token.picture as string;
         }

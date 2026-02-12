@@ -15,7 +15,7 @@ const adminProtectedPaths = ['/admin'];
 const publicAdminPaths = ['/admin/login'];
 
 // Paths that require user authentication
-const userProtectedPaths = ['/profile'];
+const userProtectedPaths = ['/profile', '/cv-builder', '/matcher', '/loi-builder'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

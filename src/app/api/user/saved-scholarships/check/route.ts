@@ -10,11 +10,11 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session?.user?.id || (session.user as any).isAdmin) {
+    if (!session?.user?.id || session.user.isAdmin) {
       return NextResponse.json({ isSaved: false, savedScholarship: null });
     }
 
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
     const scholarshipId = request.nextUrl.searchParams.get('scholarshipId');
 
     if (!scholarshipId) {

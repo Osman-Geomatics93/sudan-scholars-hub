@@ -8,12 +8,19 @@ import OpenAI from 'openai';
 import type { MatcherProfile, ScholarshipMatch, PreliminaryMatch, MatchLevel } from './types';
 import { getMatchLevel } from './types';
 import { buildMatcherPrompt, parseAIResponse, generateFallbackExplanation } from './prompts';
+import { getGroqApiKey } from '../env';
 
-// Initialize Groq client
-const groqClient = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY || '',
-  baseURL: 'https://api.groq.com/openai/v1',
-});
+// Lazy-initialized Groq client
+let groqClient: OpenAI | null = null;
+function getGroqClient(): OpenAI {
+  if (!groqClient) {
+    groqClient = new OpenAI({
+      apiKey: getGroqApiKey(),
+      baseURL: 'https://api.groq.com/openai/v1',
+    });
+  }
+  return groqClient;
+}
 
 /**
  * Generate AI explanations for scholarship matches
@@ -59,7 +66,7 @@ async function callAIForExplanations(
   const prompt = buildMatcherPrompt(matches, profile, locale);
 
   try {
-    const completion = await groqClient.chat.completions.create({
+    const completion = await getGroqClient().chat.completions.create({
       model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'user', content: prompt }

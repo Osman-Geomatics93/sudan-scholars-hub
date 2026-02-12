@@ -1,6 +1,13 @@
 import { Resend } from 'resend';
+import { getResendApiKey } from './env';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend: Resend | null = null;
+function getResend(): Resend {
+  if (!resend) {
+    resend = new Resend(getResendApiKey());
+  }
+  return resend;
+}
 
 /**
  * Escape HTML special characters to prevent XSS in emails
@@ -35,7 +42,7 @@ export async function sendContactNotification({
   const safeSubject = escapeHtml(subject);
   const safeMessage = escapeHtml(message);
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: adminEmail,
     subject: `New Contact: ${safeSubject}`,
@@ -64,7 +71,7 @@ export async function sendContactNotification({
 export async function sendWelcomeEmail({ email }: { email: string }) {
   const unsubscribeUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: email,
     subject: 'Welcome to Sudan Scholars Hub Newsletter! 🎓',
@@ -189,7 +196,7 @@ export async function sendMaterialReviewNotification({
           </div>
     `;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: email,
     subject,
@@ -221,7 +228,7 @@ export async function sendAdminOTP({
   // OTP is generated internally, but escape just in case
   const safeOtpCode = escapeHtml(otpCode);
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: email,
     subject: 'Admin Login Code - Sudan Scholars Hub',
