@@ -83,6 +83,17 @@ const withPWA = require('next-pwa')({
       },
     },
     {
+      urlPattern: /\/api\/study-hub\/universities\?country=[a-z]{2}$/i,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'study-hub-universities',
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        },
+      },
+    },
+    {
       urlPattern: /.*/i,
       handler: 'NetworkFirst',
       options: {

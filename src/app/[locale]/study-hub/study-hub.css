@@ -1,0 +1,14 @@
+/* Hide the main app's fixed navbar */
+.min-h-screen > nav.fixed {
+  display: none !important;
+}
+
+/* Hide the main app's footer */
+.min-h-screen > footer.bg-gray-900 {
+  display: none !important;
+}
+
+/* Remove the flex-1 top padding that accounts for the fixed navbar */
+.min-h-screen > main.flex-1 {
+  padding-top: 0 !important;
+}
