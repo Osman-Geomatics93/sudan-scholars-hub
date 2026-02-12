@@ -18,6 +18,7 @@ import {
   Building2,
   BarChart3,
   Calendar,
+  BookOpen,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -100,6 +101,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Admissions Calendar',
       labelAr: 'تقويم المفاضلات',
       icon: Calendar,
+    },
+    {
+      href: `/${locale}/admin/study-materials`,
+      label: 'Study Materials',
+      labelAr: 'المواد الدراسية',
+      icon: BookOpen,
     },
     {
       href: `/${locale}/admin/analytics`,

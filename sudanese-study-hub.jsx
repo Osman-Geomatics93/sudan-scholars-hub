@@ -1,0 +1,2249 @@
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useTheme } from "next-themes";
+import { COUNTRIES } from "@/lib/constants/countries";
+
+
+const TELEGRAM_LINK = "https://t.me/";
+
+const DEGREE_LEVELS = [
+  { id: "bsc", name: "BSc — Bachelor", icon: "🎓", color: "#2E86C1", arabic: "بكالوريوس", desc: "Undergraduate programs" },
+  { id: "msc", name: "MSc — Master", icon: "📜", color: "#27AE60", arabic: "ماجستير", desc: "Postgraduate programs" },
+  { id: "phd", name: "PhD — Doctorate", icon: "🏅", color: "#8E44AD", arabic: "دكتوراه", desc: "Doctoral research programs" },
+  { id: "other", name: "Other Programs", icon: "📋", color: "#E67E22", arabic: "أخرى", desc: "Diploma, Certificate & more" },
+];
+
+const SEMESTERS_MAP = {
+  bsc: ["Semester 1","Semester 2","Semester 3","Semester 4","Semester 5","Semester 6","Semester 7","Semester 8","Semester 9","Semester 10"],
+  msc: ["Semester 1","Semester 2","Semester 3","Semester 4"],
+  phd: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
+  other: ["Term 1","Term 2","Term 3","Term 4"],
+};
+
+const FILE_TYPES = [
+  { id: "pdf", label: "PDF", icon: "📄", color: "#E74C3C" },
+  { id: "docx", label: "DOCX", icon: "📝", color: "#2E86C1" },
+  { id: "pptx", label: "PPT", icon: "📊", color: "#E67E22" },
+  { id: "video", label: "Video", icon: "🎬", color: "#8E44AD" },
+];
+
+const getTypeInfo = (type) => FILE_TYPES.find((f) => f.id === type) || FILE_TYPES[0];
+
+const UPLOADER_ROLES = [
+  { id: "student", label: "Student", icon: "🎓", color: "#2E86C1" },
+  { id: "teacher", label: "Teacher / Professor", icon: "👨‍🏫", color: "#27AE60" },
+  { id: "ta", label: "Teaching Assistant", icon: "🧑‍🏫", color: "#E67E22" },
+  { id: "other", label: "Other", icon: "👤", color: "#95A5A6" },
+];
+
+const getRoleInfo = (role) => UPLOADER_ROLES.find((r) => r.id === role) || UPLOADER_ROLES[0];
+
+const FACULTIES = [
+  { id: "medicine", name: "Medicine", nameAr: "الطب", icon: "🩺" },
+  { id: "engineering", name: "Engineering", nameAr: "الهندسة", icon: "⚙️" },
+  { id: "pharmacy", name: "Pharmacy", nameAr: "الصيدلة", icon: "💊" },
+  { id: "dentistry", name: "Dentistry", nameAr: "طب الأسنان", icon: "🦷" },
+  { id: "science", name: "Science", nameAr: "العلوم", icon: "🔬" },
+  { id: "cs_it", name: "Computer Science & IT", nameAr: "علوم الحاسوب وتقنية المعلومات", icon: "💻" },
+  { id: "law", name: "Law", nameAr: "القانون", icon: "⚖️" },
+  { id: "business", name: "Business & Commerce", nameAr: "إدارة الأعمال والتجارة", icon: "📈" },
+  { id: "economics", name: "Economics & Political Science", nameAr: "الاقتصاد والعلوم السياسية", icon: "🏛️" },
+  { id: "arts_humanities", name: "Arts & Humanities", nameAr: "الآداب والعلوم الإنسانية", icon: "📚" },
+  { id: "education", name: "Education", nameAr: "التربية", icon: "🎓" },
+  { id: "agriculture", name: "Agriculture", nameAr: "الزراعة", icon: "🌾" },
+  { id: "nursing", name: "Nursing", nameAr: "التمريض", icon: "🏥" },
+  { id: "veterinary", name: "Veterinary Medicine", nameAr: "الطب البيطري", icon: "🐾" },
+  { id: "architecture", name: "Architecture & Planning", nameAr: "العمارة والتخطيط", icon: "🏗️" },
+  { id: "media", name: "Media & Communication", nameAr: "الإعلام والاتصال", icon: "📡" },
+  { id: "islamic_studies", name: "Islamic Studies & Sharia", nameAr: "الدراسات الإسلامية والشريعة", icon: "🕌" },
+  { id: "languages", name: "Languages & Translation", nameAr: "اللغات والترجمة", icon: "🌐" },
+  { id: "psychology", name: "Psychology", nameAr: "علم النفس", icon: "🧠" },
+  { id: "public_health", name: "Public Health", nameAr: "الصحة العامة", icon: "🏥" },
+  { id: "social_sciences", name: "Social Sciences", nameAr: "العلوم الاجتماعية", icon: "👥" },
+  { id: "environmental", name: "Environmental Science", nameAr: "العلوم البيئية", icon: "🌍" },
+  { id: "fine_arts", name: "Fine Arts & Design", nameAr: "الفنون الجميلة والتصميم", icon: "🎨" },
+  { id: "music_performing", name: "Music & Performing Arts", nameAr: "الموسيقى والفنون المسرحية", icon: "🎭" },
+];
+
+const SPECIALTIES_MAP = {
+  medicine: [
+    { id: "general_medicine", name: "General Medicine", nameAr: "الطب العام" },
+    { id: "surgery", name: "Surgery", nameAr: "الجراحة" },
+    { id: "internal_medicine", name: "Internal Medicine", nameAr: "الباطنية" },
+    { id: "pediatrics", name: "Pediatrics", nameAr: "طب الأطفال" },
+    { id: "obstetrics_gynecology", name: "Obstetrics & Gynecology", nameAr: "النساء والتوليد" },
+    { id: "orthopedics", name: "Orthopedics", nameAr: "جراحة العظام" },
+    { id: "dermatology", name: "Dermatology", nameAr: "الأمراض الجلدية" },
+    { id: "ophthalmology", name: "Ophthalmology", nameAr: "طب العيون" },
+    { id: "ent", name: "ENT", nameAr: "الأنف والأذن والحنجرة" },
+    { id: "psychiatry", name: "Psychiatry", nameAr: "الطب النفسي" },
+    { id: "radiology", name: "Radiology", nameAr: "الأشعة" },
+    { id: "anesthesia", name: "Anesthesia", nameAr: "التخدير" },
+    { id: "pathology", name: "Pathology", nameAr: "علم الأمراض" },
+    { id: "anatomy", name: "Anatomy", nameAr: "التشريح" },
+    { id: "physiology", name: "Physiology", nameAr: "علم وظائف الأعضاء" },
+  ],
+  engineering: [
+    { id: "civil", name: "Civil Engineering", nameAr: "الهندسة المدنية" },
+    { id: "mechanical", name: "Mechanical Engineering", nameAr: "الهندسة الميكانيكية" },
+    { id: "electrical", name: "Electrical Engineering", nameAr: "الهندسة الكهربائية" },
+    { id: "electronic", name: "Electronic Engineering", nameAr: "الهندسة الإلكترونية" },
+    { id: "chemical", name: "Chemical Engineering", nameAr: "الهندسة الكيميائية" },
+    { id: "petroleum", name: "Petroleum Engineering", nameAr: "هندسة البترول" },
+    { id: "industrial", name: "Industrial Engineering", nameAr: "الهندسة الصناعية" },
+    { id: "biomedical", name: "Biomedical Engineering", nameAr: "الهندسة الطبية الحيوية" },
+    { id: "environmental_eng", name: "Environmental Engineering", nameAr: "الهندسة البيئية" },
+    { id: "mining", name: "Mining Engineering", nameAr: "هندسة التعدين" },
+    { id: "telecom", name: "Telecommunications Engineering", nameAr: "هندسة الاتصالات" },
+    { id: "surveying", name: "Surveying Engineering", nameAr: "هندسة المساحة" },
+  ],
+  pharmacy: [
+    { id: "clinical_pharmacy", name: "Clinical Pharmacy", nameAr: "الصيدلة السريرية" },
+    { id: "pharmaceutics", name: "Pharmaceutics", nameAr: "الصيدلانيات" },
+    { id: "pharmacology", name: "Pharmacology", nameAr: "علم الأدوية" },
+    { id: "pharmaceutical_chemistry", name: "Pharmaceutical Chemistry", nameAr: "الكيمياء الصيدلية" },
+    { id: "pharmacognosy", name: "Pharmacognosy", nameAr: "العقاقير" },
+    { id: "industrial_pharmacy", name: "Industrial Pharmacy", nameAr: "الصيدلة الصناعية" },
+    { id: "pharmacy_practice", name: "Pharmacy Practice", nameAr: "ممارسة الصيدلة" },
+    { id: "toxicology", name: "Toxicology", nameAr: "علم السموم" },
+  ],
+  dentistry: [
+    { id: "oral_surgery", name: "Oral Surgery", nameAr: "جراحة الفم" },
+    { id: "orthodontics", name: "Orthodontics", nameAr: "تقويم الأسنان" },
+    { id: "periodontics", name: "Periodontics", nameAr: "أمراض اللثة" },
+    { id: "prosthodontics", name: "Prosthodontics", nameAr: "الاستعاضة السنية" },
+    { id: "endodontics", name: "Endodontics", nameAr: "علاج الجذور" },
+    { id: "pediatric_dentistry", name: "Pediatric Dentistry", nameAr: "طب أسنان الأطفال" },
+    { id: "oral_pathology", name: "Oral Pathology", nameAr: "أمراض الفم" },
+    { id: "preventive_dentistry", name: "Preventive Dentistry", nameAr: "طب الأسنان الوقائي" },
+  ],
+  science: [
+    { id: "mathematics", name: "Mathematics", nameAr: "الرياضيات" },
+    { id: "physics", name: "Physics", nameAr: "الفيزياء" },
+    { id: "chemistry", name: "Chemistry", nameAr: "الكيمياء" },
+    { id: "biology", name: "Biology", nameAr: "الأحياء" },
+    { id: "geology", name: "Geology", nameAr: "الجيولوجيا" },
+    { id: "statistics", name: "Statistics", nameAr: "الإحصاء" },
+    { id: "microbiology", name: "Microbiology", nameAr: "الأحياء الدقيقة" },
+    { id: "biochemistry", name: "Biochemistry", nameAr: "الكيمياء الحيوية" },
+    { id: "zoology", name: "Zoology", nameAr: "علم الحيوان" },
+    { id: "botany", name: "Botany", nameAr: "علم النبات" },
+  ],
+  cs_it: [
+    { id: "computer_science", name: "Computer Science", nameAr: "علوم الحاسوب" },
+    { id: "software_engineering", name: "Software Engineering", nameAr: "هندسة البرمجيات" },
+    { id: "information_systems", name: "Information Systems", nameAr: "نظم المعلومات" },
+    { id: "information_technology", name: "Information Technology", nameAr: "تقنية المعلومات" },
+    { id: "ai_ml", name: "AI & Machine Learning", nameAr: "الذكاء الاصطناعي وتعلم الآلة" },
+    { id: "cybersecurity", name: "Cybersecurity", nameAr: "الأمن السيبراني" },
+    { id: "data_science", name: "Data Science", nameAr: "علم البيانات" },
+    { id: "networking", name: "Networking", nameAr: "الشبكات" },
+    { id: "computer_engineering", name: "Computer Engineering", nameAr: "هندسة الحاسوب" },
+  ],
+  law: [
+    { id: "constitutional_law", name: "Constitutional Law", nameAr: "القانون الدستوري" },
+    { id: "criminal_law", name: "Criminal Law", nameAr: "القانون الجنائي" },
+    { id: "civil_law", name: "Civil Law", nameAr: "القانون المدني" },
+    { id: "commercial_law", name: "Commercial Law", nameAr: "القانون التجاري" },
+    { id: "international_law", name: "International Law", nameAr: "القانون الدولي" },
+    { id: "islamic_law", name: "Islamic Law", nameAr: "الفقه الإسلامي" },
+    { id: "administrative_law", name: "Administrative Law", nameAr: "القانون الإداري" },
+    { id: "labor_law", name: "Labor Law", nameAr: "قانون العمل" },
+  ],
+  business: [
+    { id: "accounting", name: "Accounting", nameAr: "المحاسبة" },
+    { id: "finance", name: "Finance", nameAr: "التمويل" },
+    { id: "marketing", name: "Marketing", nameAr: "التسويق" },
+    { id: "management", name: "Management", nameAr: "الإدارة" },
+    { id: "human_resources", name: "Human Resources", nameAr: "الموارد البشرية" },
+    { id: "business_admin", name: "Business Administration", nameAr: "إدارة الأعمال" },
+    { id: "supply_chain", name: "Supply Chain Management", nameAr: "إدارة سلاسل الإمداد" },
+    { id: "entrepreneurship", name: "Entrepreneurship", nameAr: "ريادة الأعمال" },
+    { id: "banking", name: "Banking", nameAr: "الأعمال المصرفية" },
+    { id: "international_business", name: "International Business", nameAr: "الأعمال الدولية" },
+  ],
+  economics: [
+    { id: "economic_theory", name: "Economic Theory", nameAr: "النظرية الاقتصادية" },
+    { id: "applied_economics", name: "Applied Economics", nameAr: "الاقتصاد التطبيقي" },
+    { id: "development_economics", name: "Development Economics", nameAr: "اقتصاديات التنمية" },
+    { id: "political_science", name: "Political Science", nameAr: "العلوم السياسية" },
+    { id: "international_relations", name: "International Relations", nameAr: "العلاقات الدولية" },
+    { id: "public_policy", name: "Public Policy", nameAr: "السياسات العامة" },
+    { id: "econometrics", name: "Econometrics", nameAr: "الاقتصاد القياسي" },
+    { id: "public_finance", name: "Public Finance", nameAr: "المالية العامة" },
+  ],
+  arts_humanities: [
+    { id: "arabic_language", name: "Arabic Language", nameAr: "اللغة العربية" },
+    { id: "english_language", name: "English Language", nameAr: "اللغة الإنجليزية" },
+    { id: "history", name: "History", nameAr: "التاريخ" },
+    { id: "geography", name: "Geography", nameAr: "الجغرافيا" },
+    { id: "philosophy", name: "Philosophy", nameAr: "الفلسفة" },
+    { id: "arabic_literature", name: "Arabic Literature", nameAr: "الأدب العربي" },
+    { id: "english_literature", name: "English Literature", nameAr: "الأدب الإنجليزي" },
+    { id: "linguistics", name: "Linguistics", nameAr: "اللسانيات" },
+    { id: "archaeology", name: "Archaeology", nameAr: "الآثار" },
+  ],
+  education: [
+    { id: "curriculum_instruction", name: "Curriculum & Instruction", nameAr: "المناهج وطرق التدريس" },
+    { id: "educational_psychology", name: "Educational Psychology", nameAr: "علم النفس التربوي" },
+    { id: "educational_admin", name: "Educational Administration", nameAr: "الإدارة التربوية" },
+    { id: "special_education", name: "Special Education", nameAr: "التربية الخاصة" },
+    { id: "early_childhood", name: "Early Childhood Education", nameAr: "تربية الطفولة المبكرة" },
+    { id: "educational_technology", name: "Educational Technology", nameAr: "تكنولوجيا التعليم" },
+    { id: "physical_education", name: "Physical Education", nameAr: "التربية البدنية" },
+    { id: "science_education", name: "Science Education", nameAr: "تعليم العلوم" },
+  ],
+  agriculture: [
+    { id: "crop_science", name: "Crop Science", nameAr: "علوم المحاصيل" },
+    { id: "animal_production", name: "Animal Production", nameAr: "الإنتاج الحيواني" },
+    { id: "soil_science", name: "Soil Science", nameAr: "علوم التربة" },
+    { id: "horticulture", name: "Horticulture", nameAr: "البستنة" },
+    { id: "agricultural_economics", name: "Agricultural Economics", nameAr: "الاقتصاد الزراعي" },
+    { id: "food_science", name: "Food Science & Technology", nameAr: "علوم وتقنية الأغذية" },
+    { id: "forestry", name: "Forestry", nameAr: "الغابات" },
+    { id: "agricultural_engineering", name: "Agricultural Engineering", nameAr: "الهندسة الزراعية" },
+    { id: "plant_protection", name: "Plant Protection", nameAr: "وقاية النبات" },
+  ],
+  nursing: [
+    { id: "medical_surgical", name: "Medical-Surgical Nursing", nameAr: "تمريض باطني جراحي" },
+    { id: "pediatric_nursing", name: "Pediatric Nursing", nameAr: "تمريض الأطفال" },
+    { id: "obstetric_nursing", name: "Obstetric Nursing", nameAr: "تمريض النساء والتوليد" },
+    { id: "community_nursing", name: "Community Health Nursing", nameAr: "تمريض صحة المجتمع" },
+    { id: "psychiatric_nursing", name: "Psychiatric Nursing", nameAr: "التمريض النفسي" },
+    { id: "nursing_admin", name: "Nursing Administration", nameAr: "إدارة التمريض" },
+    { id: "critical_care_nursing", name: "Critical Care Nursing", nameAr: "تمريض العناية المركزة" },
+  ],
+  veterinary: [
+    { id: "veterinary_surgery", name: "Veterinary Surgery", nameAr: "الجراحة البيطرية" },
+    { id: "veterinary_medicine_int", name: "Veterinary Internal Medicine", nameAr: "الباطنية البيطرية" },
+    { id: "animal_health", name: "Animal Health", nameAr: "صحة الحيوان" },
+    { id: "veterinary_pathology", name: "Veterinary Pathology", nameAr: "الأمراض البيطرية" },
+    { id: "veterinary_pharmacology", name: "Veterinary Pharmacology", nameAr: "الأدوية البيطرية" },
+    { id: "poultry_science", name: "Poultry Science", nameAr: "علوم الدواجن" },
+    { id: "food_hygiene", name: "Food Hygiene", nameAr: "صحة الأغذية" },
+  ],
+  architecture: [
+    { id: "architectural_design", name: "Architectural Design", nameAr: "التصميم المعماري" },
+    { id: "urban_planning", name: "Urban Planning", nameAr: "التخطيط العمراني" },
+    { id: "interior_design", name: "Interior Design", nameAr: "التصميم الداخلي" },
+    { id: "landscape_architecture", name: "Landscape Architecture", nameAr: "العمارة البيئية" },
+    { id: "building_technology", name: "Building Technology", nameAr: "تكنولوجيا البناء" },
+    { id: "sustainable_design", name: "Sustainable Design", nameAr: "التصميم المستدام" },
+  ],
+  media: [
+    { id: "journalism", name: "Journalism", nameAr: "الصحافة" },
+    { id: "public_relations", name: "Public Relations", nameAr: "العلاقات العامة" },
+    { id: "broadcasting", name: "Broadcasting", nameAr: "الإذاعة والتلفزيون" },
+    { id: "digital_media", name: "Digital Media", nameAr: "الإعلام الرقمي" },
+    { id: "advertising", name: "Advertising", nameAr: "الإعلان" },
+    { id: "mass_communication", name: "Mass Communication", nameAr: "الاتصال الجماهيري" },
+    { id: "visual_communication", name: "Visual Communication", nameAr: "الاتصال البصري" },
+  ],
+  islamic_studies: [
+    { id: "quran_sciences", name: "Quran Sciences", nameAr: "علوم القرآن" },
+    { id: "hadith", name: "Hadith Studies", nameAr: "علوم الحديث" },
+    { id: "fiqh", name: "Islamic Jurisprudence (Fiqh)", nameAr: "الفقه الإسلامي" },
+    { id: "aqeedah", name: "Islamic Creed (Aqeedah)", nameAr: "العقيدة الإسلامية" },
+    { id: "islamic_history", name: "Islamic History", nameAr: "التاريخ الإسلامي" },
+    { id: "dawah", name: "Da'wah & Islamic Culture", nameAr: "الدعوة والثقافة الإسلامية" },
+    { id: "usul_fiqh", name: "Principles of Jurisprudence", nameAr: "أصول الفقه" },
+  ],
+  languages: [
+    { id: "english_translation", name: "English Translation", nameAr: "الترجمة الإنجليزية" },
+    { id: "french", name: "French Language", nameAr: "اللغة الفرنسية" },
+    { id: "chinese", name: "Chinese Language", nameAr: "اللغة الصينية" },
+    { id: "arabic_studies", name: "Arabic Studies", nameAr: "الدراسات العربية" },
+    { id: "translation_studies", name: "Translation Studies", nameAr: "دراسات الترجمة" },
+    { id: "applied_linguistics", name: "Applied Linguistics", nameAr: "اللسانيات التطبيقية" },
+  ],
+  psychology: [
+    { id: "clinical_psychology", name: "Clinical Psychology", nameAr: "علم النفس السريري" },
+    { id: "counseling_psychology", name: "Counseling Psychology", nameAr: "علم النفس الإرشادي" },
+    { id: "developmental_psychology", name: "Developmental Psychology", nameAr: "علم النفس النمائي" },
+    { id: "social_psychology", name: "Social Psychology", nameAr: "علم النفس الاجتماعي" },
+    { id: "cognitive_psychology", name: "Cognitive Psychology", nameAr: "علم النفس المعرفي" },
+    { id: "organizational_psychology", name: "Organizational Psychology", nameAr: "علم النفس التنظيمي" },
+  ],
+  public_health: [
+    { id: "epidemiology", name: "Epidemiology", nameAr: "علم الوبائيات" },
+    { id: "health_promotion", name: "Health Promotion", nameAr: "تعزيز الصحة" },
+    { id: "health_management", name: "Health Management", nameAr: "إدارة الصحة" },
+    { id: "environmental_health", name: "Environmental Health", nameAr: "الصحة البيئية" },
+    { id: "nutrition", name: "Nutrition", nameAr: "التغذية" },
+    { id: "biostatistics", name: "Biostatistics", nameAr: "الإحصاء الحيوي" },
+    { id: "occupational_health", name: "Occupational Health", nameAr: "الصحة المهنية" },
+  ],
+  social_sciences: [
+    { id: "sociology", name: "Sociology", nameAr: "علم الاجتماع" },
+    { id: "anthropology", name: "Anthropology", nameAr: "الأنثروبولوجيا" },
+    { id: "social_work", name: "Social Work", nameAr: "الخدمة الاجتماعية" },
+    { id: "demography", name: "Demography", nameAr: "الديموغرافيا" },
+    { id: "gender_studies", name: "Gender Studies", nameAr: "دراسات النوع الاجتماعي" },
+    { id: "criminology", name: "Criminology", nameAr: "علم الجريمة" },
+    { id: "development_studies", name: "Development Studies", nameAr: "دراسات التنمية" },
+  ],
+  environmental: [
+    { id: "ecology", name: "Ecology", nameAr: "علم البيئة" },
+    { id: "conservation", name: "Conservation Biology", nameAr: "أحياء الحفظ" },
+    { id: "climate_science", name: "Climate Science", nameAr: "علوم المناخ" },
+    { id: "water_resources", name: "Water Resources", nameAr: "الموارد المائية" },
+    { id: "waste_management", name: "Waste Management", nameAr: "إدارة النفايات" },
+    { id: "environmental_policy", name: "Environmental Policy", nameAr: "السياسات البيئية" },
+  ],
+  fine_arts: [
+    { id: "painting", name: "Painting", nameAr: "الرسم" },
+    { id: "sculpture", name: "Sculpture", nameAr: "النحت" },
+    { id: "graphic_design", name: "Graphic Design", nameAr: "التصميم الجرافيكي" },
+    { id: "photography", name: "Photography", nameAr: "التصوير الفوتوغرافي" },
+    { id: "ceramics", name: "Ceramics", nameAr: "الخزف" },
+    { id: "textile_design", name: "Textile Design", nameAr: "تصميم المنسوجات" },
+    { id: "art_history", name: "Art History", nameAr: "تاريخ الفن" },
+  ],
+  music_performing: [
+    { id: "music_theory", name: "Music Theory", nameAr: "النظرية الموسيقية" },
+    { id: "vocal_performance", name: "Vocal Performance", nameAr: "الأداء الصوتي" },
+    { id: "instrumental", name: "Instrumental Performance", nameAr: "العزف الآلي" },
+    { id: "theater", name: "Theater & Drama", nameAr: "المسرح والدراما" },
+    { id: "dance", name: "Dance", nameAr: "الرقص" },
+    { id: "music_education", name: "Music Education", nameAr: "التربية الموسيقية" },
+  ],
+};
+
+// --- i18n: Arabic semester display labels (data keys stay English) ---
+const SEMESTER_LABELS_AR = {
+  "Semester 1": "الفصل ١", "Semester 2": "الفصل ٢", "Semester 3": "الفصل ٣",
+  "Semester 4": "الفصل ٤", "Semester 5": "الفصل ٥", "Semester 6": "الفصل ٦",
+  "Semester 7": "الفصل ٧", "Semester 8": "الفصل ٨", "Semester 9": "الفصل ٩",
+  "Semester 10": "الفصل ١٠",
+  "Year 1": "السنة ١", "Year 2": "السنة ٢", "Year 3": "السنة ٣",
+  "Year 4": "السنة ٤", "Year 5": "السنة ٥",
+  "Term 1": "الفترة ١", "Term 2": "الفترة ٢", "Term 3": "الفترة ٣", "Term 4": "الفترة ٤",
+};
+
+// --- i18n: File type labels ---
+const FILE_TYPE_LABELS_AR = { pdf: "PDF", docx: "DOCX", pptx: "PPT", video: "فيديو" };
+
+const ROLE_LABELS_AR = { student: "طالب", teacher: "أستاذ", ta: "معيد", other: "أخرى" };
+
+// Map COUNTRIES to the shape expected by this component
+const ALL_COUNTRIES = COUNTRIES.map((c) => ({
+  id: c.code,
+  name: c.name,
+  nameAr: c.nameAr,
+  flag: c.flag,
+}));
+
+// --- i18n: Translations ---
+const T = {
+  en: {
+    siteTitle: "Sudanese Study Hub",
+    siteSubtitle: "مركز الطالب السوداني",
+    home: "Home",
+    backToMain: "Back to Main Site",
+    browseCountries: "Browse Countries",
+    upload: "Upload",
+    telegram: "Telegram",
+    search: "Search...",
+    searchFull: "Search country...",
+    lightMode: "Light mode",
+    darkMode: "Dark mode",
+    signIn: "Sign In",
+    heroBadge: "For Sudanese Students Worldwide",
+    heroTitle: "Your Study Materials, One Platform",
+    heroSub: "Upload and download PDFs, documents, presentations and video lectures — organized by country, university, degree level, and semester.",
+    heroArabic: "منصة واحدة لكل طالب سوداني حول العالم",
+    countries: "Countries",
+    universities: "Universities",
+    materials: "Materials",
+    degreeLevels: "Degree Levels",
+    browseByCountry: "Browse by Country",
+    howItWorks: "How It Works",
+    step1Title: "Select Country",
+    step1Desc: "Choose the country where you study",
+    step2Title: "Pick University",
+    step2Desc: "Find your university from the list",
+    step3Title: "Degree Level",
+    step3Desc: "BSc, MSc, PhD, or Other programs",
+    step4Title: "Browse & Upload",
+    step4Desc: "Download or share study materials",
+    nUniversities: "universities",
+    nMaterials: "materials",
+    noResultsFor: "No results for",
+    universitiesIn: "Universities in",
+    selectUniversity: "Select a university to continue",
+    selectDegree: "Select degree level",
+    material: "material",
+    materialPlural: "materials",
+    years: "years",
+    semesterTerms: "semesters/terms",
+    uploadMaterial: "Upload Material",
+    all: "All",
+    noMaterials: "No materials yet",
+    beFirst: "Be the first to upload study materials!",
+    uploadFirst: "Upload First Material",
+    watch: "Watch",
+    download: "Download",
+    selectSemesterFirst: "Select a semester first to upload materials",
+    uploadStudyMaterial: "Upload Study Material",
+    materialTitle: "Material Title",
+    materialTitlePlaceholder: "e.g. Organic Chemistry Notes - Ch.5",
+    subjectCourse: "Subject / Course",
+    subjectPlaceholder: "e.g. Organic Chemistry, Calculus II",
+    materialType: "Material Type",
+    videoUrl: "Video URL",
+    fileUrl: "File URL (Google Drive, Dropbox)",
+    videoPlaceholder: "https://youtube.com/watch?v=...",
+    filePlaceholder: "https://drive.google.com/file/...",
+    description: "Description (optional)",
+    descPlaceholder: "Brief description...",
+    uploadMaterialBtn: "Upload Material",
+    fillRequired: "Please fill all required fields!",
+    uploadSuccess: "Material uploaded successfully! ✅",
+    submittedForReview: "Material submitted for review! ✅",
+    pendingReviewMsg: "Your upload will be reviewed and published within 24 hours.",
+    materialUnderReview: "Under Review",
+    deleteSuccess: "Material deleted 🗑️",
+    footerText: "Sudanese Study Hub — Built with ❤️ for Sudanese students everywhere",
+    footerAr: "منصة تعليمية للطلاب السودانيين حول العالم — بكالوريوس · ماجستير · دكتوراه",
+    scholarships: "Scholarships",
+    contact: "Contact",
+    bscName: "BSc — Bachelor",
+    mscName: "MSc — Master",
+    phdName: "PhD — Doctorate",
+    otherName: "Other Programs",
+    bscDesc: "Undergraduate programs",
+    mscDesc: "Postgraduate programs",
+    phdDesc: "Doctoral research programs",
+    otherDesc: "Diploma, Certificate & more",
+    publicUniversities: "Public Universities",
+    privateUniversities: "Private Universities",
+    otherUniversities: "Other Universities",
+    publicLabel: "Public",
+    privateLabel: "Private",
+    otherLabel: "Other",
+    searchUniversities: "Search universities...",
+    noUniversitiesFound: "No universities found",
+    resultsCount: "results",
+    loadingUniversities: "Loading universities...",
+    fetchError: "Failed to load universities. Please try again.",
+    editMaterial: "Edit Material",
+    saveChanges: "Save Changes",
+    editSuccess: "Material updated successfully!",
+    confirmDelete: "Confirm Delete",
+    confirmDeleteMsg: "Are you sure you want to delete",
+    cancel: "Cancel",
+    yesDelete: "Yes, Delete",
+    myMaterials: "My Materials",
+    allYourMaterials: "All your uploaded materials",
+    noMyMaterials: "You haven't uploaded any materials yet",
+    share: "Share",
+    copyLink: "Copy Link",
+    copied: "Copied!",
+    shareVia: "Share via",
+    edited: "edited",
+    faculty: "Faculty",
+    selectFaculty: "Select Faculty",
+    specialty: "Specialty",
+    selectSpecialty: "Select Specialty",
+    selectFacultyFirst: "Select a faculty first",
+    duplicateWarningTitle: "Similar Materials Found",
+    duplicateWarningMsg: "The following materials with the same subject already exist in this location:",
+    uploadAnyway: "Upload Anyway",
+    duplicateSubject: "Subject",
+    duplicateUploadedOn: "Uploaded on",
+    groupBySubject: "Grouped by Subject",
+    materialsInSubject: "materials",
+    noSubject: "Uncategorized",
+    collapseAll: "Collapse All",
+    expandAll: "Expand All",
+    uploaderRole: "Uploaded by",
+    selectRole: "I am a...",
+    roleBadgeStudent: "Student",
+    roleBadgeTeacher: "Professor",
+  },
+  ar: {
+    siteTitle: "مركز الطالب السوداني",
+    siteSubtitle: "Sudanese Study Hub",
+    home: "الرئيسية",
+    backToMain: "العودة للموقع الرئيسي",
+    browseCountries: "تصفح الدول",
+    upload: "رفع",
+    telegram: "تيليجرام",
+    search: "بحث...",
+    searchFull: "ابحث عن دولة...",
+    lightMode: "الوضع الفاتح",
+    darkMode: "الوضع الداكن",
+    signIn: "تسجيل الدخول",
+    heroBadge: "للطلاب السودانيين حول العالم",
+    heroTitle: "موادك الدراسية في منصة واحدة",
+    heroSub: "ارفع وحمّل ملفات PDF والمستندات والعروض التقديمية والمحاضرات المرئية — مرتبة حسب الدولة والجامعة والمرحلة الدراسية والفصل الدراسي.",
+    heroArabic: "One Platform for Every Sudanese Student Worldwide",
+    countries: "دول",
+    universities: "جامعات",
+    materials: "مواد",
+    degreeLevels: "مراحل دراسية",
+    browseByCountry: "تصفح حسب الدولة",
+    howItWorks: "كيف تعمل المنصة",
+    step1Title: "اختر الدولة",
+    step1Desc: "اختر الدولة التي تدرس فيها",
+    step2Title: "اختر الجامعة",
+    step2Desc: "ابحث عن جامعتك من القائمة",
+    step3Title: "المرحلة الدراسية",
+    step3Desc: "بكالوريوس، ماجستير، دكتوراه، أو أخرى",
+    step4Title: "تصفح وارفع",
+    step4Desc: "حمّل أو شارك المواد الدراسية",
+    nUniversities: "جامعات",
+    nMaterials: "مواد",
+    noResultsFor: "لا توجد نتائج لـ",
+    universitiesIn: "الجامعات في",
+    selectUniversity: "اختر جامعة للمتابعة",
+    selectDegree: "اختر المرحلة الدراسية",
+    material: "مادة",
+    materialPlural: "مواد",
+    years: "سنوات",
+    semesterTerms: "فصول دراسية",
+    uploadMaterial: "رفع مادة",
+    all: "الكل",
+    noMaterials: "لا توجد مواد بعد",
+    beFirst: "كن أول من يرفع مواد دراسية!",
+    uploadFirst: "ارفع أول مادة",
+    watch: "مشاهدة",
+    download: "تحميل",
+    selectSemesterFirst: "اختر فصلاً دراسياً أولاً لرفع المواد",
+    uploadStudyMaterial: "رفع مادة دراسية",
+    materialTitle: "عنوان المادة",
+    materialTitlePlaceholder: "مثال: ملاحظات الكيمياء العضوية - الفصل ٥",
+    subjectCourse: "المادة / المقرر",
+    subjectPlaceholder: "مثال: الكيمياء العضوية، التفاضل والتكامل",
+    materialType: "نوع المادة",
+    videoUrl: "رابط الفيديو",
+    fileUrl: "رابط الملف (Google Drive, Dropbox)",
+    videoPlaceholder: "https://youtube.com/watch?v=...",
+    filePlaceholder: "https://drive.google.com/file/...",
+    description: "الوصف (اختياري)",
+    descPlaceholder: "وصف مختصر...",
+    uploadMaterialBtn: "📤 رفع المادة",
+    fillRequired: "يرجى ملء جميع الحقول المطلوبة!",
+    uploadSuccess: "تم رفع المادة بنجاح! ✅",
+    submittedForReview: "تم إرسال المادة للمراجعة! ✅",
+    pendingReviewMsg: "سيتم مراجعة المادة ونشرها خلال ٢٤ ساعة.",
+    materialUnderReview: "قيد المراجعة",
+    deleteSuccess: "تم حذف المادة 🗑️",
+    footerText: "مركز الطالب السوداني — صُنع بـ ❤️ للطلاب السودانيين في كل مكان",
+    footerAr: "An educational platform for Sudanese students worldwide — BSc · MSc · PhD",
+    scholarships: "المنح الدراسية",
+    contact: "اتصل بنا",
+    bscName: "بكالوريوس",
+    mscName: "ماجستير",
+    phdName: "دكتوراه",
+    otherName: "برامج أخرى",
+    bscDesc: "البرامج الجامعية",
+    mscDesc: "برامج الدراسات العليا",
+    phdDesc: "برامج البحث الدكتوراه",
+    otherDesc: "دبلوم، شهادة وأكثر",
+    publicUniversities: "جامعات حكومية",
+    privateUniversities: "جامعات خاصة",
+    otherUniversities: "جامعات أخرى",
+    publicLabel: "حكومية",
+    privateLabel: "خاصة",
+    otherLabel: "أخرى",
+    searchUniversities: "ابحث عن جامعة...",
+    noUniversitiesFound: "لا توجد جامعات",
+    resultsCount: "نتيجة",
+    loadingUniversities: "جاري تحميل الجامعات...",
+    fetchError: "فشل تحميل الجامعات. يرجى المحاولة مرة أخرى.",
+    editMaterial: "تعديل المادة",
+    saveChanges: "حفظ التغييرات",
+    editSuccess: "تم تحديث المادة بنجاح!",
+    confirmDelete: "تأكيد الحذف",
+    confirmDeleteMsg: "هل أنت متأكد من حذف",
+    cancel: "إلغاء",
+    yesDelete: "نعم، احذف",
+    myMaterials: "موادي",
+    allYourMaterials: "جميع المواد التي رفعتها",
+    noMyMaterials: "لم ترفع أي مواد بعد",
+    share: "مشاركة",
+    copyLink: "نسخ الرابط",
+    copied: "تم النسخ!",
+    shareVia: "شارك عبر",
+    edited: "تم التعديل",
+    faculty: "الكلية",
+    selectFaculty: "اختر الكلية",
+    specialty: "التخصص",
+    selectSpecialty: "اختر التخصص",
+    selectFacultyFirst: "اختر الكلية أولاً",
+    duplicateWarningTitle: "تم العثور على مواد مشابهة",
+    duplicateWarningMsg: "المواد التالية بنفس المادة موجودة بالفعل في هذا الموقع:",
+    uploadAnyway: "رفع على أي حال",
+    duplicateSubject: "المادة",
+    duplicateUploadedOn: "تم الرفع في",
+    groupBySubject: "مجمعة حسب المادة",
+    materialsInSubject: "مواد",
+    noSubject: "بدون تصنيف",
+    collapseAll: "طي الكل",
+    expandAll: "توسيع الكل",
+    uploaderRole: "تم الرفع بواسطة",
+    selectRole: "...أنا",
+    roleBadgeStudent: "طالب",
+    roleBadgeTeacher: "أستاذ",
+  },
+};
+
+// Degree name/desc translation keys mapped by id
+const DEGREE_T_KEYS = {
+  bsc: { name: "bscName", desc: "bscDesc" },
+  msc: { name: "mscName", desc: "mscDesc" },
+  phd: { name: "phdName", desc: "phdDesc" },
+  other: { name: "otherName", desc: "otherDesc" },
+};
+
+// --- Loading Spinner ---
+function LoadingSpinner({ text }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "48px 20px" }}>
+      <div style={{
+        width: 44, height: 44, border: "4px solid #e8ddd0", borderTopColor: "#C8956C",
+        borderRadius: "50%", animation: "studyhub-spin 0.8s linear infinite",
+      }} />
+      <span style={{ fontSize: 14, color: "#888", fontWeight: 600 }}>{text}</span>
+      <style>{`@keyframes studyhub-spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+}
+
+// --- Searchable University Select Dropdown ---
+function SearchableUniversitySelect({ universities, onSelect, isRTL, t }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [highlightIdx, setHighlightIdx] = useState(-1);
+  const containerRef = useRef(null);
+  const inputRef = useRef(null);
+  const listRef = useRef(null);
+
+  // click-outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // focus input on open
+  useEffect(() => {
+    if (open && inputRef.current) inputRef.current.focus();
+  }, [open]);
+
+  const uniDisplay = (u) => isRTL ? (u.nameAr || u.name) : u.name;
+
+  const publicUnis = universities.filter((u) => u.type === "public");
+  const privateUnis = universities.filter((u) => u.type === "private");
+  const otherUnis = universities.filter((u) => !u.type);
+
+  const filterList = (list) => {
+    if (!query) return list;
+    const q = query.toLowerCase();
+    return list.filter(
+      (u) => u.name.toLowerCase().includes(q) || (u.nameAr || "").includes(query)
+    );
+  };
+
+  const filteredPublic = filterList(publicUnis);
+  const filteredPrivate = filterList(privateUnis);
+  const filteredOther = filterList(otherUnis);
+  const flatFiltered = [...filteredPublic, ...filteredPrivate, ...filteredOther];
+  const totalResults = flatFiltered.length;
+
+  // scroll highlighted into view
+  useEffect(() => {
+    if (highlightIdx >= 0 && listRef.current) {
+      const items = listRef.current.querySelectorAll("[data-uni-item]");
+      if (items[highlightIdx]) items[highlightIdx].scrollIntoView({ block: "nearest" });
+    }
+  }, [highlightIdx]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") { setOpen(false); return; }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightIdx((prev) => (prev < totalResults - 1 ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightIdx((prev) => (prev > 0 ? prev - 1 : totalResults - 1));
+    } else if (e.key === "Enter" && highlightIdx >= 0 && flatFiltered[highlightIdx]) {
+      e.preventDefault();
+      onSelect(flatFiltered[highlightIdx]);
+      setOpen(false);
+      setQuery("");
+    }
+  };
+
+  const getBadgeInfo = (type) => {
+    if (type === "public") return { label: t.publicLabel, bg: "#27ae6018", color: "#27ae60" };
+    if (type === "private") return { label: t.privateLabel, bg: "#8e44ad18", color: "#8e44ad" };
+    return { label: t.otherLabel, bg: "#95a5a618", color: "#95a5a6" };
+  };
+
+  const renderGroup = (label, color, list, startIdx) => {
+    if (list.length === 0) return null;
+    return (
+      <div key={label}>
+        <div style={DS.groupHeader}>
+          <span style={{ ...DS.groupDot, background: color }} />
+          <span style={DS.groupLabel}>{label}</span>
+          <span style={DS.groupCount}>{list.length}</span>
+        </div>
+        {list.map((u, i) => {
+          const globalIdx = startIdx + i;
+          const badge = getBadgeInfo(u.type);
+          return (
+            <div
+              key={u.id}
+              data-uni-item="true"
+              style={{
+                ...DS.option,
+                ...(highlightIdx === globalIdx ? DS.optionHighlight : {}),
+                ...(isRTL ? { paddingRight: 36, paddingLeft: 12 } : { paddingLeft: 36 }),
+              }}
+              onClick={() => { onSelect(u); setOpen(false); setQuery(""); }}
+              onMouseEnter={() => setHighlightIdx(globalIdx)}
+            >
+              <span style={DS.optionName}>{uniDisplay(u)}</span>
+              <span style={{ ...DS.typeBadge, background: badge.bg, color: badge.color }}>
+                {badge.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  return (
+    <div ref={containerRef} style={DS.container}>
+      {/* Trigger button */}
+      <button
+        style={DS.trigger}
+        onClick={() => { setOpen(!open); setHighlightIdx(-1); }}
+      >
+        <span style={DS.triggerIcon}>🏛️</span>
+        <span style={DS.triggerText}>{t.selectUniversity}</span>
+        <span style={{ ...DS.chevron, transform: open ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+      </button>
+
+      {/* Dropdown panel */}
+      {open && (
+        <div style={DS.dropdown}>
+          {/* Search input */}
+          <div style={DS.searchWrap}>
+            <span style={{ ...DS.searchIcon, ...(isRTL ? { marginRight: 0, marginLeft: 8 } : {}) }}>🔍</span>
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder={t.searchUniversities}
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setHighlightIdx(-1); }}
+              onKeyDown={handleKeyDown}
+              style={{ ...DS.searchInput, textAlign: isRTL ? "right" : "left" }}
+            />
+            {query && (
+              <button onClick={() => { setQuery(""); setHighlightIdx(-1); }} style={DS.clearBtn}>✕</button>
+            )}
+          </div>
+
+          {/* Scrollable list */}
+          <div ref={listRef} style={DS.list}>
+            {totalResults === 0 ? (
+              <div style={DS.noResults}>
+                <span style={{ fontSize: 28 }}>🔍</span>
+                <span>{t.noUniversitiesFound}</span>
+              </div>
+            ) : (
+              <>
+                {renderGroup(t.publicUniversities, "#27ae60", filteredPublic, 0)}
+                {renderGroup(t.privateUniversities, "#8e44ad", filteredPrivate, filteredPublic.length)}
+                {renderGroup(t.otherUniversities, "#95a5a6", filteredOther, filteredPublic.length + filteredPrivate.length)}
+              </>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div style={DS.footer}>
+            <span style={DS.footerText}>{totalResults} {t.resultsCount}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- Dropdown Styles ---
+const DS = {
+  container: { position: "relative", width: "100%", maxWidth: 560, margin: "0 auto" },
+  trigger: {
+    width: "100%", display: "flex", alignItems: "center", gap: 10,
+    padding: "14px 18px", borderRadius: 14, border: "2px solid #e8ddd0",
+    background: "white", cursor: "pointer", fontFamily: "inherit",
+    fontSize: 15, color: "#1B3A4B", fontWeight: 600,
+    boxShadow: "0 2px 10px rgba(0,0,0,0.04)", transition: "all 0.2s",
+  },
+  triggerIcon: { fontSize: 22 },
+  triggerText: { flex: 1, textAlign: "start" },
+  chevron: { fontSize: 18, color: "#888", transition: "transform 0.2s" },
+  dropdown: {
+    position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0,
+    background: "white", borderRadius: 14, border: "2px solid #e8ddd0",
+    boxShadow: "0 12px 40px rgba(0,0,0,0.12)", zIndex: 50,
+    overflow: "hidden",
+  },
+  searchWrap: {
+    display: "flex", alignItems: "center", padding: "10px 14px",
+    borderBottom: "1px solid #f0e8df",
+  },
+  searchIcon: { fontSize: 16, marginRight: 8, flexShrink: 0 },
+  searchInput: {
+    flex: 1, border: "none", outline: "none", fontSize: 14,
+    padding: "6px 0", background: "transparent", color: "#1B3A4B",
+    fontFamily: "inherit",
+  },
+  clearBtn: {
+    background: "#e8ddd0", border: "none", borderRadius: "50%",
+    width: 24, height: 24, cursor: "pointer", fontSize: 11, fontWeight: 700,
+    color: "#1B3A4B", display: "flex", alignItems: "center", justifyContent: "center",
+    flexShrink: 0,
+  },
+  list: { maxHeight: 320, overflowY: "auto", padding: "4px 0" },
+  groupHeader: {
+    display: "flex", alignItems: "center", gap: 8,
+    padding: "10px 14px 6px", position: "sticky", top: 0,
+    background: "white", zIndex: 1,
+  },
+  groupDot: { width: 8, height: 8, borderRadius: "50%", flexShrink: 0 },
+  groupLabel: { fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "#888" },
+  groupCount: { fontSize: 10, color: "#aaa", fontWeight: 600 },
+  option: {
+    display: "flex", alignItems: "center", justifyContent: "space-between",
+    padding: "10px 14px 10px 36px", cursor: "pointer", transition: "background 0.15s",
+    gap: 8,
+  },
+  optionHighlight: { background: "#f5efe8" },
+  optionName: { fontSize: 14, fontWeight: 600, color: "#1B3A4B", flex: 1 },
+  typeBadge: {
+    fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20,
+    flexShrink: 0, whiteSpace: "nowrap",
+  },
+  noResults: {
+    display: "flex", flexDirection: "column", alignItems: "center",
+    gap: 6, padding: "24px 14px", color: "#888", fontSize: 13,
+  },
+  footer: {
+    borderTop: "1px solid #f0e8df", padding: "8px 14px",
+    display: "flex", justifyContent: "flex-end",
+  },
+  footerText: { fontSize: 11, color: "#aaa", fontWeight: 600 },
+};
+
+export default function SudaneseStudyHub({ locale = "en" }) {
+  const [view, setView] = useState("home");
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedUniversity, setSelectedUniversity] = useState(null);
+  const [selectedDegree, setSelectedDegree] = useState(null);
+  const [selectedSemester, setSelectedSemester] = useState(null);
+  const [materials, setMaterials] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadForm, setUploadForm] = useState({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" });
+  const [notification, setNotification] = useState(null);
+  const [filterType, setFilterType] = useState("all");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [editingMaterial, setEditingMaterial] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [sharePopup, setSharePopup] = useState(null);
+  const [myMaterialsExpanded, setMyMaterialsExpanded] = useState({});
+  const [duplicateWarning, setDuplicateWarning] = useState(null);
+  const [subjectGroupsExpanded, setSubjectGroupsExpanded] = useState({});
+  const userMenuRef = useRef(null);
+
+  // University API state
+  const [universityCache, setUniversityCache] = useState({});
+  const [loadingUniversities, setLoadingUniversities] = useState(false);
+  const [universityError, setUniversityError] = useState(null);
+
+  // Sync with main app's theme system (next-themes)
+  const { theme, setTheme } = useTheme();
+  const darkMode = theme === "dark";
+  const toggleDarkMode = () => setTheme(darkMode ? "light" : "dark");
+
+  // i18n helpers
+  const t = T[locale] || T.en;
+  const isRTL = locale === "ar";
+  const countryName = (c) => isRTL ? (c.nameAr || c.name) : c.name;
+  const uniName = (u) => isRTL ? (u.nameAr || u.name) : u.name;
+  const semLabel = (sem) => isRTL ? (SEMESTER_LABELS_AR[sem] || sem) : sem;
+  const degreeName = (deg) => t[DEGREE_T_KEYS[deg.id]?.name] || deg.name;
+  const degreeDesc = (deg) => t[DEGREE_T_KEYS[deg.id]?.desc] || deg.desc;
+  const facultyName = (fac) => isRTL ? (fac.nameAr || fac.name) : fac.name;
+  const specialtyName = (spec) => isRTL ? (spec.nameAr || spec.name) : spec.name;
+  const fileTypeLabel = (ft) => isRTL ? (FILE_TYPE_LABELS_AR[ft.id] || ft.label) : ft.label;
+  const roleLabel = (role) => isRTL ? (ROLE_LABELS_AR[role.id] || role.label) : role.label;
+  const matCount = (n) => n === 1 ? t.material : t.materialPlural;
+
+  // Fetch universities from API
+  const fetchUniversities = useCallback(async (countryCode) => {
+    if (universityCache[countryCode]) return;
+    setLoadingUniversities(true);
+    setUniversityError(null);
+    try {
+      const res = await fetch(`/api/study-hub/universities?country=${countryCode}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setUniversityCache((prev) => ({ ...prev, [countryCode]: data.universities }));
+    } catch (err) {
+      console.error("Failed to fetch universities:", err);
+      setUniversityError(t.fetchError);
+    } finally {
+      setLoadingUniversities(false);
+    }
+  }, [universityCache, t.fetchError]);
+
+  // Fetch approved materials from API when navigating to a semester
+  const fetchMaterials = useCallback(async () => {
+    if (!selectedCountry || !selectedUniversity || !selectedDegree || !selectedSemester) return;
+    try {
+      const params = new URLSearchParams({
+        countryId: selectedCountry.id,
+        universityId: selectedUniversity.id,
+        degreeId: selectedDegree.id,
+        semester: selectedSemester,
+      });
+      const res = await fetch(`/api/study-hub/materials?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setMaterials(data.materials || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch materials:", err);
+      setMaterials([]);
+    }
+  }, [selectedCountry, selectedUniversity, selectedDegree, selectedSemester]);
+
+  useEffect(() => {
+    fetchMaterials();
+  }, [fetchMaterials]);
+
+  // Scroll listener for header transformation
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Close share popup on outside click
+  useEffect(() => {
+    if (!sharePopup) return;
+    const handler = (e) => {
+      if (!e.target.closest("[data-share-popup]")) setSharePopup(null);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [sharePopup]);
+
+  const showNotif = (msg, type = "success") => {
+    setNotification({ msg, type });
+    setTimeout(() => setNotification(null), 4500);
+  };
+
+  const submitMaterialToAPI = async (materialData) => {
+    try {
+      const res = await fetch("/api/study-hub/materials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(materialData),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to submit");
+      }
+      return await res.json();
+    } catch (err) {
+      console.error("Submit error:", err);
+      throw err;
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!uploadForm.title || !uploadForm.url || !uploadForm.subject) {
+      showNotif(t.fillRequired, "error");
+      return;
+    }
+    if (editingMaterial) {
+      // For editing, remove old and submit as new pending material
+      const materialData = {
+        ...uploadForm,
+        countryId: selectedCountry.id,
+        countryName: selectedCountry.name,
+        universityId: selectedUniversity.id,
+        universityName: selectedUniversity.name,
+        degreeId: selectedDegree.id,
+        degreeName: selectedDegree.name,
+        semester: selectedSemester,
+      };
+      try {
+        await submitMaterialToAPI(materialData);
+        setEditingMaterial(null);
+        setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" });
+        setShowUploadModal(false);
+        showNotif(`${t.submittedForReview}\n${t.pendingReviewMsg}`);
+      } catch {
+        showNotif(t.fillRequired, "error");
+      }
+    } else {
+      const materialData = {
+        ...uploadForm,
+        countryId: selectedCountry.id,
+        countryName: selectedCountry.name,
+        universityId: selectedUniversity.id,
+        universityName: selectedUniversity.name,
+        degreeId: selectedDegree.id,
+        degreeName: selectedDegree.name,
+        semester: selectedSemester,
+      };
+      const duplicates = checkForDuplicates(materialData);
+      if (duplicates.length > 0) {
+        setDuplicateWarning({ duplicates, pendingMaterial: materialData });
+        return;
+      }
+      try {
+        await submitMaterialToAPI(materialData);
+        setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" });
+        setShowUploadModal(false);
+        showNotif(`${t.submittedForReview}\n${t.pendingReviewMsg}`);
+      } catch {
+        showNotif(t.fillRequired, "error");
+      }
+    }
+  };
+
+  const handleEdit = (material) => {
+    setEditingMaterial(material);
+    setUploadForm({
+      title: material.title,
+      type: material.type,
+      url: material.url,
+      description: material.description || "",
+      subject: material.subject || "",
+      facultyId: material.facultyId || "",
+      specialtyId: material.specialtyId || "",
+      uploaderRole: material.uploaderRole || "student",
+    });
+    setShowUploadModal(true);
+  };
+
+  const handleFacultyChange = (facultyId) => {
+    setUploadForm((prev) => ({ ...prev, facultyId, specialtyId: "" }));
+  };
+
+  const handleDeleteRequest = (material) => {
+    setDeleteConfirm({ id: material.id, title: material.title });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteConfirm) return;
+    setMaterials(materials.filter((m) => m.id !== deleteConfirm.id));
+    setDeleteConfirm(null);
+    showNotif(t.deleteSuccess);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteConfirm(null);
+  };
+
+  const checkForDuplicates = (newMaterial) => {
+    return materials.filter((m) =>
+      m.countryId === newMaterial.countryId &&
+      m.universityId === newMaterial.universityId &&
+      m.degreeId === newMaterial.degreeId &&
+      m.semester === newMaterial.semester &&
+      m.subject.trim().toLowerCase() === newMaterial.subject.trim().toLowerCase() &&
+      (!editingMaterial || m.id !== editingMaterial.id)
+    );
+  };
+
+  const handleDuplicateConfirm = async () => {
+    if (!duplicateWarning) return;
+    try {
+      await submitMaterialToAPI(duplicateWarning.pendingMaterial);
+      setDuplicateWarning(null);
+      setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" });
+      setShowUploadModal(false);
+      showNotif(`${t.submittedForReview}\n${t.pendingReviewMsg}`);
+    } catch {
+      showNotif(t.fillRequired, "error");
+    }
+  };
+
+  const handleDuplicateCancel = () => {
+    setDuplicateWarning(null);
+  };
+
+  const handleShareToggle = (matId) => {
+    setSharePopup(sharePopup === matId ? null : matId);
+  };
+
+  const handleCopyLink = (material) => {
+    const text = `${material.title} — ${material.url}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => showNotif(t.copied));
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showNotif(t.copied);
+    }
+    setSharePopup(null);
+  };
+
+  const currentMaterials = materials.filter(
+    (m) =>
+      m.countryId === (selectedCountry && selectedCountry.id) &&
+      m.universityId === (selectedUniversity && selectedUniversity.id) &&
+      m.degreeId === (selectedDegree && selectedDegree.id) &&
+      m.semester === selectedSemester &&
+      (filterType === "all" || m.type === filterType)
+  );
+
+  const groupedBySubject = (() => {
+    const groups = {};
+    currentMaterials.forEach((mat) => {
+      const key = (mat.subject || "").trim() || t.noSubject;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(mat);
+    });
+    // Sort materials within each group by uploadedAt newest first
+    Object.values(groups).forEach((arr) => arr.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)));
+    // Sort groups alphabetically, "Uncategorized" / noSubject last
+    const sortedKeys = Object.keys(groups).sort((a, b) => {
+      if (a === t.noSubject) return 1;
+      if (b === t.noSubject) return -1;
+      return a.localeCompare(b);
+    });
+    return sortedKeys.map((key) => ({ subject: key, materials: groups[key] }));
+  })();
+
+  const toggleSubjectGroup = (subjectName) => {
+    setSubjectGroupsExpanded((prev) => ({ ...prev, [subjectName]: prev[subjectName] === false ? true : false }));
+  };
+
+  const toggleAllSubjectGroups = (expand) => {
+    const next = {};
+    groupedBySubject.forEach((g) => { next[g.subject] = expand; });
+    setSubjectGroupsExpanded(next);
+  };
+
+  const filteredCountries = searchQuery
+    ? ALL_COUNTRIES.filter(
+        (c) =>
+          c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (c.nameAr || "").includes(searchQuery) ||
+          c.id.includes(searchQuery.toLowerCase())
+      )
+    : ALL_COUNTRIES;
+
+  const navigate = (newView, c, u, d, s) => {
+    setView(newView);
+    if (c !== undefined) setSelectedCountry(c);
+    if (u !== undefined) setSelectedUniversity(u);
+    if (d !== undefined) setSelectedDegree(d);
+    if (s !== undefined) setSelectedSemester(s);
+    setFilterType("all");
+    setSubjectGroupsExpanded({});
+    // Fetch universities when navigating to university view
+    if (newView === "universities" && c) {
+      fetchUniversities(c.id);
+    }
+  };
+
+  const countMats = (cId, uId, dId, sem) =>
+    materials.filter(
+      (m) =>
+        (!cId || m.countryId === cId) &&
+        (!uId || m.universityId === uId) &&
+        (!dId || m.degreeId === dId) &&
+        (!sem || m.semester === sem)
+    ).length;
+
+  const renderMaterialCard = (mat, showLocation = false) => {
+    const ti = getTypeInfo(mat.type);
+    const ri = getRoleInfo(mat.uploaderRole);
+    const matCountry = ALL_COUNTRIES.find((c) => c.id === mat.countryId);
+    const deg = DEGREE_LEVELS.find((d) => d.id === mat.degreeId);
+    return (
+      <div
+        key={mat.id} style={{ ...S.matCard, ...(isRTL ? { borderLeft: "none", borderRight: "4px solid #e0d5c8" } : {}) }}
+        onMouseEnter={(e) => { const prop = isRTL ? "borderRightColor" : "borderLeftColor"; e.currentTarget.style[prop] = ti.color; e.currentTarget.style.transform = isRTL ? "translateX(-4px)" : "translateX(4px)"; }}
+        onMouseLeave={(e) => { const prop = isRTL ? "borderRightColor" : "borderLeftColor"; e.currentTarget.style[prop] = "#e0d5c8"; e.currentTarget.style.transform = "translateX(0)"; }}
+      >
+        <div style={{ ...S.matIcon, background: ti.color + "15", color: ti.color }}>{ti.icon}</div>
+        <div style={S.matInfo}>
+          <h4 style={S.matTitle}>{mat.title}</h4>
+          <p style={S.matSubject}>📖 {mat.subject}</p>
+          {mat.facultyId && (() => {
+            const fac = FACULTIES.find((f) => f.id === mat.facultyId);
+            const spec = mat.specialtyId && (SPECIALTIES_MAP[mat.facultyId] || []).find((s) => s.id === mat.specialtyId);
+            return fac ? (
+              <p style={S.matFaculty}>{fac.icon} {facultyName(fac)}{spec ? ` › ${specialtyName(spec)}` : ""}</p>
+            ) : null;
+          })()}
+          {showLocation && deg && (
+            <p style={S.matDesc}>
+              {deg.icon} {isRTL ? (DEGREE_T_KEYS[deg.id] ? T.ar[DEGREE_T_KEYS[deg.id].name] : deg.name) : deg.name} › {semLabel(mat.semester)}
+            </p>
+          )}
+          {mat.description && <p style={S.matDesc}>{mat.description}</p>}
+          <div style={S.matMeta}>
+            <span style={{ ...S.matBadge, background: ti.color }}>{fileTypeLabel(ti)}</span>
+            <span style={{ ...S.matBadge, background: ri.color }}>{ri.icon} {roleLabel(ri)}</span>
+            <span style={S.matDate}>🕐 {new Date(mat.uploadedAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
+            {mat.editedAt && <span style={S.matDate}>✏️ {t.edited}</span>}
+          </div>
+        </div>
+        <div style={{ ...S.matActions, position: "relative" }}>
+          <a href={mat.url} target="_blank" rel="noopener noreferrer" style={S.dlBtn}>
+            {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
+          </a>
+          <button onClick={() => handleEdit(mat)} style={S.editBtn} title={t.editMaterial}>✏️</button>
+          <div data-share-popup="true" style={{ position: "relative" }}>
+            <button onClick={() => handleShareToggle(mat.id)} style={S.shareBtn} title={t.share}>🔗</button>
+            {sharePopup === mat.id && (
+              <div style={{ ...S.sharePopup, ...(isRTL ? { left: 0, right: "auto" } : { right: 0, left: "auto" }) }}>
+                <button onClick={() => handleCopyLink(mat)} style={S.shareOption}>📋 {t.copyLink}</button>
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(mat.title + " — " + mat.url)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  style={S.shareOption}
+                  onClick={() => setSharePopup(null)}
+                >💬 {t.shareVia} WhatsApp</a>
+                <a
+                  href={`https://t.me/share/url?url=${encodeURIComponent(mat.url)}&text=${encodeURIComponent(mat.title)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  style={S.shareOption}
+                  onClick={() => setSharePopup(null)}
+                >📱 {t.shareVia} Telegram</a>
+              </div>
+            )}
+          </div>
+          <button onClick={() => handleDeleteRequest(mat)} style={S.delBtn} title={t.confirmDelete}>🗑️</button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={S.app} dir={isRTL ? "rtl" : "ltr"}>
+      <div style={S.bgPattern} />
+
+      {/* Responsive overrides for subject grouping & duplicate modal */}
+      <style>{`
+        @media (max-width: 600px) {
+          .studyhub-dup-modal {
+            padding: 24px 16px !important;
+            border-radius: 14px !important;
+            max-height: 85vh !important;
+          }
+          .studyhub-dup-modal h3 { font-size: 17px !important; }
+          .studyhub-dup-modal p { font-size: 13px !important; }
+          .studyhub-dup-actions {
+            flex-direction: column !important;
+            gap: 8px !important;
+          }
+          .studyhub-dup-actions button {
+            width: 100% !important;
+            min-height: 44px !important;
+          }
+          .studyhub-dup-list {
+            max-height: 160px !important;
+          }
+          .studyhub-dup-item {
+            padding: 8px 10px !important;
+            gap: 8px !important;
+          }
+          .studyhub-dup-item-icon {
+            width: 30px !important;
+            height: 30px !important;
+            font-size: 15px !important;
+          }
+          .studyhub-dup-item-title { font-size: 12px !important; }
+          .studyhub-dup-item-meta { font-size: 10px !important; }
+          .studyhub-subj-controls {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          .studyhub-subj-controls span { font-size: 13px !important; }
+          .studyhub-subj-header {
+            padding: 12px 14px !important;
+            gap: 8px !important;
+          }
+          .studyhub-subj-header .studyhub-subj-title {
+            font-size: 14px !important;
+          }
+          .studyhub-subj-header .studyhub-subj-count {
+            font-size: 11px !important;
+            padding: 2px 8px !important;
+          }
+          .studyhub-subj-body {
+            padding: 8px 10px !important;
+          }
+          .studyhub-group-toggles button {
+            min-height: 36px !important;
+            padding: 6px 14px !important;
+            font-size: 12px !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .studyhub-dup-modal {
+            padding: 18px 12px !important;
+          }
+          .studyhub-subj-header .studyhub-subj-title {
+            font-size: 13px !important;
+          }
+        }
+      `}</style>
+
+      {notification && (
+        <div style={{
+          ...S.notification,
+          background: notification.type === "error"
+            ? "linear-gradient(135deg, #e74c3c, #c0392b)"
+            : "linear-gradient(135deg, #27ae60, #2ecc71)",
+          ...(isRTL ? { right: "auto", left: 20 } : {}),
+        }}>
+          {notification.msg}
+        </div>
+      )}
+
+      {/* HEADER — matches main app navbar style */}
+      <header
+        className={[
+          "sticky top-0 w-full z-50 transition-all duration-500 ease-out",
+          scrolled
+            ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20"
+            : "bg-white/70 dark:bg-gray-900/70 backdrop-blur-md",
+          "border-b border-gray-200/50 dark:border-gray-700/30",
+        ].join(" ")}
+      >
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-14" : "h-16"}`}>
+
+          {/* Logo */}
+          <div
+            className="flex items-center gap-2.5 cursor-pointer shrink-0 group"
+            onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); }}
+          >
+            <span className="text-2xl sm:text-3xl group-hover:scale-105 transition-transform duration-300">🎓</span>
+            <div>
+              <h1 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white m-0 tracking-tight leading-tight">
+                {t.siteTitle}
+              </h1>
+              <p className="text-[10px] text-gray-500 dark:text-gray-400 m-0 font-medium">
+                {t.siteSubtitle}
+              </p>
+            </div>
+          </div>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex items-center gap-0 lg:gap-1">
+            <button
+              onClick={() => { navigate("home"); setSearchQuery(""); }}
+              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+            >
+              <span className="relative z-10">{t.home}</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+            </button>
+            <a
+              href={`/${locale}`}
+              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group no-underline"
+            >
+              <span className="relative z-10">{t.backToMain}</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+            </a>
+            <button
+              onClick={() => { navigate("home"); setSearchQuery(""); }}
+              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+            >
+              <span className="relative z-10">{t.browseCountries}</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+            </button>
+            <button
+              onClick={() => navigate("my-materials")}
+              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+            >
+              <span className="relative z-10">{t.myMaterials}</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+            </button>
+            <button
+              onClick={() => {
+                if (selectedSemester) setShowUploadModal(true);
+                else { navigate("home"); showNotif(t.selectSemesterFirst, "error"); }
+              }}
+              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+            >
+              <span className="relative z-10">{t.upload}</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+            </button>
+            <a
+              href={TELEGRAM_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group no-underline"
+            >
+              <span className="relative z-10">{t.telegram}</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+            </a>
+          </nav>
+
+          {/* Right Side Actions */}
+          <div className="hidden md:flex items-center gap-1 lg:gap-3 shrink-0">
+            {/* Search */}
+            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1.5 focus-within:ring-2 focus-within:ring-blue-500/30 transition-all max-w-[180px]">
+              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder={t.search}
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); if (view !== "home") navigate("home"); }}
+                className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
+              />
+            </div>
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={() => toggleDarkMode()}
+              className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+              title={darkMode ? t.lightMode : t.darkMode}
+            >
+              {darkMode ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+
+            {/* Sign In Button */}
+            <a
+              href={`/${locale}/login`}
+              className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 px-3 lg:px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 no-underline"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span className="hidden lg:inline">{t.signIn}</span>
+            </a>
+          </div>
+
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+          >
+            <span className={`w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute ${isMobileMenuOpen ? "rotate-45 translate-y-0" : "-translate-y-2"}`} />
+            <span className={`w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 ${isMobileMenuOpen ? "opacity-0 scale-0" : ""}`} />
+            <span className={`w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute ${isMobileMenuOpen ? "-rotate-45 translate-y-0" : "translate-y-2"}`} />
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <div
+          className={`md:hidden overflow-y-auto transition-all duration-300 overscroll-contain ${isMobileMenuOpen ? "max-h-[calc(100vh-4rem)] pb-24" : "max-h-0 overflow-hidden"}`}
+        >
+          <div className="flex flex-col gap-1 pt-4 px-4 border-t border-gray-100 dark:border-gray-800">
+
+            {/* Mobile Search */}
+            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2 mb-3">
+              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder={t.searchFull}
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); if (view !== "home") navigate("home"); }}
+                className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
+              />
+            </div>
+
+            <button
+              onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              {t.home}
+            </button>
+            <a
+              href={`/${locale}`}
+              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2 no-underline"
+            >
+              {t.backToMain}
+            </a>
+            <button
+              onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              {t.browseCountries}
+            </button>
+            <button
+              onClick={() => { navigate("my-materials"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              {t.myMaterials}
+            </button>
+            <button
+              onClick={() => {
+                if (selectedSemester) { setShowUploadModal(true); setIsMobileMenuOpen(false); }
+                else { navigate("home"); setIsMobileMenuOpen(false); showNotif(t.selectSemesterFirst, "error"); }
+              }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              {t.upload}
+            </button>
+            <a
+              href={TELEGRAM_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2 no-underline"
+            >
+              {t.telegram}
+            </a>
+
+            {/* Mobile bottom actions */}
+            <div className="flex items-center gap-3 pt-4 pb-8 border-t border-gray-100 dark:border-gray-800 mt-2">
+              <button
+                onClick={() => toggleDarkMode()}
+                className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400"
+              >
+                {darkMode ? (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
+              <a
+                href={`/${locale}/login`}
+                className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                {t.signIn}
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* BREADCRUMB */}
+      {view !== "home" && (
+        <nav style={S.breadcrumb}>
+          <span style={S.crumbItem} onClick={() => navigate("home")}>🏠 {t.home}</span>
+          {view === "my-materials" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📋 {t.myMaterials}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
+                {selectedCountry.flag} {countryName(selectedCountry)}
+              </span>
+            </>
+          )}
+          {selectedUniversity && !["universities","countries","my-materials"].includes(view) && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbItem} onClick={() => navigate("degrees", selectedCountry, selectedUniversity)}>
+                🏛️ {uniName(selectedUniversity)}
+              </span>
+            </>
+          )}
+          {selectedDegree && !["degrees","universities","countries","my-materials"].includes(view) && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbItem} onClick={() => navigate("semesters", selectedCountry, selectedUniversity, selectedDegree)}>
+                {selectedDegree.icon} {degreeName(selectedDegree)}
+              </span>
+            </>
+          )}
+          {selectedSemester && view === "materials" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📚 {semLabel(selectedSemester)}</span>
+            </>
+          )}
+        </nav>
+      )}
+
+      {/* MAIN */}
+      <main style={S.main}>
+
+        {/* === HOME === */}
+        {view === "home" && (
+          <div>
+            <div style={S.hero}>
+              <div style={S.heroBadge}>🇸🇩 {t.heroBadge}</div>
+              <h2 style={S.heroTitle}>{t.heroTitle}</h2>
+              <p style={S.heroSub}>{t.heroSub}</p>
+              <p style={{ ...S.heroArabic, direction: isRTL ? "ltr" : "rtl" }}>{t.heroArabic}</p>
+
+              <div style={S.searchBox}>
+                <span style={{ ...S.searchIcon, ...(isRTL ? { marginRight: 0, marginLeft: 8 } : {}) }}>🔍</span>
+                <input
+                  type="text"
+                  placeholder={t.searchFull}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={S.searchInput}
+                />
+                {searchQuery && <button onClick={() => setSearchQuery("")} style={S.clearBtn}>✕</button>}
+              </div>
+
+              {/* Degree Level Quick Cards */}
+              <div style={S.degreePreview}>
+                {DEGREE_LEVELS.map((d) => (
+                  <div key={d.id} style={{ ...S.degreePreviewCard, borderTopColor: d.color }}>
+                    <span style={{ fontSize: 28 }}>{d.icon}</span>
+                    <span style={{ fontWeight: 800, fontSize: 14, color: "#1B3A4B" }}>{degreeName(d)}</span>
+                    <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div style={S.statsRow}>
+              {[
+                { n: ALL_COUNTRIES.length, l: t.countries },
+                { n: "10,000+", l: t.universities },
+                { n: materials.length, l: t.materials },
+                { n: DEGREE_LEVELS.length, l: t.degreeLevels },
+              ].map((s, i) => (
+                <div key={i} style={S.statCard}>
+                  <span style={S.statNum}>{s.n}</span>
+                  <span style={S.statLabel}>{s.l}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Countries */}
+            <h3 style={S.secTitle}>🌍 {t.browseByCountry}</h3>
+            <div style={S.countryGrid}>
+              {filteredCountries.map((c) => (
+                <div
+                  key={c.id}
+                  style={S.countryCard}
+                  onClick={() => navigate("universities", c)}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.12)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.05)"; }}
+                >
+                  <span style={S.countryFlag}>{c.flag}</span>
+                  <h4 style={S.countryName}>{countryName(c)}</h4>
+                  <span style={S.countryMats}>{countMats(c.id)} {t.nMaterials}</span>
+                </div>
+              ))}
+            </div>
+            {filteredCountries.length === 0 && (
+              <div style={S.empty}><span style={{ fontSize: 48 }}>🔍</span><p>{t.noResultsFor} &quot;{searchQuery}&quot;</p></div>
+            )}
+
+            {/* How It Works */}
+            <div style={S.howSection}>
+              <h3 style={S.secTitle}>📖 {t.howItWorks}</h3>
+              <div style={S.howGrid}>
+                {[
+                  { step: "1", icon: "🌍", title: t.step1Title, desc: t.step1Desc },
+                  { step: "2", icon: "🏛️", title: t.step2Title, desc: t.step2Desc },
+                  { step: "3", icon: "🎓", title: t.step3Title, desc: t.step3Desc },
+                  { step: "4", icon: "📚", title: t.step4Title, desc: t.step4Desc },
+                ].map((h) => (
+                  <div key={h.step} style={S.howCard}>
+                    <div style={{ ...S.howStep, ...(isRTL ? { left: "auto", right: 16 } : {}) }}>{h.step}</div>
+                    <span style={{ fontSize: 32 }}>{h.icon}</span>
+                    <h4 style={{ margin: "8px 0 4px", color: "#1B3A4B", fontWeight: 800 }}>{h.title}</h4>
+                    <p style={{ margin: 0, fontSize: 13, color: "#777" }}>{h.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* === UNIVERSITIES (Searchable Dropdown) === */}
+        {view === "universities" && selectedCountry && (
+          <div>
+            <div style={S.viewHeader}>
+              <span style={{ fontSize: 48 }}>{selectedCountry.flag}</span>
+              <div>
+                <h2 style={S.viewTitle}>{t.universitiesIn} {countryName(selectedCountry)}</h2>
+                <p style={S.viewSub}>
+                  {loadingUniversities
+                    ? t.loadingUniversities
+                    : universityCache[selectedCountry.id]
+                      ? `${universityCache[selectedCountry.id].length} ${t.nUniversities}`
+                      : ""}
+                </p>
+              </div>
+            </div>
+            {loadingUniversities ? (
+              <LoadingSpinner text={t.loadingUniversities} />
+            ) : universityError ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 48 }}>⚠️</span>
+                <p style={{ color: "#e74c3c", fontWeight: 600 }}>{universityError}</p>
+                <button
+                  style={S.uploadBtn}
+                  onClick={() => { setUniversityError(null); fetchUniversities(selectedCountry.id); }}
+                >
+                  🔄 {isRTL ? "إعادة المحاولة" : "Retry"}
+                </button>
+              </div>
+            ) : universityCache[selectedCountry.id] ? (
+              universityCache[selectedCountry.id].length === 0 ? (
+                <div style={S.empty}>
+                  <span style={{ fontSize: 48 }}>🏫</span>
+                  <p>{t.noUniversitiesFound}</p>
+                </div>
+              ) : (
+                <SearchableUniversitySelect
+                  universities={universityCache[selectedCountry.id]}
+                  onSelect={(uni) => navigate("degrees", selectedCountry, uni)}
+                  isRTL={isRTL}
+                  t={t}
+                />
+              )
+            ) : null}
+          </div>
+        )}
+
+        {/* === DEGREE LEVELS === */}
+        {view === "degrees" && selectedUniversity && (
+          <div>
+            <div style={S.viewHeader}>
+              <span style={{ fontSize: 48 }}>🏛️</span>
+              <div>
+                <h2 style={S.viewTitle}>{uniName(selectedUniversity)}</h2>
+                <p style={S.viewSub}>{selectedCountry.flag} {countryName(selectedCountry)} — {t.selectDegree}</p>
+              </div>
+            </div>
+            <div style={S.degreeGrid}>
+              {DEGREE_LEVELS.map((deg) => {
+                const count = countMats(selectedCountry.id, selectedUniversity.id, deg.id);
+                return (
+                  <div
+                    key={deg.id} style={{ ...S.degreeCard, borderTopColor: deg.color }}
+                    onClick={() => navigate("semesters", selectedCountry, selectedUniversity, deg)}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 35px " + deg.color + "25"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; }}
+                  >
+                    <span style={{ fontSize: 48 }}>{deg.icon}</span>
+                    <h3 style={{ margin: "12px 0 4px", fontWeight: 900, color: "#1B3A4B", fontSize: 20 }}>{degreeName(deg)}</h3>
+                    <p style={{ margin: 0, fontSize: 16, color: deg.color, fontWeight: 700 }}>{isRTL ? deg.name : deg.arabic}</p>
+                    <p style={{ margin: "4px 0 12px", fontSize: 13, color: "#888" }}>{degreeDesc(deg)}</p>
+                    <span style={{ ...S.degreeBadge, background: deg.color + "18", color: deg.color }}>
+                      {count} {matCount(count)}
+                    </span>
+                    <div style={{ marginTop: 12, fontSize: 12, color: "#aaa" }}>
+                      {SEMESTERS_MAP[deg.id].length} {deg.id === "phd" ? t.years : t.semesterTerms}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* === SEMESTERS === */}
+        {view === "semesters" && selectedDegree && (
+          <div>
+            <div style={S.viewHeader}>
+              <span style={{ fontSize: 48 }}>{selectedDegree.icon}</span>
+              <div>
+                <h2 style={S.viewTitle}>{degreeName(selectedDegree)}</h2>
+                <p style={S.viewSub}>
+                  {selectedCountry.flag} {countryName(selectedCountry)} › {uniName(selectedUniversity)}
+                </p>
+              </div>
+            </div>
+            <div style={S.semGrid}>
+              {SEMESTERS_MAP[selectedDegree.id].map((sem) => {
+                const count = countMats(selectedCountry.id, selectedUniversity.id, selectedDegree.id, sem);
+                return (
+                  <div
+                    key={sem} style={{ ...S.semCard, ...(isRTL ? { borderLeft: "none", borderRight: `4px solid ${selectedDegree.color}` } : { borderLeftColor: selectedDegree.color }) }}
+                    onClick={() => navigate("materials", selectedCountry, selectedUniversity, selectedDegree, sem)}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.background = "#1B3A4B"; e.currentTarget.style.color = "white"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "white"; e.currentTarget.style.color = "#1B3A4B"; }}
+                  >
+                    <div style={{ ...S.semNum, color: selectedDegree.color }}>{sem.replace(/[^\d]/g, "") || "•"}</div>
+                    <h4 style={{ margin: "6px 0 4px", fontWeight: 800, fontSize: 16, color: "inherit" }}>{semLabel(sem)}</h4>
+                    <span style={{ fontSize: 13, opacity: 0.7, color: "inherit" }}>{count} {matCount(count)}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* === MATERIALS === */}
+        {view === "materials" && selectedSemester && (
+          <div>
+            <div style={S.viewHeader}>
+              <span style={{ fontSize: 48 }}>📚</span>
+              <div>
+                <h2 style={S.viewTitle}>{semLabel(selectedSemester)}</h2>
+                <p style={S.viewSub}>
+                  {selectedCountry.flag} {countryName(selectedCountry)} › {uniName(selectedUniversity)} › {selectedDegree.icon} {degreeName(selectedDegree)}
+                </p>
+              </div>
+              <button style={{ ...S.uploadBtn, ...(isRTL ? { marginLeft: 0, marginRight: "auto" } : {}) }} onClick={() => setShowUploadModal(true)}>⬆️ {t.uploadMaterial}</button>
+            </div>
+
+            {/* Filters */}
+            <div style={S.filterRow}>
+              <button
+                onClick={() => setFilterType("all")}
+                style={{ ...S.filterBtn, ...(filterType === "all" ? S.filterActive : {}) }}
+              >{t.all}</button>
+              {FILE_TYPES.map((ft) => {
+                const c = materials.filter(
+                  (m) => m.countryId === (selectedCountry && selectedCountry.id) && m.universityId === (selectedUniversity && selectedUniversity.id) &&
+                    m.degreeId === (selectedDegree && selectedDegree.id) && m.semester === selectedSemester && m.type === ft.id
+                ).length;
+                return (
+                  <button
+                    key={ft.id}
+                    onClick={() => setFilterType(ft.id)}
+                    style={{
+                      ...S.filterBtn,
+                      ...(filterType === ft.id ? { ...S.filterActive, background: ft.color, borderColor: ft.color } : {}),
+                    }}
+                  >{ft.icon} {fileTypeLabel(ft)} ({c})</button>
+                );
+              })}
+            </div>
+
+            {currentMaterials.length === 0 ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 64 }}>📭</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noMaterials}</h3>
+                <p style={{ color: "#666", marginBottom: 20 }}>{t.beFirst}</p>
+                <button style={S.uploadBtn} onClick={() => setShowUploadModal(true)}>⬆️ {t.uploadFirst}</button>
+              </div>
+            ) : (
+              <div>
+                <div className="studyhub-subj-controls" style={S.subjectGroupControls}>
+                  <span style={S.subjectGroupLabel}>📂 {t.groupBySubject} ({groupedBySubject.length})</span>
+                  <div className="studyhub-group-toggles" style={{ display: "flex", gap: 6 }}>
+                    <button onClick={() => toggleAllSubjectGroups(true)} style={S.groupToggleBtn}>{t.expandAll}</button>
+                    <button onClick={() => toggleAllSubjectGroups(false)} style={S.groupToggleBtn}>{t.collapseAll}</button>
+                  </div>
+                </div>
+                {groupedBySubject.map((group) => {
+                  const isExpanded = subjectGroupsExpanded[group.subject] !== false;
+                  return (
+                    <div key={group.subject} style={S.myGroupSection}>
+                      <div
+                        className="studyhub-subj-header"
+                        style={S.myGroupHeader}
+                        onClick={() => toggleSubjectGroup(group.subject)}
+                      >
+                        <span style={S.myGroupChevron}>{isExpanded ? "▾" : (isRTL ? "◂" : "▸")}</span>
+                        <span className="studyhub-subj-title" style={S.myGroupTitle}>📖 {group.subject}</span>
+                        <span className="studyhub-subj-count" style={S.myGroupCount}>{group.materials.length} {t.materialsInSubject}</span>
+                      </div>
+                      {isExpanded && (
+                        <div className="studyhub-subj-body" style={S.myGroupBody}>
+                          <div style={S.matList}>
+                            {group.materials.map((mat) => renderMaterialCard(mat))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* === MY MATERIALS === */}
+        {view === "my-materials" && (
+          <div>
+            <div style={S.viewHeader}>
+              <span style={{ fontSize: 48 }}>📋</span>
+              <div>
+                <h2 style={S.viewTitle}>{t.myMaterials}</h2>
+                <p style={S.viewSub}>{t.allYourMaterials} ({materials.length})</p>
+              </div>
+            </div>
+
+            {materials.length === 0 ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 64 }}>📭</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noMyMaterials}</h3>
+              </div>
+            ) : (
+              <div>
+                {(() => {
+                  const grouped = {};
+                  materials.forEach((m) => {
+                    if (!grouped[m.countryId]) grouped[m.countryId] = {};
+                    if (!grouped[m.countryId][m.universityId]) grouped[m.countryId][m.universityId] = [];
+                    grouped[m.countryId][m.universityId].push(m);
+                  });
+                  return Object.keys(grouped).map((cId) => {
+                    const country = ALL_COUNTRIES.find((c) => c.id === cId);
+                    const countryMats = Object.values(grouped[cId]).flat();
+                    const isExpanded = myMaterialsExpanded[cId] !== false;
+                    return (
+                      <div key={cId} style={S.myGroupSection}>
+                        <div
+                          style={S.myGroupHeader}
+                          onClick={() => setMyMaterialsExpanded((prev) => ({ ...prev, [cId]: !isExpanded }))}
+                        >
+                          <span style={S.myGroupChevron}>{isExpanded ? "▾" : (isRTL ? "◂" : "▸")}</span>
+                          <span style={S.myGroupTitle}>
+                            {country ? `${country.flag} ${countryName(country)}` : cId}
+                          </span>
+                          <span style={S.myGroupCount}>{countryMats.length} {matCount(countryMats.length)}</span>
+                        </div>
+                        {isExpanded && (
+                          <div style={S.myGroupBody}>
+                            {Object.keys(grouped[cId]).map((uId) => {
+                              const uniMats = grouped[cId][uId];
+                              const uniNameDisplay = uniMats[0]?.universityName || uId;
+                              return (
+                                <div key={uId} style={S.mySubGroup}>
+                                  <div style={S.mySubGroupHeader}>
+                                    <span style={S.mySubGroupTitle}>🏛️ {uniNameDisplay}</span>
+                                  </div>
+                                  <div style={S.matList}>
+                                    {uniMats.map((mat) => renderMaterialCard(mat, true))}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      {/* UPLOAD / EDIT MODAL */}
+      {showUploadModal && (
+        <div style={S.overlay} onClick={() => { setShowUploadModal(false); setEditingMaterial(null); setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" }); }}>
+          <div style={S.modal} onClick={(e) => e.stopPropagation()}>
+            <div style={S.modalHead}>
+              <h3 style={S.modalTitle}>{editingMaterial ? `✏️ ${t.editMaterial}` : `⬆️ ${t.uploadStudyMaterial}`}</h3>
+              <button onClick={() => { setShowUploadModal(false); setEditingMaterial(null); setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" }); }} style={S.modalX}>✕</button>
+            </div>
+            <div style={S.modalBody}>
+              <div style={S.modalCtx}>
+                {editingMaterial ? (
+                  <>
+                    {(() => { const ec = ALL_COUNTRIES.find((c) => c.id === editingMaterial.countryId); return ec ? `${ec.flag} ${countryName(ec)}` : editingMaterial.countryId; })()}
+                    {" › "}{editingMaterial.universityName}
+                    {" › "}{(() => { const ed = DEGREE_LEVELS.find((d) => d.id === editingMaterial.degreeId); return ed ? `${ed.icon} ${degreeName(ed)}` : editingMaterial.degreeId; })()}
+                    {" › "}{semLabel(editingMaterial.semester)}
+                  </>
+                ) : (
+                  <>
+                    {selectedCountry && selectedCountry.flag} {selectedCountry && countryName(selectedCountry)} › {selectedUniversity && uniName(selectedUniversity)} › {selectedDegree && selectedDegree.icon} {selectedDegree && degreeName(selectedDegree)} › {semLabel(selectedSemester)}
+                  </>
+                )}
+              </div>
+
+              <label style={S.label}>{t.materialTitle} *</label>
+              <input type="text" placeholder={t.materialTitlePlaceholder} value={uploadForm.title}
+                onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })} style={S.input} />
+
+              <label style={S.label}>{t.subjectCourse} *</label>
+              <input type="text" placeholder={t.subjectPlaceholder} value={uploadForm.subject}
+                onChange={(e) => setUploadForm({ ...uploadForm, subject: e.target.value })} style={S.input} />
+
+              <label style={S.label}>{t.faculty}</label>
+              <select value={uploadForm.facultyId} onChange={(e) => handleFacultyChange(e.target.value)} style={S.input}>
+                <option value="">{t.selectFaculty}</option>
+                {FACULTIES.map((fac) => (
+                  <option key={fac.id} value={fac.id}>{fac.icon} {facultyName(fac)}</option>
+                ))}
+              </select>
+
+              <label style={S.label}>{t.specialty}</label>
+              <select
+                value={uploadForm.specialtyId}
+                onChange={(e) => setUploadForm({ ...uploadForm, specialtyId: e.target.value })}
+                style={S.input}
+                disabled={!uploadForm.facultyId}
+              >
+                <option value="">{uploadForm.facultyId ? t.selectSpecialty : t.selectFacultyFirst}</option>
+                {uploadForm.facultyId && (SPECIALTIES_MAP[uploadForm.facultyId] || []).map((spec) => (
+                  <option key={spec.id} value={spec.id}>{specialtyName(spec)}</option>
+                ))}
+              </select>
+
+              <label style={S.label}>{t.materialType} *</label>
+              <div style={S.typeSelector}>
+                {FILE_TYPES.map((ft) => (
+                  <button key={ft.id}
+                    onClick={() => setUploadForm({ ...uploadForm, type: ft.id })}
+                    style={{
+                      ...S.typeOpt,
+                      borderColor: uploadForm.type === ft.id ? ft.color : "#ddd",
+                      background: uploadForm.type === ft.id ? ft.color + "12" : "white",
+                    }}
+                  >
+                    <span style={{ fontSize: 22 }}>{ft.icon}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700 }}>{fileTypeLabel(ft)}</span>
+                  </button>
+                ))}
+              </div>
+
+              <label style={S.label}>{t.selectRole} *</label>
+              <div style={S.typeSelector}>
+                {UPLOADER_ROLES.map((role) => (
+                  <button key={role.id}
+                    onClick={() => setUploadForm({ ...uploadForm, uploaderRole: role.id })}
+                    style={{
+                      ...S.typeOpt,
+                      borderColor: uploadForm.uploaderRole === role.id ? role.color : "#ddd",
+                      background: uploadForm.uploaderRole === role.id ? role.color + "12" : "white",
+                    }}
+                  >
+                    <span style={{ fontSize: 22 }}>{role.icon}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700 }}>{roleLabel(role)}</span>
+                  </button>
+                ))}
+              </div>
+
+              <label style={S.label}>{uploadForm.type === "video" ? `${t.videoUrl} *` : `${t.fileUrl} *`}</label>
+              <input type="url" placeholder={uploadForm.type === "video" ? t.videoPlaceholder : t.filePlaceholder}
+                value={uploadForm.url} onChange={(e) => setUploadForm({ ...uploadForm, url: e.target.value })} style={S.input} />
+
+              <label style={S.label}>{t.description}</label>
+              <textarea placeholder={t.descPlaceholder} value={uploadForm.description}
+                onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })}
+                style={{ ...S.input, height: 70, resize: "vertical" }} />
+
+              <button onClick={handleUpload} style={S.submitBtn}>
+                {editingMaterial ? `✏️ ${t.saveChanges}` : `📤 ${t.uploadMaterialBtn}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteConfirm && (
+        <div style={S.overlay} onClick={handleDeleteCancel}>
+          <div style={S.confirmModal} onClick={(e) => e.stopPropagation()}>
+            <div style={S.confirmIcon}>🗑️</div>
+            <h3 style={S.confirmTitle}>{t.confirmDelete}</h3>
+            <p style={S.confirmMsg}>{t.confirmDeleteMsg} &quot;{deleteConfirm.title}&quot;?</p>
+            <div style={S.confirmActions}>
+              <button onClick={handleDeleteCancel} style={S.cancelBtn}>{t.cancel}</button>
+              <button onClick={handleDeleteConfirm} style={S.confirmDeleteBtn}>{t.yesDelete}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DUPLICATE WARNING MODAL */}
+      {duplicateWarning && (
+        <div style={S.overlay} onClick={handleDuplicateCancel}>
+          <div className="studyhub-dup-modal" style={S.duplicateModal} onClick={(e) => e.stopPropagation()}>
+            <div style={S.duplicateIcon}>⚠️</div>
+            <h3 style={S.confirmTitle}>{t.duplicateWarningTitle}</h3>
+            <p style={S.confirmMsg}>{t.duplicateWarningMsg}</p>
+            <div className="studyhub-dup-list" style={S.duplicateList}>
+              {duplicateWarning.duplicates.map((dup) => {
+                const ti = getTypeInfo(dup.type);
+                return (
+                  <div key={dup.id} className="studyhub-dup-item" style={S.duplicateItem}>
+                    <div className="studyhub-dup-item-icon" style={{ ...S.duplicateItemIcon, background: ti.color + "15", color: ti.color }}>{ti.icon}</div>
+                    <div style={S.duplicateItemInfo}>
+                      <span className="studyhub-dup-item-title" style={S.duplicateItemTitle}>{dup.title}</span>
+                      <span className="studyhub-dup-item-meta" style={S.duplicateItemMeta}>{t.duplicateSubject}: {dup.subject} · {t.duplicateUploadedOn} {new Date(dup.uploadedAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="studyhub-dup-actions" style={S.confirmActions}>
+              <button onClick={handleDuplicateCancel} style={S.cancelBtn}>{t.cancel}</button>
+              <button onClick={handleDuplicateConfirm} style={S.duplicateConfirmBtn}>{t.uploadAnyway}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FOOTER */}
+      <footer style={S.footer}>
+        <p style={S.footerText}>🎓 {t.footerText}</p>
+        <p style={{ ...S.footerAr, direction: isRTL ? "ltr" : "rtl" }}>{t.footerAr}</p>
+        <div style={S.footerLinks}>
+          <a href={`/${locale}`} style={S.footerLink}>🏠 {t.home}</a>
+          <span style={{ color: "#C8956C" }}>•</span>
+          <a href={`/${locale}/scholarships`} style={S.footerLink}>🎯 {t.scholarships}</a>
+          <span style={{ color: "#C8956C" }}>•</span>
+          <a href={`/${locale}/contact`} style={S.footerLink}>📧 {t.contact}</a>
+          <span style={{ color: "#C8956C" }}>•</span>
+          <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" style={S.footerLink}>📱 {t.telegram}</a>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+const S = {
+  app: { fontFamily: "var(--font-inter), var(--font-cairo), 'Inter', 'Cairo', system-ui, sans-serif", minHeight: "100vh", background: "#FAF6F1", color: "#1B3A4B", position: "relative" },
+  bgPattern: { position: "fixed", inset: 0, backgroundImage: "radial-gradient(circle at 20% 50%, rgba(200,149,108,0.07) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(27,58,75,0.04) 0%, transparent 50%)", pointerEvents: "none", zIndex: 0 },
+  notification: { position: "fixed", top: 20, right: 20, padding: "14px 24px", borderRadius: 12, color: "white", fontWeight: 700, fontSize: 14, zIndex: 1000, boxShadow: "0 8px 30px rgba(0,0,0,0.2)" },
+  breadcrumb: { maxWidth: 1200, margin: "0 auto", padding: "12px 24px", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", position: "relative", zIndex: 1 },
+  crumbItem: { cursor: "pointer", color: "#1B3A4B", fontWeight: 600, fontSize: 13, padding: "4px 10px", borderRadius: 6, background: "rgba(200,149,108,0.1)" },
+  crumbActive: { color: "#C8956C", fontWeight: 700, fontSize: 13, padding: "4px 10px" },
+  crumbSep: { color: "#C8956C", fontWeight: 700, fontSize: 18 },
+  main: { maxWidth: 1200, margin: "0 auto", padding: "20px 24px", position: "relative", zIndex: 1, minHeight: "60vh" },
+  hero: { textAlign: "center", padding: "40px 20px 28px" },
+  heroBadge: { display: "inline-block", background: "#1B3A4B", color: "#C8956C", padding: "6px 18px", borderRadius: 50, fontSize: 13, fontWeight: 700, marginBottom: 16 },
+  heroTitle: { fontSize: 34, fontWeight: 900, color: "#1B3A4B", margin: "0 0 14px", lineHeight: 1.15, letterSpacing: "-1px" },
+  heroSub: { fontSize: 16, color: "#555", maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 },
+  heroArabic: { fontSize: 20, color: "#C8956C", fontWeight: 700, margin: "0 0 28px" },
+  searchBox: { display: "flex", alignItems: "center", maxWidth: 500, margin: "0 auto 24px", background: "white", borderRadius: 50, padding: "4px 6px 4px 18px", boxShadow: "0 4px 20px rgba(0,0,0,0.07)", border: "2px solid #e8ddd0" },
+  searchIcon: { fontSize: 18, marginRight: 8 },
+  searchInput: { flex: 1, border: "none", outline: "none", fontSize: 15, padding: "11px 0", background: "transparent", color: "#1B3A4B", fontFamily: "inherit" },
+  clearBtn: { background: "#e8ddd0", border: "none", borderRadius: "50%", width: 30, height: 30, cursor: "pointer", fontSize: 13, fontWeight: 700, color: "#1B3A4B" },
+  degreePreview: { display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap", marginBottom: 8 },
+  degreePreviewCard: { background: "white", borderRadius: 12, padding: "14px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, borderTop: "3px solid", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", minWidth: 110 },
+  statsRow: { display: "flex", justifyContent: "center", gap: 14, margin: "20px 0 36px", flexWrap: "wrap" },
+  statCard: { background: "white", borderRadius: 14, padding: "18px 24px", textAlign: "center", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", border: "1px solid #ede5da", minWidth: 110 },
+  statNum: { display: "block", fontSize: 30, fontWeight: 900, color: "#C8956C" },
+  statLabel: { fontSize: 12, color: "#777", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" },
+  secTitle: { fontSize: 20, fontWeight: 800, color: "#1B3A4B", marginBottom: 20 },
+  countryGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 14, marginBottom: 36 },
+  countryCard: { background: "white", borderRadius: 16, padding: "20px 14px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 3px 16px rgba(0,0,0,0.05)", border: "1px solid #ede5da" },
+  countryFlag: { fontSize: 36, display: "block", marginBottom: 8 },
+  countryName: { fontSize: 13, fontWeight: 800, color: "#1B3A4B", margin: "0 0 4px" },
+  countryInfo: { fontSize: 12, color: "#888", margin: 0 },
+  countryMats: { fontSize: 11, color: "#C8956C", fontWeight: 700, marginTop: 6, display: "inline-block", background: "#C8956C15", padding: "2px 10px", borderRadius: 20 },
+  howSection: { marginTop: 20, marginBottom: 20 },
+  howGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 },
+  howCard: { background: "white", borderRadius: 16, padding: "24px 20px", textAlign: "center", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", position: "relative", border: "1px solid #ede5da" },
+  howStep: { position: "absolute", top: 12, left: 16, background: "#C8956C", color: "white", width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 13 },
+  viewHeader: { display: "flex", alignItems: "center", gap: 16, marginBottom: 28, flexWrap: "wrap" },
+  viewTitle: { fontSize: 26, fontWeight: 900, color: "#1B3A4B", margin: 0, letterSpacing: "-0.5px" },
+  viewSub: { fontSize: 14, color: "#777", margin: "4px 0 0" },
+  uniGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 },
+  uniCard: { background: "white", borderRadius: 14, padding: "24px 22px", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 2px 12px rgba(0,0,0,0.04)", border: "2px solid transparent", display: "flex", flexDirection: "column", gap: 6, position: "relative" },
+  uniIcon: { fontSize: 30 },
+  uniName: { fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: 0 },
+  uniDegrees: { display: "flex", gap: 6, flexWrap: "wrap", marginTop: 4 },
+  uniDegreeDot: { fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 10 },
+  uniArrow: { position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)", fontSize: 22, color: "#C8956C", fontWeight: 700 },
+  degreeGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 18 },
+  degreeCard: { background: "white", borderRadius: 18, padding: "32px 24px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", borderTop: "4px solid" },
+  degreeBadge: { display: "inline-block", padding: "4px 14px", borderRadius: 20, fontSize: 13, fontWeight: 700 },
+  semGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 14 },
+  semCard: { background: "white", borderRadius: 14, padding: "24px 18px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", borderLeft: "4px solid" },
+  semNum: { fontSize: 32, fontWeight: 900, lineHeight: 1 },
+  uploadBtn: { background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", border: "none", padding: "11px 24px", borderRadius: 50, fontWeight: 700, fontSize: 14, cursor: "pointer", marginLeft: "auto", transition: "all 0.2s", boxShadow: "0 4px 15px rgba(200,149,108,0.3)", fontFamily: "inherit" },
+  filterRow: { display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" },
+  filterBtn: { padding: "7px 16px", borderRadius: 50, border: "2px solid #ddd", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "all 0.2s" },
+  filterActive: { background: "#1B3A4B", color: "white", borderColor: "#1B3A4B" },
+  matList: { display: "flex", flexDirection: "column", gap: 12 },
+  matCard: { background: "white", borderRadius: 14, padding: "18px 22px", display: "flex", alignItems: "center", gap: 16, boxShadow: "0 2px 10px rgba(0,0,0,0.04)", borderLeft: "4px solid #e0d5c8", transition: "all 0.3s ease", flexWrap: "wrap" },
+  matIcon: { width: 50, height: 50, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 },
+  matInfo: { flex: 1, minWidth: 180 },
+  matTitle: { fontSize: 15, fontWeight: 800, color: "#1B3A4B", margin: "0 0 3px" },
+  matSubject: { fontSize: 12, color: "#888", margin: "0 0 3px" },
+  matFaculty: { fontSize: 11, color: "#C8956C", margin: "0 0 3px", fontWeight: 600 },
+  matDesc: { fontSize: 12, color: "#999", margin: "0 0 6px" },
+  matMeta: { display: "flex", alignItems: "center", gap: 10 },
+  matBadge: { color: "white", padding: "2px 9px", borderRadius: 20, fontSize: 10, fontWeight: 700 },
+  matDate: { fontSize: 11, color: "#aaa" },
+  matActions: { display: "flex", gap: 8, alignItems: "center", flexShrink: 0 },
+  dlBtn: { background: "#1B3A4B", color: "white", padding: "9px 20px", borderRadius: 50, textDecoration: "none", fontWeight: 700, fontSize: 13, whiteSpace: "nowrap", fontFamily: "inherit" },
+  delBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" },
+  editBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" },
+  shareBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" },
+  sharePopup: { position: "absolute", top: "calc(100% + 6px)", minWidth: 180, background: "white", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "1px solid #ede5da", zIndex: 100, overflow: "hidden" },
+  shareOption: { display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "10px 14px", border: "none", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1B3A4B", textDecoration: "none", fontFamily: "inherit", transition: "background 0.15s" },
+  confirmModal: { background: "white", borderRadius: 18, padding: "32px 28px", textAlign: "center", maxWidth: 380, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
+  confirmIcon: { fontSize: 48, marginBottom: 12 },
+  confirmTitle: { fontSize: 20, fontWeight: 900, color: "#1B3A4B", margin: "0 0 10px" },
+  confirmMsg: { fontSize: 14, color: "#666", margin: "0 0 24px", lineHeight: 1.5 },
+  confirmActions: { display: "flex", gap: 10, justifyContent: "center" },
+  cancelBtn: { padding: "10px 24px", borderRadius: 10, border: "2px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#555", fontFamily: "inherit" },
+  confirmDeleteBtn: { padding: "10px 24px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #e74c3c, #c0392b)", color: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", boxShadow: "0 4px 15px rgba(231,76,60,0.3)" },
+  myGroupSection: { marginBottom: 20, background: "white", borderRadius: 16, border: "1px solid #ede5da", overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,0.04)" },
+  myGroupHeader: { display: "flex", alignItems: "center", gap: 10, padding: "16px 20px", cursor: "pointer", background: "#FAF6F1", borderBottom: "1px solid #ede5da", transition: "background 0.2s" },
+  myGroupTitle: { fontSize: 16, fontWeight: 800, color: "#1B3A4B", flex: 1 },
+  myGroupCount: { fontSize: 12, fontWeight: 700, color: "#C8956C", background: "#C8956C15", padding: "3px 12px", borderRadius: 20 },
+  myGroupChevron: { fontSize: 14, color: "#888", fontWeight: 700, width: 20, textAlign: "center" },
+  myGroupBody: { padding: "12px 16px" },
+  mySubGroup: { marginBottom: 16 },
+  mySubGroupHeader: { display: "flex", alignItems: "center", gap: 8, marginBottom: 10, paddingBottom: 6, borderBottom: "1px solid #f0e8df" },
+  mySubGroupTitle: { fontSize: 14, fontWeight: 700, color: "#555" },
+  empty: { textAlign: "center", padding: "50px 20px", color: "#888" },
+  overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20, backdropFilter: "blur(4px)" },
+  modal: { background: "white", borderRadius: 22, width: "100%", maxWidth: 500, maxHeight: "90vh", overflow: "auto", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
+  modalHead: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "22px 24px 0" },
+  modalTitle: { fontSize: 20, fontWeight: 900, color: "#1B3A4B", margin: 0 },
+  modalX: { background: "#f0e8df", border: "none", borderRadius: "50%", width: 34, height: 34, fontSize: 16, cursor: "pointer", fontWeight: 700, color: "#1B3A4B" },
+  modalBody: { padding: "18px 24px 24px" },
+  modalCtx: { fontSize: 12, color: "#888", background: "#FAF6F1", padding: "10px 14px", borderRadius: 10, marginBottom: 16 },
+  label: { display: "block", fontSize: 12, fontWeight: 700, color: "#1B3A4B", marginBottom: 5, marginTop: 14 },
+  input: { width: "100%", padding: "11px 14px", borderRadius: 10, border: "2px solid #e8ddd0", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FDFBF9" },
+  typeSelector: { display: "flex", gap: 8, flexWrap: "wrap" },
+  typeOpt: { display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 16px", borderRadius: 10, border: "2px solid #ddd", cursor: "pointer", background: "white", fontFamily: "inherit" },
+  submitBtn: { width: "100%", background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", border: "none", padding: "13px", borderRadius: 12, fontWeight: 800, fontSize: 15, cursor: "pointer", marginTop: 20, fontFamily: "inherit", boxShadow: "0 4px 15px rgba(27,58,75,0.3)" },
+  footer: { background: "linear-gradient(135deg, #1B3A4B, #0F2530)", padding: "32px 24px", marginTop: 50, position: "relative", zIndex: 1, textAlign: "center" },
+  footerText: { color: "#F5E6D3", fontSize: 14, fontWeight: 600, margin: "0 0 6px" },
+  footerAr: { color: "#C8956C", fontSize: 15, fontWeight: 700, margin: "0 0 14px" },
+  footerLinks: { display: "flex", justifyContent: "center", gap: 14, alignItems: "center", flexWrap: "wrap" },
+  footerLink: { color: "#8BB8CC", textDecoration: "none", fontSize: 13, fontWeight: 600, cursor: "pointer" },
+  duplicateModal: { background: "white", borderRadius: 18, padding: "32px 28px", textAlign: "center", maxWidth: 480, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.3)", maxHeight: "80vh", overflow: "auto" },
+  duplicateIcon: { fontSize: 48, marginBottom: 12 },
+  duplicateList: { textAlign: "left", margin: "16px 0 24px", maxHeight: 200, overflowY: "auto", borderRadius: 10, border: "1px solid #ede5da", background: "#FAF6F1" },
+  duplicateItem: { display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderBottom: "1px solid #ede5da" },
+  duplicateItemIcon: { width: 36, height: 36, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 },
+  duplicateItemInfo: { display: "flex", flexDirection: "column", gap: 2, flex: 1, minWidth: 0 },
+  duplicateItemTitle: { fontSize: 13, fontWeight: 700, color: "#1B3A4B", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+  duplicateItemMeta: { fontSize: 11, color: "#888" },
+  duplicateConfirmBtn: { padding: "10px 24px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #E67E22, #D35400)", color: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", boxShadow: "0 4px 15px rgba(230,126,34,0.3)" },
+  subjectGroupControls: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 8 },
+  subjectGroupLabel: { fontSize: 14, fontWeight: 700, color: "#1B3A4B" },
+  groupToggleBtn: { padding: "4px 12px", borderRadius: 20, border: "1px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 600, fontSize: 11, fontFamily: "inherit", color: "#777" },
+};

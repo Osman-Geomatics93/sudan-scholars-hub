@@ -652,3 +652,40 @@ model ResumeAward {
 
   @@index([resumeId])
 }
+
+// ============ STUDY MATERIALS MODERATION ============
+enum MaterialStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model StudyMaterial {
+  id             String         @id @default(cuid())
+  title          String
+  type           String         // pdf, docx, pptx, video
+  url            String
+  description    String?        @db.Text
+  subject        String
+  facultyId      String?
+  specialtyId    String?
+  uploaderRole   String         @default("student")
+  countryId      String
+  countryName    String
+  universityId   String
+  universityName String
+  degreeId       String
+  degreeName     String
+  semester       String
+  status         MaterialStatus @default(PENDING)
+  rejectionNote  String?
+  reviewedAt     DateTime?
+  uploadedAt     DateTime       @default(now())
+  editedAt       DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([status])
+  @@index([countryId, universityId, degreeId])
+  @@index([uploadedAt])
+}
