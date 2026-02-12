@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
     const degreeId = searchParams.get('degreeId');
     const semester = searchParams.get('semester');
     const userId = searchParams.get('userId');
+    const limit = searchParams.get('limit');
+    const offset = searchParams.get('offset');
+    const search = searchParams.get('search');
+    const type = searchParams.get('type');
 
     const where: Record<string, unknown> = {};
 
@@ -29,13 +33,36 @@ export async function GET(request: NextRequest) {
     if (universityId) where.universityId = universityId;
     if (degreeId) where.degreeId = degreeId;
     if (semester) where.semester = semester;
+    if (type) where.type = type;
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { subject: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
 
-    const materials = await prisma.studyMaterial.findMany({
-      where,
-      orderBy: { uploadedAt: 'desc' },
-    });
+    // Lightweight mode: return only categorization fields for client-side counting
+    const fieldsOnly = searchParams.get('fieldsOnly');
+    if (fieldsOnly === 'true') {
+      const items = await prisma.studyMaterial.findMany({
+        where,
+        select: { id: true, countryId: true, universityId: true, degreeId: true, semester: true },
+      });
+      return NextResponse.json({ materials: items, total: items.length });
+    }
 
-    return NextResponse.json({ materials });
+    const [materials, total] = await Promise.all([
+      prisma.studyMaterial.findMany({
+        where,
+        orderBy: { uploadedAt: 'desc' },
+        ...(limit ? { take: parseInt(limit, 10) } : {}),
+        ...(offset ? { skip: parseInt(offset, 10) } : {}),
+      }),
+      prisma.studyMaterial.count({ where }),
+    ]);
+
+    return NextResponse.json({ materials, total });
   } catch (error) {
     console.error('Error fetching study materials:', error);
     return NextResponse.json(

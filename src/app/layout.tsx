@@ -6,6 +6,7 @@ const siteUrl = 'https://www.deltaroots.store';
 
 export const viewport: Viewport = {
   themeColor: '#2563eb',
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {

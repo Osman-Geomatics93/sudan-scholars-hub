@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { COUNTRIES } from "@/lib/constants/countries";
 
 
-const TELEGRAM_LINK = "https://t.me/";
+const TELEGRAM_LINK = "https://t.me/+uNRCkz0PUfQzOGZk";
 
 const DEGREE_LEVELS = [
   { id: "bsc", name: "BSc — Bachelor", icon: "🎓", color: "#2E86C1", arabic: "بكالوريوس", desc: "Undergraduate programs" },
@@ -357,6 +357,14 @@ const T = {
     materials: "Materials",
     degreeLevels: "Degree Levels",
     browseByCountry: "Browse by Country",
+    recentMaterials: "Recent Materials",
+    recentMaterialsSub: "Latest uploads from students around the world",
+    viewAllMaterials: "Browse All Materials",
+    browseAllSub: "Search and filter all study materials",
+    searchMaterials: "Search materials by title, subject...",
+    loadMore: "Load More",
+    showing: "Showing",
+    of: "of",
     howItWorks: "How It Works",
     step1Title: "Select Country",
     step1Desc: "Choose the country where you study",
@@ -492,6 +500,14 @@ const T = {
     materials: "مواد",
     degreeLevels: "مراحل دراسية",
     browseByCountry: "تصفح حسب الدولة",
+    recentMaterials: "أحدث المواد",
+    recentMaterialsSub: "آخر ما رفعه الطلاب من حول العالم",
+    viewAllMaterials: "تصفح جميع المواد",
+    browseAllSub: "ابحث وصنّف جميع المواد الدراسية",
+    searchMaterials: "ابحث عن مادة بالعنوان أو الموضوع...",
+    loadMore: "عرض المزيد",
+    showing: "عرض",
+    of: "من",
     howItWorks: "كيف تعمل المنصة",
     step1Title: "اختر الدولة",
     step1Desc: "اختر الدولة التي تدرس فيها",
@@ -885,6 +901,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [myMaterials, setMyMaterials] = useState([]);
   const [loadingMyMaterials, setLoadingMyMaterials] = useState(false);
+  const [allMaterials, setAllMaterials] = useState([]);
+  const [allMaterialsTotal, setAllMaterialsTotal] = useState(0);
+  const [browseMatList, setBrowseMatList] = useState([]);
+  const [browseMatTotal, setBrowseMatTotal] = useState(0);
+  const [browseMatSearch, setBrowseMatSearch] = useState("");
+  const [browseMatType, setBrowseMatType] = useState("all");
+  const [browseMatLoading, setBrowseMatLoading] = useState(false);
+  const [materialCountData, setMaterialCountData] = useState([]);
   const userMenuRef = useRef(null);
 
   // Auth session
@@ -958,6 +982,56 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   useEffect(() => {
     fetchMaterials();
   }, [fetchMaterials]);
+
+  // Fetch recent materials + total count for home page
+  const fetchAllMaterials = useCallback(async () => {
+    try {
+      const [recentRes, countRes] = await Promise.all([
+        fetch("/api/study-hub/materials?limit=8"),
+        fetch("/api/study-hub/materials?fieldsOnly=true"),
+      ]);
+      if (recentRes.ok) {
+        const data = await recentRes.json();
+        setAllMaterials(data.materials || []);
+        setAllMaterialsTotal(data.total || 0);
+      }
+      if (countRes.ok) {
+        const data = await countRes.json();
+        setMaterialCountData(data.materials || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch all materials:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllMaterials();
+  }, [fetchAllMaterials]);
+
+  // Fetch materials for the "browse-all" view with search/filter/pagination
+  const fetchBrowseMaterials = useCallback(async (searchOverride, typeOverride, existingList) => {
+    setBrowseMatLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.set("limit", "12");
+      const s = searchOverride !== undefined ? searchOverride : browseMatSearch;
+      const tp = typeOverride !== undefined ? typeOverride : browseMatType;
+      const list = existingList || [];
+      if (list.length > 0) params.set("offset", String(list.length));
+      if (s) params.set("search", s);
+      if (tp !== "all") params.set("type", tp);
+      const res = await fetch(`/api/study-hub/materials?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setBrowseMatList(list.length > 0 ? [...list, ...(data.materials || [])] : (data.materials || []));
+        setBrowseMatTotal(data.total || 0);
+      }
+    } catch (err) {
+      console.error("Failed to fetch browse materials:", err);
+    } finally {
+      setBrowseMatLoading(false);
+    }
+  }, [browseMatSearch, browseMatType]);
 
   // Scroll listener for header transformation
   useEffect(() => {
@@ -1058,6 +1132,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         showNotif(`${t.submittedForReview}\n${t.pendingReviewMsg}`);
         // Refresh materials
         fetchMaterials();
+        fetchAllMaterials();
         if (currentUserId) fetchMyMaterials();
       } catch {
         showNotif(t.fillRequired, "error");
@@ -1083,6 +1158,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" });
         setShowUploadModal(false);
         showNotif(`${t.submittedForReview}\n${t.pendingReviewMsg}`);
+        fetchAllMaterials();
         if (currentUserId) fetchMyMaterials();
       } catch {
         showNotif(t.fillRequired, "error");
@@ -1123,6 +1199,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       }
       setMaterials(materials.filter((m) => m.id !== deleteConfirm.id));
       setMyMaterials(myMaterials.filter((m) => m.id !== deleteConfirm.id));
+      setAllMaterials(allMaterials.filter((m) => m.id !== deleteConfirm.id));
+      setAllMaterialsTotal((prev) => Math.max(0, prev - 1));
+      setBrowseMatList((prev) => prev.filter((m) => m.id !== deleteConfirm.id));
+      setBrowseMatTotal((prev) => Math.max(0, prev - 1));
       setDeleteConfirm(null);
       showNotif(t.deleteSuccess);
     } catch (err) {
@@ -1246,30 +1326,48 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     if (newView === "my-materials" && currentUserId) {
       fetchMyMaterials();
     }
+    // Fetch browse materials when navigating to browse-all
+    if (newView === "browse-all") {
+      setBrowseMatList([]);
+      setBrowseMatSearch("");
+      setBrowseMatType("all");
+      setBrowseMatTotal(0);
+      fetchBrowseMaterials("", "all");
+    }
   };
 
-  const countMats = (cId, uId, dId, sem) =>
-    materials.filter(
+  const countMats = (cId, uId, dId, sem) => {
+    const source = materialCountData.length > 0 ? materialCountData : (allMaterials.length > 0 ? allMaterials : materials);
+    return source.filter(
       (m) =>
         (!cId || m.countryId === cId) &&
         (!uId || m.universityId === uId) &&
         (!dId || m.degreeId === dId) &&
         (!sem || m.semester === sem)
     ).length;
+  };
 
   const renderMaterialCard = (mat, showLocation = false) => {
     const ti = getTypeInfo(mat.type);
     const ri = getRoleInfo(mat.uploaderRole);
     const matCountry = ALL_COUNTRIES.find((c) => c.id === mat.countryId);
     const deg = DEGREE_LEVELS.find((d) => d.id === mat.degreeId);
+    const statusBorderColor = mat.status === "PENDING" ? "#f59e0b" : mat.status === "REJECTED" ? "#ef4444" : "#10b981";
+    const borderSide = isRTL ? "borderRight" : "borderLeft";
     return (
       <div
-        key={mat.id} style={{ ...S.matCard, ...(isRTL ? { borderLeft: "none", borderRight: "4px solid #e0d5c8" } : {}) }}
-        onMouseEnter={(e) => { const prop = isRTL ? "borderRightColor" : "borderLeftColor"; e.currentTarget.style[prop] = ti.color; e.currentTarget.style.transform = isRTL ? "translateX(-4px)" : "translateX(4px)"; }}
-        onMouseLeave={(e) => { const prop = isRTL ? "borderRightColor" : "borderLeftColor"; e.currentTarget.style[prop] = "#e0d5c8"; e.currentTarget.style.transform = "translateX(0)"; }}
+        className="my-mat-card studyhub-mat-card"
+        key={mat.id}
+        style={{
+          ...S.matCard,
+          [borderSide]: `4px solid ${statusBorderColor}`,
+          ...(isRTL ? { borderLeft: "none" } : { borderRight: "none" }),
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style[borderSide === "borderLeft" ? "borderLeftColor" : "borderRightColor"] = ti.color; }}
+        onMouseLeave={(e) => { e.currentTarget.style[borderSide === "borderLeft" ? "borderLeftColor" : "borderRightColor"] = statusBorderColor; }}
       >
-        <div style={{ ...S.matIcon, background: ti.color + "15", color: ti.color }}>{ti.icon}</div>
-        <div style={S.matInfo}>
+        <div className="studyhub-mat-icon" style={{ ...S.matIcon, background: ti.color + "12", color: ti.color, boxShadow: `0 3px 12px ${ti.color}20` }}>{ti.icon}</div>
+        <div className="studyhub-mat-info" style={S.matInfo}>
           <h4 style={S.matTitle}>{mat.title}</h4>
           <p style={S.matSubject}>📖 {mat.subject}</p>
           {mat.facultyId && (() => {
@@ -1292,46 +1390,60 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {mat.editedAt && <span style={S.matDate}>✏️ {t.edited}</span>}
           </div>
         </div>
-        <div style={{ ...S.matActions, position: "relative" }}>
-          {mat.status && mat.status !== "APPROVED" && (
+        <div className="studyhub-mat-actions" style={{ ...S.matActions, position: "relative" }}>
+          {mat.status && (
             <span style={{
-              display: "inline-block", padding: "2px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700,
-              background: mat.status === "PENDING" ? "#fef3c7" : "#fee2e2",
-              color: mat.status === "PENDING" ? "#92400e" : "#991b1b",
-              marginBottom: 4,
+              display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 700, letterSpacing: "0.3px",
+              background: mat.status === "APPROVED" ? "#d1fae5" : mat.status === "PENDING" ? "#fef3c7" : "#fee2e2",
+              color: mat.status === "APPROVED" ? "#065f46" : mat.status === "PENDING" ? "#92400e" : "#991b1b",
+              marginBottom: 6,
             }}>
-              {mat.status === "PENDING" ? t.statusPending : t.statusRejected}
+              {mat.status === "APPROVED" ? `✅ ${t.statusApproved}` : mat.status === "PENDING" ? `⏳ ${t.statusPending}` : `❌ ${t.statusRejected}`}
             </span>
           )}
           <a href={mat.url} target="_blank" rel="noopener noreferrer" style={S.dlBtn}>
             {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
           </a>
-          {isLoggedIn && currentUserId && mat.userId === currentUserId && (
-            <button onClick={() => handleEdit(mat)} style={S.editBtn} title={t.editMaterial}>✏️</button>
-          )}
-          <div data-share-popup="true" style={{ position: "relative" }}>
-            <button onClick={() => handleShareToggle(mat.id)} style={S.shareBtn} title={t.share}>🔗</button>
-            {sharePopup === mat.id && (
-              <div style={{ ...S.sharePopup, ...(isRTL ? { left: 0, right: "auto" } : { right: 0, left: "auto" }) }}>
-                <button onClick={() => handleCopyLink(mat)} style={S.shareOption}>📋 {t.copyLink}</button>
-                <a
-                  href={`https://wa.me/?text=${encodeURIComponent(mat.title + " — " + mat.url)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={S.shareOption}
-                  onClick={() => setSharePopup(null)}
-                >💬 {t.shareVia} WhatsApp</a>
-                <a
-                  href={`https://t.me/share/url?url=${encodeURIComponent(mat.url)}&text=${encodeURIComponent(mat.title)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={S.shareOption}
-                  onClick={() => setSharePopup(null)}
-                >📱 {t.shareVia} Telegram</a>
-              </div>
+          <div style={{ display: "flex", gap: 6 }}>
+            {isLoggedIn && currentUserId && mat.userId === currentUserId && (
+              <button
+                onClick={() => handleEdit(mat)} style={S.editBtn} title={t.editMaterial}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#f0e8df"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+              >✏️</button>
+            )}
+            <div data-share-popup="true" style={{ position: "relative" }}>
+              <button
+                onClick={() => handleShareToggle(mat.id)} style={S.shareBtn} title={t.share}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#f0e8df"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+              >🔗</button>
+              {sharePopup === mat.id && (
+                <div style={{ ...S.sharePopup, ...(isRTL ? { left: 0, right: "auto" } : { right: 0, left: "auto" }) }}>
+                  <button onClick={() => handleCopyLink(mat)} style={S.shareOption}>📋 {t.copyLink}</button>
+                  <a
+                    href={`https://wa.me/?text=${encodeURIComponent(mat.title + " — " + mat.url)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={S.shareOption}
+                    onClick={() => setSharePopup(null)}
+                  >💬 {t.shareVia} WhatsApp</a>
+                  <a
+                    href={`https://t.me/share/url?url=${encodeURIComponent(mat.url)}&text=${encodeURIComponent(mat.title)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={S.shareOption}
+                    onClick={() => setSharePopup(null)}
+                  >📱 {t.shareVia} Telegram</a>
+                </div>
+              )}
+            </div>
+            {isLoggedIn && currentUserId && mat.userId === currentUserId && (
+              <button
+                onClick={() => handleDeleteRequest(mat)} style={S.delBtn} title={t.confirmDelete}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#fee2e2"; e.currentTarget.style.borderColor = "#fca5a5"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "#e0d5c8"; }}
+              >🗑️</button>
             )}
           </div>
-          {isLoggedIn && currentUserId && mat.userId === currentUserId && (
-            <button onClick={() => handleDeleteRequest(mat)} style={S.delBtn} title={t.confirmDelete}>🗑️</button>
-          )}
         </div>
       </div>
     );
@@ -1341,13 +1453,277 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     <div style={S.app} dir={isRTL ? "rtl" : "ltr"}>
       <div style={S.bgPattern} />
 
-      {/* Responsive overrides for subject grouping & duplicate modal */}
+      {/* Comprehensive responsive styles */}
       <style>{`
-        @media (max-width: 600px) {
+        /* === BASE RULES (all viewports) === */
+        .studyhub-main {
+          padding-left: max(env(safe-area-inset-left, 0px), clamp(12px, 3vw, 24px)) !important;
+          padding-right: max(env(safe-area-inset-right, 0px), clamp(12px, 3vw, 24px)) !important;
+        }
+        .studyhub-breadcrumb {
+          padding-left: max(env(safe-area-inset-left, 0px), clamp(12px, 3vw, 24px)) !important;
+          padding-right: max(env(safe-area-inset-right, 0px), clamp(12px, 3vw, 24px)) !important;
+        }
+        .studyhub-footer {
+          padding-left: max(env(safe-area-inset-left, 0px), 24px) !important;
+          padding-right: max(env(safe-area-inset-right, 0px), 24px) !important;
+          padding-bottom: max(env(safe-area-inset-bottom, 0px), 32px) !important;
+        }
+        @supports (max-height: 1dvh) {
+          .studyhub-modal { max-height: 90dvh !important; }
+        }
+
+        /* Hover animations (preserved) */
+        .recent-mat-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 30px rgba(0,0,0,0.1) !important;
+          border-color: #C8956C !important;
+        }
+        .my-group-chevron {
+          transition: transform 0.3s ease;
+          display: inline-block;
+        }
+        .my-group-chevron.expanded { transform: rotate(90deg); }
+        [dir=rtl] .my-group-chevron.expanded { transform: rotate(-90deg); }
+        .my-mat-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        }
+        .my-group-header:hover { background: #f0ebe4 !important; }
+
+        /* Remove sticky hover on touch devices */
+        @media (hover: none) {
+          .recent-mat-card:hover,
+          .my-mat-card:hover,
+          .studyhub-country-card:hover {
+            transform: none !important;
+            box-shadow: 0 3px 16px rgba(0,0,0,0.05) !important;
+          }
+        }
+
+        /* === 1199px — LAPTOP === */
+        @media (max-width: 1199px) {
+          .studyhub-hero {
+            padding: clamp(28px, 5vw, 50px) clamp(16px, 3vw, 20px) clamp(24px, 4vw, 40px) !important;
+          }
+          .studyhub-stats-wrapper {
+            padding: 22px 16px !important;
+          }
+          .studyhub-degree-cards {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+          }
+          .studyhub-hero-nav { gap: 8px !important; }
+          .studyhub-section { margin-bottom: 40px !important; }
+        }
+
+        /* === 1023px — TABLET === */
+        @media (max-width: 1023px) {
+          .studyhub-hero {
+            padding: clamp(24px, 4vw, 44px) clamp(14px, 2.5vw, 18px) clamp(20px, 3.5vw, 36px) !important;
+            border-radius: 18px !important;
+          }
+          .studyhub-how-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .studyhub-degree-cards {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .studyhub-modal {
+            max-width: 480px !important;
+          }
+          .studyhub-browse-search-bar {
+            flex-direction: column !important;
+          }
+          .studyhub-browse-search-bar > div { min-width: 100% !important; }
+          .studyhub-browse-search-bar > button { width: 100% !important; }
+          .studyhub-hero-nav { gap: 8px !important; margin-top: 20px !important; }
+          .studyhub-hero-stats { margin-top: 24px !important; }
+          .studyhub-hero-stats > div { padding-left: clamp(10px, 2vw, 20px) !important; padding-right: clamp(10px, 2vw, 20px) !important; }
+          .studyhub-section { margin-bottom: 36px !important; }
+          .studyhub-country-search > div { max-width: 100% !important; }
+        }
+
+        /* === 767px — LARGE PHONE (major changes) === */
+        @media (max-width: 767px) {
+          /* Hero */
+          .studyhub-hero {
+            padding: 28px 16px 24px !important;
+            border-radius: 16px !important;
+            margin-bottom: 28px !important;
+          }
+          .studyhub-hero-title { font-size: 24px !important; }
+          .studyhub-hero-badge { font-size: 11px !important; padding: 6px 16px !important; margin-bottom: 14px !important; }
+          .studyhub-hero-sub { font-size: 13px !important; margin-bottom: 8px !important; }
+          .studyhub-hero-arabic { font-size: 15px !important; margin-bottom: 20px !important; }
+          .studyhub-search-box {
+            max-width: 100% !important;
+            padding: 4px 6px 4px 14px !important;
+          }
+
+          /* Stats */
+          .studyhub-stats-row {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+          }
+          .studyhub-stat-card {
+            padding: 14px 16px !important;
+            min-width: 0 !important;
+          }
+          .studyhub-stats-wrapper { padding: 18px 12px !important; margin-bottom: 28px !important; }
+
+          /* Grids */
+          .studyhub-how-grid { grid-template-columns: 1fr !important; }
+          .studyhub-degree-grid { gap: 10px !important; }
+          .studyhub-country-grid {
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+          }
+          .studyhub-recent-grid { grid-template-columns: 1fr !important; }
+
+          /* View Header */
+          .studyhub-view-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+          }
+          .studyhub-upload-btn {
+            width: 100% !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            text-align: center !important;
+            justify-content: center !important;
+          }
+
+          /* Material cards → vertical stack */
+          .studyhub-mat-card {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 16px !important;
+            gap: 12px !important;
+          }
+          .studyhub-mat-icon {
+            width: 44px !important;
+            height: 44px !important;
+            font-size: 22px !important;
+          }
+          .studyhub-mat-info { min-width: 100% !important; }
+          .studyhub-mat-actions {
+            flex-direction: row !important;
+            width: 100% !important;
+            justify-content: flex-start !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+          }
+          .studyhub-mat-actions a {
+            flex: 1 !important;
+            text-align: center !important;
+            min-height: 44px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+
+          /* Filter row → horizontal scroll */
+          .studyhub-filter-row {
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+            padding-bottom: 4px !important;
+          }
+          .studyhub-filter-row::-webkit-scrollbar { display: none; }
+          .studyhub-filter-row button {
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            min-height: 44px !important;
+          }
+
+          /* Modal → bottom-sheet pattern */
+          .studyhub-overlay {
+            align-items: flex-end !important;
+            padding: 0 !important;
+          }
+          .studyhub-modal {
+            max-width: 100% !important;
+            border-radius: 20px 20px 0 0 !important;
+            max-height: 92dvh !important;
+            animation: studyhub-slide-up 0.3s ease-out;
+          }
+          .studyhub-modal-head {
+            padding: 20px 20px 16px !important;
+          }
+          .studyhub-modal-body {
+            padding: 18px 20px 24px !important;
+          }
+          .studyhub-modal-faculty-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .studyhub-type-selector {
+            gap: 8px !important;
+          }
+          .studyhub-type-selector button {
+            min-width: 60px !important;
+            padding: 10px 12px !important;
+          }
+
+          /* Confirm modal → bottom-sheet too */
+          .studyhub-confirm-modal {
+            border-radius: 20px 20px 0 0 !important;
+            max-width: 100% !important;
+            padding: 28px 20px !important;
+          }
+
+          /* Breadcrumb */
+          .studyhub-breadcrumb {
+            font-size: 12px !important;
+            gap: 6px !important;
+            padding-top: 8px !important;
+            padding-bottom: 8px !important;
+          }
+          .studyhub-breadcrumb span {
+            font-size: 12px !important;
+          }
+
+          /* My Materials banner */
+          .my-mat-banner {
+            padding: 20px 18px !important;
+            border-radius: 16px !important;
+          }
+          .my-mat-banner h2 { font-size: 20px !important; }
+          .my-mat-stats-row {
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+          }
+
+          /* Subject grouping */
+          .studyhub-subj-controls {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          .studyhub-subj-controls span { font-size: 13px !important; }
+          .studyhub-subj-header {
+            padding: 12px 14px !important;
+            gap: 8px !important;
+          }
+          .studyhub-subj-header .studyhub-subj-title { font-size: 14px !important; }
+          .studyhub-subj-header .studyhub-subj-count {
+            font-size: 11px !important;
+            padding: 2px 8px !important;
+          }
+          .studyhub-subj-body { padding: 8px 10px !important; }
+          .studyhub-group-toggles button {
+            min-height: 36px !important;
+            padding: 6px 14px !important;
+            font-size: 12px !important;
+          }
+
+          /* Duplicate modal */
           .studyhub-dup-modal {
             padding: 24px 16px !important;
-            border-radius: 14px !important;
-            max-height: 85vh !important;
+            border-radius: 20px 20px 0 0 !important;
+            max-height: 85dvh !important;
+            max-width: 100% !important;
           }
           .studyhub-dup-modal h3 { font-size: 17px !important; }
           .studyhub-dup-modal p { font-size: 13px !important; }
@@ -1359,94 +1735,232 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             width: 100% !important;
             min-height: 44px !important;
           }
-          .studyhub-dup-list {
-            max-height: 160px !important;
-          }
-          .studyhub-dup-item {
-            padding: 8px 10px !important;
-            gap: 8px !important;
-          }
-          .studyhub-dup-item-icon {
-            width: 30px !important;
-            height: 30px !important;
-            font-size: 15px !important;
-          }
+          .studyhub-dup-list { max-height: 160px !important; }
+          .studyhub-dup-item { padding: 8px 10px !important; gap: 8px !important; }
+          .studyhub-dup-item-icon { width: 30px !important; height: 30px !important; font-size: 15px !important; }
           .studyhub-dup-item-title { font-size: 12px !important; }
           .studyhub-dup-item-meta { font-size: 10px !important; }
-          .studyhub-subj-controls {
+
+          /* Footer */
+          .studyhub-footer {
+            padding-top: 24px !important;
+            margin-top: 32px !important;
+          }
+          .studyhub-footer-links {
+            gap: 10px !important;
+            font-size: 12px !important;
+          }
+
+          /* Notification */
+          .studyhub-notification {
+            left: 12px !important;
+            right: 12px !important;
+            top: 12px !important;
+            font-size: 13px !important;
+            padding: 12px 18px !important;
+            text-align: center !important;
+          }
+
+          /* Semester grid */
+          .studyhub-sem-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+          }
+          .studyhub-sem-card {
+            padding: 18px 14px !important;
+          }
+
+          /* Recent header */
+          .studyhub-recent-header {
             flex-direction: column !important;
             align-items: flex-start !important;
           }
-          .studyhub-subj-controls span { font-size: 13px !important; }
-          .studyhub-subj-header {
-            padding: 12px 14px !important;
+
+          /* Hero quick nav → full-width stacked pills */
+          .studyhub-hero-nav {
+            flex-direction: column !important;
             gap: 8px !important;
+            margin-top: 18px !important;
           }
-          .studyhub-subj-header .studyhub-subj-title {
-            font-size: 14px !important;
-          }
-          .studyhub-subj-header .studyhub-subj-count {
-            font-size: 11px !important;
-            padding: 2px 8px !important;
-          }
-          .studyhub-subj-body {
-            padding: 8px 10px !important;
-          }
-          .studyhub-group-toggles button {
-            min-height: 36px !important;
-            padding: 6px 14px !important;
-            font-size: 12px !important;
-          }
-        }
-        @media (max-width: 380px) {
-          .studyhub-dup-modal {
-            padding: 18px 12px !important;
-          }
-          .studyhub-subj-header .studyhub-subj-title {
+          .studyhub-hero-nav button {
+            width: 100% !important;
+            justify-content: center !important;
+            min-height: 44px !important;
             font-size: 13px !important;
           }
-        }
-        @media (max-width: 768px) {
-          .studyhub-hero-title {
-            font-size: 28px !important;
-          }
-          .studyhub-degree-grid {
-            gap: 10px !important;
-          }
-          .studyhub-how-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-          .studyhub-stats-row {
-            gap: 10px !important;
-          }
-          .studyhub-country-grid {
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .studyhub-hero-title {
-            font-size: 24px !important;
-          }
-          .studyhub-degree-grid {
-            justify-content: center !important;
-          }
-          .studyhub-how-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .studyhub-stats-row {
+
+          /* Hero inline stats → 2×2 grid, remove border dividers */
+          .studyhub-hero-stats {
             display: grid !important;
             grid-template-columns: 1fr 1fr !important;
-            gap: 10px !important;
+            gap: 16px 8px !important;
+            margin-top: 22px !important;
+          }
+          .studyhub-hero-stats > div {
+            border-right: none !important;
+            border-left: none !important;
+            padding: 0 !important;
+          }
+
+          /* Sections */
+          .studyhub-section {
+            margin-bottom: 28px !important;
+          }
+          .studyhub-section > div > h3 {
+            font-size: 20px !important;
+          }
+          .studyhub-section > div > p {
+            font-size: 12px !important;
+          }
+
+          /* Card-style sections → tighter on mobile */
+          .studyhub-card-section {
+            padding: 28px 16px !important;
+            border-radius: 18px !important;
+          }
+
+          /* Country search → full width */
+          .studyhub-country-search {
+            margin-bottom: 16px !important;
+          }
+          .studyhub-country-search > div {
+            max-width: 100% !important;
+            padding: 4px 6px 4px 14px !important;
+          }
+
+          /* All buttons: touch targets */
+          .studyhub-mat-card button,
+          .studyhub-confirm-modal button,
+          .studyhub-dup-modal button {
+            min-height: 44px !important;
+          }
+        }
+
+        /* Bottom-sheet slide-up animation */
+        @keyframes studyhub-slide-up {
+          from { transform: translateY(100%); }
+          to { transform: translateY(0); }
+        }
+
+        /* === 479px — SMALL PHONE === */
+        @media (max-width: 479px) {
+          .studyhub-hero-title { font-size: 21px !important; }
+          .studyhub-hero-sub { font-size: 12px !important; }
+          .studyhub-hero-arabic { font-size: 14px !important; }
+          .studyhub-hero { padding: 22px 12px 20px !important; border-radius: 14px !important; }
+
+          .studyhub-degree-grid,
+          .studyhub-degree-cards {
+            grid-template-columns: 1fr !important;
           }
           .studyhub-country-grid {
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+            gap: 8px !important;
+          }
+          .studyhub-country-card { padding: 16px 10px !important; }
+
+          .studyhub-modal { max-height: 95dvh !important; }
+          .studyhub-modal-body { padding: 14px 16px 20px !important; }
+          .studyhub-modal-head { padding: 16px 16px 12px !important; }
+
+          .studyhub-breadcrumb {
+            overflow-x: auto !important;
+            flex-wrap: nowrap !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+          }
+          .studyhub-breadcrumb::-webkit-scrollbar { display: none; }
+          .studyhub-breadcrumb span {
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            font-size: 11px !important;
+          }
+
+          .studyhub-sem-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
             gap: 10px !important;
+          }
+          .studyhub-sem-card { padding: 14px 10px !important; }
+
+          .my-mat-banner {
+            padding: 16px 14px !important;
+          }
+          .my-mat-banner h2 { font-size: 18px !important; }
+
+          /* Hero nav smaller pills */
+          .studyhub-hero-nav button {
+            padding: 8px 14px !important;
+            font-size: 12px !important;
+          }
+
+          /* Hero stats tighter */
+          .studyhub-hero-stats { gap: 12px 6px !important; }
+          .studyhub-hero-stats > div span:first-child { font-size: 14px !important; }
+
+          /* Sections tighter */
+          .studyhub-section { margin-bottom: 22px !important; }
+          .studyhub-section > div > h3 { font-size: 18px !important; }
+
+          /* Card sections ultra-compact */
+          .studyhub-card-section {
+            padding: 22px 12px !important;
+            border-radius: 14px !important;
+          }
+        }
+
+        /* === 380px — ULTRA-SMALL PHONE === */
+        @media (max-width: 380px) {
+          .studyhub-hero { padding: 18px 10px 16px !important; margin-bottom: 20px !important; }
+          .studyhub-hero-title { font-size: 19px !important; letter-spacing: -0.5px !important; }
+          .studyhub-hero-badge { font-size: 10px !important; padding: 5px 12px !important; }
+
+          .studyhub-stats-row {
+            grid-template-columns: 1fr !important;
+          }
+          .studyhub-stat-card { padding: 12px 14px !important; }
+
+          .studyhub-sem-grid { grid-template-columns: 1fr !important; }
+
+          .studyhub-country-grid {
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
+            gap: 6px !important;
+          }
+          .studyhub-country-card { padding: 12px 8px !important; border-radius: 12px !important; }
+
+          .studyhub-main { padding: 12px 8px !important; }
+          .studyhub-breadcrumb {
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+          }
+
+          .studyhub-dup-modal { padding: 18px 12px !important; }
+          .studyhub-subj-header .studyhub-subj-title { font-size: 13px !important; }
+
+          .studyhub-footer { padding: 20px 12px !important; }
+          .studyhub-footer-links { gap: 8px !important; }
+
+          /* Hero stats ultra-compact */
+          .studyhub-hero-stats { gap: 10px 4px !important; }
+          .studyhub-hero-stats > div span:nth-child(2) { font-size: 18px !important; }
+          .studyhub-hero-stats > div span:last-child { font-size: 9px !important; }
+
+          /* Hero nav minimal */
+          .studyhub-hero-nav button { padding: 7px 10px !important; font-size: 11px !important; }
+
+          /* Sections ultra-compact */
+          .studyhub-section { margin-bottom: 18px !important; }
+          .studyhub-section > div > h3 { font-size: 17px !important; }
+          .studyhub-section > div > p { font-size: 11px !important; }
+
+          /* Card sections - minimal padding */
+          .studyhub-card-section {
+            padding: 18px 10px !important;
+            border-radius: 12px !important;
           }
         }
       `}</style>
 
       {notification && (
-        <div style={{
+        <div className="studyhub-notification" style={{
           ...S.notification,
           background: notification.type === "error"
             ? "linear-gradient(135deg, #e74c3c, #c0392b)"
@@ -1780,7 +2294,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
       {/* BREADCRUMB */}
       {view !== "home" && (
-        <nav style={S.breadcrumb}>
+        <nav className="studyhub-breadcrumb" style={S.breadcrumb}>
           <span style={S.crumbItem} onClick={() => navigate("home")}>🏠 {t.home}</span>
           {view === "my-materials" && (
             <>
@@ -1822,19 +2336,19 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       )}
 
       {/* MAIN */}
-      <main style={S.main}>
+      <main className="studyhub-main" style={S.main}>
 
         {/* === HOME === */}
         {view === "home" && (
           <div>
-            {/* 1. Hero — Dark Gradient */}
-            <div style={S.hero}>
-              <div style={S.heroBadge}>🇸🇩 {t.heroBadge}</div>
+            {/* ══════ 1. HERO — with integrated stats & quick nav ══════ */}
+            <div className="studyhub-hero" style={S.hero}>
+              <div className="studyhub-hero-badge" style={S.heroBadge}>🇸🇩 {t.heroBadge}</div>
               <h2 className="studyhub-hero-title" style={S.heroTitle}>{t.heroTitle}</h2>
-              <p style={S.heroSub}>{t.heroSub}</p>
-              <p style={{ ...S.heroArabic, direction: isRTL ? "ltr" : "rtl" }}>{t.heroArabic}</p>
+              <p className="studyhub-hero-sub" style={S.heroSub}>{t.heroSub}</p>
+              <p className="studyhub-hero-arabic" style={{ ...S.heroArabic, direction: isRTL ? "ltr" : "rtl" }}>{t.heroArabic}</p>
 
-              <div style={S.searchBox}>
+              <div className="studyhub-search-box" style={S.searchBox}>
                 <span style={{ ...S.searchIcon, ...(isRTL ? { marginRight: 0, marginLeft: 8 } : {}) }}>🔍</span>
                 <input
                   type="text"
@@ -1845,46 +2359,57 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 />
                 {searchQuery && <button onClick={() => setSearchQuery("")} style={S.clearBtn}>✕</button>}
               </div>
-            </div>
 
-            {/* 2. Degree Cards — Dedicated Section */}
-            <h3 style={S.secTitle}>🎓 {t.degreeLevelsTitle}</h3>
-            <div className="studyhub-degree-grid" style={S.degreePreview}>
-              {DEGREE_LEVELS.map((d) => (
-                <div
-                  key={d.id}
-                  style={{ ...S.degreePreviewCard, borderTopColor: d.color }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.1)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; }}
-                >
-                  <span style={{ fontSize: 32 }}>{d.icon}</span>
-                  <span style={{ fontWeight: 800, fontSize: 15, color: "#1B3A4B" }}>{degreeName(d)}</span>
-                  <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
-                </div>
-              ))}
-            </div>
+              {/* Quick Navigation Pills */}
+              <div className="studyhub-hero-nav" style={S.heroQuickNav}>
+                <button style={S.heroQuickPill} onClick={() => navigate("browse-all")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >📚 {t.viewAllMaterials}</button>
+                <button style={S.heroQuickPill} onClick={() => navigate("my-materials")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >📂 {t.myMaterials}</button>
+                <button style={S.heroQuickPill} onClick={() => {
+                  if (!requireLogin()) { if (selectedSemester) setShowUploadModal(true); else showNotif(t.selectSemesterFirst, "error"); }
+                }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >⬆️ {t.upload}</button>
+              </div>
 
-            {/* 3. Stats Strip */}
-            <div style={S.statsWrapper}>
-              <div className="studyhub-stats-row" style={S.statsRow}>
+              {/* Inline Platform Stats */}
+              <div className="studyhub-hero-stats" style={S.heroInlineStats}>
                 {[
                   { n: ALL_COUNTRIES.length, l: t.countries, icon: "🌍" },
                   { n: "10,000+", l: t.universities, icon: "🏛️" },
-                  { n: materials.length, l: t.materials, icon: "📚" },
+                  { n: allMaterialsTotal, l: t.materials, icon: "📚" },
                   { n: DEGREE_LEVELS.length, l: t.degreeLevels, icon: "🎓" },
-                ].map((s, i) => (
-                  <div key={i} style={S.statCard}>
-                    <span style={S.statIcon}>{s.icon}</span>
-                    <span style={S.statNum}>{s.n}</span>
-                    <span style={S.statLabel}>{s.l}</span>
+                ].map((s, i, arr) => (
+                  <div key={i} style={{
+                    ...S.heroInlineStat,
+                    ...(i < arr.length - 1 ? (isRTL
+                      ? { borderLeft: "1px solid rgba(255,255,255,0.12)", paddingLeft: "clamp(14px, 3vw, 28px)" }
+                      : { borderRight: "1px solid rgba(255,255,255,0.12)", paddingRight: "clamp(14px, 3vw, 28px)" }
+                    ) : {}),
+                  }}>
+                    <span style={{ fontSize: 18, marginBottom: 4, opacity: 0.7 }}>{s.icon}</span>
+                    <span style={S.heroInlineStatNum}>{s.n}</span>
+                    <span style={S.heroInlineStatLabel}>{s.l}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* 4. How It Works */}
-            <div style={S.howSection}>
-              <h3 style={{ ...S.secTitle, marginBottom: 16 }}>📖 {t.howItWorks}</h3>
+            {/* ══════ 2. HOW IT WORKS — moved up for new user onboarding ══════ */}
+            <div className="studyhub-section studyhub-card-section" style={S.howSectionRedesign}>
+              <div style={S.sectionHead}>
+                <h3 style={S.sectionHeadTitle}>📖 {t.howItWorks}</h3>
+                <p style={S.sectionHeadSub}>
+                  {isRTL ? "ابدأ في أربع خطوات بسيطة" : "Get started in four simple steps"}
+                </p>
+                <div style={S.sectionDivider} />
+              </div>
               <div className="studyhub-how-grid" style={S.howGrid}>
                 {[
                   { step: "1", icon: "🌍", title: t.step1Title, desc: t.step1Desc },
@@ -1892,45 +2417,166 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   { step: "3", icon: "🎓", title: t.step3Title, desc: t.step3Desc },
                   { step: "4", icon: "📚", title: t.step4Title, desc: t.step4Desc },
                 ].map((h) => (
-                  <div key={h.step} style={S.howCard}>
+                  <div key={h.step} style={S.howCardRedesign}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 25px rgba(0,0,0,0.08)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                  >
                     <div style={{ ...S.howStep, ...(isRTL ? { left: "auto", right: 16 } : {}) }}>{h.step}</div>
-                    <span style={{ fontSize: 32 }}>{h.icon}</span>
-                    <h4 style={{ margin: "8px 0 4px", color: "#1B3A4B", fontWeight: 800 }}>{h.title}</h4>
-                    <p style={{ margin: 0, fontSize: 13, color: "#777" }}>{h.desc}</p>
+                    <span style={{ fontSize: 36, display: "block", marginBottom: 4 }}>{h.icon}</span>
+                    <h4 style={{ margin: "8px 0 6px", color: "#1B3A4B", fontWeight: 800, fontSize: 16 }}>{h.title}</h4>
+                    <p style={{ margin: 0, fontSize: 13, color: "#777", lineHeight: 1.5 }}>{h.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* 5. Browse by Country */}
-            <h3 style={S.secTitle}>🌍 {t.browseByCountry}</h3>
-            <div className="studyhub-country-grid" style={S.countryGrid}>
-              {(showAllCountries ? filteredCountries : filteredCountries.slice(0, 24)).map((c) => (
-                <div
-                  key={c.id}
-                  style={S.countryCard}
-                  onClick={() => navigate("universities", c)}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.12)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.05)"; }}
-                >
-                  <span style={S.countryFlag}>{c.flag}</span>
-                  <h4 style={S.countryName}>{countryName(c)}</h4>
-                  <span style={S.countryMats}>{countMats(c.id)} {t.nMaterials}</span>
-                </div>
-              ))}
+            {/* ══════ 3. EXPLORE PROGRAMS — Degree Levels ══════ */}
+            <div className="studyhub-section" style={S.sectionBlock}>
+              <div style={S.sectionHead}>
+                <h3 style={S.sectionHeadTitle}>🎓 {t.degreeLevelsTitle}</h3>
+                <p style={S.sectionHeadSub}>
+                  {isRTL ? "اختر المرحلة الدراسية المناسبة لك" : "Choose your academic level to get started"}
+                </p>
+                <div style={S.sectionDivider} />
+              </div>
+              <div className="studyhub-degree-grid" style={S.degreePreview}>
+                {DEGREE_LEVELS.map((d) => (
+                  <div
+                    key={d.id}
+                    style={{ ...S.degreePreviewCard, borderTopColor: d.color }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.1)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; }}
+                  >
+                    <span style={{ fontSize: 32 }}>{d.icon}</span>
+                    <span style={{ fontWeight: 800, fontSize: 15, color: "#1B3A4B" }}>{degreeName(d)}</span>
+                    <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            {!showAllCountries && filteredCountries.length > 24 && !searchQuery && (
-              <button
-                style={S.showAllBtn}
-                onClick={() => setShowAllCountries(true)}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "#C8956C"; e.currentTarget.style.color = "white"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#C8956C"; }}
-              >
-                {t.showAllCountries} ({filteredCountries.length})
-              </button>
-            )}
-            {filteredCountries.length === 0 && (
-              <div style={S.empty}><span style={{ fontSize: 48 }}>🔍</span><p>{t.noResultsFor} &quot;{searchQuery}&quot;</p></div>
+
+            {/* ══════ 4. BROWSE BY COUNTRY — Main navigation ══════ */}
+            <div className="studyhub-section" style={S.countrySectionWrap}>
+              <div style={S.sectionHead}>
+                <h3 style={S.sectionHeadTitle}>🌍 {t.browseByCountry}</h3>
+                <p style={S.sectionHeadSub}>
+                  {isRTL ? "تصفح الجامعات والمواد الدراسية حسب الدولة" : "Explore universities and study materials by country"}
+                </p>
+                <div style={S.sectionDivider} />
+              </div>
+              {/* Country search */}
+              <div className="studyhub-country-search" style={S.countrySearchRow}>
+                <div style={S.countrySearchInner}>
+                  <span style={{ fontSize: 16, opacity: 0.5, ...(isRTL ? { marginLeft: 8 } : { marginRight: 8 }) }}>🔍</span>
+                  <input
+                    type="text"
+                    placeholder={t.searchFull}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={(e) => { const w = e.currentTarget.parentElement; w.style.borderColor = "#1B3A4B"; w.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
+                    onBlur={(e) => { const w = e.currentTarget.parentElement; w.style.borderColor = "#e8ddd0"; w.style.boxShadow = "none"; }}
+                    style={{ flex: 1, border: "none", outline: "none", fontSize: 14, padding: "10px 0", background: "transparent", color: "#1B3A4B", fontFamily: "inherit" }}
+                  />
+                  {searchQuery && <button onClick={() => setSearchQuery("")} style={S.clearBtn}>✕</button>}
+                </div>
+              </div>
+              <div className="studyhub-country-grid" style={S.countryGrid}>
+                {(showAllCountries ? filteredCountries : filteredCountries.slice(0, 24)).map((c) => (
+                  <div
+                    key={c.id}
+                    className="studyhub-country-card" style={S.countryCard}
+                    onClick={() => navigate("universities", c)}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.12)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.05)"; }}
+                  >
+                    <span style={S.countryFlag}>{c.flag}</span>
+                    <h4 style={S.countryName}>{countryName(c)}</h4>
+                    <span style={S.countryMats}>{countMats(c.id)} {t.nMaterials}</span>
+                  </div>
+                ))}
+              </div>
+              {!showAllCountries && filteredCountries.length > 24 && !searchQuery && (
+                <button
+                  style={S.showAllBtn}
+                  onClick={() => setShowAllCountries(true)}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "#C8956C"; e.currentTarget.style.color = "white"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#C8956C"; }}
+                >
+                  {t.showAllCountries} ({filteredCountries.length})
+                </button>
+              )}
+              {filteredCountries.length === 0 && (
+                <div style={S.empty}><span style={{ fontSize: 48 }}>🔍</span><p>{t.noResultsFor} &quot;{searchQuery}&quot;</p></div>
+              )}
+            </div>
+
+            {/* ══════ 5. RECENT MATERIALS — Social proof ══════ */}
+            {allMaterials.length > 0 && (
+              <div className="studyhub-recent-section studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
+                <div style={S.sectionHead}>
+                  <h3 style={S.sectionHeadTitle}>📚 {t.recentMaterials}</h3>
+                  <p style={S.sectionHeadSub}>{t.recentMaterialsSub}</p>
+                  <div style={S.sectionDivider} />
+                </div>
+                <div className="studyhub-recent-grid" style={S.recentGrid}>
+                  {allMaterials.slice(0, 6).map((mat) => {
+                    const ti = getTypeInfo(mat.type);
+                    const country = ALL_COUNTRIES.find((c) => c.id === mat.countryId);
+                    const deg = DEGREE_LEVELS.find((d) => d.id === mat.degreeId);
+                    return (
+                      <div
+                        key={mat.id}
+                        className="recent-mat-card"
+                        style={{ ...S.recentCard, borderTop: `3px solid ${ti.color}` }}
+                      >
+                        <div style={S.recentCardTop}>
+                          <div style={{ ...S.recentCardIcon, background: ti.color + "15", color: ti.color }}>{ti.icon}</div>
+                          <div style={S.recentCardInfo}>
+                            <h4 style={S.recentCardTitle}>{mat.title}</h4>
+                            <p style={S.recentCardSubject}>📖 {mat.subject}</p>
+                          </div>
+                        </div>
+                        <div style={S.recentCardMeta}>
+                          <span style={{ ...S.matBadge, background: ti.color, fontSize: 10 }}>{fileTypeLabel(ti)}</span>
+                          {country && (
+                            <span style={S.recentCardLocation}>
+                              {country.flag} {countryName(country)}
+                            </span>
+                          )}
+                          {deg && (
+                            <span style={S.recentCardLocation}>
+                              {deg.icon} {degreeName(deg)}
+                            </span>
+                          )}
+                          <span style={{ fontSize: 11, color: "#bbb", marginLeft: "auto" }}>
+                            {new Date(mat.uploadedAt).toLocaleDateString(isRTL ? "ar" : "en")}
+                          </span>
+                        </div>
+                        <a
+                          href={mat.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ ...S.dlBtn, textAlign: "center", display: "block", fontSize: 12, padding: "8px 16px" }}
+                        >
+                          {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
+                        </a>
+                      </div>
+                    );
+                  })}
+                </div>
+                {allMaterialsTotal > 6 && (
+                  <div style={{ textAlign: "center", marginTop: 24 }}>
+                    <button
+                      style={S.viewAllBtn}
+                      onClick={() => navigate("browse-all")}
+                      onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 15px rgba(27,58,75,0.3)"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(27,58,75,0.2)"; }}
+                    >
+                      {t.viewAllMaterials} ({allMaterialsTotal}) →
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -1938,7 +2584,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {/* === UNIVERSITIES (Searchable Dropdown) === */}
         {view === "universities" && selectedCountry && (
           <div>
-            <div style={S.viewHeader}>
+            <div className="studyhub-view-header" style={S.viewHeader}>
               <span style={{ fontSize: 48 }}>{selectedCountry.flag}</span>
               <div>
                 <h2 style={S.viewTitle}>{t.universitiesIn} {countryName(selectedCountry)}</h2>
@@ -1985,14 +2631,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {/* === DEGREE LEVELS === */}
         {view === "degrees" && selectedUniversity && (
           <div>
-            <div style={S.viewHeader}>
+            <div className="studyhub-view-header" style={S.viewHeader}>
               <span style={{ fontSize: 48 }}>🏛️</span>
               <div>
                 <h2 style={S.viewTitle}>{uniName(selectedUniversity)}</h2>
                 <p style={S.viewSub}>{selectedCountry.flag} {countryName(selectedCountry)} — {t.selectDegree}</p>
               </div>
             </div>
-            <div style={S.degreeGrid}>
+            <div className="studyhub-degree-cards" style={S.degreeGrid}>
               {DEGREE_LEVELS.map((deg) => {
                 const count = countMats(selectedCountry.id, selectedUniversity.id, deg.id);
                 return (
@@ -2022,7 +2668,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {/* === SEMESTERS === */}
         {view === "semesters" && selectedDegree && (
           <div>
-            <div style={S.viewHeader}>
+            <div className="studyhub-view-header" style={S.viewHeader}>
               <span style={{ fontSize: 48 }}>{selectedDegree.icon}</span>
               <div>
                 <h2 style={S.viewTitle}>{degreeName(selectedDegree)}</h2>
@@ -2031,12 +2677,12 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 </p>
               </div>
             </div>
-            <div style={S.semGrid}>
+            <div className="studyhub-sem-grid" style={S.semGrid}>
               {SEMESTERS_MAP[selectedDegree.id].map((sem) => {
                 const count = countMats(selectedCountry.id, selectedUniversity.id, selectedDegree.id, sem);
                 return (
                   <div
-                    key={sem} style={{ ...S.semCard, ...(isRTL ? { borderLeft: "none", borderRight: `4px solid ${selectedDegree.color}` } : { borderLeftColor: selectedDegree.color }) }}
+                    key={sem} className="studyhub-sem-card" style={{ ...S.semCard, ...(isRTL ? { borderLeft: "none", borderRight: `4px solid ${selectedDegree.color}` } : { borderLeftColor: selectedDegree.color }) }}
                     onClick={() => navigate("materials", selectedCountry, selectedUniversity, selectedDegree, sem)}
                     onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.background = "#1B3A4B"; e.currentTarget.style.color = "white"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "white"; e.currentTarget.style.color = "#1B3A4B"; }}
@@ -2054,7 +2700,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {/* === MATERIALS === */}
         {view === "materials" && selectedSemester && (
           <div>
-            <div style={S.viewHeader}>
+            <div className="studyhub-view-header" style={S.viewHeader}>
               <span style={{ fontSize: 48 }}>📚</span>
               <div>
                 <h2 style={S.viewTitle}>{semLabel(selectedSemester)}</h2>
@@ -2062,11 +2708,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   {selectedCountry.flag} {countryName(selectedCountry)} › {uniName(selectedUniversity)} › {selectedDegree.icon} {degreeName(selectedDegree)}
                 </p>
               </div>
-              <button style={{ ...S.uploadBtn, ...(isRTL ? { marginLeft: 0, marginRight: "auto" } : {}) }} onClick={() => { if (!requireLogin()) setShowUploadModal(true); }}>⬆️ {t.uploadMaterial}</button>
+              <button className="studyhub-upload-btn" style={{ ...S.uploadBtn, ...(isRTL ? { marginLeft: 0, marginRight: "auto" } : {}) }} onClick={() => { if (!requireLogin()) setShowUploadModal(true); }}>⬆️ {t.uploadMaterial}</button>
             </div>
 
             {/* Filters */}
-            <div style={S.filterRow}>
+            <div className="studyhub-filter-row" style={S.filterRow}>
               <button
                 onClick={() => setFilterType("all")}
                 style={{ ...S.filterBtn, ...(filterType === "all" ? S.filterActive : {}) }}
@@ -2120,7 +2766,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       </div>
                       {isExpanded && (
                         <div className="studyhub-subj-body" style={S.myGroupBody}>
-                          <div style={S.matList}>
+                          <div className="studyhub-mat-list" style={S.matList}>
                             {group.materials.map((mat) => renderMaterialCard(mat))}
                           </div>
                         </div>
@@ -2133,15 +2779,123 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           </div>
         )}
 
+        {/* === BROWSE ALL MATERIALS === */}
+        {view === "browse-all" && (
+          <div>
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, marginBottom: 24 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>📚</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>📚</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.viewAllMaterials}</h2>
+                  <p style={S.myMatBannerSub}>{t.browseAllSub}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Search + Filters */}
+            <div className="studyhub-browse-search-bar" style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ flex: 1, minWidth: 220, position: "relative" }}>
+                <span style={{ position: "absolute", [isRTL ? "right" : "left"]: 14, top: "50%", transform: "translateY(-50%)", fontSize: 16, opacity: 0.5 }}>🔍</span>
+                <input
+                  type="text"
+                  placeholder={t.searchMaterials}
+                  value={browseMatSearch}
+                  onChange={(e) => setBrowseMatSearch(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, browseMatType); } }}
+                  style={{ ...S.input, [isRTL ? "paddingRight" : "paddingLeft"]: 40 }}
+                  onFocus={(e) => { e.target.style.borderColor = "#1B3A4B"; e.target.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+                />
+              </div>
+              <button
+                onClick={() => { setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, browseMatType); }}
+                style={{ ...S.viewAllBtn, padding: "12px 24px" }}
+              >🔍</button>
+            </div>
+
+            {/* Type filter tabs */}
+            <div className="studyhub-filter-row" style={{ ...S.filterRow, marginBottom: 20 }}>
+              <button
+                onClick={() => { setBrowseMatType("all"); setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, "all"); }}
+                style={{ ...S.filterBtn, ...(browseMatType === "all" ? S.filterActive : {}) }}
+              >{t.all}</button>
+              {FILE_TYPES.map((ft) => (
+                <button
+                  key={ft.id}
+                  onClick={() => { setBrowseMatType(ft.id); setBrowseMatList([]); fetchBrowseMaterials(browseMatSearch, ft.id); }}
+                  style={{ ...S.filterBtn, ...(browseMatType === ft.id ? { ...S.filterActive, background: ft.color, borderColor: ft.color } : {}) }}
+                >{ft.icon} {fileTypeLabel(ft)}</button>
+              ))}
+            </div>
+
+            {/* Results count */}
+            {browseMatTotal > 0 && (
+              <p style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>
+                {t.showing} {browseMatList.length} {t.of} {browseMatTotal} {t.nMaterials}
+              </p>
+            )}
+
+            {/* Material cards */}
+            {browseMatList.length === 0 && !browseMatLoading ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 48 }}>📭</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noMaterials}</h3>
+              </div>
+            ) : (
+              <div className="studyhub-mat-list" style={S.matList}>
+                {browseMatList.map((mat) => renderMaterialCard(mat, true))}
+              </div>
+            )}
+
+            {/* Load More button */}
+            {browseMatList.length < browseMatTotal && (
+              <div style={{ textAlign: "center", marginTop: 24 }}>
+                <button
+                  onClick={() => fetchBrowseMaterials(undefined, undefined, browseMatList)}
+                  disabled={browseMatLoading}
+                  style={{ ...S.viewAllBtn, padding: "12px 32px", opacity: browseMatLoading ? 0.6 : 1 }}
+                >
+                  {browseMatLoading ? "..." : `${t.loadMore} (${browseMatTotal - browseMatList.length})`}
+                </button>
+              </div>
+            )}
+
+            {browseMatLoading && browseMatList.length === 0 && <LoadingSpinner text={t.loadingUniversities} />}
+          </div>
+        )}
+
         {/* === MY MATERIALS === */}
         {view === "my-materials" && (
           <div>
-            <div style={S.viewHeader}>
-              <span style={{ fontSize: 48 }}>📋</span>
-              <div>
-                <h2 style={S.viewTitle}>{t.myMaterials}</h2>
-                <p style={S.viewSub}>{t.allYourMaterials} ({myMaterials.length})</p>
+            <div className="my-mat-banner" style={S.myMatBanner}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>📚</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 4 }}>
+                <span style={{ fontSize: 32 }}>📂</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.myMaterials}</h2>
+                  <p style={S.myMatBannerSub}>{t.allYourMaterials}</p>
+                </div>
               </div>
+              {myMaterials.length > 0 && (
+                <div className="my-mat-stats-row" style={S.myMatStatsRow}>
+                  <span style={{ ...S.myMatStatPill, background: "rgba(255,255,255,0.2)", color: "white" }}>
+                    📊 {myMaterials.length} {matCount(myMaterials.length)}
+                  </span>
+                  {(() => {
+                    const approved = myMaterials.filter(m => m.status === "APPROVED" || !m.status).length;
+                    const pending = myMaterials.filter(m => m.status === "PENDING").length;
+                    const rejected = myMaterials.filter(m => m.status === "REJECTED").length;
+                    return (
+                      <>
+                        {approved > 0 && <span style={{ ...S.myMatStatPill, background: "#d1fae5", color: "#065f46" }}>✅ {approved} {t.statusApproved}</span>}
+                        {pending > 0 && <span style={{ ...S.myMatStatPill, background: "#fef3c7", color: "#92400e" }}>⏳ {pending} {t.statusPending}</span>}
+                        {rejected > 0 && <span style={{ ...S.myMatStatPill, background: "#fee2e2", color: "#991b1b" }}>❌ {rejected} {t.statusRejected}</span>}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
 
             {!isLoggedIn ? (
@@ -2158,9 +2912,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             ) : loadingMyMaterials ? (
               <LoadingSpinner text={t.loadingUniversities} />
             ) : myMaterials.length === 0 ? (
-              <div style={S.empty}>
-                <span style={{ fontSize: 64 }}>📭</span>
-                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noMyMaterials}</h3>
+              <div style={S.myEmptyCard}>
+                <span style={{ fontSize: 52, display: "block", marginBottom: 12, opacity: 0.5 }}>📁</span>
+                <h3 style={{ color: "#1B3A4B", margin: "0 0 8px", fontSize: 18, fontWeight: 800 }}>{t.noMyMaterials}</h3>
+                <p style={{ color: "#999", fontSize: 14, margin: "0 0 20px", lineHeight: 1.5 }}>{t.selectSemesterFirst}</p>
+                <button
+                  style={{ ...S.uploadBtn, marginLeft: 0 }}
+                  onClick={() => navigate("home")}
+                >🌍 {t.browseByCountry}</button>
               </div>
             ) : (
               <div>
@@ -2178,12 +2937,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     return (
                       <div key={cId} style={S.myGroupSection}>
                         <div
+                          className="my-group-header"
                           style={S.myGroupHeader}
                           onClick={() => setMyMaterialsExpanded((prev) => ({ ...prev, [cId]: !isExpanded }))}
                         >
-                          <span style={S.myGroupChevron}>{isExpanded ? "▾" : (isRTL ? "◂" : "▸")}</span>
+                          <span className={`my-group-chevron${isExpanded ? " expanded" : ""}`} style={S.myGroupChevron}>▸</span>
                           <span style={S.myGroupTitle}>
-                            {country ? `${country.flag} ${countryName(country)}` : cId}
+                            <span style={{ fontSize: 22 }}>{country ? country.flag : "🌍"}</span>
+                            {country ? countryName(country) : cId}
                           </span>
                           <span style={S.myGroupCount}>{countryMats.length} {matCount(countryMats.length)}</span>
                         </div>
@@ -2194,10 +2955,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                               const uniNameDisplay = uniMats[0]?.universityName || uId;
                               return (
                                 <div key={uId} style={S.mySubGroup}>
-                                  <div style={S.mySubGroupHeader}>
+                                  <div style={{ ...S.mySubGroupHeader, ...(isRTL ? { borderLeft: "none", borderRight: "3px solid #C8956C", paddingLeft: 0, paddingRight: 12 } : {}) }}>
                                     <span style={S.mySubGroupTitle}>🏛️ {uniNameDisplay}</span>
+                                    <span style={{ fontSize: 11, color: "#999", fontWeight: 600 }}>({uniMats.length})</span>
                                   </div>
-                                  <div style={S.matList}>
+                                  <div className="studyhub-mat-list" style={S.matList}>
                                     {uniMats.map((mat) => renderMaterialCard(mat, true))}
                                   </div>
                                 </div>
@@ -2217,101 +2979,152 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
       {/* UPLOAD / EDIT MODAL */}
       {showUploadModal && (
-        <div style={S.overlay} onClick={() => { setShowUploadModal(false); setEditingMaterial(null); setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" }); }}>
-          <div style={S.modal} onClick={(e) => e.stopPropagation()}>
-            <div style={S.modalHead}>
-              <h3 style={S.modalTitle}>{editingMaterial ? `✏️ ${t.editMaterial}` : `⬆️ ${t.uploadStudyMaterial}`}</h3>
-              <button onClick={() => { setShowUploadModal(false); setEditingMaterial(null); setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" }); }} style={S.modalX}>✕</button>
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowUploadModal(false); setEditingMaterial(null); setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" }); }}>
+          <div className="studyhub-modal" style={S.modal} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={S.modalHead}>
+              <div>
+                <h3 style={S.modalTitle}>
+                  <span style={{ fontSize: 24 }}>{editingMaterial ? "✏️" : "📤"}</span>
+                  {editingMaterial ? t.editMaterial : t.uploadStudyMaterial}
+                </h3>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginTop: 6, lineHeight: 1.4 }}>
+                  {editingMaterial ? (
+                    <>
+                      {(() => { const ec = ALL_COUNTRIES.find((c) => c.id === editingMaterial.countryId); return ec ? `${ec.flag} ${countryName(ec)}` : editingMaterial.countryId; })()}
+                      {" › "}{editingMaterial.universityName}
+                      {" › "}{(() => { const ed = DEGREE_LEVELS.find((d) => d.id === editingMaterial.degreeId); return ed ? `${ed.icon} ${degreeName(ed)}` : editingMaterial.degreeId; })()}
+                      {" › "}{semLabel(editingMaterial.semester)}
+                    </>
+                  ) : (
+                    <>
+                      {selectedCountry && selectedCountry.flag} {selectedCountry && countryName(selectedCountry)} › {selectedUniversity && uniName(selectedUniversity)} › {selectedDegree && selectedDegree.icon} {selectedDegree && degreeName(selectedDegree)} › {semLabel(selectedSemester)}
+                    </>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={() => { setShowUploadModal(false); setEditingMaterial(null); setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" }); }}
+                style={S.modalX}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.15)"; }}
+              >✕</button>
             </div>
-            <div style={S.modalBody}>
-              <div style={S.modalCtx}>
-                {editingMaterial ? (
-                  <>
-                    {(() => { const ec = ALL_COUNTRIES.find((c) => c.id === editingMaterial.countryId); return ec ? `${ec.flag} ${countryName(ec)}` : editingMaterial.countryId; })()}
-                    {" › "}{editingMaterial.universityName}
-                    {" › "}{(() => { const ed = DEGREE_LEVELS.find((d) => d.id === editingMaterial.degreeId); return ed ? `${ed.icon} ${degreeName(ed)}` : editingMaterial.degreeId; })()}
-                    {" › "}{semLabel(editingMaterial.semester)}
-                  </>
-                ) : (
-                  <>
-                    {selectedCountry && selectedCountry.flag} {selectedCountry && countryName(selectedCountry)} › {selectedUniversity && uniName(selectedUniversity)} › {selectedDegree && selectedDegree.icon} {selectedDegree && degreeName(selectedDegree)} › {semLabel(selectedSemester)}
-                  </>
-                )}
-              </div>
-
-              <label style={S.label}>{t.materialTitle} *</label>
+            <div className="studyhub-modal-body" style={S.modalBody}>
+              {/* Material Title */}
+              <label style={{ ...S.label, marginTop: 0 }}>{t.materialTitle} <span style={{ color: "#C8956C" }}>*</span></label>
               <input type="text" placeholder={t.materialTitlePlaceholder} value={uploadForm.title}
-                onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })} style={S.input} />
-
-              <label style={S.label}>{t.subjectCourse} *</label>
-              <input type="text" placeholder={t.subjectPlaceholder} value={uploadForm.subject}
-                onChange={(e) => setUploadForm({ ...uploadForm, subject: e.target.value })} style={S.input} />
-
-              <label style={S.label}>{t.faculty}</label>
-              <select value={uploadForm.facultyId} onChange={(e) => handleFacultyChange(e.target.value)} style={S.input}>
-                <option value="">{t.selectFaculty}</option>
-                {FACULTIES.map((fac) => (
-                  <option key={fac.id} value={fac.id}>{fac.icon} {facultyName(fac)}</option>
-                ))}
-              </select>
-
-              <label style={S.label}>{t.specialty}</label>
-              <select
-                value={uploadForm.specialtyId}
-                onChange={(e) => setUploadForm({ ...uploadForm, specialtyId: e.target.value })}
+                onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
                 style={S.input}
-                disabled={!uploadForm.facultyId}
-              >
-                <option value="">{uploadForm.facultyId ? t.selectSpecialty : t.selectFacultyFirst}</option>
-                {uploadForm.facultyId && (SPECIALTIES_MAP[uploadForm.facultyId] || []).map((spec) => (
-                  <option key={spec.id} value={spec.id}>{specialtyName(spec)}</option>
-                ))}
-              </select>
+                onFocus={(e) => { e.target.style.borderColor = "#1B3A4B"; e.target.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
 
-              <label style={S.label}>{t.materialType} *</label>
-              <div style={S.typeSelector}>
-                {FILE_TYPES.map((ft) => (
-                  <button key={ft.id}
-                    onClick={() => setUploadForm({ ...uploadForm, type: ft.id })}
-                    style={{
-                      ...S.typeOpt,
-                      borderColor: uploadForm.type === ft.id ? ft.color : "#ddd",
-                      background: uploadForm.type === ft.id ? ft.color + "12" : "white",
-                    }}
+              {/* Subject */}
+              <label style={S.label}>{t.subjectCourse} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="text" placeholder={t.subjectPlaceholder} value={uploadForm.subject}
+                onChange={(e) => setUploadForm({ ...uploadForm, subject: e.target.value })}
+                style={S.input}
+                onFocus={(e) => { e.target.style.borderColor = "#1B3A4B"; e.target.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
+
+              {/* Faculty & Specialty row */}
+              <div className="studyhub-modal-faculty-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div>
+                  <label style={S.label}>{t.faculty}</label>
+                  <select value={uploadForm.facultyId} onChange={(e) => handleFacultyChange(e.target.value)} style={{ ...S.input, cursor: "pointer" }}>
+                    <option value="">{t.selectFaculty}</option>
+                    {FACULTIES.map((fac) => (
+                      <option key={fac.id} value={fac.id}>{fac.icon} {facultyName(fac)}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label style={S.label}>{t.specialty}</label>
+                  <select
+                    value={uploadForm.specialtyId}
+                    onChange={(e) => setUploadForm({ ...uploadForm, specialtyId: e.target.value })}
+                    style={{ ...S.input, cursor: "pointer", opacity: uploadForm.facultyId ? 1 : 0.5 }}
+                    disabled={!uploadForm.facultyId}
                   >
-                    <span style={{ fontSize: 22 }}>{ft.icon}</span>
-                    <span style={{ fontSize: 11, fontWeight: 700 }}>{fileTypeLabel(ft)}</span>
-                  </button>
-                ))}
+                    <option value="">{uploadForm.facultyId ? t.selectSpecialty : t.selectFacultyFirst}</option>
+                    {uploadForm.facultyId && (SPECIALTIES_MAP[uploadForm.facultyId] || []).map((spec) => (
+                      <option key={spec.id} value={spec.id}>{specialtyName(spec)}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              <label style={S.label}>{t.selectRole} *</label>
-              <div style={S.typeSelector}>
-                {UPLOADER_ROLES.map((role) => (
-                  <button key={role.id}
-                    onClick={() => setUploadForm({ ...uploadForm, uploaderRole: role.id })}
-                    style={{
-                      ...S.typeOpt,
-                      borderColor: uploadForm.uploaderRole === role.id ? role.color : "#ddd",
-                      background: uploadForm.uploaderRole === role.id ? role.color + "12" : "white",
-                    }}
-                  >
-                    <span style={{ fontSize: 22 }}>{role.icon}</span>
-                    <span style={{ fontSize: 11, fontWeight: 700 }}>{roleLabel(role)}</span>
-                  </button>
-                ))}
+              {/* Material Type */}
+              <label style={S.label}>{t.materialType} <span style={{ color: "#C8956C" }}>*</span></label>
+              <div className="studyhub-type-selector" style={S.typeSelector}>
+                {FILE_TYPES.map((ft) => {
+                  const isActive = uploadForm.type === ft.id;
+                  return (
+                    <button key={ft.id}
+                      onClick={() => setUploadForm({ ...uploadForm, type: ft.id })}
+                      style={{
+                        ...S.typeOpt,
+                        borderColor: isActive ? ft.color : "#e8ddd0",
+                        background: isActive ? ft.color + "15" : "white",
+                        boxShadow: isActive ? `0 2px 8px ${ft.color}25` : "none",
+                        transform: isActive ? "scale(1.05)" : "scale(1)",
+                      }}
+                    >
+                      <span style={{ fontSize: 24 }}>{ft.icon}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: isActive ? ft.color : "#666" }}>{fileTypeLabel(ft)}</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              <label style={S.label}>{uploadForm.type === "video" ? `${t.videoUrl} *` : `${t.fileUrl} *`}</label>
+              {/* Role */}
+              <label style={S.label}>{t.selectRole} <span style={{ color: "#C8956C" }}>*</span></label>
+              <div className="studyhub-type-selector" style={S.typeSelector}>
+                {UPLOADER_ROLES.map((role) => {
+                  const isActive = uploadForm.uploaderRole === role.id;
+                  return (
+                    <button key={role.id}
+                      onClick={() => setUploadForm({ ...uploadForm, uploaderRole: role.id })}
+                      style={{
+                        ...S.typeOpt,
+                        borderColor: isActive ? role.color : "#e8ddd0",
+                        background: isActive ? role.color + "15" : "white",
+                        boxShadow: isActive ? `0 2px 8px ${role.color}25` : "none",
+                        transform: isActive ? "scale(1.05)" : "scale(1)",
+                      }}
+                    >
+                      <span style={{ fontSize: 24 }}>{role.icon}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: isActive ? role.color : "#666" }}>{roleLabel(role)}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* File URL */}
+              <label style={S.label}>{uploadForm.type === "video" ? t.videoUrl : t.fileUrl} <span style={{ color: "#C8956C" }}>*</span></label>
               <input type="url" placeholder={uploadForm.type === "video" ? t.videoPlaceholder : t.filePlaceholder}
-                value={uploadForm.url} onChange={(e) => setUploadForm({ ...uploadForm, url: e.target.value })} style={S.input} />
+                value={uploadForm.url} onChange={(e) => setUploadForm({ ...uploadForm, url: e.target.value })}
+                style={S.input}
+                onFocus={(e) => { e.target.style.borderColor = "#1B3A4B"; e.target.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
 
+              {/* Description */}
               <label style={S.label}>{t.description}</label>
               <textarea placeholder={t.descPlaceholder} value={uploadForm.description}
                 onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })}
-                style={{ ...S.input, height: 70, resize: "vertical" }} />
+                style={{ ...S.input, height: 80, resize: "vertical" }}
+                onFocus={(e) => { e.target.style.borderColor = "#1B3A4B"; e.target.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
 
-              <button onClick={handleUpload} style={S.submitBtn}>
+              <button
+                onClick={handleUpload}
+                style={S.submitBtn}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 25px rgba(27,58,75,0.4)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(27,58,75,0.3)"; }}
+              >
                 {editingMaterial ? `✏️ ${t.saveChanges}` : `📤 ${t.uploadMaterialBtn}`}
               </button>
             </div>
@@ -2321,8 +3134,8 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
       {/* DELETE CONFIRMATION MODAL */}
       {deleteConfirm && (
-        <div style={S.overlay} onClick={handleDeleteCancel}>
-          <div style={S.confirmModal} onClick={(e) => e.stopPropagation()}>
+        <div className="studyhub-overlay" style={S.overlay} onClick={handleDeleteCancel}>
+          <div className="studyhub-confirm-modal" style={S.confirmModal} onClick={(e) => e.stopPropagation()}>
             <div style={S.confirmIcon}>🗑️</div>
             <h3 style={S.confirmTitle}>{t.confirmDelete}</h3>
             <p style={S.confirmMsg}>{t.confirmDeleteMsg} &quot;{deleteConfirm.title}&quot;?</p>
@@ -2364,10 +3177,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       )}
 
       {/* FOOTER */}
-      <footer style={S.footer}>
+      <footer className="studyhub-footer" style={S.footer}>
         <p style={S.footerText}>🎓 {t.footerText}</p>
         <p style={{ ...S.footerAr, direction: isRTL ? "ltr" : "rtl" }}>{t.footerAr}</p>
-        <div style={S.footerLinks}>
+        <div className="studyhub-footer-links" style={S.footerLinks}>
           <a href={`/${locale}`} style={S.footerLink}>🏠 {t.home}</a>
           <span style={{ color: "#C8956C" }}>•</span>
           <a href={`/${locale}/scholarships`} style={S.footerLink}>🎯 {t.scholarships}</a>
@@ -2385,16 +3198,16 @@ const S = {
   app: { fontFamily: "var(--font-inter), var(--font-cairo), 'Inter', 'Cairo', system-ui, sans-serif", minHeight: "100vh", background: "#FAF6F1", color: "#1B3A4B", position: "relative" },
   bgPattern: { position: "fixed", inset: 0, backgroundImage: "radial-gradient(circle at 20% 50%, rgba(200,149,108,0.07) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(27,58,75,0.04) 0%, transparent 50%)", pointerEvents: "none", zIndex: 0 },
   notification: { position: "fixed", top: 20, right: 20, padding: "14px 24px", borderRadius: 12, color: "white", fontWeight: 700, fontSize: 14, zIndex: 1000, boxShadow: "0 8px 30px rgba(0,0,0,0.2)" },
-  breadcrumb: { maxWidth: 1200, margin: "0 auto", padding: "12px 24px", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", position: "relative", zIndex: 1 },
+  breadcrumb: { maxWidth: 1200, margin: "0 auto", padding: "12px clamp(12px, 3vw, 24px)", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", position: "relative", zIndex: 1 },
   crumbItem: { cursor: "pointer", color: "#1B3A4B", fontWeight: 600, fontSize: 13, padding: "4px 10px", borderRadius: 6, background: "rgba(200,149,108,0.1)" },
   crumbActive: { color: "#C8956C", fontWeight: 700, fontSize: 13, padding: "4px 10px" },
   crumbSep: { color: "#C8956C", fontWeight: 700, fontSize: 18 },
-  main: { maxWidth: 1200, margin: "0 auto", padding: "20px 24px", position: "relative", zIndex: 1, minHeight: "60vh" },
-  hero: { textAlign: "center", padding: "60px 24px 48px", background: "linear-gradient(135deg, #1B3A4B 0%, #274555 100%)", borderRadius: 24, marginBottom: 44 },
+  main: { maxWidth: 1200, margin: "0 auto", padding: "20px clamp(12px, 3vw, 24px)", position: "relative", zIndex: 1, minHeight: "60vh" },
+  hero: { textAlign: "center", padding: "clamp(32px, 6vw, 60px) clamp(16px, 3vw, 24px) clamp(28px, 5vw, 48px)", background: "linear-gradient(135deg, #1B3A4B 0%, #274555 100%)", borderRadius: 24, marginBottom: 44 },
   heroBadge: { display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#F5E6D3", padding: "8px 22px", borderRadius: 50, fontSize: 13, fontWeight: 700, marginBottom: 20, border: "1px solid rgba(255,255,255,0.1)" },
-  heroTitle: { fontSize: 38, fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.15, letterSpacing: "-1px", textShadow: "0 2px 10px rgba(0,0,0,0.15)" },
-  heroSub: { fontSize: 16, color: "rgba(255,255,255,0.75)", maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 },
-  heroArabic: { fontSize: 20, color: "#C8956C", fontWeight: 700, margin: "0 0 28px" },
+  heroTitle: { fontSize: "clamp(24px, 5vw, 38px)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.15, letterSpacing: "-1px", textShadow: "0 2px 10px rgba(0,0,0,0.15)" },
+  heroSub: { fontSize: "clamp(14px, 2.5vw, 16px)", color: "rgba(255,255,255,0.75)", maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 },
+  heroArabic: { fontSize: "clamp(16px, 3vw, 20px)", color: "#C8956C", fontWeight: 700, margin: "0 0 28px" },
   searchBox: { display: "flex", alignItems: "center", maxWidth: 520, margin: "0 auto", background: "white", borderRadius: 50, padding: "6px 8px 6px 20px", boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "none" },
   searchIcon: { fontSize: 18, marginRight: 8 },
   searchInput: { flex: 1, border: "none", outline: "none", fontSize: 15, padding: "11px 0", background: "transparent", color: "#1B3A4B", fontFamily: "inherit" },
@@ -2405,9 +3218,9 @@ const S = {
   statsRow: { display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" },
   statCard: { background: "white", borderRadius: 14, padding: "18px 24px", textAlign: "left", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", borderLeft: "3px solid #C8956C", minWidth: 110, flex: "1 1 0" },
   statIcon: { fontSize: 24, marginBottom: 4, display: "block" },
-  statNum: { display: "block", fontSize: 32, fontWeight: 900, color: "#C8956C" },
+  statNum: { display: "block", fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 900, color: "#C8956C" },
   statLabel: { fontSize: 12, color: "#777", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" },
-  secTitle: { fontSize: 22, fontWeight: 800, color: "#1B3A4B", marginBottom: 20 },
+  secTitle: { fontSize: "clamp(18px, 3vw, 22px)", fontWeight: 800, color: "#1B3A4B", marginBottom: 20 },
   countryGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 14, marginBottom: 36 },
   countryCard: { background: "white", borderRadius: 18, padding: "22px 14px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 3px 16px rgba(0,0,0,0.05)", border: "1px solid #ede5da" },
   countryFlag: { fontSize: 42, display: "block", marginBottom: 8 },
@@ -2419,7 +3232,7 @@ const S = {
   howCard: { background: "#FAF6F1", borderRadius: 16, padding: "24px 20px", textAlign: "center", position: "relative" },
   howStep: { position: "absolute", top: 12, left: 16, background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", width: 34, height: 34, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 15, boxShadow: "0 3px 10px rgba(200,149,108,0.3)" },
   viewHeader: { display: "flex", alignItems: "center", gap: 16, marginBottom: 28, flexWrap: "wrap" },
-  viewTitle: { fontSize: 26, fontWeight: 900, color: "#1B3A4B", margin: 0, letterSpacing: "-0.5px" },
+  viewTitle: { fontSize: "clamp(20px, 3.5vw, 26px)", fontWeight: 900, color: "#1B3A4B", margin: 0, letterSpacing: "-0.5px" },
   viewSub: { fontSize: 14, color: "#777", margin: "4px 0 0" },
   uniGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 },
   uniCard: { background: "white", borderRadius: 14, padding: "24px 22px", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 2px 12px rgba(0,0,0,0.04)", border: "2px solid transparent", display: "flex", flexDirection: "column", gap: 6, position: "relative" },
@@ -2436,24 +3249,24 @@ const S = {
   semNum: { fontSize: 32, fontWeight: 900, lineHeight: 1 },
   uploadBtn: { background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", border: "none", padding: "11px 24px", borderRadius: 50, fontWeight: 700, fontSize: 14, cursor: "pointer", marginLeft: "auto", transition: "all 0.2s", boxShadow: "0 4px 15px rgba(200,149,108,0.3)", fontFamily: "inherit" },
   filterRow: { display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" },
-  filterBtn: { padding: "7px 16px", borderRadius: 50, border: "2px solid #ddd", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "all 0.2s" },
+  filterBtn: { padding: "7px 16px", borderRadius: 50, border: "2px solid #ddd", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "all 0.2s", minHeight: 44 },
   filterActive: { background: "#1B3A4B", color: "white", borderColor: "#1B3A4B" },
   matList: { display: "flex", flexDirection: "column", gap: 12 },
-  matCard: { background: "white", borderRadius: 14, padding: "18px 22px", display: "flex", alignItems: "center", gap: 16, boxShadow: "0 2px 10px rgba(0,0,0,0.04)", borderLeft: "4px solid #e0d5c8", transition: "all 0.3s ease", flexWrap: "wrap" },
-  matIcon: { width: 50, height: 50, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 },
+  matCard: { background: "white", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 18, boxShadow: "0 2px 12px rgba(0,0,0,0.05)", borderLeft: "4px solid #e0d5c8", transition: "all 0.3s cubic-bezier(.4,0,.2,1)", flexWrap: "wrap", cursor: "default" },
+  matIcon: { width: 56, height: 56, borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 },
   matInfo: { flex: 1, minWidth: 180 },
-  matTitle: { fontSize: 15, fontWeight: 800, color: "#1B3A4B", margin: "0 0 3px" },
+  matTitle: { fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: "0 0 4px", lineHeight: 1.3 },
   matSubject: { fontSize: 12, color: "#888", margin: "0 0 3px" },
   matFaculty: { fontSize: 11, color: "#C8956C", margin: "0 0 3px", fontWeight: 600 },
   matDesc: { fontSize: 12, color: "#999", margin: "0 0 6px" },
   matMeta: { display: "flex", alignItems: "center", gap: 10 },
   matBadge: { color: "white", padding: "2px 9px", borderRadius: 20, fontSize: 10, fontWeight: 700 },
   matDate: { fontSize: 11, color: "#aaa" },
-  matActions: { display: "flex", gap: 8, alignItems: "center", flexShrink: 0 },
-  dlBtn: { background: "#1B3A4B", color: "white", padding: "9px 20px", borderRadius: 50, textDecoration: "none", fontWeight: 700, fontSize: 13, whiteSpace: "nowrap", fontFamily: "inherit" },
-  delBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" },
-  editBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" },
-  shareBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" },
+  matActions: { display: "flex", gap: 8, alignItems: "center", flexShrink: 0, flexDirection: "column" },
+  dlBtn: { background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", padding: "10px 22px", borderRadius: 50, textDecoration: "none", fontWeight: 700, fontSize: 13, whiteSpace: "nowrap", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(27,58,75,0.2)", transition: "all 0.2s", minHeight: 44 },
+  delBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, minHeight: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
+  editBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
+  shareBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
   sharePopup: { position: "absolute", top: "calc(100% + 6px)", minWidth: 180, background: "white", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "1px solid #ede5da", zIndex: 100, overflow: "hidden" },
   shareOption: { display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "10px 14px", border: "none", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1B3A4B", textDecoration: "none", fontFamily: "inherit", transition: "background 0.15s" },
   confirmModal: { background: "white", borderRadius: 18, padding: "32px 28px", textAlign: "center", maxWidth: 380, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
@@ -2463,28 +3276,46 @@ const S = {
   confirmActions: { display: "flex", gap: 10, justifyContent: "center" },
   cancelBtn: { padding: "10px 24px", borderRadius: 10, border: "2px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#555", fontFamily: "inherit" },
   confirmDeleteBtn: { padding: "10px 24px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #e74c3c, #c0392b)", color: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", boxShadow: "0 4px 15px rgba(231,76,60,0.3)" },
-  myGroupSection: { marginBottom: 20, background: "white", borderRadius: 16, border: "1px solid #ede5da", overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,0.04)" },
-  myGroupHeader: { display: "flex", alignItems: "center", gap: 10, padding: "16px 20px", cursor: "pointer", background: "#FAF6F1", borderBottom: "1px solid #ede5da", transition: "background 0.2s" },
-  myGroupTitle: { fontSize: 16, fontWeight: 800, color: "#1B3A4B", flex: 1 },
-  myGroupCount: { fontSize: 12, fontWeight: 700, color: "#C8956C", background: "#C8956C15", padding: "3px 12px", borderRadius: 20 },
-  myGroupChevron: { fontSize: 14, color: "#888", fontWeight: 700, width: 20, textAlign: "center" },
-  myGroupBody: { padding: "12px 16px" },
-  mySubGroup: { marginBottom: 16 },
-  mySubGroupHeader: { display: "flex", alignItems: "center", gap: 8, marginBottom: 10, paddingBottom: 6, borderBottom: "1px solid #f0e8df" },
-  mySubGroupTitle: { fontSize: 14, fontWeight: 700, color: "#555" },
+  myGroupSection: { marginBottom: 20, background: "white", borderRadius: 18, border: "1px solid #e8e0d6", overflow: "hidden", boxShadow: "0 2px 14px rgba(0,0,0,0.05)" },
+  myGroupHeader: { display: "flex", alignItems: "center", gap: 12, padding: "18px 22px", cursor: "pointer", background: "#FAF6F1", borderBottom: "1px solid #ede5da", transition: "background 0.2s", userSelect: "none" },
+  myGroupTitle: { fontSize: 17, fontWeight: 800, color: "#1B3A4B", flex: 1, display: "flex", alignItems: "center", gap: 10 },
+  myGroupCount: { fontSize: 12, fontWeight: 700, color: "#fff", background: "linear-gradient(135deg, #C8956C, #B07D55)", padding: "4px 14px", borderRadius: 20, boxShadow: "0 2px 6px rgba(200,149,108,0.25)" },
+  myGroupChevron: { fontSize: 16, color: "#1B3A4B", fontWeight: 700, width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center" },
+  myGroupBody: { padding: "16px 20px" },
+  mySubGroup: { marginBottom: 20 },
+  mySubGroupHeader: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, paddingLeft: 12, borderBottom: "2px solid #f0e8df", borderLeft: "3px solid #C8956C" },
+  mySubGroupTitle: { fontSize: 15, fontWeight: 700, color: "#444" },
   empty: { textAlign: "center", padding: "50px 20px", color: "#888" },
+  myMatBanner: { background: "linear-gradient(135deg, #1B3A4B 0%, #1a6b6a 100%)", borderRadius: 20, padding: "28px 30px", marginBottom: 28, color: "white", position: "relative", overflow: "hidden" },
+  myMatBannerTitle: { fontSize: 24, fontWeight: 900, margin: "0 0 4px", color: "white", letterSpacing: "-0.3px" },
+  myMatBannerSub: { fontSize: 14, color: "rgba(255,255,255,0.75)", margin: 0 },
+  myMatStatsRow: { display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" },
+  myMatStatPill: { padding: "5px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 },
+  myEmptyCard: { textAlign: "center", padding: "48px 24px", border: "2px dashed #d4cdc4", borderRadius: 20, background: "#FDFBF9", margin: "20px 0" },
+  recentSection: { marginBottom: 44 },
+  recentHeader: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, flexWrap: "wrap", gap: 10 },
+  recentGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 },
+  recentCard: { background: "white", borderRadius: 18, padding: "20px 22px", boxShadow: "0 2px 14px rgba(0,0,0,0.05)", border: "1px solid #ede5da", transition: "all 0.3s cubic-bezier(.4,0,.2,1)", cursor: "pointer", display: "flex", flexDirection: "column", gap: 12, position: "relative", overflow: "hidden" },
+  recentCardTop: { display: "flex", alignItems: "center", gap: 14 },
+  recentCardIcon: { width: 48, height: 48, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 },
+  recentCardInfo: { flex: 1, minWidth: 0 },
+  recentCardTitle: { fontSize: 15, fontWeight: 800, color: "#1B3A4B", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+  recentCardSubject: { fontSize: 12, color: "#888", margin: "2px 0 0" },
+  recentCardMeta: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" },
+  recentCardLocation: { fontSize: 11, color: "#999", display: "flex", alignItems: "center", gap: 4 },
+  viewAllBtn: { background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", border: "none", padding: "9px 22px", borderRadius: 50, fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(27,58,75,0.2)", transition: "all 0.2s", textDecoration: "none" },
   overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20, backdropFilter: "blur(4px)" },
-  modal: { background: "white", borderRadius: 22, width: "100%", maxWidth: 500, maxHeight: "90vh", overflow: "auto", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
-  modalHead: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "22px 24px 0" },
-  modalTitle: { fontSize: 20, fontWeight: 900, color: "#1B3A4B", margin: 0 },
-  modalX: { background: "#f0e8df", border: "none", borderRadius: "50%", width: 34, height: 34, fontSize: 16, cursor: "pointer", fontWeight: 700, color: "#1B3A4B" },
-  modalBody: { padding: "18px 24px 24px" },
-  modalCtx: { fontSize: 12, color: "#888", background: "#FAF6F1", padding: "10px 14px", borderRadius: 10, marginBottom: 16 },
-  label: { display: "block", fontSize: 12, fontWeight: 700, color: "#1B3A4B", marginBottom: 5, marginTop: 14 },
-  input: { width: "100%", padding: "11px 14px", borderRadius: 10, border: "2px solid #e8ddd0", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FDFBF9" },
-  typeSelector: { display: "flex", gap: 8, flexWrap: "wrap" },
-  typeOpt: { display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "10px 16px", borderRadius: 10, border: "2px solid #ddd", cursor: "pointer", background: "white", fontFamily: "inherit" },
-  submitBtn: { width: "100%", background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", border: "none", padding: "13px", borderRadius: 12, fontWeight: 800, fontSize: 15, cursor: "pointer", marginTop: 20, fontFamily: "inherit", boxShadow: "0 4px 15px rgba(27,58,75,0.3)" },
+  modal: { background: "white", borderRadius: 24, width: "100%", maxWidth: 520, maxHeight: "90dvh", overflow: "hidden", boxShadow: "0 25px 80px rgba(0,0,0,0.25)", display: "flex", flexDirection: "column" },
+  modalHead: { background: "linear-gradient(135deg, #1B3A4B 0%, #1a6b6a 100%)", padding: "24px 28px 20px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative" },
+  modalTitle: { fontSize: 20, fontWeight: 900, color: "white", margin: 0, display: "flex", alignItems: "center", gap: 10 },
+  modalX: { background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%", width: 36, height: 36, fontSize: 18, cursor: "pointer", fontWeight: 700, color: "white", transition: "background 0.2s", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" },
+  modalBody: { padding: "22px 28px 28px", overflowY: "auto", flex: 1 },
+  modalCtx: { fontSize: 12, color: "#666", background: "linear-gradient(135deg, #f8f4ef, #FAF6F1)", padding: "12px 16px", borderRadius: 12, marginBottom: 20, border: "1px solid #ede5da", display: "flex", alignItems: "center", gap: 8, lineHeight: 1.5 },
+  label: { display: "block", fontSize: 13, fontWeight: 700, color: "#1B3A4B", marginBottom: 6, marginTop: 18, letterSpacing: "0.2px" },
+  input: { width: "100%", padding: "12px 16px", borderRadius: 12, border: "2px solid #e8ddd0", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FDFBF9", transition: "border-color 0.2s, box-shadow 0.2s" },
+  typeSelector: { display: "flex", gap: 10, flexWrap: "wrap" },
+  typeOpt: { display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "12px 18px", borderRadius: 14, border: "2px solid #e8ddd0", cursor: "pointer", background: "white", fontFamily: "inherit", transition: "all 0.2s", minWidth: 72 },
+  submitBtn: { width: "100%", background: "linear-gradient(135deg, #1B3A4B, #1a6b6a)", color: "white", border: "none", padding: "15px", borderRadius: 14, fontWeight: 800, fontSize: 15, cursor: "pointer", marginTop: 24, fontFamily: "inherit", boxShadow: "0 4px 20px rgba(27,58,75,0.3)", transition: "all 0.2s", letterSpacing: "0.3px" },
   footer: { background: "linear-gradient(135deg, #1B3A4B, #0F2530)", padding: "32px 24px", marginTop: 50, position: "relative", zIndex: 1, textAlign: "center" },
   footerText: { color: "#F5E6D3", fontSize: 14, fontWeight: 600, margin: "0 0 6px" },
   footerAr: { color: "#C8956C", fontSize: 15, fontWeight: 700, margin: "0 0 14px" },
@@ -2503,4 +3334,22 @@ const S = {
   subjectGroupLabel: { fontSize: 14, fontWeight: 700, color: "#1B3A4B" },
   groupToggleBtn: { padding: "4px 12px", borderRadius: 20, border: "1px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 600, fontSize: 11, fontFamily: "inherit", color: "#777" },
   showAllBtn: { display: "block", margin: "20px auto 0", padding: "10px 32px", borderRadius: 50, border: "2px solid #C8956C", background: "transparent", color: "#C8956C", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", transition: "all 0.2s" },
+  // --- Redesigned homepage styles ---
+  sectionBlock: { marginBottom: 48 },
+  sectionBlockAlt: { marginBottom: 48, background: "white", borderRadius: 24, padding: "40px clamp(16px, 3vw, 32px)", border: "1px solid #ede5da", boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
+  sectionHead: { textAlign: "center", marginBottom: 28 },
+  sectionHeadTitle: { fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 900, color: "#1B3A4B", margin: "0 0 8px", letterSpacing: "-0.5px", lineHeight: 1.2 },
+  sectionHeadSub: { fontSize: "clamp(13px, 2vw, 15px)", color: "#888", margin: "0 auto", maxWidth: 560, lineHeight: 1.6 },
+  sectionDivider: { width: 60, height: 3, background: "linear-gradient(90deg, #C8956C, #1B3A4B)", borderRadius: 3, margin: "12px auto 0" },
+  heroQuickNav: { display: "flex", justifyContent: "center", gap: 10, marginTop: 24, flexWrap: "wrap" },
+  heroQuickPill: { display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", borderRadius: 50, background: "rgba(255,255,255,0.1)", color: "#F5E6D3", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", fontWeight: 700, fontSize: 13, fontFamily: "inherit", transition: "all 0.25s", backdropFilter: "blur(4px)" },
+  heroInlineStats: { display: "flex", justifyContent: "center", gap: 0, marginTop: 32, flexWrap: "wrap" },
+  heroInlineStat: { display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "0 clamp(14px, 3vw, 28px)" },
+  heroInlineStatNum: { fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 900, color: "#F5E6D3", lineHeight: 1.1 },
+  heroInlineStatLabel: { fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.8px" },
+  howSectionRedesign: { background: "white", borderRadius: 24, padding: "44px clamp(16px, 3vw, 32px)", border: "1px solid #ede5da", marginBottom: 48, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
+  howCardRedesign: { background: "#FAF6F1", borderRadius: 20, padding: "28px 22px", textAlign: "center", position: "relative", border: "1px solid #ede5da", transition: "all 0.3s ease" },
+  countrySectionWrap: { marginBottom: 48 },
+  countrySearchRow: { display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 },
+  countrySearchInner: { display: "flex", alignItems: "center", maxWidth: 420, width: "100%", background: "white", borderRadius: 50, padding: "6px 8px 6px 20px", border: "2px solid #e8ddd0", transition: "border-color 0.2s, box-shadow 0.2s" },
 };
