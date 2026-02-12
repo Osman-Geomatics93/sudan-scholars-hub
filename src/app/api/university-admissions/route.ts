@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// Enable caching for public endpoint
-export const revalidate = 300; // 5 minutes
+export const dynamic = 'force-dynamic';
 
 // GET - List all active university admissions (public)
 export async function GET(request: NextRequest) {
