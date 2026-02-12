@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { studyMaterialSchema } from '@/lib/validations/study-material';
+import { requireAuth } from '@/lib/auth-utils';
 
 export const dynamic = 'force-dynamic';
 
-// GET - List approved materials (public, no auth)
+// GET - List materials (public for approved, or user's own materials of any status)
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -12,8 +13,18 @@ export async function GET(request: NextRequest) {
     const universityId = searchParams.get('universityId');
     const degreeId = searchParams.get('degreeId');
     const semester = searchParams.get('semester');
+    const userId = searchParams.get('userId');
 
-    const where: Record<string, unknown> = { status: 'APPROVED' };
+    const where: Record<string, unknown> = {};
+
+    if (userId) {
+      // When fetching user's own materials, show all statuses
+      where.userId = userId;
+    } else {
+      // Public listing: only approved materials
+      where.status = 'APPROVED';
+    }
+
     if (countryId) where.countryId = countryId;
     if (universityId) where.universityId = universityId;
     if (degreeId) where.degreeId = degreeId;
@@ -34,8 +45,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Submit a new material (public, no auth, creates as PENDING)
+// POST - Submit a new material (requires auth, creates as PENDING)
 export async function POST(request: NextRequest) {
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
   try {
     const body = await request.json();
     const result = studyMaterialSchema.safeParse(body);
@@ -47,6 +61,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const user = session!.user as { id: string; email?: string | null; name?: string | null };
+
     const material = await prisma.studyMaterial.create({
       data: {
         ...result.data,
@@ -54,6 +70,9 @@ export async function POST(request: NextRequest) {
         facultyId: result.data.facultyId || null,
         specialtyId: result.data.specialtyId || null,
         status: 'PENDING',
+        userId: user.id,
+        userEmail: user.email || null,
+        userName: user.name || null,
       },
     });
 

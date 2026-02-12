@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { COUNTRIES } from "@/lib/constants/countries";
 
@@ -459,6 +460,15 @@ const T = {
     selectRole: "I am a...",
     roleBadgeStudent: "Student",
     roleBadgeTeacher: "Professor",
+    degreeLevelsTitle: "Degree Levels",
+    showAllCountries: "Show All",
+    signOut: "Sign Out",
+    profile: "Profile",
+    loginToUpload: "Sign in to upload materials",
+    myAccount: "My Account",
+    statusPending: "Pending Review",
+    statusRejected: "Rejected",
+    statusApproved: "Approved",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -585,6 +595,15 @@ const T = {
     selectRole: "...أنا",
     roleBadgeStudent: "طالب",
     roleBadgeTeacher: "أستاذ",
+    degreeLevelsTitle: "المراحل الدراسية",
+    showAllCountries: "عرض الكل",
+    signOut: "تسجيل الخروج",
+    profile: "الملف الشخصي",
+    loginToUpload: "سجّل الدخول لرفع المواد",
+    myAccount: "حسابي",
+    statusPending: "قيد المراجعة",
+    statusRejected: "مرفوض",
+    statusApproved: "مقبول",
   },
 };
 
@@ -862,7 +881,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [myMaterialsExpanded, setMyMaterialsExpanded] = useState({});
   const [duplicateWarning, setDuplicateWarning] = useState(null);
   const [subjectGroupsExpanded, setSubjectGroupsExpanded] = useState({});
+  const [showAllCountries, setShowAllCountries] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [myMaterials, setMyMaterials] = useState([]);
+  const [loadingMyMaterials, setLoadingMyMaterials] = useState(false);
   const userMenuRef = useRef(null);
+
+  // Auth session
+  const { data: session, status: authStatus } = useSession();
+  const isLoggedIn = authStatus === "authenticated" && !!session?.user;
+  const currentUserId = session?.user?.id;
 
   // University API state
   const [universityCache, setUniversityCache] = useState({});
@@ -938,6 +966,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close user dropdown on outside click
+  useEffect(() => {
+    if (!isUserDropdownOpen) return;
+    const handler = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) setIsUserDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [isUserDropdownOpen]);
+
   // Close share popup on outside click
   useEffect(() => {
     if (!sharePopup) return;
@@ -948,9 +986,35 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     return () => document.removeEventListener("mousedown", handler);
   }, [sharePopup]);
 
+  // Fetch user's own materials
+  const fetchMyMaterials = useCallback(async () => {
+    if (!currentUserId) return;
+    setLoadingMyMaterials(true);
+    try {
+      const res = await fetch(`/api/study-hub/materials?userId=${currentUserId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setMyMaterials(data.materials || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch my materials:", err);
+      setMyMaterials([]);
+    } finally {
+      setLoadingMyMaterials(false);
+    }
+  }, [currentUserId]);
+
   const showNotif = (msg, type = "success") => {
     setNotification({ msg, type });
     setTimeout(() => setNotification(null), 4500);
+  };
+
+  const requireLogin = () => {
+    if (!isLoggedIn) {
+      window.location.href = `/${locale}/login?callbackUrl=/${locale}/study-hub`;
+      return true; // blocked
+    }
+    return false; // allowed
   };
 
   const submitMaterialToAPI = async (materialData) => {
@@ -977,23 +1041,24 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       return;
     }
     if (editingMaterial) {
-      // For editing, remove old and submit as new pending material
-      const materialData = {
-        ...uploadForm,
-        countryId: selectedCountry.id,
-        countryName: selectedCountry.name,
-        universityId: selectedUniversity.id,
-        universityName: selectedUniversity.name,
-        degreeId: selectedDegree.id,
-        degreeName: selectedDegree.name,
-        semester: selectedSemester,
-      };
+      // PATCH existing material via owner endpoint
       try {
-        await submitMaterialToAPI(materialData);
+        const res = await fetch(`/api/study-hub/materials/${editingMaterial.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(uploadForm),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || "Failed to update");
+        }
         setEditingMaterial(null);
         setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" });
         setShowUploadModal(false);
         showNotif(`${t.submittedForReview}\n${t.pendingReviewMsg}`);
+        // Refresh materials
+        fetchMaterials();
+        if (currentUserId) fetchMyMaterials();
       } catch {
         showNotif(t.fillRequired, "error");
       }
@@ -1018,6 +1083,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         setUploadForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student" });
         setShowUploadModal(false);
         showNotif(`${t.submittedForReview}\n${t.pendingReviewMsg}`);
+        if (currentUserId) fetchMyMaterials();
       } catch {
         showNotif(t.fillRequired, "error");
       }
@@ -1049,9 +1115,21 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
   const handleDeleteConfirm = async () => {
     if (!deleteConfirm) return;
-    setMaterials(materials.filter((m) => m.id !== deleteConfirm.id));
-    setDeleteConfirm(null);
-    showNotif(t.deleteSuccess);
+    try {
+      const res = await fetch(`/api/study-hub/materials/${deleteConfirm.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to delete");
+      }
+      setMaterials(materials.filter((m) => m.id !== deleteConfirm.id));
+      setMyMaterials(myMaterials.filter((m) => m.id !== deleteConfirm.id));
+      setDeleteConfirm(null);
+      showNotif(t.deleteSuccess);
+    } catch (err) {
+      console.error("Delete error:", err);
+      setDeleteConfirm(null);
+      showNotif(err.message || "Failed to delete", "error");
+    }
   };
 
   const handleDeleteCancel = () => {
@@ -1164,6 +1242,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     if (newView === "universities" && c) {
       fetchUniversities(c.id);
     }
+    // Fetch user's own materials when navigating to my-materials
+    if (newView === "my-materials" && currentUserId) {
+      fetchMyMaterials();
+    }
   };
 
   const countMats = (cId, uId, dId, sem) =>
@@ -1211,10 +1293,22 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           </div>
         </div>
         <div style={{ ...S.matActions, position: "relative" }}>
+          {mat.status && mat.status !== "APPROVED" && (
+            <span style={{
+              display: "inline-block", padding: "2px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+              background: mat.status === "PENDING" ? "#fef3c7" : "#fee2e2",
+              color: mat.status === "PENDING" ? "#92400e" : "#991b1b",
+              marginBottom: 4,
+            }}>
+              {mat.status === "PENDING" ? t.statusPending : t.statusRejected}
+            </span>
+          )}
           <a href={mat.url} target="_blank" rel="noopener noreferrer" style={S.dlBtn}>
             {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
           </a>
-          <button onClick={() => handleEdit(mat)} style={S.editBtn} title={t.editMaterial}>✏️</button>
+          {isLoggedIn && currentUserId && mat.userId === currentUserId && (
+            <button onClick={() => handleEdit(mat)} style={S.editBtn} title={t.editMaterial}>✏️</button>
+          )}
           <div data-share-popup="true" style={{ position: "relative" }}>
             <button onClick={() => handleShareToggle(mat.id)} style={S.shareBtn} title={t.share}>🔗</button>
             {sharePopup === mat.id && (
@@ -1235,7 +1329,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             )}
           </div>
-          <button onClick={() => handleDeleteRequest(mat)} style={S.delBtn} title={t.confirmDelete}>🗑️</button>
+          {isLoggedIn && currentUserId && mat.userId === currentUserId && (
+            <button onClick={() => handleDeleteRequest(mat)} style={S.delBtn} title={t.confirmDelete}>🗑️</button>
+          )}
         </div>
       </div>
     );
@@ -1310,6 +1406,43 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             font-size: 13px !important;
           }
         }
+        @media (max-width: 768px) {
+          .studyhub-hero-title {
+            font-size: 28px !important;
+          }
+          .studyhub-degree-grid {
+            gap: 10px !important;
+          }
+          .studyhub-how-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .studyhub-stats-row {
+            gap: 10px !important;
+          }
+          .studyhub-country-grid {
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .studyhub-hero-title {
+            font-size: 24px !important;
+          }
+          .studyhub-degree-grid {
+            justify-content: center !important;
+          }
+          .studyhub-how-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .studyhub-stats-row {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+          }
+          .studyhub-country-grid {
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+            gap: 10px !important;
+          }
+        }
       `}</style>
 
       {notification && (
@@ -1353,7 +1486,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           </div>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-0 lg:gap-1">
+          <nav className="hidden md:flex items-center gap-0 lg:gap-1 whitespace-nowrap">
             <button
               onClick={() => { navigate("home"); setSearchQuery(""); }}
               className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
@@ -1388,6 +1521,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             </button>
             <button
               onClick={() => {
+                if (requireLogin()) return;
                 if (selectedSemester) setShowUploadModal(true);
                 else { navigate("home"); showNotif(t.selectSemesterFirst, "error"); }
               }}
@@ -1442,16 +1576,77 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               )}
             </button>
 
-            {/* Sign In Button */}
-            <a
-              href={`/${locale}/login`}
-              className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 px-3 lg:px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 no-underline"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              <span className="hidden lg:inline">{t.signIn}</span>
-            </a>
+            {/* Auth: Avatar Dropdown or Sign In */}
+            {authStatus === "loading" ? (
+              <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+            ) : isLoggedIn ? (
+              <div ref={userMenuRef} className="relative">
+                <button
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                >
+                  {session.user.image ? (
+                    <img
+                      src={session.user.image}
+                      alt=""
+                      className="w-7 h-7 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+                      {(session.user.name || session.user.email || "U").charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <span className="hidden lg:inline text-sm font-medium text-gray-700 dark:text-gray-200 max-w-[100px] truncate">
+                    {(session.user.name || "").split(" ")[0]}
+                  </span>
+                  <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${isUserDropdownOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {isUserDropdownOpen && (
+                  <div className={`absolute top-full mt-2 ${isRTL ? "left-0" : "right-0"} w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 py-1 overflow-hidden`}>
+                    <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{session.user.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{session.user.email}</p>
+                    </div>
+                    <a
+                      href={`/${locale}/profile`}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 no-underline transition-colors"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                      {t.profile}
+                    </a>
+                    <button
+                      onClick={() => { navigate("my-materials"); setIsUserDropdownOpen(false); }}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 w-full transition-colors"
+                    >
+                      <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                      {t.myMaterials}
+                    </button>
+                    <div className="border-t border-gray-100 dark:border-gray-800" />
+                    <button
+                      onClick={() => { setIsUserDropdownOpen(false); signOut({ callbackUrl: `/${locale}/study-hub` }); }}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                      {t.signOut}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <a
+                href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
+                className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 px-3 lg:px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 no-underline"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="hidden lg:inline">{t.signIn}</span>
+              </a>
+            )}
           </div>
 
           {/* Mobile Hamburger */}
@@ -1511,6 +1706,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             </button>
             <button
               onClick={() => {
+                if (requireLogin()) return;
                 if (selectedSemester) { setShowUploadModal(true); setIsMobileMenuOpen(false); }
                 else { navigate("home"); setIsMobileMenuOpen(false); showNotif(t.selectSemesterFirst, "error"); }
               }}
@@ -1543,15 +1739,40 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   </svg>
                 )}
               </button>
-              <a
-                href={`/${locale}/login`}
-                className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                {t.signIn}
-              </a>
+              {isLoggedIn ? (
+                <div className="flex-1 flex flex-col gap-2">
+                  <div className="flex items-center gap-3 px-2">
+                    {session.user.image ? (
+                      <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                        {(session.user.name || session.user.email || "U").charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white truncate m-0">{session.user.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate m-0">{session.user.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { setIsMobileMenuOpen(false); signOut({ callbackUrl: `/${locale}/study-hub` }); }}
+                    className="flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                    {t.signOut}
+                  </button>
+                </div>
+              ) : (
+                <a
+                  href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  {t.signIn}
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -1606,9 +1827,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {/* === HOME === */}
         {view === "home" && (
           <div>
+            {/* 1. Hero — Dark Gradient */}
             <div style={S.hero}>
               <div style={S.heroBadge}>🇸🇩 {t.heroBadge}</div>
-              <h2 style={S.heroTitle}>{t.heroTitle}</h2>
+              <h2 className="studyhub-hero-title" style={S.heroTitle}>{t.heroTitle}</h2>
               <p style={S.heroSub}>{t.heroSub}</p>
               <p style={{ ...S.heroArabic, direction: isRTL ? "ltr" : "rtl" }}>{t.heroArabic}</p>
 
@@ -1623,59 +1845,47 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 />
                 {searchQuery && <button onClick={() => setSearchQuery("")} style={S.clearBtn}>✕</button>}
               </div>
+            </div>
 
-              {/* Degree Level Quick Cards */}
-              <div style={S.degreePreview}>
-                {DEGREE_LEVELS.map((d) => (
-                  <div key={d.id} style={{ ...S.degreePreviewCard, borderTopColor: d.color }}>
-                    <span style={{ fontSize: 28 }}>{d.icon}</span>
-                    <span style={{ fontWeight: 800, fontSize: 14, color: "#1B3A4B" }}>{degreeName(d)}</span>
-                    <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
+            {/* 2. Degree Cards — Dedicated Section */}
+            <h3 style={S.secTitle}>🎓 {t.degreeLevelsTitle}</h3>
+            <div className="studyhub-degree-grid" style={S.degreePreview}>
+              {DEGREE_LEVELS.map((d) => (
+                <div
+                  key={d.id}
+                  style={{ ...S.degreePreviewCard, borderTopColor: d.color }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.1)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; }}
+                >
+                  <span style={{ fontSize: 32 }}>{d.icon}</span>
+                  <span style={{ fontWeight: 800, fontSize: 15, color: "#1B3A4B" }}>{degreeName(d)}</span>
+                  <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* 3. Stats Strip */}
+            <div style={S.statsWrapper}>
+              <div className="studyhub-stats-row" style={S.statsRow}>
+                {[
+                  { n: ALL_COUNTRIES.length, l: t.countries, icon: "🌍" },
+                  { n: "10,000+", l: t.universities, icon: "🏛️" },
+                  { n: materials.length, l: t.materials, icon: "📚" },
+                  { n: DEGREE_LEVELS.length, l: t.degreeLevels, icon: "🎓" },
+                ].map((s, i) => (
+                  <div key={i} style={S.statCard}>
+                    <span style={S.statIcon}>{s.icon}</span>
+                    <span style={S.statNum}>{s.n}</span>
+                    <span style={S.statLabel}>{s.l}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Stats */}
-            <div style={S.statsRow}>
-              {[
-                { n: ALL_COUNTRIES.length, l: t.countries },
-                { n: "10,000+", l: t.universities },
-                { n: materials.length, l: t.materials },
-                { n: DEGREE_LEVELS.length, l: t.degreeLevels },
-              ].map((s, i) => (
-                <div key={i} style={S.statCard}>
-                  <span style={S.statNum}>{s.n}</span>
-                  <span style={S.statLabel}>{s.l}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Countries */}
-            <h3 style={S.secTitle}>🌍 {t.browseByCountry}</h3>
-            <div style={S.countryGrid}>
-              {filteredCountries.map((c) => (
-                <div
-                  key={c.id}
-                  style={S.countryCard}
-                  onClick={() => navigate("universities", c)}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.12)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.05)"; }}
-                >
-                  <span style={S.countryFlag}>{c.flag}</span>
-                  <h4 style={S.countryName}>{countryName(c)}</h4>
-                  <span style={S.countryMats}>{countMats(c.id)} {t.nMaterials}</span>
-                </div>
-              ))}
-            </div>
-            {filteredCountries.length === 0 && (
-              <div style={S.empty}><span style={{ fontSize: 48 }}>🔍</span><p>{t.noResultsFor} &quot;{searchQuery}&quot;</p></div>
-            )}
-
-            {/* How It Works */}
+            {/* 4. How It Works */}
             <div style={S.howSection}>
-              <h3 style={S.secTitle}>📖 {t.howItWorks}</h3>
-              <div style={S.howGrid}>
+              <h3 style={{ ...S.secTitle, marginBottom: 16 }}>📖 {t.howItWorks}</h3>
+              <div className="studyhub-how-grid" style={S.howGrid}>
                 {[
                   { step: "1", icon: "🌍", title: t.step1Title, desc: t.step1Desc },
                   { step: "2", icon: "🏛️", title: t.step2Title, desc: t.step2Desc },
@@ -1691,6 +1901,37 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 ))}
               </div>
             </div>
+
+            {/* 5. Browse by Country */}
+            <h3 style={S.secTitle}>🌍 {t.browseByCountry}</h3>
+            <div className="studyhub-country-grid" style={S.countryGrid}>
+              {(showAllCountries ? filteredCountries : filteredCountries.slice(0, 24)).map((c) => (
+                <div
+                  key={c.id}
+                  style={S.countryCard}
+                  onClick={() => navigate("universities", c)}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.12)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.05)"; }}
+                >
+                  <span style={S.countryFlag}>{c.flag}</span>
+                  <h4 style={S.countryName}>{countryName(c)}</h4>
+                  <span style={S.countryMats}>{countMats(c.id)} {t.nMaterials}</span>
+                </div>
+              ))}
+            </div>
+            {!showAllCountries && filteredCountries.length > 24 && !searchQuery && (
+              <button
+                style={S.showAllBtn}
+                onClick={() => setShowAllCountries(true)}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#C8956C"; e.currentTarget.style.color = "white"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#C8956C"; }}
+              >
+                {t.showAllCountries} ({filteredCountries.length})
+              </button>
+            )}
+            {filteredCountries.length === 0 && (
+              <div style={S.empty}><span style={{ fontSize: 48 }}>🔍</span><p>{t.noResultsFor} &quot;{searchQuery}&quot;</p></div>
+            )}
           </div>
         )}
 
@@ -1821,7 +2062,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   {selectedCountry.flag} {countryName(selectedCountry)} › {uniName(selectedUniversity)} › {selectedDegree.icon} {degreeName(selectedDegree)}
                 </p>
               </div>
-              <button style={{ ...S.uploadBtn, ...(isRTL ? { marginLeft: 0, marginRight: "auto" } : {}) }} onClick={() => setShowUploadModal(true)}>⬆️ {t.uploadMaterial}</button>
+              <button style={{ ...S.uploadBtn, ...(isRTL ? { marginLeft: 0, marginRight: "auto" } : {}) }} onClick={() => { if (!requireLogin()) setShowUploadModal(true); }}>⬆️ {t.uploadMaterial}</button>
             </div>
 
             {/* Filters */}
@@ -1853,7 +2094,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <span style={{ fontSize: 64 }}>📭</span>
                 <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noMaterials}</h3>
                 <p style={{ color: "#666", marginBottom: 20 }}>{t.beFirst}</p>
-                <button style={S.uploadBtn} onClick={() => setShowUploadModal(true)}>⬆️ {t.uploadFirst}</button>
+                <button style={S.uploadBtn} onClick={() => { if (!requireLogin()) setShowUploadModal(true); }}>⬆️ {t.uploadFirst}</button>
               </div>
             ) : (
               <div>
@@ -1899,11 +2140,24 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={{ fontSize: 48 }}>📋</span>
               <div>
                 <h2 style={S.viewTitle}>{t.myMaterials}</h2>
-                <p style={S.viewSub}>{t.allYourMaterials} ({materials.length})</p>
+                <p style={S.viewSub}>{t.allYourMaterials} ({myMaterials.length})</p>
               </div>
             </div>
 
-            {materials.length === 0 ? (
+            {!isLoggedIn ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 64 }}>🔒</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.loginToUpload}</h3>
+                <a
+                  href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
+                  style={{ ...S.uploadBtn, textDecoration: "none", display: "inline-block", marginTop: 8 }}
+                >
+                  {t.signIn}
+                </a>
+              </div>
+            ) : loadingMyMaterials ? (
+              <LoadingSpinner text={t.loadingUniversities} />
+            ) : myMaterials.length === 0 ? (
               <div style={S.empty}>
                 <span style={{ fontSize: 64 }}>📭</span>
                 <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noMyMaterials}</h3>
@@ -1912,7 +2166,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <div>
                 {(() => {
                   const grouped = {};
-                  materials.forEach((m) => {
+                  myMaterials.forEach((m) => {
                     if (!grouped[m.countryId]) grouped[m.countryId] = {};
                     if (!grouped[m.countryId][m.universityId]) grouped[m.countryId][m.universityId] = [];
                     grouped[m.countryId][m.universityId].push(m);
@@ -2136,32 +2390,34 @@ const S = {
   crumbActive: { color: "#C8956C", fontWeight: 700, fontSize: 13, padding: "4px 10px" },
   crumbSep: { color: "#C8956C", fontWeight: 700, fontSize: 18 },
   main: { maxWidth: 1200, margin: "0 auto", padding: "20px 24px", position: "relative", zIndex: 1, minHeight: "60vh" },
-  hero: { textAlign: "center", padding: "40px 20px 28px" },
-  heroBadge: { display: "inline-block", background: "#1B3A4B", color: "#C8956C", padding: "6px 18px", borderRadius: 50, fontSize: 13, fontWeight: 700, marginBottom: 16 },
-  heroTitle: { fontSize: 34, fontWeight: 900, color: "#1B3A4B", margin: "0 0 14px", lineHeight: 1.15, letterSpacing: "-1px" },
-  heroSub: { fontSize: 16, color: "#555", maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 },
+  hero: { textAlign: "center", padding: "60px 24px 48px", background: "linear-gradient(135deg, #1B3A4B 0%, #274555 100%)", borderRadius: 24, marginBottom: 44 },
+  heroBadge: { display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#F5E6D3", padding: "8px 22px", borderRadius: 50, fontSize: 13, fontWeight: 700, marginBottom: 20, border: "1px solid rgba(255,255,255,0.1)" },
+  heroTitle: { fontSize: 38, fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.15, letterSpacing: "-1px", textShadow: "0 2px 10px rgba(0,0,0,0.15)" },
+  heroSub: { fontSize: 16, color: "rgba(255,255,255,0.75)", maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 },
   heroArabic: { fontSize: 20, color: "#C8956C", fontWeight: 700, margin: "0 0 28px" },
-  searchBox: { display: "flex", alignItems: "center", maxWidth: 500, margin: "0 auto 24px", background: "white", borderRadius: 50, padding: "4px 6px 4px 18px", boxShadow: "0 4px 20px rgba(0,0,0,0.07)", border: "2px solid #e8ddd0" },
+  searchBox: { display: "flex", alignItems: "center", maxWidth: 520, margin: "0 auto", background: "white", borderRadius: 50, padding: "6px 8px 6px 20px", boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "none" },
   searchIcon: { fontSize: 18, marginRight: 8 },
   searchInput: { flex: 1, border: "none", outline: "none", fontSize: 15, padding: "11px 0", background: "transparent", color: "#1B3A4B", fontFamily: "inherit" },
   clearBtn: { background: "#e8ddd0", border: "none", borderRadius: "50%", width: 30, height: 30, cursor: "pointer", fontSize: 13, fontWeight: 700, color: "#1B3A4B" },
-  degreePreview: { display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap", marginBottom: 8 },
-  degreePreviewCard: { background: "white", borderRadius: 12, padding: "14px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, borderTop: "3px solid", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", minWidth: 110 },
-  statsRow: { display: "flex", justifyContent: "center", gap: 14, margin: "20px 0 36px", flexWrap: "wrap" },
-  statCard: { background: "white", borderRadius: 14, padding: "18px 24px", textAlign: "center", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", border: "1px solid #ede5da", minWidth: 110 },
-  statNum: { display: "block", fontSize: 30, fontWeight: 900, color: "#C8956C" },
+  degreePreview: { display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap", margin: "32px 0 40px" },
+  degreePreviewCard: { background: "white", borderRadius: 16, padding: "22px 28px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, borderTop: "4px solid", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", minWidth: 135, cursor: "default", transition: "transform 0.2s ease, box-shadow 0.2s ease" },
+  statsWrapper: { background: "linear-gradient(135deg, rgba(27,58,75,0.05), rgba(200,149,108,0.08))", borderRadius: 20, padding: "28px 20px", marginBottom: 44 },
+  statsRow: { display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" },
+  statCard: { background: "white", borderRadius: 14, padding: "18px 24px", textAlign: "left", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", borderLeft: "3px solid #C8956C", minWidth: 110, flex: "1 1 0" },
+  statIcon: { fontSize: 24, marginBottom: 4, display: "block" },
+  statNum: { display: "block", fontSize: 32, fontWeight: 900, color: "#C8956C" },
   statLabel: { fontSize: 12, color: "#777", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" },
-  secTitle: { fontSize: 20, fontWeight: 800, color: "#1B3A4B", marginBottom: 20 },
+  secTitle: { fontSize: 22, fontWeight: 800, color: "#1B3A4B", marginBottom: 20 },
   countryGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 14, marginBottom: 36 },
-  countryCard: { background: "white", borderRadius: 16, padding: "20px 14px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 3px 16px rgba(0,0,0,0.05)", border: "1px solid #ede5da" },
-  countryFlag: { fontSize: 36, display: "block", marginBottom: 8 },
+  countryCard: { background: "white", borderRadius: 18, padding: "22px 14px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 3px 16px rgba(0,0,0,0.05)", border: "1px solid #ede5da" },
+  countryFlag: { fontSize: 42, display: "block", marginBottom: 8 },
   countryName: { fontSize: 13, fontWeight: 800, color: "#1B3A4B", margin: "0 0 4px" },
   countryInfo: { fontSize: 12, color: "#888", margin: 0 },
   countryMats: { fontSize: 11, color: "#C8956C", fontWeight: 700, marginTop: 6, display: "inline-block", background: "#C8956C15", padding: "2px 10px", borderRadius: 20 },
-  howSection: { marginTop: 20, marginBottom: 20 },
+  howSection: { background: "white", borderRadius: 24, padding: "32px 24px", border: "1px solid #ede5da", marginBottom: 44, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
   howGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 },
-  howCard: { background: "white", borderRadius: 16, padding: "24px 20px", textAlign: "center", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", position: "relative", border: "1px solid #ede5da" },
-  howStep: { position: "absolute", top: 12, left: 16, background: "#C8956C", color: "white", width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 13 },
+  howCard: { background: "#FAF6F1", borderRadius: 16, padding: "24px 20px", textAlign: "center", position: "relative" },
+  howStep: { position: "absolute", top: 12, left: 16, background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", width: 34, height: 34, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 15, boxShadow: "0 3px 10px rgba(200,149,108,0.3)" },
   viewHeader: { display: "flex", alignItems: "center", gap: 16, marginBottom: 28, flexWrap: "wrap" },
   viewTitle: { fontSize: 26, fontWeight: 900, color: "#1B3A4B", margin: 0, letterSpacing: "-0.5px" },
   viewSub: { fontSize: 14, color: "#777", margin: "4px 0 0" },
@@ -2246,4 +2502,5 @@ const S = {
   subjectGroupControls: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 8 },
   subjectGroupLabel: { fontSize: 14, fontWeight: 700, color: "#1B3A4B" },
   groupToggleBtn: { padding: "4px 12px", borderRadius: 20, border: "1px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 600, fontSize: 11, fontFamily: "inherit", color: "#777" },
+  showAllBtn: { display: "block", margin: "20px auto 0", padding: "10px 32px", borderRadius: 50, border: "2px solid #C8956C", background: "transparent", color: "#C8956C", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", transition: "all 0.2s" },
 };

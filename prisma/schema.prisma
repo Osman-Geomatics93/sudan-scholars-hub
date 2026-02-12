@@ -50,6 +50,7 @@ model User {
   savedScholarships SavedScholarship[]
   matcherProfile    MatcherProfile?
   resumes           Resume[]
+  studyMaterials    StudyMaterial[]
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -685,7 +686,14 @@ model StudyMaterial {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 
+  // User ownership (nullable for existing records)
+  userId         String?
+  userEmail      String?
+  userName       String?
+  user           User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+
   @@index([status])
   @@index([countryId, universityId, degreeId])
   @@index([uploadedAt])
+  @@index([userId])
 }
