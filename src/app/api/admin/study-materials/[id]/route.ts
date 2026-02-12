@@ -41,9 +41,13 @@ export async function PATCH(
       },
     });
 
-    // Send notification email to the uploader (best-effort, non-blocking)
+    // Send notification email to the uploader (best-effort)
+    let emailSent = false;
+    let emailError: string | null = null;
+
     if (existingMaterial?.userEmail) {
-      const studyHubUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/study-hub`;
+      const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+      const studyHubUrl = `${baseUrl}/en/study-hub`;
       try {
         await sendMaterialReviewNotification({
           email: existingMaterial.userEmail,
@@ -53,12 +57,16 @@ export async function PATCH(
           rejectionNote: status === 'REJECTED' ? rejectionNote : undefined,
           studyHubUrl,
         });
-      } catch (emailError) {
-        console.error('Failed to send material review notification email:', emailError);
+        emailSent = true;
+      } catch (err) {
+        emailError = err instanceof Error ? err.message : 'Unknown email error';
+        console.error('Failed to send material review notification email:', err);
       }
+    } else {
+      emailError = 'No uploader email found on this material';
     }
 
-    return NextResponse.json({ material });
+    return NextResponse.json({ material, emailSent, emailError });
   } catch (error) {
     console.error('Error updating study material:', error);
     return NextResponse.json(
