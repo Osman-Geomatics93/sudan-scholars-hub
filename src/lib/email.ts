@@ -117,6 +117,100 @@ export async function sendWelcomeEmail({ email }: { email: string }) {
   });
 }
 
+export async function sendMaterialReviewNotification({
+  email,
+  userName,
+  materialTitle,
+  status,
+  rejectionNote,
+  studyHubUrl,
+}: {
+  email: string;
+  userName: string;
+  materialTitle: string;
+  status: 'APPROVED' | 'REJECTED';
+  rejectionNote?: string | null;
+  studyHubUrl: string;
+}) {
+  const safeName = escapeHtml(userName);
+  const safeTitle = escapeHtml(materialTitle);
+  const isApproved = status === 'APPROVED';
+
+  const subject = isApproved
+    ? `Your material "${safeTitle}" has been approved!`
+    : `Update on your material "${safeTitle}"`;
+
+  const headerBg = isApproved
+    ? 'linear-gradient(135deg, #065f46 0%, #10b981 100%)'
+    : 'linear-gradient(135deg, #92400e 0%, #f59e0b 100%)';
+
+  const accentColor = isApproved ? '#065f46' : '#92400e';
+
+  const heading = isApproved
+    ? 'Material Approved!'
+    : 'Material Not Approved';
+
+  const bodyContent = isApproved
+    ? `
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            Congratulations, ${safeName}! Your study material <strong>"${safeTitle}"</strong> has been reviewed and approved.
+          </p>
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            It is now publicly available on the Study Hub for other students to benefit from. Thank you for your valuable contribution!
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${studyHubUrl}"
+               style="background: ${accentColor}; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+              View on Study Hub
+            </a>
+          </div>
+    `
+    : `
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            Hi ${safeName}, thank you for submitting your study material <strong>"${safeTitle}"</strong>.
+          </p>
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            After review, we were unable to approve it at this time.
+          </p>
+          ${rejectionNote ? `
+          <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0;">
+            <p style="color: #92400e; font-weight: bold; margin: 0 0 8px 0;">Reason:</p>
+            <p style="color: #78350f; margin: 0;">${escapeHtml(rejectionNote)}</p>
+          </div>
+          ` : ''}
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            Don't be discouraged! You can update your material and re-upload it for another review.
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${studyHubUrl}"
+               style="background: ${accentColor}; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+              Go to Study Hub
+            </a>
+          </div>
+    `;
+
+  await resend.emails.send({
+    from: 'Sudan Scholars Hub <onboarding@resend.dev>',
+    to: email,
+    subject,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
+        <div style="background: ${headerBg}; padding: 40px 20px; text-align: center; border-radius: 8px 8px 0 0;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 28px;">${heading}</h1>
+        </div>
+        <div style="padding: 30px 20px;">
+          ${bodyContent}
+        </div>
+        <div style="background: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+          <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+            Sudan Scholars Hub - Empowering Sudanese Students Worldwide
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}
+
 export async function sendAdminOTP({
   email,
   otpCode,

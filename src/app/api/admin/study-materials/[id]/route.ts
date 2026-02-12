@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth-utils';
+import { sendMaterialReviewNotification } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,12 @@ export async function PATCH(
       );
     }
 
+    // Fetch the material first to get uploader info for the notification email
+    const existingMaterial = await prisma.studyMaterial.findUnique({
+      where: { id },
+      select: { userEmail: true, userName: true, title: true },
+    });
+
     const material = await prisma.studyMaterial.update({
       where: { id },
       data: {
@@ -33,6 +40,23 @@ export async function PATCH(
         reviewedAt: new Date(),
       },
     });
+
+    // Send notification email to the uploader (best-effort, non-blocking)
+    if (existingMaterial?.userEmail) {
+      const studyHubUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/study-hub`;
+      try {
+        await sendMaterialReviewNotification({
+          email: existingMaterial.userEmail,
+          userName: existingMaterial.userName || 'Student',
+          materialTitle: existingMaterial.title,
+          status: status as 'APPROVED' | 'REJECTED',
+          rejectionNote: status === 'REJECTED' ? rejectionNote : undefined,
+          studyHubUrl,
+        });
+      } catch (emailError) {
+        console.error('Failed to send material review notification email:', emailError);
+      }
+    }
 
     return NextResponse.json({ material });
   } catch (error) {
