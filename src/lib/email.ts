@@ -36,7 +36,7 @@ export async function sendContactNotification({
   const safeMessage = escapeHtml(message);
 
   await resend.emails.send({
-    from: 'Sudan Scholars Hub <onboarding@resend.dev>',
+    from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: adminEmail,
     subject: `New Contact: ${safeSubject}`,
     html: `
@@ -65,7 +65,7 @@ export async function sendWelcomeEmail({ email }: { email: string }) {
   const unsubscribeUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`;
 
   await resend.emails.send({
-    from: 'Sudan Scholars Hub <onboarding@resend.dev>',
+    from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: email,
     subject: 'Welcome to Sudan Scholars Hub Newsletter! 🎓',
     html: `
@@ -190,7 +190,7 @@ export async function sendMaterialReviewNotification({
     `;
 
   await resend.emails.send({
-    from: 'Sudan Scholars Hub <onboarding@resend.dev>',
+    from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: email,
     subject,
     html: `
@@ -222,7 +222,7 @@ export async function sendAdminOTP({
   const safeOtpCode = escapeHtml(otpCode);
 
   await resend.emails.send({
-    from: 'Sudan Scholars Hub <onboarding@resend.dev>',
+    from: 'Sudan Scholars Hub <noreply@deltaroots.store>',
     to: email,
     subject: 'Admin Login Code - Sudan Scholars Hub',
     html: `
