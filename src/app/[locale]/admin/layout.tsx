@@ -19,6 +19,7 @@ import {
   BarChart3,
   Calendar,
   BookOpen,
+  ClipboardList,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -107,6 +108,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Study Materials',
       labelAr: 'المواد الدراسية',
       icon: BookOpen,
+    },
+    {
+      href: `/${locale}/admin/past-exams`,
+      label: 'Past Exams',
+      labelAr: 'الامتحانات السابقة',
+      icon: ClipboardList,
     },
     {
       href: `/${locale}/admin/analytics`,

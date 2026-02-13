@@ -55,6 +55,7 @@ model User {
   matcherProfile    MatcherProfile?
   resumes           Resume[]
   studyMaterials    StudyMaterial[]
+  pastExams         PastExam[]
   savedMaterials    SavedMaterial[]
   materialReviews   MaterialReview[]
   notifications     Notification[]
@@ -716,6 +717,64 @@ model StudyMaterial {
   @@index([countryId, universityId, degreeId])
   @@index([uploadedAt])
   @@index([userId])
+}
+
+// ============ PAST EXAMS ============
+enum ExamType {
+  MIDTERM
+  FINAL
+  QUIZ
+  ASSIGNMENT
+  PRACTICAL
+}
+
+model PastExam {
+  id             String         @id @default(cuid())
+  title          String
+  type           String         // pdf, docx, pptx, folder
+  url            String
+  description    String?        @db.Text
+  subject        String
+  facultyId      String?
+  specialtyId    String?
+  uploaderRole   String         @default("student")
+  countryId      String
+  countryName    String
+  universityId   String
+  universityName String
+  degreeId       String
+  degreeName     String
+  semester       String
+  status         MaterialStatus @default(PENDING)
+  rejectionNote  String?
+  reviewedAt     DateTime?
+  uploadedAt     DateTime       @default(now())
+  editedAt       DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Exam-specific fields
+  examType       ExamType
+  year           String         // e.g. "2024" or "2024-2025"
+  professorName  String?
+
+  // Counters
+  viewCount      Int            @default(0)
+  downloadCount  Int            @default(0)
+
+  // User ownership
+  userId         String?
+  userEmail      String?
+  userName       String?
+  user           User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([examType])
+  @@index([year])
+  @@index([countryId, universityId, degreeId])
+  @@index([uploadedAt])
+  @@index([userId])
+  @@index([downloadCount])
 }
 
 // ============ SAVED MATERIALS (Bookmarks) ============

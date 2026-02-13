@@ -28,6 +28,33 @@ const FILE_TYPES = [
   { id: "folder", label: "Folder", icon: "📁", color: "#27AE60" },
 ];
 
+const EXAM_FILE_TYPES = [
+  { id: "pdf", label: "PDF", icon: "📄", color: "#E74C3C" },
+  { id: "docx", label: "DOCX", icon: "📝", color: "#2E86C1" },
+  { id: "pptx", label: "PPT", icon: "📊", color: "#E67E22" },
+  { id: "folder", label: "Folder", icon: "📁", color: "#27AE60" },
+];
+
+const EXAM_TYPES = [
+  { id: "MIDTERM", label: "Midterm", labelAr: "نصفي", icon: "📘", color: "#2563EB" },
+  { id: "FINAL", label: "Final", labelAr: "نهائي", icon: "📕", color: "#DC2626" },
+  { id: "QUIZ", label: "Quiz", labelAr: "كويز", icon: "📒", color: "#EAB308" },
+  { id: "ASSIGNMENT", label: "Assignment", labelAr: "واجب", icon: "📓", color: "#9333EA" },
+  { id: "PRACTICAL", label: "Practical", labelAr: "عملي", icon: "📗", color: "#16A34A" },
+];
+
+const getExamTypeInfo = (examType) => EXAM_TYPES.find((e) => e.id === examType) || EXAM_TYPES[0];
+
+const ACADEMIC_YEARS = (() => {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let y = 2070; y >= currentYear - 10; y--) {
+    years.push(`${y}`);
+    years.push(`${y - 1}-${y}`);
+  }
+  return years;
+})();
+
 const getTypeInfo = (type) => FILE_TYPES.find((f) => f.id === type) || FILE_TYPES[0];
 
 const UPLOADER_ROLES = [
@@ -610,6 +637,31 @@ const T = {
     deleteCollectionMsg: "Are you sure you want to delete this collection?",
     saveChanges: "Save Changes",
     viewCollection: "View Collection",
+    // Past Exams
+    pastExams: "Past Exams",
+    uploadExam: "Upload Exam",
+    examType: "Exam Type",
+    examYear: "Year",
+    professorName: "Professor Name",
+    professorNamePlaceholder: "e.g. Dr. Ahmed Mohamed",
+    noExams: "No past exams yet",
+    noExamsDesc: "Be the first to upload past exam papers!",
+    uploadFirstExam: "Upload First Exam",
+    examMidterm: "Midterm",
+    examFinal: "Final",
+    examQuiz: "Quiz",
+    examAssignment: "Assignment",
+    examPractical: "Practical",
+    uploadPastExam: "Upload Past Exam",
+    examSubmitted: "Past exam submitted for review!",
+    examDeleted: "Past exam deleted",
+    allExamTypes: "All Types",
+    allYears: "All Years",
+    examViews: "views",
+    examDownloads: "downloads",
+    pastExamsBadge: "Past Exams Database",
+    pastExamsHeroTitle: "Past Exams & Papers",
+    pastExamsHeroSub: "Find midterms, finals, quizzes, and assignments from previous years",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -885,6 +937,31 @@ const T = {
     deleteCollectionMsg: "هل أنت متأكد من حذف هذه المجموعة؟",
     saveChanges: "حفظ التغييرات",
     viewCollection: "عرض المجموعة",
+    // Past Exams
+    pastExams: "الامتحانات السابقة",
+    uploadExam: "رفع امتحان",
+    examType: "نوع الامتحان",
+    examYear: "السنة",
+    professorName: "اسم الأستاذ",
+    professorNamePlaceholder: "مثال: د. أحمد محمد",
+    noExams: "لا توجد امتحانات سابقة بعد",
+    noExamsDesc: "كن أول من يرفع أوراق امتحانات سابقة!",
+    uploadFirstExam: "ارفع أول امتحان",
+    examMidterm: "نصفي",
+    examFinal: "نهائي",
+    examQuiz: "كويز",
+    examAssignment: "واجب",
+    examPractical: "عملي",
+    uploadPastExam: "رفع امتحان سابق",
+    examSubmitted: "تم إرسال الامتحان للمراجعة!",
+    examDeleted: "تم حذف الامتحان",
+    allExamTypes: "جميع الأنواع",
+    allYears: "جميع السنوات",
+    examViews: "مشاهدات",
+    examDownloads: "تحميلات",
+    pastExamsBadge: "بنك الامتحانات السابقة",
+    pastExamsHeroTitle: "الامتحانات والأوراق السابقة",
+    pastExamsHeroSub: "ابحث عن امتحانات نصفية ونهائية وكويزات وواجبات من سنوات سابقة",
   },
 };
 
@@ -1245,6 +1322,19 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [universityCache, setUniversityCache] = useState({});
   const [loadingUniversities, setLoadingUniversities] = useState(false);
   const [universityError, setUniversityError] = useState(null);
+
+  // Past Exams
+  const [showExamModal, setShowExamModal] = useState(false);
+  const [examForm, setExamForm] = useState({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student", examType: "MIDTERM", year: `${new Date().getFullYear()}`, professorName: "" });
+  const [examsList, setExamsList] = useState([]);
+  const [examsTotal, setExamsTotal] = useState(0);
+  const [examsLoading, setExamsLoading] = useState(false);
+  const [examSearch, setExamSearch] = useState("");
+  const [examFilterType, setExamFilterType] = useState("all");
+  const [examFilterYear, setExamFilterYear] = useState("");
+  const [editingExam, setEditingExam] = useState(null);
+  const [deleteExamConfirm, setDeleteExamConfirm] = useState(null);
+  const [examSortOrder, setExamSortOrder] = useState("newest");
 
   // Sync with main app's theme system (next-themes)
   const { theme, setTheme } = useTheme();
@@ -1726,6 +1816,121 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
   const handleFacultyChange = (facultyId) => {
     setUploadForm((prev) => ({ ...prev, facultyId, specialtyId: "" }));
+  };
+
+  // === Past Exams Functions ===
+  const fetchExams = useCallback(async (searchOverride, typeOverride, yearOverride, existingList) => {
+    setExamsLoading(true);
+    try {
+      const s = searchOverride !== undefined ? searchOverride : examSearch;
+      const t2 = typeOverride !== undefined ? typeOverride : examFilterType;
+      const y = yearOverride !== undefined ? yearOverride : examFilterYear;
+      const params = new URLSearchParams();
+      if (s) params.set("search", s);
+      if (t2 && t2 !== "all") params.set("examType", t2);
+      if (y) params.set("year", y);
+      params.set("orderBy", examSortOrder);
+      params.set("limit", "20");
+      if (existingList) params.set("offset", String(existingList.length));
+      const res = await fetch(`/api/study-hub/exams?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (existingList) {
+          setExamsList([...existingList, ...data.exams]);
+        } else {
+          setExamsList(data.exams);
+        }
+        setExamsTotal(data.total);
+      }
+    } catch (err) {
+      console.error("Failed to fetch exams:", err);
+    } finally {
+      setExamsLoading(false);
+    }
+  }, [examSearch, examFilterType, examFilterYear, examSortOrder]);
+
+  const handleSubmitExam = async () => {
+    if (!examForm.title || !examForm.url || !examForm.subject || !examForm.examType || !examForm.year) {
+      showNotif(t.fillRequired, "error");
+      return;
+    }
+    if (editingExam) {
+      try {
+        const res = await fetch(`/api/study-hub/exams/${editingExam.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(examForm),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || "Failed to update");
+        }
+        setEditingExam(null);
+        resetExamForm();
+        setShowExamModal(false);
+        showNotif(`${t.examSubmitted}\n${t.pendingReviewMsg}`);
+        fetchExams();
+      } catch {
+        showNotif(t.fillRequired, "error");
+      }
+    } else {
+      const examData = {
+        ...examForm,
+        countryId: selectedCountry.id,
+        countryName: selectedCountry.name,
+        universityId: selectedUniversity.id,
+        universityName: selectedUniversity.name,
+        degreeId: selectedDegree.id,
+        degreeName: selectedDegree.name,
+        semester: selectedSemester,
+      };
+      try {
+        const res = await fetch("/api/study-hub/exams", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(examData),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || "Failed to submit");
+        }
+        resetExamForm();
+        setShowExamModal(false);
+        showNotif(`${t.examSubmitted}\n${t.pendingReviewMsg}`);
+        fetchExams();
+      } catch {
+        showNotif(t.fillRequired, "error");
+      }
+    }
+  };
+
+  const resetExamForm = () => {
+    setExamForm({ title: "", type: "pdf", url: "", description: "", subject: "", facultyId: "", specialtyId: "", uploaderRole: "student", examType: "MIDTERM", year: `${new Date().getFullYear()}`, professorName: "" });
+  };
+
+  const trackExamAction = async (examId, action) => {
+    try {
+      await fetch(`/api/study-hub/exams/${examId}/track`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+    } catch {}
+  };
+
+  const handleDeleteExam = async () => {
+    if (!deleteExamConfirm) return;
+    try {
+      const res = await fetch(`/api/study-hub/exams/${deleteExamConfirm.id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete");
+      setExamsList((prev) => prev.filter((e) => e.id !== deleteExamConfirm.id));
+      setExamsTotal((prev) => Math.max(0, prev - 1));
+      showNotif(t.examDeleted);
+    } catch {
+      showNotif(t.fillRequired, "error");
+    } finally {
+      setDeleteExamConfirm(null);
+    }
   };
 
   const handleDeleteRequest = (material) => {
@@ -2221,6 +2426,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     if (newView === "requests") fetchRequests();
     if (newView === "groups") fetchGroups();
     if (newView === "collections") fetchCollections();
+    if (newView === "exams") {
+      setExamsList([]);
+      setExamSearch("");
+      setExamFilterType("all");
+      setExamFilterYear("");
+      setExamSortOrder("newest");
+      fetchExams("", "all", "");
+    }
   };
 
   const countMats = (cId, uId, dId, sem, facId) => {
@@ -3542,6 +3755,12 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             >
               {t.upload}
             </button>
+            <button
+              onClick={() => { navigate("exams"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              {t.pastExams}
+            </button>
             <a
               href={TELEGRAM_LINK}
               target="_blank"
@@ -3634,7 +3853,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>📁 {t.collections}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && (
+          {view === "exams" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📝 {t.pastExams}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -3724,6 +3949,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >👥 {t.studyGroups}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(220,38,38,0.4)", background: "rgba(220,38,38,0.15)" }} onClick={() => navigate("exams")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(220,38,38,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(220,38,38,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >📝 {t.pastExams}</button>
               </div>
 
               {/* Inline Platform Stats */}
@@ -4900,6 +5129,170 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           </div>
         )}
 
+        {/* === PAST EXAMS === */}
+        {view === "exams" && (
+          <div>
+            {/* Banner */}
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, background: "linear-gradient(135deg, #1B3A4B 0%, #7F1D1D 100%)", marginBottom: 24 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>📝</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>📝</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.pastExamsHeroTitle}</h2>
+                  <p style={S.myMatBannerSub}>{t.pastExamsHeroSub}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Search + Upload button */}
+            <div className="studyhub-browse-search-bar" style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ flex: 1, minWidth: 220, position: "relative" }}>
+                <span style={{ position: "absolute", [isRTL ? "right" : "left"]: 14, top: "50%", transform: "translateY(-50%)", fontSize: 16, opacity: 0.5 }}>🔍</span>
+                <input
+                  type="text"
+                  placeholder={t.searchMaterials}
+                  value={examSearch}
+                  onChange={(e) => setExamSearch(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { setExamsList([]); fetchExams(examSearch, examFilterType, examFilterYear); } }}
+                  style={{ ...S.input, [isRTL ? "paddingRight" : "paddingLeft"]: 40 }}
+                  onFocus={(e) => { e.target.style.borderColor = "#DC2626"; e.target.style.boxShadow = "0 0 0 3px rgba(220,38,38,0.08)"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+                />
+              </div>
+              <button
+                onClick={() => { setExamsList([]); fetchExams(examSearch, examFilterType, examFilterYear); }}
+                style={{ ...S.viewAllBtn, padding: "12px 24px", background: "#DC2626" }}
+              >🔍</button>
+              {selectedSemester && (
+                <button
+                  onClick={() => { if (requireLogin()) return; setShowExamModal(true); }}
+                  style={{ ...S.viewAllBtn, padding: "12px 24px", background: "linear-gradient(135deg, #DC2626, #991B1B)" }}
+                >📤 {t.uploadExam}</button>
+              )}
+            </div>
+
+            {/* Exam Type filter chips */}
+            <div className="studyhub-filter-row" style={{ ...S.filterRow, marginBottom: 12 }}>
+              <button
+                onClick={() => { setExamFilterType("all"); setExamsList([]); fetchExams(examSearch, "all", examFilterYear); }}
+                style={{ ...S.filterBtn, ...(examFilterType === "all" ? { ...S.filterActive, background: "#DC2626", borderColor: "#DC2626" } : {}) }}
+              >{t.allExamTypes}</button>
+              {EXAM_TYPES.map((et) => (
+                <button
+                  key={et.id}
+                  onClick={() => { setExamFilterType(et.id); setExamsList([]); fetchExams(examSearch, et.id, examFilterYear); }}
+                  style={{ ...S.filterBtn, ...(examFilterType === et.id ? { ...S.filterActive, background: et.color, borderColor: et.color } : {}) }}
+                >{et.icon} {isRTL ? et.labelAr : et.label}</button>
+              ))}
+            </div>
+
+            {/* Year dropdown + Sort */}
+            <div className="studyhub-sort-row" style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
+              <select
+                value={examFilterYear}
+                onChange={(e) => { setExamFilterYear(e.target.value); setExamsList([]); fetchExams(examSearch, examFilterType, e.target.value); }}
+                style={{ ...S.input, padding: "8px 12px", fontSize: 12, maxWidth: 160, cursor: "pointer" }}
+              >
+                <option value="">{t.allYears}</option>
+                {ACADEMIC_YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+              </select>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#888", marginLeft: 8 }}>{t.sortBy}:</span>
+              {[
+                { id: "newest", label: t.newest },
+                { id: "downloads", label: t.mostDownloaded },
+              ].map((s) => (
+                <button key={s.id}
+                  onClick={() => { setExamSortOrder(s.id); setExamsList([]); fetchExams(examSearch, examFilterType, examFilterYear); }}
+                  style={{ ...S.filterBtn, fontSize: 11, padding: "5px 12px", ...(examSortOrder === s.id ? S.filterActive : {}) }}
+                >{s.label}</button>
+              ))}
+            </div>
+
+            {/* Results count */}
+            {examsTotal > 0 && (
+              <p style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>
+                {t.showing} {examsList.length} {t.of} {examsTotal}
+              </p>
+            )}
+
+            {/* Exam cards */}
+            {examsList.length === 0 && !examsLoading ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 48 }}>📝</span>
+                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noExams}</h3>
+                <p style={{ color: "#888", fontSize: 14, margin: 0 }}>{t.noExamsDesc}</p>
+                {selectedSemester && (
+                  <button onClick={() => { if (!requireLogin()) setShowExamModal(true); }} style={{ ...S.viewAllBtn, marginTop: 16, background: "linear-gradient(135deg, #DC2626, #991B1B)" }}>
+                    📤 {t.uploadFirstExam}
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="studyhub-mat-list" style={S.matList}>
+                {examsList.map((exam) => {
+                  const eti = getExamTypeInfo(exam.examType);
+                  const fti = EXAM_FILE_TYPES.find((f) => f.id === exam.type) || EXAM_FILE_TYPES[0];
+                  const borderSide = isRTL ? "borderRight" : "borderLeft";
+                  return (
+                    <div
+                      className="my-mat-card studyhub-mat-card"
+                      key={exam.id}
+                      style={{
+                        ...S.matCard,
+                        [borderSide]: `4px solid ${eti.color}`,
+                        ...(isRTL ? { borderLeft: "none" } : { borderRight: "none" }),
+                      }}
+                    >
+                      <div className="studyhub-mat-icon" style={{ ...S.matIcon, background: eti.color + "12", color: eti.color, boxShadow: `0 3px 12px ${eti.color}20` }}>{eti.icon}</div>
+                      <div className="studyhub-mat-info" style={S.matInfo}>
+                        <h4 style={S.matTitle}>{exam.title}</h4>
+                        <p style={S.matSub}>{exam.subject}</p>
+                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 6 }}>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 10px", borderRadius: 50, fontSize: 11, fontWeight: 700, background: eti.color + "18", color: eti.color }}>{eti.icon} {isRTL ? eti.labelAr : eti.label}</span>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 10px", borderRadius: 50, fontSize: 11, fontWeight: 700, background: "#f3f4f6", color: "#374151" }}>📅 {exam.year}</span>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 10px", borderRadius: 50, fontSize: 11, fontWeight: 700, background: fti.color + "18", color: fti.color }}>{fti.icon} {fti.label}</span>
+                          {exam.professorName && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 10px", borderRadius: 50, fontSize: 11, fontWeight: 600, background: "#f3f4f6", color: "#374151" }}>👨‍🏫 {exam.professorName}</span>
+                          )}
+                        </div>
+                        <div style={{ display: "flex", gap: 12, marginTop: 8, fontSize: 11, color: "#888" }}>
+                          <span>👁 {exam.viewCount} {t.examViews}</span>
+                          <span>⬇️ {exam.downloadCount} {t.examDownloads}</span>
+                          <span>{exam.countryName} › {exam.universityName}</span>
+                        </div>
+                      </div>
+                      <a
+                        href={exam.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => trackExamAction(exam.id, "download")}
+                        style={{ ...S.viewAllBtn, padding: "8px 16px", fontSize: 12, background: "linear-gradient(135deg, #DC2626, #991B1B)", textDecoration: "none", whiteSpace: "nowrap" }}
+                      >
+                        {exam.type === "folder" ? t.openFolder : t.download}
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Load More */}
+            {examsList.length < examsTotal && (
+              <div style={{ textAlign: "center", marginTop: 24 }}>
+                <button
+                  onClick={() => fetchExams(undefined, undefined, undefined, examsList)}
+                  disabled={examsLoading}
+                  style={{ ...S.viewAllBtn, padding: "12px 32px", opacity: examsLoading ? 0.6 : 1, background: "#DC2626" }}
+                >
+                  {examsLoading ? "..." : `${t.loadMore} (${examsTotal - examsList.length})`}
+                </button>
+              </div>
+            )}
+
+            {examsLoading && examsList.length === 0 && <LoadingSpinner text={t.loadingUniversities} />}
+          </div>
+        )}
+
         {/* === MY MATERIALS === */}
         {view === "my-materials" && (
           <div>
@@ -5391,6 +5784,207 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               >
                 {editingMaterial ? `✏️ ${t.saveChanges}` : `📤 ${t.uploadMaterialBtn}`}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EXAM UPLOAD MODAL */}
+      {showExamModal && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowExamModal(false); setEditingExam(null); resetExamForm(); }}>
+          <div className="studyhub-modal" style={S.modal} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={{ ...S.modalHead, background: "linear-gradient(135deg, #DC2626 0%, #991B1B 100%)" }}>
+              <div>
+                <h3 style={S.modalTitle}>
+                  <span style={{ fontSize: 24 }}>{editingExam ? "✏️" : "📝"}</span>
+                  {editingExam ? t.saveChanges : t.uploadPastExam}
+                </h3>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginTop: 6, lineHeight: 1.4 }}>
+                  {editingExam ? (
+                    <>{editingExam.countryName} › {editingExam.universityName} › {editingExam.degreeName} › {editingExam.semester}</>
+                  ) : (
+                    <>{selectedCountry && selectedCountry.flag} {selectedCountry && countryName(selectedCountry)} › {selectedUniversity && uniName(selectedUniversity)} › {selectedDegree && selectedDegree.icon} {selectedDegree && degreeName(selectedDegree)} › {semLabel(selectedSemester)}</>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={() => { setShowExamModal(false); setEditingExam(null); resetExamForm(); }}
+                style={S.modalX}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.15)"; }}
+              >✕</button>
+            </div>
+            <div className="studyhub-modal-body" style={S.modalBody}>
+              {/* Title */}
+              <label style={{ ...S.label, marginTop: 0 }}>{t.materialTitle} <span style={{ color: "#DC2626" }}>*</span></label>
+              <input type="text" placeholder={t.materialTitlePlaceholder} value={examForm.title}
+                onChange={(e) => setExamForm({ ...examForm, title: e.target.value })}
+                style={S.input}
+                onFocus={(e) => { e.target.style.borderColor = "#DC2626"; e.target.style.boxShadow = "0 0 0 3px rgba(220,38,38,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
+
+              {/* Subject */}
+              <label style={S.label}>{t.subjectCourse} <span style={{ color: "#DC2626" }}>*</span></label>
+              <input type="text" placeholder={t.subjectPlaceholder} value={examForm.subject}
+                onChange={(e) => setExamForm({ ...examForm, subject: e.target.value })}
+                style={S.input}
+                onFocus={(e) => { e.target.style.borderColor = "#DC2626"; e.target.style.boxShadow = "0 0 0 3px rgba(220,38,38,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
+
+              {/* Exam Type selector */}
+              <label style={S.label}>{t.examType} <span style={{ color: "#DC2626" }}>*</span></label>
+              <div className="studyhub-type-selector" style={S.typeSelector}>
+                {EXAM_TYPES.map((et) => {
+                  const isActive = examForm.examType === et.id;
+                  return (
+                    <button key={et.id}
+                      onClick={() => setExamForm({ ...examForm, examType: et.id })}
+                      style={{
+                        ...S.typeOpt,
+                        borderColor: isActive ? et.color : "#e8ddd0",
+                        background: isActive ? et.color + "15" : "white",
+                        boxShadow: isActive ? `0 2px 8px ${et.color}25` : "none",
+                        transform: isActive ? "scale(1.05)" : "scale(1)",
+                      }}
+                    >
+                      <span style={{ fontSize: 24 }}>{et.icon}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: isActive ? et.color : "#666" }}>{isRTL ? et.labelAr : et.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Year dropdown */}
+              <label style={S.label}>{t.examYear} <span style={{ color: "#DC2626" }}>*</span></label>
+              <select value={examForm.year} onChange={(e) => setExamForm({ ...examForm, year: e.target.value })} style={{ ...S.input, cursor: "pointer" }}>
+                {ACADEMIC_YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+              </select>
+
+              {/* Professor Name */}
+              <label style={S.label}>{t.professorName}</label>
+              <input type="text" placeholder={t.professorNamePlaceholder} value={examForm.professorName}
+                onChange={(e) => setExamForm({ ...examForm, professorName: e.target.value })}
+                style={S.input}
+                onFocus={(e) => { e.target.style.borderColor = "#DC2626"; e.target.style.boxShadow = "0 0 0 3px rgba(220,38,38,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
+
+              {/* Faculty & Specialty row */}
+              <div className="studyhub-modal-faculty-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div>
+                  <label style={S.label}>{t.faculty}</label>
+                  <select value={examForm.facultyId} onChange={(e) => setExamForm({ ...examForm, facultyId: e.target.value, specialtyId: "" })} style={{ ...S.input, cursor: "pointer" }}>
+                    <option value="">{t.selectFaculty}</option>
+                    {FACULTIES.map((fac) => (
+                      <option key={fac.id} value={fac.id}>{fac.icon} {facultyName(fac)}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label style={S.label}>{t.specialty}</label>
+                  <select
+                    value={examForm.specialtyId}
+                    onChange={(e) => setExamForm({ ...examForm, specialtyId: e.target.value })}
+                    style={{ ...S.input, cursor: "pointer", opacity: examForm.facultyId ? 1 : 0.5 }}
+                    disabled={!examForm.facultyId}
+                  >
+                    <option value="">{examForm.facultyId ? t.selectSpecialty : t.selectFacultyFirst}</option>
+                    {examForm.facultyId && (SPECIALTIES_MAP[examForm.facultyId] || []).map((spec) => (
+                      <option key={spec.id} value={spec.id}>{specialtyName(spec)}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* File Type (no video for exams) */}
+              <label style={S.label}>{t.materialType} <span style={{ color: "#DC2626" }}>*</span></label>
+              <div className="studyhub-type-selector" style={S.typeSelector}>
+                {EXAM_FILE_TYPES.map((ft) => {
+                  const isActive = examForm.type === ft.id;
+                  return (
+                    <button key={ft.id}
+                      onClick={() => setExamForm({ ...examForm, type: ft.id })}
+                      style={{
+                        ...S.typeOpt,
+                        borderColor: isActive ? ft.color : "#e8ddd0",
+                        background: isActive ? ft.color + "15" : "white",
+                        boxShadow: isActive ? `0 2px 8px ${ft.color}25` : "none",
+                        transform: isActive ? "scale(1.05)" : "scale(1)",
+                      }}
+                    >
+                      <span style={{ fontSize: 24 }}>{ft.icon}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: isActive ? ft.color : "#666" }}>{ft.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* File URL */}
+              <label style={S.label}>{examForm.type === "folder" ? t.folderUrl : t.fileUrl} <span style={{ color: "#DC2626" }}>*</span></label>
+              <input type="url" placeholder={examForm.type === "folder" ? t.folderPlaceholder : t.filePlaceholder}
+                value={examForm.url} onChange={(e) => setExamForm({ ...examForm, url: e.target.value })}
+                style={S.input}
+                onFocus={(e) => { e.target.style.borderColor = "#DC2626"; e.target.style.boxShadow = "0 0 0 3px rgba(220,38,38,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
+
+              {/* Uploader Role */}
+              <label style={S.label}>{t.selectRole}</label>
+              <div className="studyhub-type-selector" style={S.typeSelector}>
+                {UPLOADER_ROLES.map((role) => {
+                  const isActive = examForm.uploaderRole === role.id;
+                  return (
+                    <button key={role.id}
+                      onClick={() => setExamForm({ ...examForm, uploaderRole: role.id })}
+                      style={{
+                        ...S.typeOpt,
+                        borderColor: isActive ? role.color : "#e8ddd0",
+                        background: isActive ? role.color + "15" : "white",
+                        boxShadow: isActive ? `0 2px 8px ${role.color}25` : "none",
+                        transform: isActive ? "scale(1.05)" : "scale(1)",
+                      }}
+                    >
+                      <span style={{ fontSize: 24 }}>{role.icon}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: isActive ? role.color : "#666" }}>{roleLabel(role)}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Description */}
+              <label style={S.label}>{t.description}</label>
+              <textarea placeholder={t.descPlaceholder} value={examForm.description}
+                onChange={(e) => setExamForm({ ...examForm, description: e.target.value })}
+                style={{ ...S.input, height: 80, resize: "vertical" }}
+                onFocus={(e) => { e.target.style.borderColor = "#DC2626"; e.target.style.boxShadow = "0 0 0 3px rgba(220,38,38,0.08)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
+              />
+
+              <button
+                onClick={handleSubmitExam}
+                style={{ ...S.submitBtn, background: "linear-gradient(135deg, #DC2626 0%, #991B1B 100%)", boxShadow: "0 4px 20px rgba(220,38,38,0.3)" }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 25px rgba(220,38,38,0.4)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(220,38,38,0.3)"; }}
+              >
+                {editingExam ? `✏️ ${t.saveChanges}` : `📤 ${t.uploadExam}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EXAM DELETE CONFIRMATION MODAL */}
+      {deleteExamConfirm && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => setDeleteExamConfirm(null)}>
+          <div className="studyhub-confirm-modal" style={S.confirmModal} onClick={(e) => e.stopPropagation()}>
+            <div style={S.confirmIcon}>🗑️</div>
+            <h3 style={S.confirmTitle}>{t.confirmDelete}</h3>
+            <p style={S.confirmMsg}>{t.confirmDeleteMsg} &quot;{deleteExamConfirm.title}&quot;?</p>
+            <div style={S.confirmActions}>
+              <button onClick={() => setDeleteExamConfirm(null)} style={S.cancelBtn}>{t.cancel}</button>
+              <button onClick={handleDeleteExam} style={S.confirmDeleteBtn}>{t.yesDelete}</button>
             </div>
           </div>
         </div>
