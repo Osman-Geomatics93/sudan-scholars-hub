@@ -380,6 +380,9 @@ const T = {
     universitiesIn: "Universities in",
     selectUniversity: "Select a university to continue",
     selectDegree: "Select degree level",
+    selectCollege: "Select Your College",
+    allFaculties: "All Faculties",
+    allFacultiesDesc: "View all semesters without faculty filter",
     material: "material",
     materialPlural: "materials",
     years: "years",
@@ -614,6 +617,9 @@ const T = {
     universitiesIn: "الجامعات في",
     selectUniversity: "اختر جامعة للمتابعة",
     selectDegree: "اختر المرحلة الدراسية",
+    selectCollege: "اختر كليتك",
+    allFaculties: "جميع الكليات",
+    allFacultiesDesc: "عرض جميع الفصول بدون تصفية حسب الكلية",
     material: "مادة",
     materialPlural: "مواد",
     years: "سنوات",
@@ -1064,6 +1070,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [selectedDegree, setSelectedDegree] = useState(null);
+  const [selectedFaculty, setSelectedFaculty] = useState(null);
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [materials, setMaterials] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -1193,6 +1200,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         degreeId: selectedDegree.id,
         semester: selectedSemester,
       });
+      if (selectedFaculty && selectedFaculty.id !== "all") {
+        params.set("facultyId", selectedFaculty.id);
+      }
       const res = await fetch(`/api/study-hub/materials?${params}`);
       if (res.ok) {
         const data = await res.json();
@@ -1202,7 +1212,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       console.error("Failed to fetch materials:", err);
       setMaterials([]);
     }
-  }, [selectedCountry, selectedUniversity, selectedDegree, selectedSemester]);
+  }, [selectedCountry, selectedUniversity, selectedDegree, selectedSemester, selectedFaculty]);
 
   useEffect(() => {
     fetchMaterials();
@@ -1820,6 +1830,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       m.universityId === (selectedUniversity && selectedUniversity.id) &&
       m.degreeId === (selectedDegree && selectedDegree.id) &&
       m.semester === selectedSemester &&
+      (!selectedFaculty || selectedFaculty.id === "all" || m.facultyId === selectedFaculty.id) &&
       (filterType === "all" || m.type === filterType)
   );
 
@@ -1860,12 +1871,17 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       )
     : ALL_COUNTRIES;
 
-  const navigate = (newView, c, u, d, s) => {
+  const navigate = (newView, c, u, d, s, f) => {
     setView(newView);
     if (c !== undefined) setSelectedCountry(c);
     if (u !== undefined) setSelectedUniversity(u);
     if (d !== undefined) setSelectedDegree(d);
+    if (f !== undefined) setSelectedFaculty(f);
     if (s !== undefined) setSelectedSemester(s);
+    // Reset faculty when navigating above faculty level
+    if (["home", "countries", "universities", "degrees"].includes(newView)) {
+      setSelectedFaculty(null);
+    }
     setFilterType("all");
     setSubjectGroupsExpanded({});
     // Fetch universities when navigating to university view
@@ -1892,14 +1908,15 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     if (newView === "collections") fetchCollections();
   };
 
-  const countMats = (cId, uId, dId, sem) => {
+  const countMats = (cId, uId, dId, sem, facId) => {
     const source = materialCountData.length > 0 ? materialCountData : (allMaterials.length > 0 ? allMaterials : materials);
     return source.filter(
       (m) =>
         (!cId || m.countryId === cId) &&
         (!uId || m.universityId === uId) &&
         (!dId || m.degreeId === dId) &&
-        (!sem || m.semester === sem)
+        (!sem || m.semester === sem) &&
+        (!facId || m.facultyId === facId)
     ).length;
   };
 
@@ -3068,8 +3085,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           {selectedDegree && !["degrees","universities","countries","my-materials"].includes(view) && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
-              <span style={S.crumbItem} onClick={() => navigate("semesters", selectedCountry, selectedUniversity, selectedDegree)}>
+              <span style={S.crumbItem} onClick={() => navigate("faculties", selectedCountry, selectedUniversity, selectedDegree)}>
                 {selectedDegree.icon} {degreeName(selectedDegree)}
+              </span>
+            </>
+          )}
+          {selectedFaculty && !["faculties","degrees","universities","countries","my-materials"].includes(view) && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbItem} onClick={() => navigate("semesters", selectedCountry, selectedUniversity, selectedDegree, undefined, selectedFaculty)}>
+                {selectedFaculty.id === "all" ? "📋" : selectedFaculty.icon} {selectedFaculty.id === "all" ? t.allFaculties : (isRTL ? selectedFaculty.nameAr : selectedFaculty.name)}
               </span>
             </>
           )}
@@ -3455,7 +3480,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 return (
                   <div
                     key={deg.id} style={{ ...S.degreeCard, borderTopColor: deg.color }}
-                    onClick={() => navigate("semesters", selectedCountry, selectedUniversity, deg)}
+                    onClick={() => navigate("faculties", selectedCountry, selectedUniversity, deg)}
                     onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 35px " + deg.color + "25"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; }}
                   >
@@ -3476,6 +3501,59 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           </div>
         )}
 
+        {/* === FACULTIES / COLLEGES === */}
+        {view === "faculties" && selectedDegree && (
+          <div>
+            <div className="studyhub-view-header" style={S.viewHeader}>
+              <span style={{ fontSize: 48 }}>{selectedDegree.icon}</span>
+              <div>
+                <h2 style={S.viewTitle}>{t.selectCollege}</h2>
+                <p style={S.viewSub}>
+                  {selectedCountry.flag} {countryName(selectedCountry)} › {uniName(selectedUniversity)} › {degreeName(selectedDegree)}
+                </p>
+              </div>
+            </div>
+            <div className="studyhub-faculty-grid" style={S.facultyGrid}>
+              {/* All Faculties card */}
+              <div
+                className="studyhub-faculty-card"
+                style={S.facultyCard}
+                onClick={() => navigate("semesters", selectedCountry, selectedUniversity, selectedDegree, undefined, { id: "all", name: "All Faculties", nameAr: "جميع الكليات", icon: "📋" })}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 35px rgba(200,149,108,0.25)"; e.currentTarget.style.borderColor = "#C8956C"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; e.currentTarget.style.borderColor = "transparent"; }}
+              >
+                <span style={S.facultyIcon}>📋</span>
+                <h3 style={S.facultyName}>{t.allFaculties}</h3>
+                <p style={S.facultyNameAr}>{isRTL ? "All Faculties" : "جميع الكليات"}</p>
+                <p style={S.facultyDesc}>{t.allFacultiesDesc}</p>
+                <span style={{ ...S.facultyBadge, background: "#C8956C18", color: "#C8956C" }}>
+                  {countMats(selectedCountry.id, selectedUniversity.id, selectedDegree.id)} {matCount(countMats(selectedCountry.id, selectedUniversity.id, selectedDegree.id))}
+                </span>
+              </div>
+              {FACULTIES.map((fac) => {
+                const count = countMats(selectedCountry.id, selectedUniversity.id, selectedDegree.id, undefined, fac.id);
+                return (
+                  <div
+                    key={fac.id}
+                    className="studyhub-faculty-card"
+                    style={S.facultyCard}
+                    onClick={() => navigate("semesters", selectedCountry, selectedUniversity, selectedDegree, undefined, fac)}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 35px rgba(200,149,108,0.25)"; e.currentTarget.style.borderColor = "#C8956C"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; e.currentTarget.style.borderColor = "transparent"; }}
+                  >
+                    <span style={S.facultyIcon}>{fac.icon}</span>
+                    <h3 style={S.facultyName}>{isRTL ? fac.nameAr : fac.name}</h3>
+                    <p style={S.facultyNameAr}>{isRTL ? fac.name : fac.nameAr}</p>
+                    <span style={{ ...S.facultyBadge, background: count > 0 ? "#C8956C18" : "#eee", color: count > 0 ? "#C8956C" : "#aaa" }}>
+                      {count} {matCount(count)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* === SEMESTERS === */}
         {view === "semesters" && selectedDegree && (
           <div>
@@ -3485,16 +3563,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <h2 style={S.viewTitle}>{degreeName(selectedDegree)}</h2>
                 <p style={S.viewSub}>
                   {selectedCountry.flag} {countryName(selectedCountry)} › {uniName(selectedUniversity)}
+                  {selectedFaculty && <> › {selectedFaculty.id === "all" ? t.allFaculties : (isRTL ? selectedFaculty.nameAr : selectedFaculty.name)}</>}
                 </p>
               </div>
             </div>
             <div className="studyhub-sem-grid" style={S.semGrid}>
               {SEMESTERS_MAP[selectedDegree.id].map((sem) => {
-                const count = countMats(selectedCountry.id, selectedUniversity.id, selectedDegree.id, sem);
+                const facId = selectedFaculty && selectedFaculty.id !== "all" ? selectedFaculty.id : undefined;
+                const count = countMats(selectedCountry.id, selectedUniversity.id, selectedDegree.id, sem, facId);
                 return (
                   <div
                     key={sem} className="studyhub-sem-card" style={{ ...S.semCard, ...(isRTL ? { borderLeft: "none", borderRight: `4px solid ${selectedDegree.color}` } : { borderLeftColor: selectedDegree.color }) }}
-                    onClick={() => navigate("materials", selectedCountry, selectedUniversity, selectedDegree, sem)}
+                    onClick={() => navigate("materials", selectedCountry, selectedUniversity, selectedDegree, sem, selectedFaculty)}
                     onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.background = "#1B3A4B"; e.currentTarget.style.color = "white"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "white"; e.currentTarget.style.color = "#1B3A4B"; }}
                   >
@@ -3517,6 +3597,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <h2 style={S.viewTitle}>{semLabel(selectedSemester)}</h2>
                 <p style={S.viewSub}>
                   {selectedCountry.flag} {countryName(selectedCountry)} › {uniName(selectedUniversity)} › {selectedDegree.icon} {degreeName(selectedDegree)}
+                  {selectedFaculty && selectedFaculty.id !== "all" && <> › {isRTL ? selectedFaculty.nameAr : selectedFaculty.name}</>}
                 </p>
               </div>
               <button className="studyhub-upload-btn" style={{ ...S.uploadBtn, ...(isRTL ? { marginLeft: 0, marginRight: "auto" } : {}) }} onClick={() => { if (!requireLogin()) setShowUploadModal(true); }}>⬆️ {t.uploadMaterial}</button>
@@ -4501,6 +4582,13 @@ const S = {
   semGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 14 },
   semCard: { background: "white", borderRadius: 14, padding: "24px 18px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", borderLeft: "4px solid" },
   semNum: { fontSize: 32, fontWeight: 900, lineHeight: 1 },
+  facultyGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 },
+  facultyCard: { background: "white", borderRadius: 18, padding: "28px 20px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "2px solid transparent", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 },
+  facultyIcon: { fontSize: 42, display: "block", marginBottom: 6 },
+  facultyName: { margin: "0 0 2px", fontWeight: 800, color: "#1B3A4B", fontSize: 15, lineHeight: 1.3 },
+  facultyNameAr: { margin: 0, fontSize: 13, color: "#888", fontWeight: 600 },
+  facultyDesc: { margin: "4px 0 8px", fontSize: 12, color: "#aaa", lineHeight: 1.4 },
+  facultyBadge: { display: "inline-block", padding: "4px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, marginTop: 6 },
   uploadBtn: { background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", border: "none", padding: "11px 24px", borderRadius: 50, fontWeight: 700, fontSize: 14, cursor: "pointer", marginLeft: "auto", transition: "all 0.2s", boxShadow: "0 4px 15px rgba(200,149,108,0.3)", fontFamily: "inherit" },
   filterRow: { display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" },
   filterBtn: { padding: "7px 16px", borderRadius: 50, border: "2px solid #ddd", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "all 0.2s", minHeight: 44 },
