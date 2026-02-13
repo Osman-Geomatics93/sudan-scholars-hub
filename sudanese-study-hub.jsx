@@ -374,6 +374,10 @@ const T = {
     step3Desc: "BSc, MSc, PhD, or Other programs",
     step4Title: "Browse & Upload",
     step4Desc: "Download or share study materials",
+    videoTutorialTitle: "Watch How It Works",
+    videoTutorialSub: "A quick walkthrough on how to use the Study Hub and upload your materials",
+    videoTutorialBtn: "Watch Full Tutorial",
+    videoTutorialClose: "Close",
     nUniversities: "universities",
     nMaterials: "materials",
     noResultsFor: "No results for",
@@ -635,6 +639,10 @@ const T = {
     step3Desc: "بكالوريوس، ماجستير، دكتوراه، أو أخرى",
     step4Title: "تصفح وارفع",
     step4Desc: "حمّل أو شارك المواد الدراسية",
+    videoTutorialTitle: "شاهد كيف تعمل المنصة",
+    videoTutorialSub: "شرح سريع لكيفية استخدام مركز الدراسة ورفع موادك الدراسية",
+    videoTutorialBtn: "شاهد الشرح الكامل",
+    videoTutorialClose: "إغلاق",
     nUniversities: "جامعات",
     nMaterials: "مواد",
     noResultsFor: "لا توجد نتائج لـ",
@@ -1189,6 +1197,15 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [showAddToCollectionPopup, setShowAddToCollectionPopup] = useState(null); // materialId or null
   const [selectedCollectionView, setSelectedCollectionView] = useState(null);
   const [editingCollection, setEditingCollection] = useState(null); // collection object when editing
+  const [showTutorialVideo, setShowTutorialVideo] = useState(false); // fullscreen tutorial video modal
+
+  // Close tutorial video modal on ESC
+  useEffect(() => {
+    if (!showTutorialVideo) return;
+    const handleEsc = (e) => { if (e.key === "Escape") setShowTutorialVideo(false); };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [showTutorialVideo]);
   const [deleteCollectionConfirm, setDeleteCollectionConfirm] = useState(null); // { id, name }
   // Recent Materials Filter Bar
   const [recentFilters, setRecentFilters] = useState({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", specialtyId: "", degreeId: "" });
@@ -2622,6 +2639,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             border-radius: 18px !important;
           }
 
+          /* Video tutorial section → tighter on mobile */
+          .studyhub-video-section {
+            padding: 28px 16px !important;
+            border-radius: 18px !important;
+            margin-bottom: 32px !important;
+          }
+
           /* Country search → full width */
           .studyhub-country-search {
             margin-bottom: 16px !important;
@@ -3388,6 +3412,104 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     <p style={{ margin: 0, fontSize: 13, color: "#8896A6", lineHeight: 1.6, maxWidth: 200, marginInline: "auto" }}>{h.desc}</p>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* ══════ 2.5. VIDEO TUTORIAL — How to use Study Hub ══════ */}
+            <div className="studyhub-section studyhub-video-section" style={{
+              background: "linear-gradient(135deg, #1B3A4B 0%, #0f2a38 50%, #1a4a5e 100%)",
+              borderRadius: 24,
+              padding: "clamp(32px, 5vw, 48px) clamp(20px, 4vw, 40px)",
+              marginBottom: 48,
+              position: "relative",
+              overflow: "hidden",
+              border: "1px solid rgba(200,149,108,0.15)",
+            }}>
+              {/* Decorative background elements */}
+              <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,149,108,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
+              <div style={{ position: "absolute", bottom: -40, left: -40, width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+
+              <div style={{ position: "relative", zIndex: 1 }}>
+                {/* Section header */}
+                <div style={{ textAlign: "center", marginBottom: "clamp(24px, 4vw, 36px)" }}>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(200,149,108,0.15)", padding: "6px 18px", borderRadius: 50, marginBottom: 16, border: "1px solid rgba(200,149,108,0.2)" }}>
+                    <span style={{ fontSize: 16 }}>🎬</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#C8956C", textTransform: "uppercase", letterSpacing: "1px" }}>
+                      {isRTL ? "فيديو تعليمي" : "Video Tutorial"}
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: "clamp(20px, 4vw, 28px)", fontWeight: 900, color: "#fff", margin: "0 0 10px", letterSpacing: "-0.5px", lineHeight: 1.2 }}>
+                    {t.videoTutorialTitle}
+                  </h3>
+                  <p style={{ fontSize: "clamp(13px, 2vw, 15px)", color: "rgba(255,255,255,0.6)", maxWidth: 500, margin: "0 auto", lineHeight: 1.6 }}>
+                    {t.videoTutorialSub}
+                  </p>
+                </div>
+
+                {/* Video embed container */}
+                <div style={{ maxWidth: 720, margin: "0 auto", position: "relative" }}>
+                  <div style={{
+                    position: "relative",
+                    paddingBottom: "56.25%",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    boxShadow: "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
+                    background: "#000",
+                  }}>
+                    <iframe
+                      src="https://drive.google.com/file/d/1TpORHo-UO2zeuRz4ixxhmrk6nLGfEvq3/preview"
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        border: "none",
+                        borderRadius: 16,
+                      }}
+                      allow="autoplay; encrypted-media"
+                      allowFullScreen
+                      title="Study Hub Tutorial"
+                    />
+                  </div>
+
+                  {/* Decorative glow ring around video */}
+                  <div style={{
+                    position: "absolute",
+                    inset: -2,
+                    borderRadius: 18,
+                    background: "linear-gradient(135deg, rgba(200,149,108,0.3), transparent 40%, transparent 60%, rgba(59,130,246,0.2))",
+                    zIndex: -1,
+                    pointerEvents: "none",
+                  }} />
+                </div>
+
+                {/* Expand to fullscreen button */}
+                <div style={{ textAlign: "center", marginTop: 20 }}>
+                  <button
+                    onClick={() => setShowTutorialVideo(true)}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "10px 24px",
+                      borderRadius: 50,
+                      background: "rgba(200,149,108,0.15)",
+                      color: "#C8956C",
+                      border: "1px solid rgba(200,149,108,0.25)",
+                      cursor: "pointer",
+                      fontWeight: 700,
+                      fontSize: 13,
+                      fontFamily: "inherit",
+                      transition: "all 0.25s",
+                      backdropFilter: "blur(4px)",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.25)"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(200,149,108,0.2)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.15)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                  >
+                    <span style={{ fontSize: 16 }}>🔳</span> {t.videoTutorialBtn}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -4989,6 +5111,91 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </label>
               <button onClick={editingCollection ? handleUpdateCollection : handleCreateCollection} style={S.submitBtn}>{editingCollection ? t.saveChanges : t.createCollection}</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* TUTORIAL VIDEO FULLSCREEN MODAL */}
+      {showTutorialVideo && (
+        <div
+          className="studyhub-overlay"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.85)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 300,
+            padding: 20,
+            backdropFilter: "blur(8px)",
+          }}
+          onClick={() => setShowTutorialVideo(false)}
+        >
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: 960,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setShowTutorialVideo(false)}
+              style={{
+                position: "absolute",
+                top: -48,
+                [isRTL ? "left" : "right"]: 0,
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "#fff",
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                cursor: "pointer",
+                fontSize: 18,
+                fontWeight: 700,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s",
+                backdropFilter: "blur(4px)",
+                fontFamily: "inherit",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; e.currentTarget.style.transform = "scale(1.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "scale(1)"; }}
+            >
+              ✕
+            </button>
+            {/* Video container */}
+            <div style={{
+              position: "relative",
+              paddingBottom: "56.25%",
+              borderRadius: 16,
+              overflow: "hidden",
+              boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
+              background: "#000",
+            }}>
+              <iframe
+                src="https://drive.google.com/file/d/1TpORHo-UO2zeuRz4ixxhmrk6nLGfEvq3/preview"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  border: "none",
+                }}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="Study Hub Tutorial - Full Screen"
+              />
+            </div>
+            {/* Label under video */}
+            <p style={{ textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 13, marginTop: 16, fontWeight: 600 }}>
+              {isRTL ? "اضغط ESC أو خارج الفيديو للإغلاق" : "Press ESC or click outside to close"}
+            </p>
           </div>
         </div>
       )}
