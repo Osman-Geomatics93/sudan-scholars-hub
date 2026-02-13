@@ -4321,12 +4321,15 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                         const ti = getTypeInfo(mat.type);
                         const country = ALL_COUNTRIES.find((c) => c.id === mat.countryId);
                         const deg = DEGREE_LEVELS.find((d) => d.id === mat.degreeId);
+                        const fac = mat.facultyId ? FACULTIES.find((f) => f.id === mat.facultyId) : null;
+                        const spec = mat.specialtyId && mat.facultyId ? (SPECIALTIES_MAP[mat.facultyId] || []).find((s) => s.id === mat.specialtyId) : null;
                         return (
                           <div
                             key={mat.id}
                             className="recent-mat-card"
                             style={{ ...S.recentCard, borderTop: `3px solid ${ti.color}` }}
                           >
+                            {/* Header: icon + title + subject */}
                             <div style={S.recentCardTop}>
                               <div style={{ ...S.recentCardIcon, background: ti.color + "15", color: ti.color }}>{ti.icon}</div>
                               <div style={S.recentCardInfo}>
@@ -4334,6 +4337,50 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                                 <p style={S.recentCardSubject}>📖 {mat.subject}</p>
                               </div>
                             </div>
+
+                            {/* University & Faculty Info Block */}
+                            {(mat.universityName || fac) && (
+                              <div style={{
+                                display: "flex", flexDirection: "column", gap: 6,
+                                background: "linear-gradient(135deg, #f8f6f3 0%, #f0ece6 100%)",
+                                borderRadius: 12, padding: "10px 14px",
+                                border: "1px solid #e8e0d4"
+                              }}>
+                                {mat.universityName && (
+                                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                    <div style={{
+                                      width: 26, height: 26, borderRadius: 8,
+                                      background: "#1B3A4B15", display: "flex",
+                                      alignItems: "center", justifyContent: "center",
+                                      fontSize: 13, flexShrink: 0
+                                    }}>🏛️</div>
+                                    <span style={{
+                                      fontSize: 12, fontWeight: 700, color: "#1B3A4B",
+                                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"
+                                    }}>{mat.universityName}</span>
+                                  </div>
+                                )}
+                                {fac && (
+                                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                    <div style={{
+                                      width: 26, height: 26, borderRadius: 8,
+                                      background: "#C8956C15", display: "flex",
+                                      alignItems: "center", justifyContent: "center",
+                                      fontSize: 13, flexShrink: 0
+                                    }}>{fac.icon}</div>
+                                    <span style={{
+                                      fontSize: 12, fontWeight: 600, color: "#555",
+                                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"
+                                    }}>
+                                      {facultyName(fac)}
+                                      {spec && <span style={{ fontWeight: 400, color: "#999" }}> — {specialtyName(spec)}</span>}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Meta: type badge, country, degree, date */}
                             <div style={S.recentCardMeta}>
                               <span style={{ ...S.matBadge, background: ti.color, fontSize: 10 }}>{fileTypeLabel(ti)}</span>
                               {country && (
@@ -4346,10 +4393,17 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                                   {deg.icon} {degreeName(deg)}
                                 </span>
                               )}
-                              <span style={{ fontSize: 11, color: "#bbb", marginLeft: "auto" }}>
+                              {mat.semester && (
+                                <span style={S.recentCardLocation}>
+                                  📅 {mat.semester}
+                                </span>
+                              )}
+                              <span style={{ fontSize: 11, color: "#bbb", [isRTL ? "marginRight" : "marginLeft"]: "auto" }}>
                                 {new Date(mat.uploadedAt).toLocaleDateString(isRTL ? "ar" : "en")}
                               </span>
                             </div>
+
+                            {/* Download button */}
                             <a
                               href={mat.url}
                               target="_blank"
