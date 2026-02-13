@@ -1,13 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/auth-utils';
 import { recalculateAllPoints } from '@/lib/points';
 
 export const dynamic = 'force-dynamic';
 
 // POST - Recalculate points for all users based on actual data
-export async function POST() {
-  const { session, error } = await requireAdmin();
-  if (error) return error;
+// Supports admin session OR one-time secret token via query param
+export async function POST(request: NextRequest) {
+  const secret = request.nextUrl.searchParams.get('secret');
+  const validSecret = process.env.RECALCULATE_SECRET;
+
+  if (secret && validSecret && secret === validSecret) {
+    // Secret token auth — bypasses session check
+  } else {
+    const { session, error } = await requireAdmin();
+    if (error) return error;
+  }
 
   try {
     const updated = await recalculateAllPoints();
