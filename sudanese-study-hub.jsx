@@ -509,6 +509,8 @@ const T = {
     notifications: "Notifications",
     noNotifications: "No notifications",
     markAllRead: "Mark all read",
+    clearAll: "Clear all",
+    deleteNotification: "Delete",
     // Requests
     requestMaterial: "Request Material",
     requests: "Requests",
@@ -741,6 +743,8 @@ const T = {
     notifications: "الإشعارات",
     noNotifications: "لا توجد إشعارات",
     markAllRead: "تحديد الكل كمقروء",
+    clearAll: "مسح الكل",
+    deleteNotification: "حذف",
     // Requests
     requestMaterial: "طلب مادة",
     requests: "الطلبات",
@@ -1588,6 +1592,33 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       setUnreadCount(0);
       setNotificationsList((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch (err) { console.error("Mark read error:", err); }
+  };
+
+  const handleClearAllNotifications = async () => {
+    try {
+      await fetch("/api/user/notifications", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deleteAll: true }),
+      });
+      setNotificationsList([]);
+      setUnreadCount(0);
+    } catch (err) { console.error("Clear all error:", err); }
+  };
+
+  const handleDeleteNotification = async (id) => {
+    try {
+      await fetch("/api/user/notifications", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: [id] }),
+      });
+      setNotificationsList((prev) => {
+        const removed = prev.find((n) => n.id === id);
+        if (removed && !removed.read) setUnreadCount((c) => Math.max(0, c - 1));
+        return prev.filter((n) => n.id !== id);
+      });
+    } catch (err) { console.error("Delete notification error:", err); }
   };
 
   // Requests
@@ -2677,34 +2708,85 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   style={{ position: "relative" }}
                   title={t.notifications}
                 >
-                  <span style={{ fontSize: 18 }}>🔔</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                  </svg>
                   {unreadCount > 0 && (
-                    <span style={{
-                      position: "absolute", top: 2, right: 2, background: "#ef4444", color: "white",
-                      fontSize: 9, fontWeight: 800, borderRadius: "50%", width: 16, height: 16,
-                      display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1,
-                    }}>{unreadCount > 9 ? "9+" : unreadCount}</span>
+                    <span className="absolute top-0.5 right-0.5 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
                   )}
                 </button>
                 {showNotifications && (
-                  <div className="studyhub-notif-dropdown" style={S.notifDropdown}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderBottom: "1px solid #ede5da" }}>
-                      <span style={{ fontWeight: 800, fontSize: 14, color: "#1B3A4B" }}>🔔 {t.notifications}</span>
-                      {unreadCount > 0 && (
-                        <button onClick={handleMarkAllRead} style={{ background: "none", border: "none", color: "#C8956C", fontWeight: 700, fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>{t.markAllRead}</button>
-                      )}
+                  <div className="studyhub-notif-dropdown absolute top-[calc(100%+8px)] right-0 w-[340px] max-w-[calc(100vw-32px)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[100] overflow-hidden">
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                      <div className="flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500">
+                          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span className="font-bold text-sm text-gray-900 dark:text-gray-100">{t.notifications}</span>
+                        {unreadCount > 0 && (
+                          <span className="bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5 leading-none">{unreadCount}</span>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => setShowNotifications(false)}
+                        className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                        title="Close"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 6L6 18" /><path d="M6 6l12 12" />
+                        </svg>
+                      </button>
                     </div>
-                    <div style={{ maxHeight: 320, overflowY: "auto" }}>
+
+                    {/* Actions bar */}
+                    {notificationsList.length > 0 && (
+                      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+                        {unreadCount > 0 ? (
+                          <button onClick={handleMarkAllRead} className="text-[11px] font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors">
+                            {t.markAllRead}
+                          </button>
+                        ) : <span />}
+                        <button onClick={handleClearAllNotifications} className="text-[11px] font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors">
+                          {t.clearAll}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Notification list */}
+                    <div className="max-h-[320px] overflow-y-auto overscroll-contain">
                       {notificationsList.length === 0 ? (
-                        <div style={{ padding: "24px 16px", textAlign: "center", color: "#888", fontSize: 13 }}>
-                          <span style={{ fontSize: 32, display: "block", marginBottom: 8 }}>🔕</span>
-                          {t.noNotifications}
+                        <div className="py-10 px-4 text-center">
+                          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-500">
+                              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /><line x1="1" y1="1" x2="23" y2="23" />
+                            </svg>
+                          </div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{t.noNotifications}</p>
                         </div>
                       ) : notificationsList.map((n) => (
-                        <div key={n.id} style={{ ...S.notifItem, ...(n.read ? {} : S.notifItemUnread) }}>
-                          <div style={{ fontSize: 13, fontWeight: n.read ? 500 : 700, color: "#1B3A4B" }}>{n.title}</div>
-                          <div style={{ fontSize: 12, color: "#888", marginTop: 2 }}>{n.message}</div>
-                          <div style={{ fontSize: 10, color: "#bbb", marginTop: 4 }}>{new Date(n.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</div>
+                        <div
+                          key={n.id}
+                          className={`group relative px-4 py-3 border-b border-gray-50 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 ${!n.read ? (isRTL ? "border-r-[3px] border-r-amber-500 bg-amber-50/50 dark:bg-amber-900/10" : "border-l-[3px] border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/10") : ""}`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                              <div className={`text-[13px] text-gray-900 dark:text-gray-100 ${!n.read ? "font-bold" : "font-medium"}`}>{n.title}</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{n.message}</div>
+                              <div className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{new Date(n.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</div>
+                            </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDeleteNotification(n.id); }}
+                              className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-400 hover:text-red-500 transition-all shrink-0"
+                              title={t.deleteNotification}
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6h18" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>

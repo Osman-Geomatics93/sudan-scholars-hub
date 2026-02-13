@@ -57,3 +57,29 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to update notifications' }, { status: 500 });
   }
 }
+
+// DELETE - Delete notifications
+export async function DELETE(request: NextRequest) {
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
+  try {
+    const userId = (session!.user as { id: string }).id;
+    const { ids, deleteAll } = await request.json();
+
+    if (deleteAll) {
+      await prisma.notification.deleteMany({
+        where: { userId },
+      });
+    } else if (ids && Array.isArray(ids)) {
+      await prisma.notification.deleteMany({
+        where: { id: { in: ids }, userId },
+      });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting notifications:', error);
+    return NextResponse.json({ error: 'Failed to delete notifications' }, { status: 500 });
+  }
+}
