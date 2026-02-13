@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth-utils';
+import { deductPoints, POINT_VALUES } from '@/lib/points';
 
 export const dynamic = 'force-dynamic';
 
@@ -76,7 +77,13 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden - You can only delete your own materials' }, { status: 403 });
     }
 
+    const wasApproved = material.status === 'APPROVED';
+
     await prisma.studyMaterial.delete({ where: { id } });
+
+    if (wasApproved) {
+      await deductPoints(userId, POINT_VALUES.UPLOAD_APPROVED);
+    }
 
     return NextResponse.json({ success: true, message: 'Material deleted' });
   } catch (error) {

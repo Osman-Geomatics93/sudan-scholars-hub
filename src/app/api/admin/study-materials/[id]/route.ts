@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth-utils';
 import { sendMaterialReviewNotification } from '@/lib/email';
-import { awardPoints, POINT_VALUES } from '@/lib/points';
+import { awardPoints, deductPoints, POINT_VALUES } from '@/lib/points';
 import { createNotification } from '@/lib/notifications';
 
 export const dynamic = 'force-dynamic';
@@ -118,9 +118,18 @@ export async function DELETE(
   try {
     const { id } = await params;
 
+    const material = await prisma.studyMaterial.findUnique({
+      where: { id },
+      select: { userId: true, status: true },
+    });
+
     await prisma.studyMaterial.delete({
       where: { id },
     });
+
+    if (material?.userId && material.status === 'APPROVED') {
+      await deductPoints(material.userId, POINT_VALUES.UPLOAD_APPROVED);
+    }
 
     return NextResponse.json({ success: true, message: 'Study material deleted' });
   } catch (error) {

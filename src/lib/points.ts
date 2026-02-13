@@ -38,3 +38,19 @@ export async function awardPoints(userId: string, amount: number) {
 
   return { newPoints: user.points, badge };
 }
+
+export async function deductPoints(userId: string, amount: number) {
+  const current = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { points: true },
+  });
+  const newPoints = Math.max(0, (current?.points || 0) - amount);
+
+  const badge = getBadgeForPoints(newPoints);
+  await prisma.user.update({
+    where: { id: userId },
+    data: { points: newPoints, badge: badge.key },
+  });
+
+  return { newPoints, badge };
+}
