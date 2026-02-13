@@ -543,6 +543,23 @@ const T = {
     filterByRole: "Uploader Role",
     clearFilters: "Clear Filters",
     advancedFilters: "Advanced Filters",
+    // Recent Filter Bar
+    filterByCountry: "Country",
+    filterByUniversity: "University",
+    filterByType: "File Type",
+    filterBySemester: "Semester",
+    filterByUploader: "Uploader",
+    allCountries: "All Countries",
+    allUniversities: "All Universities",
+    allTypes: "All Types",
+    allSemesters: "All Semesters",
+    allUploaders: "All Uploaders",
+    clearAllFilters: "Clear All",
+    noFilterResults: "No materials match your filters",
+    tryDifferentFilters: "Try adjusting or clearing filters",
+    searchCountry: "Search country...",
+    filteredResults: "Filtered Results",
+    activeFilters: "active filters",
     // Groups
     studyGroups: "Study Groups",
     createGroup: "Create Group",
@@ -780,6 +797,23 @@ const T = {
     filterByRole: "دور الرافع",
     clearFilters: "مسح الفلاتر",
     advancedFilters: "فلاتر متقدمة",
+    // Recent Filter Bar
+    filterByCountry: "الدولة",
+    filterByUniversity: "الجامعة",
+    filterByType: "نوع الملف",
+    filterBySemester: "الفصل الدراسي",
+    filterByUploader: "الرافع",
+    allCountries: "كل الدول",
+    allUniversities: "كل الجامعات",
+    allTypes: "كل الأنواع",
+    allSemesters: "كل الفصول",
+    allUploaders: "كل الرافعين",
+    clearAllFilters: "مسح الكل",
+    noFilterResults: "لا توجد مواد تطابق الفلاتر",
+    tryDifferentFilters: "حاول تعديل أو مسح الفلاتر",
+    searchCountry: "ابحث عن دولة...",
+    filteredResults: "نتائج مفلترة",
+    activeFilters: "فلاتر نشطة",
     // Groups
     studyGroups: "مجموعات الدراسة",
     createGroup: "إنشاء مجموعة",
@@ -1142,6 +1176,15 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [selectedCollectionView, setSelectedCollectionView] = useState(null);
   const [editingCollection, setEditingCollection] = useState(null); // collection object when editing
   const [deleteCollectionConfirm, setDeleteCollectionConfirm] = useState(null); // { id, name }
+  // Recent Materials Filter Bar
+  const [recentFilters, setRecentFilters] = useState({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "" });
+  const [recentFilteredMaterials, setRecentFilteredMaterials] = useState([]);
+  const [recentFilteredTotal, setRecentFilteredTotal] = useState(0);
+  const [recentFilterLoading, setRecentFilterLoading] = useState(false);
+  const [recentFilterOpen, setRecentFilterOpen] = useState(null);
+  const [recentFilterUniversities, setRecentFilterUniversities] = useState([]);
+  const [recentCountrySearch, setRecentCountrySearch] = useState("");
+  const recentFilterRef = useRef(null);
 
   // Auth session
   const { data: session, status: authStatus } = useSession();
@@ -1239,11 +1282,87 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     }
   }, []);
 
+  // Fetch filtered recent materials
+  const fetchRecentFiltered = useCallback(async (filters) => {
+    const hasFilter = Object.values(filters).some(v => v !== "");
+    if (!hasFilter) {
+      setRecentFilteredMaterials([]);
+      setRecentFilteredTotal(0);
+      setRecentFilterLoading(false);
+      return;
+    }
+    setRecentFilterLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.set("limit", "12");
+      if (filters.countryId) params.set("countryId", filters.countryId);
+      if (filters.universityId) params.set("universityId", filters.universityId);
+      if (filters.uploaderRole) params.set("uploaderRole", filters.uploaderRole);
+      if (filters.type) params.set("type", filters.type);
+      if (filters.semester) params.set("semester", filters.semester);
+      const res = await fetch(`/api/study-hub/materials?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setRecentFilteredMaterials(data.materials || []);
+        setRecentFilteredTotal(data.total || 0);
+      }
+    } catch (err) {
+      console.error("Failed to fetch filtered materials:", err);
+    } finally {
+      setRecentFilterLoading(false);
+    }
+  }, []);
+
+  const updateRecentFilter = useCallback(async (key, value) => {
+    const next = { ...recentFilters, [key]: value };
+    if (key === "countryId") {
+      next.universityId = "";
+      next.semester = "";
+      if (value) {
+        try {
+          const res = await fetch(`/api/study-hub/universities?country=${value}`);
+          if (res.ok) {
+            const data = await res.json();
+            setRecentFilterUniversities(data.universities || []);
+          }
+        } catch { setRecentFilterUniversities([]); }
+      } else {
+        setRecentFilterUniversities([]);
+      }
+    }
+    setRecentFilters(next);
+    setRecentFilterOpen(null);
+    setRecentCountrySearch("");
+    fetchRecentFiltered(next);
+  }, [recentFilters, fetchRecentFiltered]);
+
+  const clearAllRecentFilters = useCallback(() => {
+    setRecentFilters({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "" });
+    setRecentFilteredMaterials([]);
+    setRecentFilteredTotal(0);
+    setRecentFilterOpen(null);
+    setRecentCountrySearch("");
+    setRecentFilterUniversities([]);
+  }, []);
+
   useEffect(() => {
     fetchAllMaterials();
     // Also fetch requests for home page teaser
     fetch("/api/study-hub/requests?status=OPEN").then(r => r.ok ? r.json() : { requests: [] }).then(d => setRequestsList(d.requests || [])).catch(() => {});
   }, [fetchAllMaterials]);
+
+  // Close recent filter dropdown on outside click
+  useEffect(() => {
+    if (!recentFilterOpen) return;
+    const handler = (e) => {
+      if (recentFilterRef.current && !recentFilterRef.current.contains(e.target)) {
+        setRecentFilterOpen(null);
+        setRecentCountrySearch("");
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [recentFilterOpen]);
 
   // Fetch materials for the "browse-all" view with search/filter/pagination
   const fetchBrowseMaterials = useCallback(async (searchOverride, typeOverride, existingList) => {
@@ -1871,6 +1990,19 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       )
     : ALL_COUNTRIES;
 
+  // Recent filter bar computed values
+  const isRecentFiltered = Object.values(recentFilters).some(v => v !== "");
+  const recentDisplayMaterials = isRecentFiltered ? recentFilteredMaterials : allMaterials.slice(0, 6);
+  const recentDisplayTotal = isRecentFiltered ? recentFilteredTotal : allMaterialsTotal;
+  const activeRecentFilterCount = Object.values(recentFilters).filter(v => v !== "").length;
+
+  // Deduplicated flat semester list for filter dropdown
+  const allSemesterOptions = (() => {
+    const set = new Set();
+    Object.values(SEMESTERS_MAP).forEach(arr => arr.forEach(s => set.add(s)));
+    return [...set];
+  })();
+
   const navigate = (newView, c, u, d, s, f) => {
     setView(newView);
     if (c !== undefined) setSelectedCountry(c);
@@ -2184,6 +2316,15 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
         /* === 767px — LARGE PHONE (major changes) === */
         @media (max-width: 767px) {
+          /* Recent filter bar */
+          .studyhub-recent-filter-bar {
+            gap: 6px !important;
+          }
+          .studyhub-recent-filter-chip {
+            padding: 5px 12px !important;
+            font-size: 11px !important;
+            min-height: 34px !important;
+          }
           /* Hero */
           .studyhub-hero {
             padding: 28px 16px 24px !important;
@@ -2486,6 +2627,19 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
         /* === 479px — SMALL PHONE === */
         @media (max-width: 479px) {
+          /* Recent filter bar: horizontal scroll */
+          .studyhub-recent-filter-bar {
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 4px !important;
+          }
+          .studyhub-recent-filter-bar::-webkit-scrollbar { display: none; }
+          .studyhub-recent-filter-chip {
+            flex-shrink: 0 !important;
+          }
           .studyhub-hero-title { font-size: 21px !important; }
           .studyhub-hero-sub { font-size: 12px !important; }
           .studyhub-hero-arabic { font-size: 14px !important; }
@@ -3297,61 +3451,274 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               )}
             </div>
 
-            {/* ══════ 5. RECENT MATERIALS — Social proof ══════ */}
-            {allMaterials.length > 0 && (
+            {/* ══════ 5. RECENT MATERIALS — Social proof + Filter Bar ══════ */}
+            {(allMaterials.length > 0 || isRecentFiltered) && (
               <div className="studyhub-recent-section studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
                 <div style={S.sectionHead}>
                   <h3 style={S.sectionHeadTitle}>📚 {t.recentMaterials}</h3>
-                  <p style={S.sectionHeadSub}>{t.recentMaterialsSub}</p>
+                  <p style={S.sectionHeadSub}>{isRecentFiltered ? t.filteredResults : t.recentMaterialsSub}</p>
                   <div style={S.sectionDivider} />
                 </div>
-                <div className="studyhub-recent-grid" style={S.recentGrid}>
-                  {allMaterials.slice(0, 6).map((mat) => {
-                    const ti = getTypeInfo(mat.type);
-                    const country = ALL_COUNTRIES.find((c) => c.id === mat.countryId);
-                    const deg = DEGREE_LEVELS.find((d) => d.id === mat.degreeId);
-                    return (
-                      <div
-                        key={mat.id}
-                        className="recent-mat-card"
-                        style={{ ...S.recentCard, borderTop: `3px solid ${ti.color}` }}
-                      >
-                        <div style={S.recentCardTop}>
-                          <div style={{ ...S.recentCardIcon, background: ti.color + "15", color: ti.color }}>{ti.icon}</div>
-                          <div style={S.recentCardInfo}>
-                            <h4 style={S.recentCardTitle}>{mat.title}</h4>
-                            <p style={S.recentCardSubject}>📖 {mat.subject}</p>
-                          </div>
-                        </div>
-                        <div style={S.recentCardMeta}>
-                          <span style={{ ...S.matBadge, background: ti.color, fontSize: 10 }}>{fileTypeLabel(ti)}</span>
-                          {country && (
-                            <span style={S.recentCardLocation}>
-                              {country.flag} {countryName(country)}
-                            </span>
-                          )}
-                          {deg && (
-                            <span style={S.recentCardLocation}>
-                              {deg.icon} {degreeName(deg)}
-                            </span>
-                          )}
-                          <span style={{ fontSize: 11, color: "#bbb", marginLeft: "auto" }}>
-                            {new Date(mat.uploadedAt).toLocaleDateString(isRTL ? "ar" : "en")}
-                          </span>
-                        </div>
-                        <a
-                          href={mat.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ ...S.dlBtn, textAlign: "center", display: "block", fontSize: 12, padding: "8px 16px" }}
+
+                {/* Filter Bar */}
+                <div className="studyhub-recent-filter-bar" ref={recentFilterRef} style={S.recentFilterBar}>
+
+                  {/* Country chip */}
+                  <div style={{ position: "relative" }}>
+                    <button
+                      className="studyhub-recent-filter-chip"
+                      style={{ ...S.recentFilterChip, ...(recentFilters.countryId ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "country" ? S.recentFilterChipOpen : {}) }}
+                      onClick={() => { setRecentFilterOpen(recentFilterOpen === "country" ? null : "country"); setRecentCountrySearch(""); }}
+                    >
+                      {recentFilters.countryId ? (() => { const c = ALL_COUNTRIES.find(x => x.id === recentFilters.countryId); return c ? `${c.flag} ${countryName(c)}` : t.filterByCountry; })() : `🌍 ${t.filterByCountry}`}
+                      <span style={{ fontSize: 10 }}>{recentFilterOpen === "country" ? "▲" : "▼"}</span>
+                    </button>
+                    {recentFilterOpen === "country" && (
+                      <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}) }}>
+                        <input
+                          type="text"
+                          placeholder={t.searchCountry}
+                          value={recentCountrySearch}
+                          onChange={(e) => setRecentCountrySearch(e.target.value)}
+                          style={S.recentFilterSearch}
+                          autoFocus
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <button
+                          style={{ ...S.recentFilterOption, ...(recentFilters.countryId === "" ? S.recentFilterOptionActive : {}) }}
+                          onClick={() => updateRecentFilter("countryId", "")}
                         >
-                          {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
-                        </a>
+                          {t.allCountries}
+                        </button>
+                        {ALL_COUNTRIES
+                          .filter(c => !recentCountrySearch || c.name.toLowerCase().includes(recentCountrySearch.toLowerCase()) || (c.nameAr || "").includes(recentCountrySearch) || c.id.includes(recentCountrySearch.toLowerCase()))
+                          .slice(0, 50)
+                          .map(c => (
+                            <button
+                              key={c.id}
+                              style={{ ...S.recentFilterOption, ...(recentFilters.countryId === c.id ? S.recentFilterOptionActive : {}) }}
+                              onClick={() => updateRecentFilter("countryId", c.id)}
+                            >
+                              {c.flag} {countryName(c)}
+                            </button>
+                          ))}
                       </div>
-                    );
-                  })}
+                    )}
+                  </div>
+
+                  {/* University chip (only when country selected) */}
+                  {recentFilters.countryId && (
+                    <div style={{ position: "relative" }}>
+                      <button
+                        className="studyhub-recent-filter-chip"
+                        style={{ ...S.recentFilterChip, ...(recentFilters.universityId ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "university" ? S.recentFilterChipOpen : {}) }}
+                        onClick={() => setRecentFilterOpen(recentFilterOpen === "university" ? null : "university")}
+                      >
+                        {recentFilters.universityId ? (() => { const u = recentFilterUniversities.find(x => x.id === recentFilters.universityId); return u ? `🏫 ${uniName(u)}` : t.filterByUniversity; })() : `🏫 ${t.filterByUniversity}`}
+                        <span style={{ fontSize: 10 }}>{recentFilterOpen === "university" ? "▲" : "▼"}</span>
+                      </button>
+                      {recentFilterOpen === "university" && (
+                        <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}) }}>
+                          <button
+                            style={{ ...S.recentFilterOption, ...(recentFilters.universityId === "" ? S.recentFilterOptionActive : {}) }}
+                            onClick={() => updateRecentFilter("universityId", "")}
+                          >
+                            {t.allUniversities}
+                          </button>
+                          {recentFilterUniversities.map(u => (
+                            <button
+                              key={u.id}
+                              style={{ ...S.recentFilterOption, ...(recentFilters.universityId === u.id ? S.recentFilterOptionActive : {}) }}
+                              onClick={() => updateRecentFilter("universityId", u.id)}
+                            >
+                              🏫 {uniName(u)}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* File Type chip */}
+                  <div style={{ position: "relative" }}>
+                    <button
+                      className="studyhub-recent-filter-chip"
+                      style={{ ...S.recentFilterChip, ...(recentFilters.type ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "type" ? S.recentFilterChipOpen : {}) }}
+                      onClick={() => setRecentFilterOpen(recentFilterOpen === "type" ? null : "type")}
+                    >
+                      {recentFilters.type ? (() => { const ft = getTypeInfo(recentFilters.type); return `${ft.icon} ${fileTypeLabel(ft)}`; })() : `📁 ${t.filterByType}`}
+                      <span style={{ fontSize: 10 }}>{recentFilterOpen === "type" ? "▲" : "▼"}</span>
+                    </button>
+                    {recentFilterOpen === "type" && (
+                      <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}) }}>
+                        <button
+                          style={{ ...S.recentFilterOption, ...(recentFilters.type === "" ? S.recentFilterOptionActive : {}) }}
+                          onClick={() => updateRecentFilter("type", "")}
+                        >
+                          {t.allTypes}
+                        </button>
+                        {FILE_TYPES.map(ft => (
+                          <button
+                            key={ft.id}
+                            style={{ ...S.recentFilterOption, ...(recentFilters.type === ft.id ? S.recentFilterOptionActive : {}) }}
+                            onClick={() => updateRecentFilter("type", ft.id)}
+                          >
+                            <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: ft.color }} /> {ft.icon} {fileTypeLabel(ft)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Uploader Role chip */}
+                  <div style={{ position: "relative" }}>
+                    <button
+                      className="studyhub-recent-filter-chip"
+                      style={{ ...S.recentFilterChip, ...(recentFilters.uploaderRole ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "role" ? S.recentFilterChipOpen : {}) }}
+                      onClick={() => setRecentFilterOpen(recentFilterOpen === "role" ? null : "role")}
+                    >
+                      {recentFilters.uploaderRole ? (() => { const r = getRoleInfo(recentFilters.uploaderRole); return `${r.icon} ${roleLabel(r)}`; })() : `👤 ${t.filterByUploader}`}
+                      <span style={{ fontSize: 10 }}>{recentFilterOpen === "role" ? "▲" : "▼"}</span>
+                    </button>
+                    {recentFilterOpen === "role" && (
+                      <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}) }}>
+                        <button
+                          style={{ ...S.recentFilterOption, ...(recentFilters.uploaderRole === "" ? S.recentFilterOptionActive : {}) }}
+                          onClick={() => updateRecentFilter("uploaderRole", "")}
+                        >
+                          {t.allUploaders}
+                        </button>
+                        {UPLOADER_ROLES.map(r => (
+                          <button
+                            key={r.id}
+                            style={{ ...S.recentFilterOption, ...(recentFilters.uploaderRole === r.id ? S.recentFilterOptionActive : {}) }}
+                            onClick={() => updateRecentFilter("uploaderRole", r.id)}
+                          >
+                            {r.icon} {roleLabel(r)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Semester chip */}
+                  <div style={{ position: "relative" }}>
+                    <button
+                      className="studyhub-recent-filter-chip"
+                      style={{ ...S.recentFilterChip, ...(recentFilters.semester ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "semester" ? S.recentFilterChipOpen : {}) }}
+                      onClick={() => setRecentFilterOpen(recentFilterOpen === "semester" ? null : "semester")}
+                    >
+                      {recentFilters.semester ? `📅 ${semLabel(recentFilters.semester)}` : `📅 ${t.filterBySemester}`}
+                      <span style={{ fontSize: 10 }}>{recentFilterOpen === "semester" ? "▲" : "▼"}</span>
+                    </button>
+                    {recentFilterOpen === "semester" && (
+                      <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}) }}>
+                        <button
+                          style={{ ...S.recentFilterOption, ...(recentFilters.semester === "" ? S.recentFilterOptionActive : {}) }}
+                          onClick={() => updateRecentFilter("semester", "")}
+                        >
+                          {t.allSemesters}
+                        </button>
+                        {allSemesterOptions.map(sem => (
+                          <button
+                            key={sem}
+                            style={{ ...S.recentFilterOption, ...(recentFilters.semester === sem ? S.recentFilterOptionActive : {}) }}
+                            onClick={() => updateRecentFilter("semester", sem)}
+                          >
+                            {semLabel(sem)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Clear All button */}
+                  {activeRecentFilterCount > 0 && (
+                    <button
+                      style={S.recentFilterClearAll}
+                      onClick={clearAllRecentFilters}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "#e74c3c"; e.currentTarget.style.color = "white"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "white"; e.currentTarget.style.color = "#e74c3c"; }}
+                    >
+                      ✕ {t.clearAllFilters}
+                      <span style={S.recentFilterBadge}>{activeRecentFilterCount}</span>
+                    </button>
+                  )}
                 </div>
-                {allMaterialsTotal > 6 && (
+
+                {/* Materials grid with loading overlay */}
+                <div style={{ position: "relative", minHeight: 100 }}>
+                  {recentFilterLoading && (
+                    <div style={S.recentFilterLoadingOverlay}>
+                      <span style={{ fontSize: 28, animation: "spin 1s linear infinite" }}>⏳</span>
+                    </div>
+                  )}
+
+                  {recentDisplayMaterials.length > 0 ? (
+                    <div className="studyhub-recent-grid" style={S.recentGrid}>
+                      {recentDisplayMaterials.map((mat) => {
+                        const ti = getTypeInfo(mat.type);
+                        const country = ALL_COUNTRIES.find((c) => c.id === mat.countryId);
+                        const deg = DEGREE_LEVELS.find((d) => d.id === mat.degreeId);
+                        return (
+                          <div
+                            key={mat.id}
+                            className="recent-mat-card"
+                            style={{ ...S.recentCard, borderTop: `3px solid ${ti.color}` }}
+                          >
+                            <div style={S.recentCardTop}>
+                              <div style={{ ...S.recentCardIcon, background: ti.color + "15", color: ti.color }}>{ti.icon}</div>
+                              <div style={S.recentCardInfo}>
+                                <h4 style={S.recentCardTitle}>{mat.title}</h4>
+                                <p style={S.recentCardSubject}>📖 {mat.subject}</p>
+                              </div>
+                            </div>
+                            <div style={S.recentCardMeta}>
+                              <span style={{ ...S.matBadge, background: ti.color, fontSize: 10 }}>{fileTypeLabel(ti)}</span>
+                              {country && (
+                                <span style={S.recentCardLocation}>
+                                  {country.flag} {countryName(country)}
+                                </span>
+                              )}
+                              {deg && (
+                                <span style={S.recentCardLocation}>
+                                  {deg.icon} {degreeName(deg)}
+                                </span>
+                              )}
+                              <span style={{ fontSize: 11, color: "#bbb", marginLeft: "auto" }}>
+                                {new Date(mat.uploadedAt).toLocaleDateString(isRTL ? "ar" : "en")}
+                              </span>
+                            </div>
+                            <a
+                              href={mat.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ ...S.dlBtn, textAlign: "center", display: "block", fontSize: 12, padding: "8px 16px" }}
+                            >
+                              {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
+                            </a>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    !recentFilterLoading && isRecentFiltered && (
+                      <div style={S.empty}>
+                        <span style={{ fontSize: 48 }}>🔍</span>
+                        <p style={{ fontWeight: 700, fontSize: 16, color: "#1B3A4B", margin: "12px 0 4px" }}>{t.noFilterResults}</p>
+                        <p style={{ fontSize: 13, color: "#888", margin: "0 0 16px" }}>{t.tryDifferentFilters}</p>
+                        <button
+                          style={{ ...S.recentFilterClearAll, borderColor: "#1B3A4B", color: "#1B3A4B" }}
+                          onClick={clearAllRecentFilters}
+                        >
+                          ✕ {t.clearAllFilters}
+                        </button>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                {recentDisplayTotal > (isRecentFiltered ? 12 : 6) && (
                   <div style={{ textAlign: "center", marginTop: 24 }}>
                     <button
                       style={S.viewAllBtn}
@@ -3359,7 +3726,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 15px rgba(27,58,75,0.3)"; }}
                       onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(27,58,75,0.2)"; }}
                     >
-                      {t.viewAllMaterials} ({allMaterialsTotal}) →
+                      {t.viewAllMaterials} ({recentDisplayTotal}) →
                     </button>
                   </div>
                 )}
@@ -4710,4 +5077,17 @@ const S = {
   leaderPoints: { fontSize: 13, fontWeight: 800, color: "#C8956C", whiteSpace: "nowrap" },
   counterBadge: { fontSize: 11, color: "#888", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 3 },
   previewFrame: { width: "100%", height: 420, border: "none", borderRadius: "0 0 24px 24px" },
+  // Recent Filter Bar
+  recentFilterBar: { display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap", alignItems: "center", position: "relative" },
+  recentFilterChip: { position: "relative", padding: "7px 16px", borderRadius: 50, border: "2px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "all 0.2s", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", minHeight: 38, userSelect: "none" },
+  recentFilterChipActive: { background: "#1B3A4B", color: "white", borderColor: "#1B3A4B" },
+  recentFilterChipOpen: { borderColor: "#C8956C", boxShadow: "0 0 0 3px rgba(200,149,108,0.15)" },
+  recentFilterDropdown: { position: "absolute", top: "calc(100% + 6px)", left: 0, minWidth: 220, maxHeight: 280, overflowY: "auto", background: "white", borderRadius: 14, boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "1px solid #ede5da", zIndex: 120, padding: "6px 0" },
+  recentFilterDropdownRTL: { left: "auto", right: 0 },
+  recentFilterOption: { display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "9px 16px", border: "none", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1B3A4B", fontFamily: "inherit", transition: "background 0.15s", textAlign: "start" },
+  recentFilterOptionActive: { background: "#f0ebe4", fontWeight: 800 },
+  recentFilterSearch: { width: "calc(100% - 20px)", margin: "6px 10px", padding: "8px 12px", borderRadius: 10, border: "2px solid #e8ddd0", fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FDFBF9" },
+  recentFilterClearAll: { padding: "7px 16px", borderRadius: 50, border: "2px solid #e74c3c", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#e74c3c", transition: "all 0.2s", display: "inline-flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", minHeight: 38 },
+  recentFilterBadge: { background: "#C8956C", color: "white", fontSize: 10, fontWeight: 800, borderRadius: 10, padding: "1px 7px", lineHeight: "16px" },
+  recentFilterLoadingOverlay: { position: "absolute", inset: 0, background: "rgba(250,246,241,0.7)", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, backdropFilter: "blur(1px)" },
 };
