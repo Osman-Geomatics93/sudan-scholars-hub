@@ -4,7 +4,7 @@ export const studyMaterialSchema = z.object({
   title: z.string()
     .min(2, 'Title must be at least 2 characters / العنوان يجب أن يكون حرفين على الأقل')
     .max(200, 'Title is too long / العنوان طويل جداً'),
-  type: z.enum(['pdf', 'docx', 'pptx', 'video'], {
+  type: z.enum(['pdf', 'docx', 'pptx', 'video', 'folder'], {
     error: 'Invalid material type / نوع المادة غير صالح',
   }),
   url: z.string()

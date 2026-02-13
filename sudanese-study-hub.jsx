@@ -25,6 +25,7 @@ const FILE_TYPES = [
   { id: "docx", label: "DOCX", icon: "📝", color: "#2E86C1" },
   { id: "pptx", label: "PPT", icon: "📊", color: "#E67E22" },
   { id: "video", label: "Video", icon: "🎬", color: "#8E44AD" },
+  { id: "folder", label: "Folder", icon: "📁", color: "#27AE60" },
 ];
 
 const getTypeInfo = (type) => FILE_TYPES.find((f) => f.id === type) || FILE_TYPES[0];
@@ -321,7 +322,7 @@ const SEMESTER_LABELS_AR = {
 };
 
 // --- i18n: File type labels ---
-const FILE_TYPE_LABELS_AR = { pdf: "PDF", docx: "DOCX", pptx: "PPT", video: "فيديو" };
+const FILE_TYPE_LABELS_AR = { pdf: "PDF", docx: "DOCX", pptx: "PPT", video: "فيديو", folder: "مجلد" };
 
 const ROLE_LABELS_AR = { student: "طالب", teacher: "أستاذ", ta: "معيد", other: "أخرى" };
 
@@ -404,6 +405,7 @@ const T = {
     uploadFirst: "Upload First Material",
     watch: "Watch",
     download: "Download",
+    openFolder: "Open Folder",
     selectSemesterFirst: "Select a semester first to upload materials",
     uploadStudyMaterial: "Upload Study Material",
     materialTitle: "Material Title",
@@ -413,8 +415,11 @@ const T = {
     materialType: "Material Type",
     videoUrl: "Video URL",
     fileUrl: "File URL (Google Drive, Dropbox)",
+    folderUrl: "Folder URL (Google Drive, Dropbox)",
     videoPlaceholder: "https://youtube.com/watch?v=...",
     filePlaceholder: "https://drive.google.com/file/...",
+    folderPlaceholder: "https://drive.google.com/drive/folders/...",
+    folderHint: "Share a folder link containing multiple files (PDFs, docs, videos, etc.)",
     description: "Description (optional)",
     descPlaceholder: "Brief description...",
     uploadMaterialBtn: "Upload Material",
@@ -675,6 +680,7 @@ const T = {
     uploadFirst: "ارفع أول مادة",
     watch: "مشاهدة",
     download: "تحميل",
+    openFolder: "فتح المجلد",
     selectSemesterFirst: "اختر فصلاً دراسياً أولاً لرفع المواد",
     uploadStudyMaterial: "رفع مادة دراسية",
     materialTitle: "عنوان المادة",
@@ -684,8 +690,11 @@ const T = {
     materialType: "نوع المادة",
     videoUrl: "رابط الفيديو",
     fileUrl: "رابط الملف (Google Drive, Dropbox)",
+    folderUrl: "رابط المجلد (Google Drive, Dropbox)",
     videoPlaceholder: "https://youtube.com/watch?v=...",
     filePlaceholder: "https://drive.google.com/file/...",
+    folderPlaceholder: "https://drive.google.com/drive/folders/...",
+    folderHint: "شارك رابط مجلد يحتوي على ملفات متعددة (PDF، مستندات، فيديوهات، إلخ)",
     description: "الوصف (اختياري)",
     descPlaceholder: "وصف مختصر...",
     uploadMaterialBtn: "📤 رفع المادة",
@@ -2286,7 +2295,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           <a href={mat.url} target="_blank" rel="noopener noreferrer" style={S.dlBtn}
             onClick={() => handleTrackAction(mat.id, mat.type === "video" ? "view" : "download")}
           >
-            {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
+            {mat.type === "video" ? `▶ ${t.watch}` : mat.type === "folder" ? `📂 ${t.openFolder}` : `⬇ ${t.download}`}
           </a>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
             {/* Bookmark */}
@@ -4410,7 +4419,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                               rel="noopener noreferrer"
                               style={{ ...S.dlBtn, textAlign: "center", display: "block", fontSize: 12, padding: "8px 16px" }}
                             >
-                              {mat.type === "video" ? `▶ ${t.watch}` : `⬇ ${t.download}`}
+                              {mat.type === "video" ? `▶ ${t.watch}` : mat.type === "folder" ? `📂 ${t.openFolder}` : `⬇ ${t.download}`}
                             </a>
                           </div>
                         );
@@ -5352,13 +5361,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
 
               {/* File URL */}
-              <label style={S.label}>{uploadForm.type === "video" ? t.videoUrl : t.fileUrl} <span style={{ color: "#C8956C" }}>*</span></label>
-              <input type="url" placeholder={uploadForm.type === "video" ? t.videoPlaceholder : t.filePlaceholder}
+              <label style={S.label}>{uploadForm.type === "video" ? t.videoUrl : uploadForm.type === "folder" ? t.folderUrl : t.fileUrl} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="url" placeholder={uploadForm.type === "video" ? t.videoPlaceholder : uploadForm.type === "folder" ? t.folderPlaceholder : t.filePlaceholder}
                 value={uploadForm.url} onChange={(e) => setUploadForm({ ...uploadForm, url: e.target.value })}
                 style={S.input}
                 onFocus={(e) => { e.target.style.borderColor = "#1B3A4B"; e.target.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
                 onBlur={(e) => { e.target.style.borderColor = "#e8ddd0"; e.target.style.boxShadow = "none"; }}
               />
+              {uploadForm.type === "folder" && (
+                <p style={{ fontSize: 12, color: "#27AE60", margin: "6px 0 0", display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 14 }}>💡</span> {t.folderHint}
+                </p>
+              )}
 
               {/* Description */}
               <label style={S.label}>{t.description}</label>
