@@ -124,8 +124,8 @@ export function Navbar({ locale }: NavbarProps) {
         )}>
           {/* Logo */}
           <Link href={`/${locale}`} className="group flex items-center shrink-0">
-            {/* Mobile: Icon only */}
-            <div className="relative md:hidden">
+            {/* Mobile/Tablet: Icon only */}
+            <div className="relative lg:hidden">
               <Image
                 src="/images/logo-icon.webp"
                 alt="Sudan Scholars Hub"
@@ -136,7 +136,7 @@ export function Navbar({ locale }: NavbarProps) {
               />
             </div>
             {/* Desktop: Full horizontal logo */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <Image
                 src="/images/logo-horizontal.webp"
                 alt="Sudan Scholars Hub"
@@ -157,7 +157,7 @@ export function Navbar({ locale }: NavbarProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-0 lg:gap-1">
+          <div className="hidden lg:flex items-center gap-0 lg:gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -330,7 +330,7 @@ export function Navbar({ locale }: NavbarProps) {
           </div>
 
           {/* Right side actions */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-3 shrink-0">
+          <div className="hidden lg:flex items-center gap-1 lg:gap-3 shrink-0">
             <ThemeToggle locale={locale} />
             <LanguageSwitcher locale={locale} />
 
@@ -436,9 +436,9 @@ export function Navbar({ locale }: NavbarProps) {
             )}
           </div>
 
-          {/* Mobile menu button - Animated hamburger to X */}
+          {/* Mobile/Tablet menu button - Animated hamburger to X */}
           <button
-            className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+            className="lg:hidden relative w-10 h-10 flex flex-col justify-center items-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
             onClick={() => setIsOpen(!isOpen)}
             suppressHydrationWarning
             aria-label="Toggle menu"
@@ -458,10 +458,10 @@ export function Navbar({ locale }: NavbarProps) {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile/Tablet Navigation */}
         <div
           className={cn(
-            'md:hidden overflow-y-auto transition-all duration-300 overscroll-contain',
+            'lg:hidden overflow-y-auto transition-all duration-300 overscroll-contain',
             isOpen ? 'max-h-[calc(100vh-4rem)] pb-24' : 'max-h-0 overflow-hidden'
           )}
         >
