@@ -436,26 +436,60 @@ export function Navbar({ locale }: NavbarProps) {
             )}
           </div>
 
-          {/* Mobile/Tablet menu button - Animated hamburger to X */}
-          <button
-            className="lg:hidden relative w-10 h-10 flex flex-col justify-center items-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
-            onClick={() => setIsOpen(!isOpen)}
-            suppressHydrationWarning
-            aria-label="Toggle menu"
-          >
-            <span className={cn(
-              "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute",
-              isOpen ? "rotate-45 translate-y-0" : "-translate-y-2"
-            )} />
-            <span className={cn(
-              "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300",
-              isOpen && "opacity-0 scale-0"
-            )} />
-            <span className={cn(
-              "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute",
-              isOpen ? "-rotate-45 translate-y-0" : "translate-y-2"
-            )} />
-          </button>
+          {/* Mobile/Tablet: Login + Theme + Language + Hamburger */}
+          <div className="lg:hidden flex items-center gap-2">
+            <ThemeToggle locale={locale} />
+            <LanguageSwitcher locale={locale} />
+
+            {mounted && !isLoggedIn && status !== 'loading' && (
+              <Link href={`/${locale}/login`}>
+                <Button variant="outline" size="sm" className="h-9 px-3">
+                  <User className="h-4 w-4 me-1.5" />
+                  <span className="text-xs">{isRTL ? 'دخول' : 'Login'}</span>
+                </Button>
+              </Link>
+            )}
+
+            {mounted && isLoggedIn && (
+              <Link href={isAdmin ? `/${locale}/admin` : `/${locale}/profile`}>
+                <div className="relative w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 p-0.5">
+                  <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                    {session?.user?.image ? (
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || 'User'}
+                        width={32}
+                        height={32}
+                        className="rounded-full w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+                    )}
+                  </div>
+                </div>
+              </Link>
+            )}
+
+            <button
+              className="relative w-10 h-10 flex flex-col justify-center items-center rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+              onClick={() => setIsOpen(!isOpen)}
+              suppressHydrationWarning
+              aria-label="Toggle menu"
+            >
+              <span className={cn(
+                "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute",
+                isOpen ? "rotate-45 translate-y-0" : "-translate-y-2"
+              )} />
+              <span className={cn(
+                "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300",
+                isOpen && "opacity-0 scale-0"
+              )} />
+              <span className={cn(
+                "w-6 h-0.5 bg-gray-700 dark:bg-gray-200 rounded-full transition-all duration-300 absolute",
+                isOpen ? "-rotate-45 translate-y-0" : "translate-y-2"
+              )} />
+            </button>
+          </div>
         </div>
 
         {/* Mobile/Tablet Navigation */}
@@ -622,24 +656,8 @@ export function Navbar({ locale }: NavbarProps) {
                   {isRTL ? 'تسجيل الخروج' : 'Sign Out'}
                 </button>
 
-                {/* Theme and Language for logged-in users */}
-                <div className="flex items-center gap-3 pt-4 pb-8 border-t border-gray-100 dark:border-gray-800">
-                  <ThemeToggle locale={locale} />
-                  <LanguageSwitcher locale={locale} />
-                </div>
               </div>
-            ) : (
-              <div className="flex items-center gap-3 pt-4 pb-8 border-t border-gray-100 dark:border-gray-800">
-                <ThemeToggle locale={locale} />
-                <LanguageSwitcher locale={locale} />
-                <Link href={`/${locale}/login`} className="flex-1">
-                  <Button className="w-full">
-                    <User className="h-4 w-4 me-2" />
-                    {isRTL ? 'تسجيل الدخول' : 'Sign In'}
-                  </Button>
-                </Link>
-              </div>
-            )}
+            ) : null}
           </div>
         </div>
       </Container>
