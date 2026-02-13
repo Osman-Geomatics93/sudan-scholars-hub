@@ -554,6 +554,10 @@ const T = {
     allTypes: "All Types",
     allSemesters: "All Semesters",
     allUploaders: "All Uploaders",
+    filterByFaculty: "College",
+    filterByDegree: "Level",
+    allFaculties: "All Colleges",
+    allDegrees: "All Levels",
     clearAllFilters: "Clear All",
     noFilterResults: "No materials match your filters",
     tryDifferentFilters: "Try adjusting or clearing filters",
@@ -808,6 +812,10 @@ const T = {
     allTypes: "كل الأنواع",
     allSemesters: "كل الفصول",
     allUploaders: "كل الرافعين",
+    filterByFaculty: "الكلية",
+    filterByDegree: "المرحلة",
+    allFaculties: "كل الكليات",
+    allDegrees: "كل المراحل",
     clearAllFilters: "مسح الكل",
     noFilterResults: "لا توجد مواد تطابق الفلاتر",
     tryDifferentFilters: "حاول تعديل أو مسح الفلاتر",
@@ -1177,7 +1185,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [editingCollection, setEditingCollection] = useState(null); // collection object when editing
   const [deleteCollectionConfirm, setDeleteCollectionConfirm] = useState(null); // { id, name }
   // Recent Materials Filter Bar
-  const [recentFilters, setRecentFilters] = useState({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "" });
+  const [recentFilters, setRecentFilters] = useState({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", degreeId: "" });
   const [recentFilteredMaterials, setRecentFilteredMaterials] = useState([]);
   const [recentFilteredTotal, setRecentFilteredTotal] = useState(0);
   const [recentFilterLoading, setRecentFilterLoading] = useState(false);
@@ -1300,6 +1308,8 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       if (filters.uploaderRole) params.set("uploaderRole", filters.uploaderRole);
       if (filters.type) params.set("type", filters.type);
       if (filters.semester) params.set("semester", filters.semester);
+      if (filters.facultyId) params.set("facultyId", filters.facultyId);
+      if (filters.degreeId) params.set("degreeId", filters.degreeId);
       const res = await fetch(`/api/study-hub/materials?${params}`);
       if (res.ok) {
         const data = await res.json();
@@ -1337,7 +1347,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   }, [recentFilters, fetchRecentFiltered]);
 
   const clearAllRecentFilters = useCallback(() => {
-    setRecentFilters({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "" });
+    setRecentFilters({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", degreeId: "" });
     setRecentFilteredMaterials([]);
     setRecentFilteredTotal(0);
     setRecentFilterOpen(null);
@@ -3564,6 +3574,68 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                             onClick={() => updateRecentFilter("type", ft.id)}
                           >
                             <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: ft.color }} /> {ft.icon} {fileTypeLabel(ft)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Faculty/College chip */}
+                  <div style={{ position: "relative" }}>
+                    <button
+                      className="studyhub-recent-filter-chip"
+                      style={{ ...S.recentFilterChip, ...(recentFilters.facultyId ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "faculty" ? S.recentFilterChipOpen : {}) }}
+                      onClick={() => setRecentFilterOpen(recentFilterOpen === "faculty" ? null : "faculty")}
+                    >
+                      {recentFilters.facultyId ? (() => { const fac = FACULTIES.find(f => f.id === recentFilters.facultyId) || FACULTIES[0]; return `${fac.icon} ${facultyName(fac)}`; })() : `🏛️ ${t.filterByFaculty}`}
+                      <span style={{ fontSize: 10 }}>{recentFilterOpen === "faculty" ? "▲" : "▼"}</span>
+                    </button>
+                    {recentFilterOpen === "faculty" && (
+                      <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}), maxHeight: 280, overflowY: "auto" }}>
+                        <button
+                          style={{ ...S.recentFilterOption, ...(recentFilters.facultyId === "" ? S.recentFilterOptionActive : {}) }}
+                          onClick={() => updateRecentFilter("facultyId", "")}
+                        >
+                          {t.allFaculties}
+                        </button>
+                        {FACULTIES.map(fac => (
+                          <button
+                            key={fac.id}
+                            style={{ ...S.recentFilterOption, ...(recentFilters.facultyId === fac.id ? S.recentFilterOptionActive : {}) }}
+                            onClick={() => updateRecentFilter("facultyId", fac.id)}
+                          >
+                            {fac.icon} {facultyName(fac)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Degree Level chip */}
+                  <div style={{ position: "relative" }}>
+                    <button
+                      className="studyhub-recent-filter-chip"
+                      style={{ ...S.recentFilterChip, ...(recentFilters.degreeId ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "degree" ? S.recentFilterChipOpen : {}) }}
+                      onClick={() => setRecentFilterOpen(recentFilterOpen === "degree" ? null : "degree")}
+                    >
+                      {recentFilters.degreeId ? (() => { const deg = DEGREE_LEVELS.find(d => d.id === recentFilters.degreeId) || DEGREE_LEVELS[0]; return `${deg.icon} ${degreeName(deg)}`; })() : `🎓 ${t.filterByDegree}`}
+                      <span style={{ fontSize: 10 }}>{recentFilterOpen === "degree" ? "▲" : "▼"}</span>
+                    </button>
+                    {recentFilterOpen === "degree" && (
+                      <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}) }}>
+                        <button
+                          style={{ ...S.recentFilterOption, ...(recentFilters.degreeId === "" ? S.recentFilterOptionActive : {}) }}
+                          onClick={() => updateRecentFilter("degreeId", "")}
+                        >
+                          {t.allDegrees}
+                        </button>
+                        {DEGREE_LEVELS.map(deg => (
+                          <button
+                            key={deg.id}
+                            style={{ ...S.recentFilterOption, ...(recentFilters.degreeId === deg.id ? S.recentFilterOptionActive : {}) }}
+                            onClick={() => updateRecentFilter("degreeId", deg.id)}
+                          >
+                            <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: deg.color }} /> {deg.icon} {degreeName(deg)}
                           </button>
                         ))}
                       </div>
