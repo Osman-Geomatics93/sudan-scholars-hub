@@ -39,6 +39,56 @@ export async function awardPoints(userId: string, amount: number) {
   return { newPoints: user.points, badge };
 }
 
+export async function recalculateAllPoints() {
+  // Get all users
+  const users = await prisma.user.findMany({ select: { id: true, points: true } });
+
+  const results: { id: string; oldPoints: number; newPoints: number; badge: string }[] = [];
+
+  for (const user of users) {
+    // Count approved materials
+    const approvedCount = await prisma.studyMaterial.count({
+      where: { userId: user.id, status: 'APPROVED' },
+    });
+
+    // Count reviews posted
+    const reviewCount = await prisma.materialReview.count({
+      where: { userId: user.id },
+    });
+
+    // Count high ratings received on user's materials (from other users)
+    const highRatingCount = await prisma.materialReview.count({
+      where: {
+        rating: { gte: 4 },
+        material: { userId: user.id },
+        NOT: { userId: user.id },
+      },
+    });
+
+    // Count fulfilled requests
+    const fulfilledCount = await prisma.materialRequest.count({
+      where: { fulfilledBy: user.id, status: 'FULFILLED' },
+    });
+
+    const newPoints =
+      approvedCount * POINT_VALUES.UPLOAD_APPROVED +
+      reviewCount * POINT_VALUES.REVIEW_POSTED +
+      highRatingCount * POINT_VALUES.HIGH_RATING_RECEIVED +
+      fulfilledCount * POINT_VALUES.REQUEST_FULFILLED;
+
+    if (newPoints !== user.points) {
+      const badge = getBadgeForPoints(newPoints);
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { points: newPoints, badge: badge.key },
+      });
+      results.push({ id: user.id, oldPoints: user.points, newPoints, badge: badge.key });
+    }
+  }
+
+  return results;
+}
+
 export async function deductPoints(userId: string, amount: number) {
   const current = await prisma.user.findUnique({
     where: { id: userId },
