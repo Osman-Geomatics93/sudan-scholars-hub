@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     const orderBy = searchParams.get('orderBy'); // newest, downloads, rating
     const minRating = searchParams.get('minRating');
     const facultyId = searchParams.get('facultyId');
+    const specialtyId = searchParams.get('specialtyId');
     const uploaderRole = searchParams.get('uploaderRole');
     const dateFrom = searchParams.get('dateFrom');
     const dateTo = searchParams.get('dateTo');
@@ -49,6 +50,7 @@ export async function GET(request: NextRequest) {
       ];
     }
     if (facultyId) where.facultyId = facultyId;
+    if (specialtyId) where.specialtyId = specialtyId;
     if (uploaderRole) where.uploaderRole = uploaderRole;
     if (minRating) where.averageRating = { gte: parseFloat(minRating) };
     if (dateFrom || dateTo) {

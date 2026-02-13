@@ -558,6 +558,9 @@ const T = {
     filterByDegree: "Level",
     allFaculties: "All Colleges",
     allDegrees: "All Levels",
+    filterBySpecialty: "Specialization",
+    allSpecialties: "All Specializations",
+    selectFacultyForSpecialty: "Select a college first",
     clearAllFilters: "Clear All",
     noFilterResults: "No materials match your filters",
     tryDifferentFilters: "Try adjusting or clearing filters",
@@ -816,6 +819,9 @@ const T = {
     filterByDegree: "المرحلة",
     allFaculties: "كل الكليات",
     allDegrees: "كل المراحل",
+    filterBySpecialty: "التخصص",
+    allSpecialties: "كل التخصصات",
+    selectFacultyForSpecialty: "اختر الكلية أولاً",
     clearAllFilters: "مسح الكل",
     noFilterResults: "لا توجد مواد تطابق الفلاتر",
     tryDifferentFilters: "حاول تعديل أو مسح الفلاتر",
@@ -1185,7 +1191,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [editingCollection, setEditingCollection] = useState(null); // collection object when editing
   const [deleteCollectionConfirm, setDeleteCollectionConfirm] = useState(null); // { id, name }
   // Recent Materials Filter Bar
-  const [recentFilters, setRecentFilters] = useState({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", degreeId: "" });
+  const [recentFilters, setRecentFilters] = useState({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", specialtyId: "", degreeId: "" });
   const [recentFilteredMaterials, setRecentFilteredMaterials] = useState([]);
   const [recentFilteredTotal, setRecentFilteredTotal] = useState(0);
   const [recentFilterLoading, setRecentFilterLoading] = useState(false);
@@ -1309,6 +1315,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       if (filters.type) params.set("type", filters.type);
       if (filters.semester) params.set("semester", filters.semester);
       if (filters.facultyId) params.set("facultyId", filters.facultyId);
+      if (filters.specialtyId) params.set("specialtyId", filters.specialtyId);
       if (filters.degreeId) params.set("degreeId", filters.degreeId);
       const res = await fetch(`/api/study-hub/materials?${params}`);
       if (res.ok) {
@@ -1325,6 +1332,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
   const updateRecentFilter = useCallback(async (key, value) => {
     const next = { ...recentFilters, [key]: value };
+    if (key === "facultyId") {
+      next.specialtyId = "";
+    }
     if (key === "countryId") {
       next.universityId = "";
       next.semester = "";
@@ -1347,7 +1357,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   }, [recentFilters, fetchRecentFiltered]);
 
   const clearAllRecentFilters = useCallback(() => {
-    setRecentFilters({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", degreeId: "" });
+    setRecentFilters({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", specialtyId: "", degreeId: "" });
     setRecentFilteredMaterials([]);
     setRecentFilteredTotal(0);
     setRecentFilterOpen(null);
@@ -3610,6 +3620,39 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       </div>
                     )}
                   </div>
+
+                  {/* Specialty chip (only when faculty selected) */}
+                  {recentFilters.facultyId && (
+                    <div style={{ position: "relative" }}>
+                      <button
+                        className="studyhub-recent-filter-chip"
+                        style={{ ...S.recentFilterChip, ...(recentFilters.specialtyId ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "specialty" ? S.recentFilterChipOpen : {}) }}
+                        onClick={() => setRecentFilterOpen(recentFilterOpen === "specialty" ? null : "specialty")}
+                      >
+                        {recentFilters.specialtyId ? (() => { const specs = SPECIALTIES_MAP[recentFilters.facultyId] || []; const spec = specs.find(s => s.id === recentFilters.specialtyId); return spec ? `📋 ${specialtyName(spec)}` : t.filterBySpecialty; })() : `📋 ${t.filterBySpecialty}`}
+                        <span style={{ fontSize: 10 }}>{recentFilterOpen === "specialty" ? "▲" : "▼"}</span>
+                      </button>
+                      {recentFilterOpen === "specialty" && (
+                        <div style={{ ...S.recentFilterDropdown, ...(isRTL ? S.recentFilterDropdownRTL : {}), maxHeight: 280, overflowY: "auto" }}>
+                          <button
+                            style={{ ...S.recentFilterOption, ...(recentFilters.specialtyId === "" ? S.recentFilterOptionActive : {}) }}
+                            onClick={() => updateRecentFilter("specialtyId", "")}
+                          >
+                            {t.allSpecialties}
+                          </button>
+                          {(SPECIALTIES_MAP[recentFilters.facultyId] || []).map(spec => (
+                            <button
+                              key={spec.id}
+                              style={{ ...S.recentFilterOption, ...(recentFilters.specialtyId === spec.id ? S.recentFilterOptionActive : {}) }}
+                              onClick={() => updateRecentFilter("specialtyId", spec.id)}
+                            >
+                              📋 {specialtyName(spec)}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Degree Level chip */}
                   <div style={{ position: "relative" }}>
