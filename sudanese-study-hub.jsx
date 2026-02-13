@@ -377,7 +377,6 @@ const T = {
     videoTutorialTitle: "Watch How It Works",
     videoTutorialSub: "A quick walkthrough on how to use the Study Hub and upload your materials",
     videoTutorialBtn: "Watch Full Tutorial",
-    videoTutorialClose: "Close",
     nUniversities: "universities",
     nMaterials: "materials",
     noResultsFor: "No results for",
@@ -642,7 +641,6 @@ const T = {
     videoTutorialTitle: "شاهد كيف تعمل المنصة",
     videoTutorialSub: "شرح سريع لكيفية استخدام مركز الدراسة ورفع موادك الدراسية",
     videoTutorialBtn: "شاهد الشرح الكامل",
-    videoTutorialClose: "إغلاق",
     nUniversities: "جامعات",
     nMaterials: "مواد",
     noResultsFor: "لا توجد نتائج لـ",
@@ -1197,15 +1195,6 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [showAddToCollectionPopup, setShowAddToCollectionPopup] = useState(null); // materialId or null
   const [selectedCollectionView, setSelectedCollectionView] = useState(null);
   const [editingCollection, setEditingCollection] = useState(null); // collection object when editing
-  const [showTutorialVideo, setShowTutorialVideo] = useState(false); // fullscreen tutorial video modal
-
-  // Close tutorial video modal on ESC
-  useEffect(() => {
-    if (!showTutorialVideo) return;
-    const handleEsc = (e) => { if (e.key === "Escape") setShowTutorialVideo(false); };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [showTutorialVideo]);
   const [deleteCollectionConfirm, setDeleteCollectionConfirm] = useState(null); // { id, name }
   // Recent Materials Filter Bar
   const [recentFilters, setRecentFilters] = useState({ countryId: "", universityId: "", uploaderRole: "", type: "", semester: "", facultyId: "", specialtyId: "", degreeId: "" });
@@ -3446,34 +3435,110 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   </p>
                 </div>
 
-                {/* Video embed container */}
+                {/* Clickable video thumbnail card */}
                 <div style={{ maxWidth: 720, margin: "0 auto", position: "relative" }}>
-                  <div style={{
-                    position: "relative",
-                    paddingBottom: "56.25%",
-                    borderRadius: 16,
-                    overflow: "hidden",
-                    boxShadow: "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
-                    background: "#000",
-                  }}>
-                    <iframe
-                      src="https://drive.google.com/file/d/1TpORHo-UO2zeuRz4ixxhmrk6nLGfEvq3/preview"
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        border: "none",
-                        borderRadius: 16,
-                      }}
-                      allow="autoplay; encrypted-media"
-                      allowFullScreen
-                      title="Study Hub Tutorial"
-                    />
-                  </div>
+                  <a
+                    href="https://drive.google.com/file/d/1TpORHo-UO2zeuRz4ixxhmrk6nLGfEvq3/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="studyhub-video-card"
+                    style={{
+                      display: "block",
+                      position: "relative",
+                      paddingBottom: "56.25%",
+                      borderRadius: 16,
+                      overflow: "hidden",
+                      boxShadow: "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
+                      background: "linear-gradient(145deg, #0d1f2d 0%, #162d3e 30%, #1a3a50 60%, #0f2535 100%)",
+                      cursor: "pointer",
+                      textDecoration: "none",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.02)"; e.currentTarget.style.boxShadow = "0 24px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,149,108,0.2)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)"; }}
+                  >
+                    {/* Animated background pattern */}
+                    <div style={{ position: "absolute", inset: 0, opacity: 0.06, backgroundImage: "radial-gradient(circle at 20% 50%, #C8956C 1px, transparent 1px), radial-gradient(circle at 80% 20%, #C8956C 1px, transparent 1px), radial-gradient(circle at 60% 80%, #C8956C 1px, transparent 1px)", backgroundSize: "60px 60px, 80px 80px, 50px 50px" }} />
 
-                  {/* Decorative glow ring around video */}
+                    {/* Center play button */}
+                    <div style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 16,
+                      zIndex: 2,
+                    }}>
+                      {/* Play circle */}
+                      <div style={{
+                        width: "clamp(64px, 12vw, 88px)",
+                        height: "clamp(64px, 12vw, 88px)",
+                        borderRadius: "50%",
+                        background: "linear-gradient(135deg, #C8956C, #B07D55)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 8px 32px rgba(200,149,108,0.4), 0 0 0 8px rgba(200,149,108,0.1), 0 0 0 16px rgba(200,149,108,0.05)",
+                        transition: "transform 0.3s ease",
+                      }}>
+                        {/* Triangle play icon */}
+                        <div style={{
+                          width: 0,
+                          height: 0,
+                          borderStyle: "solid",
+                          borderWidth: "clamp(12px, 2vw, 18px) 0 clamp(12px, 2vw, 18px) clamp(20px, 3.5vw, 30px)",
+                          borderColor: "transparent transparent transparent white",
+                          marginLeft: "clamp(4px, 0.8vw, 6px)",
+                        }} />
+                      </div>
+                      {/* Label text */}
+                      <div style={{
+                        background: "rgba(0,0,0,0.5)",
+                        backdropFilter: "blur(8px)",
+                        padding: "8px 20px",
+                        borderRadius: 50,
+                        border: "1px solid rgba(255,255,255,0.1)",
+                      }}>
+                        <span style={{ color: "#F5E6D3", fontSize: "clamp(12px, 2vw, 14px)", fontWeight: 700, letterSpacing: "0.5px" }}>
+                          {t.videoTutorialBtn}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Corner decorative icons */}
+                    <div style={{ position: "absolute", top: 20, left: 20, fontSize: 28, opacity: 0.15 }}>📚</div>
+                    <div style={{ position: "absolute", top: 20, right: 20, fontSize: 28, opacity: 0.15 }}>🎓</div>
+                    <div style={{ position: "absolute", bottom: 20, left: 20, fontSize: 28, opacity: 0.15 }}>⬆️</div>
+                    <div style={{ position: "absolute", bottom: 20, right: 20, fontSize: 28, opacity: 0.15 }}>🌍</div>
+
+                    {/* Bottom bar */}
+                    <div style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      padding: "16px 24px",
+                      background: "linear-gradient(transparent, rgba(0,0,0,0.6))",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#C8956C", boxShadow: "0 0 8px rgba(200,149,108,0.5)" }} />
+                        <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, fontWeight: 600 }}>
+                          {isRTL ? "مركز الطالب السوداني" : "Sudanese Study Hub"}
+                        </span>
+                      </div>
+                      <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontWeight: 600 }}>
+                        {isRTL ? "اضغط للمشاهدة" : "Click to watch"}
+                      </span>
+                    </div>
+                  </a>
+
+                  {/* Decorative glow ring around video card */}
                   <div style={{
                     position: "absolute",
                     inset: -2,
@@ -3484,31 +3549,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   }} />
                 </div>
 
-                {/* Expand to fullscreen button */}
-                <div style={{ textAlign: "center", marginTop: 20 }}>
-                  <button
-                    onClick={() => setShowTutorialVideo(true)}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 8,
-                      padding: "10px 24px",
-                      borderRadius: 50,
-                      background: "rgba(200,149,108,0.15)",
-                      color: "#C8956C",
-                      border: "1px solid rgba(200,149,108,0.25)",
-                      cursor: "pointer",
-                      fontWeight: 700,
-                      fontSize: 13,
-                      fontFamily: "inherit",
-                      transition: "all 0.25s",
-                      backdropFilter: "blur(4px)",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.25)"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(200,149,108,0.2)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.15)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
-                  >
-                    <span style={{ fontSize: 16 }}>🔳</span> {t.videoTutorialBtn}
-                  </button>
+                {/* Features row below video */}
+                <div style={{ display: "flex", justifyContent: "center", gap: "clamp(16px, 4vw, 32px)", marginTop: 28, flexWrap: "wrap" }}>
+                  {[
+                    { icon: "📤", label: isRTL ? "كيفية رفع المواد" : "How to upload" },
+                    { icon: "🔍", label: isRTL ? "البحث والتصفح" : "Search & browse" },
+                    { icon: "📂", label: isRTL ? "تنظيم موادك" : "Organize materials" },
+                  ].map((feat, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, opacity: 0.7 }}>
+                      <span style={{ fontSize: 16 }}>{feat.icon}</span>
+                      <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, fontWeight: 600 }}>{feat.label}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -5111,91 +5163,6 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </label>
               <button onClick={editingCollection ? handleUpdateCollection : handleCreateCollection} style={S.submitBtn}>{editingCollection ? t.saveChanges : t.createCollection}</button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* TUTORIAL VIDEO FULLSCREEN MODAL */}
-      {showTutorialVideo && (
-        <div
-          className="studyhub-overlay"
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.85)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 300,
-            padding: 20,
-            backdropFilter: "blur(8px)",
-          }}
-          onClick={() => setShowTutorialVideo(false)}
-        >
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              maxWidth: 960,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
-              onClick={() => setShowTutorialVideo(false)}
-              style={{
-                position: "absolute",
-                top: -48,
-                [isRTL ? "left" : "right"]: 0,
-                background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.2)",
-                color: "#fff",
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                cursor: "pointer",
-                fontSize: 18,
-                fontWeight: 700,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "all 0.2s",
-                backdropFilter: "blur(4px)",
-                fontFamily: "inherit",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; e.currentTarget.style.transform = "scale(1.1)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "scale(1)"; }}
-            >
-              ✕
-            </button>
-            {/* Video container */}
-            <div style={{
-              position: "relative",
-              paddingBottom: "56.25%",
-              borderRadius: 16,
-              overflow: "hidden",
-              boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
-              background: "#000",
-            }}>
-              <iframe
-                src="https://drive.google.com/file/d/1TpORHo-UO2zeuRz4ixxhmrk6nLGfEvq3/preview"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  border: "none",
-                }}
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                title="Study Hub Tutorial - Full Screen"
-              />
-            </div>
-            {/* Label under video */}
-            <p style={{ textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 13, marginTop: 16, fontWeight: 600 }}>
-              {isRTL ? "اضغط ESC أو خارج الفيديو للإغلاق" : "Press ESC or click outside to close"}
-            </p>
           </div>
         </div>
       )}
