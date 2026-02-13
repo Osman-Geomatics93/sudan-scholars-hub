@@ -343,8 +343,15 @@ const T = {
     browseCountries: "Browse Countries",
     upload: "Upload",
     telegram: "Telegram",
-    search: "Search...",
+    search: "Search countries, materials, faculties...",
     searchFull: "Search country...",
+    searchPlaceholderShort: "Search...",
+    searchCountries: "Countries",
+    searchFaculties: "Faculties",
+    searchMaterialsLabel: "Materials",
+    searchNoResults: "No results found",
+    searchHint: "Press Enter to search all materials",
+    searchViewAll: "View all results for",
     lightMode: "Light mode",
     darkMode: "Dark mode",
     signIn: "Sign In",
@@ -607,8 +614,15 @@ const T = {
     browseCountries: "تصفح الدول",
     upload: "رفع",
     telegram: "تيليجرام",
-    search: "بحث...",
+    search: "ابحث عن دول، مواد، كليات...",
     searchFull: "ابحث عن دولة...",
+    searchPlaceholderShort: "بحث...",
+    searchCountries: "الدول",
+    searchFaculties: "الكليات",
+    searchMaterialsLabel: "المواد",
+    searchNoResults: "لا توجد نتائج",
+    searchHint: "اضغط Enter للبحث في جميع المواد",
+    searchViewAll: "عرض جميع النتائج لـ",
     lightMode: "الوضع الفاتح",
     darkMode: "الوضع الداكن",
     signIn: "تسجيل الدخول",
@@ -1183,6 +1197,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [sortOrder, setSortOrder] = useState("newest");
   const [advancedFilters, setAdvancedFilters] = useState({ minRating: "", facultyId: "", uploaderRole: "" });
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  // Navbar Search Dropdown
+  const [navSearchOpen, setNavSearchOpen] = useState(false);
+  const [navSearchResults, setNavSearchResults] = useState([]);
+  const [navSearchLoading, setNavSearchLoading] = useState(false);
+  const [navSearchIdx, setNavSearchIdx] = useState(-1);
+  const navSearchRef = useRef(null);
+  const navSearchTimerRef = useRef(null);
   // Groups
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [groupForm, setGroupForm] = useState({ name: "", description: "", platform: "whatsapp", chatLink: "" });
@@ -1445,6 +1466,133 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [sharePopup]);
+
+  // Close navbar search dropdown on outside click
+  useEffect(() => {
+    if (!navSearchOpen) return;
+    const handler = (e) => {
+      if (navSearchRef.current && !navSearchRef.current.contains(e.target)) {
+        setNavSearchOpen(false);
+        setNavSearchIdx(-1);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [navSearchOpen]);
+
+  // Navbar search — instant client-side + debounced API for materials
+  useEffect(() => {
+    if (navSearchTimerRef.current) clearTimeout(navSearchTimerRef.current);
+    const q = searchQuery.trim();
+    if (!q) {
+      setNavSearchResults([]);
+      setNavSearchLoading(false);
+      return;
+    }
+    setNavSearchIdx(-1);
+
+    // INSTANT: country + faculty matches (client-side, zero delay)
+    const instantResults = [];
+    const ql = q.toLowerCase();
+    ALL_COUNTRIES.filter(
+      (c) => c.name.toLowerCase().includes(ql) || (c.nameAr || "").includes(q) || c.id.toLowerCase().includes(ql)
+    ).slice(0, 4).forEach((c) => instantResults.push({ type: "country", data: c }));
+    FACULTIES.filter(
+      (f) => f.name.toLowerCase().includes(ql) || (f.nameAr || "").toLowerCase().includes(ql)
+    ).slice(0, 3).forEach((f) => instantResults.push({ type: "faculty", data: f }));
+
+    // Show instant results right away, mark loading only for materials
+    setNavSearchResults(instantResults);
+    setNavSearchLoading(true);
+
+    // DEBOUNCED: material matches from API (150ms — fast but avoids spam)
+    navSearchTimerRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/study-hub/materials?search=${encodeURIComponent(q)}&limit=5`);
+        if (res.ok) {
+          const data = await res.json();
+          const matResults = (data.materials || []).map((m) => ({ type: "material", data: m }));
+          // Merge: keep current instant results + append materials
+          setNavSearchResults((prev) => {
+            const nonMat = prev.filter((r) => r.type !== "material");
+            return [...nonMat, ...matResults];
+          });
+        }
+      } catch (err) { /* ignore */ }
+      setNavSearchLoading(false);
+    }, 150);
+    return () => { if (navSearchTimerRef.current) clearTimeout(navSearchTimerRef.current); };
+  }, [searchQuery]);
+
+  // Handle navbar search result selection
+  const handleNavSearchSelect = (item) => {
+    setNavSearchOpen(false);
+    setNavSearchIdx(-1);
+    if (item.type === "country") {
+      setSearchQuery("");
+      navigate("universities", item.data);
+    } else if (item.type === "faculty") {
+      setSearchQuery("");
+      // Navigate to browse-all with faculty filter
+      navigate("browse-all");
+      setTimeout(() => {
+        setAdvancedFilters((prev) => ({ ...prev, facultyId: item.data.id }));
+        setShowAdvancedFilters(true);
+        setBrowseMatList([]);
+        fetchBrowseMaterials("", "all");
+      }, 100);
+    } else if (item.type === "material") {
+      setSearchQuery("");
+      // Navigate to browse-all and search for this material title
+      navigate("browse-all");
+      setTimeout(() => {
+        setBrowseMatSearch(item.data.title || "");
+        setBrowseMatList([]);
+        fetchBrowseMaterials(item.data.title || "", "all");
+      }, 100);
+    }
+  };
+
+  // Handle keyboard navigation in search dropdown
+  const handleNavSearchKeyDown = (e) => {
+    if (!navSearchOpen || navSearchResults.length === 0) {
+      if (e.key === "Enter" && searchQuery.trim()) {
+        setNavSearchOpen(false);
+        navigate("browse-all");
+        setTimeout(() => {
+          setBrowseMatSearch(searchQuery);
+          setBrowseMatList([]);
+          fetchBrowseMaterials(searchQuery, "all");
+          setSearchQuery("");
+        }, 100);
+      }
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setNavSearchIdx((prev) => (prev < navSearchResults.length - 1 ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setNavSearchIdx((prev) => (prev > 0 ? prev - 1 : navSearchResults.length - 1));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (navSearchIdx >= 0 && navSearchIdx < navSearchResults.length) {
+        handleNavSearchSelect(navSearchResults[navSearchIdx]);
+      } else if (searchQuery.trim()) {
+        setNavSearchOpen(false);
+        navigate("browse-all");
+        setTimeout(() => {
+          setBrowseMatSearch(searchQuery);
+          setBrowseMatList([]);
+          fetchBrowseMaterials(searchQuery, "all");
+          setSearchQuery("");
+        }, 100);
+      }
+    } else if (e.key === "Escape") {
+      setNavSearchOpen(false);
+      setNavSearchIdx(-1);
+    }
+  };
 
   // Fetch user's own materials
   const fetchMyMaterials = useCallback(async () => {
@@ -2889,18 +3037,185 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
           {/* Right Side Actions */}
           <div className="hidden md:flex items-center gap-1 lg:gap-3 shrink-0">
-            {/* Search */}
-            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1.5 focus-within:ring-2 focus-within:ring-blue-500/30 transition-all max-w-[180px]">
-              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                placeholder={t.search}
-                value={searchQuery}
-                onChange={(e) => { setSearchQuery(e.target.value); if (view !== "home") navigate("home"); }}
-                className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
-              />
+            {/* Search — Modern Expandable with Dropdown */}
+            <div ref={navSearchRef} className="relative">
+              <div className={`flex items-center rounded-full transition-all duration-300 ${navSearchOpen ? "bg-white dark:bg-gray-800 shadow-lg ring-2 ring-blue-500/40 w-[340px]" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200/70 dark:hover:bg-gray-700 w-[200px]"} px-3.5 py-1.5`}>
+                {navSearchLoading ? (
+                  <svg className="w-4 h-4 text-blue-500 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                ) : (
+                  <svg className={`w-4 h-4 shrink-0 transition-colors duration-200 ${navSearchOpen ? "text-blue-500" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                )}
+                <input
+                  type="text"
+                  placeholder={navSearchOpen ? t.search : t.searchPlaceholderShort}
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setNavSearchOpen(true); }}
+                  onFocus={() => { setNavSearchOpen(true); }}
+                  onKeyDown={handleNavSearchKeyDown}
+                  className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => { setSearchQuery(""); setNavSearchResults([]); setNavSearchOpen(false); }}
+                    className="shrink-0 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 text-xs transition-colors"
+                  >
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+
+              {/* Search Dropdown */}
+              {navSearchOpen && searchQuery.trim() && (
+                <div className={`absolute top-[calc(100%+8px)] ${isRTL ? "left-0" : "right-0"} w-[380px] max-w-[calc(100vw-32px)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[100] overflow-hidden`}>
+                  {/* Results */}
+                  <div className="max-h-[400px] overflow-y-auto overscroll-contain">
+                    {navSearchLoading && navSearchResults.length === 0 ? (
+                      <div className="flex items-center justify-center gap-2 py-8">
+                        <svg className="w-5 h-5 text-blue-500 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        <span className="text-sm text-gray-400">{isRTL ? "جاري البحث..." : "Searching..."}</span>
+                      </div>
+                    ) : navSearchResults.length === 0 && !navSearchLoading ? (
+                      <div className="py-8 text-center">
+                        <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                          <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{t.searchNoResults}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{t.searchHint}</p>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Country Results */}
+                        {navSearchResults.some((r) => r.type === "country") && (
+                          <div>
+                            <div className={`px-4 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 ${isRTL ? "text-right" : "text-left"}`}>
+                              {t.searchCountries}
+                            </div>
+                            {navSearchResults.filter((r) => r.type === "country").map((item, i) => {
+                              const globalIdx = navSearchResults.indexOf(item);
+                              return (
+                                <button
+                                  key={`c-${item.data.id}`}
+                                  onClick={() => handleNavSearchSelect(item)}
+                                  onMouseEnter={() => setNavSearchIdx(globalIdx)}
+                                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${globalIdx === navSearchIdx ? "bg-blue-50 dark:bg-blue-900/30" : "hover:bg-gray-50 dark:hover:bg-gray-800/50"}`}
+                                >
+                                  <span className="text-xl shrink-0">{item.data.flag}</span>
+                                  <div className={`flex-1 min-w-0 ${isRTL ? "text-right" : "text-left"}`}>
+                                    <div className="font-medium text-gray-900 dark:text-gray-100 truncate">{isRTL ? item.data.nameAr || item.data.name : item.data.name}</div>
+                                    <div className="text-xs text-gray-400 dark:text-gray-500 truncate">{isRTL ? item.data.name : item.data.nameAr || ""}</div>
+                                  </div>
+                                  <svg className={`w-4 h-4 text-gray-300 dark:text-gray-600 shrink-0 ${isRTL ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* Faculty Results */}
+                        {navSearchResults.some((r) => r.type === "faculty") && (
+                          <div>
+                            <div className={`px-4 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 border-t border-gray-100 dark:border-gray-800 ${isRTL ? "text-right" : "text-left"}`}>
+                              {t.searchFaculties}
+                            </div>
+                            {navSearchResults.filter((r) => r.type === "faculty").map((item) => {
+                              const globalIdx = navSearchResults.indexOf(item);
+                              return (
+                                <button
+                                  key={`f-${item.data.id}`}
+                                  onClick={() => handleNavSearchSelect(item)}
+                                  onMouseEnter={() => setNavSearchIdx(globalIdx)}
+                                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${globalIdx === navSearchIdx ? "bg-blue-50 dark:bg-blue-900/30" : "hover:bg-gray-50 dark:hover:bg-gray-800/50"}`}
+                                >
+                                  <span className="text-lg shrink-0">{item.data.icon}</span>
+                                  <div className={`flex-1 min-w-0 ${isRTL ? "text-right" : "text-left"}`}>
+                                    <div className="font-medium text-gray-900 dark:text-gray-100 truncate">{isRTL ? item.data.nameAr : item.data.name}</div>
+                                  </div>
+                                  <svg className={`w-4 h-4 text-gray-300 dark:text-gray-600 shrink-0 ${isRTL ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* Material Results */}
+                        {navSearchResults.some((r) => r.type === "material") && (
+                          <div>
+                            <div className={`px-4 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 border-t border-gray-100 dark:border-gray-800 ${isRTL ? "text-right" : "text-left"}`}>
+                              {t.searchMaterialsLabel}
+                            </div>
+                            {navSearchResults.filter((r) => r.type === "material").map((item) => {
+                              const globalIdx = navSearchResults.indexOf(item);
+                              const typeInfo = getTypeInfo(item.data.type);
+                              return (
+                                <button
+                                  key={`m-${item.data.id}`}
+                                  onClick={() => handleNavSearchSelect(item)}
+                                  onMouseEnter={() => setNavSearchIdx(globalIdx)}
+                                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${globalIdx === navSearchIdx ? "bg-blue-50 dark:bg-blue-900/30" : "hover:bg-gray-50 dark:hover:bg-gray-800/50"}`}
+                                >
+                                  <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-sm" style={{ background: typeInfo.color + "18", color: typeInfo.color }}>
+                                    {typeInfo.icon}
+                                  </div>
+                                  <div className={`flex-1 min-w-0 ${isRTL ? "text-right" : "text-left"}`}>
+                                    <div className="font-medium text-gray-900 dark:text-gray-100 truncate">{item.data.title}</div>
+                                    <div className="text-xs text-gray-400 dark:text-gray-500 truncate">
+                                      {item.data.subject || item.data.universityName || ""}
+                                      {item.data.averageRating > 0 && <span className={`${isRTL ? "mr-2" : "ml-2"}`}>{"★".repeat(Math.round(item.data.averageRating))}</span>}
+                                    </div>
+                                  </div>
+                                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md shrink-0" style={{ background: typeInfo.color + "18", color: typeInfo.color }}>
+                                    {typeInfo.label}
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  {/* Footer — View All */}
+                  {searchQuery.trim() && (
+                    <div className="border-t border-gray-100 dark:border-gray-800">
+                      <button
+                        onClick={() => {
+                          setNavSearchOpen(false);
+                          navigate("browse-all");
+                          setTimeout(() => {
+                            setBrowseMatSearch(searchQuery);
+                            setBrowseMatList([]);
+                            fetchBrowseMaterials(searchQuery, "all");
+                            setSearchQuery("");
+                          }, 100);
+                        }}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        {t.searchViewAll} &ldquo;{searchQuery.trim()}&rdquo;
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Notification Bell */}
@@ -3114,17 +3429,74 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           <div className="flex flex-col gap-1 pt-4 px-4 border-t border-gray-100 dark:border-gray-800">
 
             {/* Mobile Search */}
-            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2 mb-3">
-              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                placeholder={t.searchFull}
-                value={searchQuery}
-                onChange={(e) => { setSearchQuery(e.target.value); if (view !== "home") navigate("home"); }}
-                className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
-              />
+            <div className="relative mb-3">
+              <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2">
+                {navSearchLoading ? (
+                  <svg className="w-4 h-4 text-blue-500 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                )}
+                <input
+                  type="text"
+                  placeholder={t.search}
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setNavSearchOpen(true); }}
+                  onFocus={() => setNavSearchOpen(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && searchQuery.trim()) {
+                      setNavSearchOpen(false);
+                      setIsMobileMenuOpen(false);
+                      navigate("browse-all");
+                      setTimeout(() => {
+                        setBrowseMatSearch(searchQuery);
+                        setBrowseMatList([]);
+                        fetchBrowseMaterials(searchQuery, "all");
+                        setSearchQuery("");
+                      }, 100);
+                    }
+                  }}
+                  className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => { setSearchQuery(""); setNavSearchResults([]); }}
+                    className="shrink-0 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 text-xs"
+                  >
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              {/* Mobile search results dropdown */}
+              {navSearchOpen && searchQuery.trim() && navSearchResults.length > 0 && (
+                <div className="mt-2 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[260px] overflow-y-auto">
+                  {navSearchResults.slice(0, 8).map((item, idx) => (
+                    <button
+                      key={`mob-${item.type}-${item.data.id}`}
+                      onClick={() => { handleNavSearchSelect(item); setIsMobileMenuOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${idx > 0 ? "border-t border-gray-50 dark:border-gray-800" : ""}`}
+                    >
+                      <span className="text-lg shrink-0">
+                        {item.type === "country" ? item.data.flag : item.type === "faculty" ? item.data.icon : getTypeInfo(item.data.type).icon}
+                      </span>
+                      <div className={`flex-1 min-w-0 ${isRTL ? "text-right" : "text-left"}`}>
+                        <div className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">
+                          {item.type === "country" ? (isRTL ? item.data.nameAr || item.data.name : item.data.name) : item.type === "faculty" ? (isRTL ? item.data.nameAr : item.data.name) : item.data.title}
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase shrink-0">
+                        {item.type === "country" ? t.searchCountries : item.type === "faculty" ? t.searchFaculties : t.searchMaterialsLabel}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button
