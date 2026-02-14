@@ -14,9 +14,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   manifest: '/manifest.json',
   appleWebApp: {
-    capable: true,
     statusBarStyle: 'default',
     title: 'Sudan Scholars Hub',
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
   },
   formatDetection: {
     telephone: false,

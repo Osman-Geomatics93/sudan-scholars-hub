@@ -786,6 +786,9 @@ const T = {
     tagInspiring: "Inspiring",
     tagAccessible: "Accessible",
     tagHeavyHomework: "Heavy Homework",
+    helpful: "Helpful",
+    notHelpful: "Not Helpful",
+    loginToVote: "Please log in to vote on reviews",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -1210,6 +1213,9 @@ const T = {
     tagInspiring: "ملهم",
     tagAccessible: "سهل التواصل",
     tagHeavyHomework: "واجبات كثيرة",
+    helpful: "مفيد",
+    notHelpful: "غير مفيد",
+    loginToVote: "يرجى تسجيل الدخول للتصويت على التقييمات",
   },
 };
 
@@ -1639,6 +1645,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [editingProfReview, setEditingProfReview] = useState(null);
   const [profAggregates, setProfAggregates] = useState({ avgRating: 0, avgDifficulty: 0, wouldTakeAgainPct: 0, totalCount: 0, tagCounts: {} });
   const [mostReviewedProfs, setMostReviewedProfs] = useState([]);
+  const [profReviewUserVotes, setProfReviewUserVotes] = useState({}); // { reviewId: true/false/null }
 
   // Sync with main app's theme system (next-themes)
   const { theme, setTheme } = useTheme();
@@ -3102,6 +3109,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         const data = await res.json();
         setProfReviewsList(data.reviews || []);
         setProfReviewsTotal(data.total || 0);
+        if (data.userVotes) setProfReviewUserVotes((prev) => ({ ...prev, ...data.userVotes }));
       }
       // Fetch aggregates
       const aggParams = new URLSearchParams(params);
@@ -3164,6 +3172,33 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         fetchMostReviewedProfs();
       }
     } catch (err) { showNotif("Error", "error"); }
+  };
+
+  const handleProfReviewVote = async (reviewId, isHelpful) => {
+    if (!isLoggedIn) {
+      showNotif(t.loginToVote, "error");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/study-hub/professor-reviews/${reviewId}/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isHelpful }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Update the review in the list with new counts
+        setProfReviewsList((prev) =>
+          prev.map((r) =>
+            r.id === reviewId
+              ? { ...r, helpfulCount: data.helpfulCount, unhelpfulCount: data.unhelpfulCount }
+              : r
+          )
+        );
+        // Update user's vote state
+        setProfReviewUserVotes((prev) => ({ ...prev, [reviewId]: data.userVote }));
+      }
+    } catch (err) { console.error("Vote error:", err); }
   };
 
   const countMats = (cId, uId, dId, sem, facId) => {
@@ -7217,6 +7252,33 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                           <span>🏛️ {review.universityName}</span>
                           <span>{new Date(review.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
                         </div>
+                        {/* Vote Buttons */}
+                        <div style={{ display: "flex", gap: 8, marginTop: 8, alignItems: "center" }}>
+                          <button
+                            onClick={() => handleProfReviewVote(review.id, true)}
+                            style={{
+                              display: "flex", alignItems: "center", gap: 4, padding: "4px 12px", borderRadius: 20,
+                              border: `1.5px solid ${profReviewUserVotes[review.id] === true ? "#16A34A" : (darkMode ? "#444" : "#e0e0e0")}`,
+                              background: profReviewUserVotes[review.id] === true ? "#16A34A18" : "transparent",
+                              color: profReviewUserVotes[review.id] === true ? "#16A34A" : (darkMode ? "#aaa" : "#666"),
+                              fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s",
+                            }}
+                          >
+                            <span>👍</span> {t.helpful} {(review.helpfulCount || 0) > 0 && <span style={{ fontWeight: 700 }}>({review.helpfulCount})</span>}
+                          </button>
+                          <button
+                            onClick={() => handleProfReviewVote(review.id, false)}
+                            style={{
+                              display: "flex", alignItems: "center", gap: 4, padding: "4px 12px", borderRadius: 20,
+                              border: `1.5px solid ${profReviewUserVotes[review.id] === false ? "#DC2626" : (darkMode ? "#444" : "#e0e0e0")}`,
+                              background: profReviewUserVotes[review.id] === false ? "#DC262618" : "transparent",
+                              color: profReviewUserVotes[review.id] === false ? "#DC2626" : (darkMode ? "#aaa" : "#666"),
+                              fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s",
+                            }}
+                          >
+                            <span>👎</span> {t.notHelpful} {(review.unhelpfulCount || 0) > 0 && <span style={{ fontWeight: 700 }}>({review.unhelpfulCount})</span>}
+                          </button>
+                        </div>
                       </div>
                       {isLoggedIn && currentUserId === review.userId && (
                         <div style={{ display: "flex", flexDirection: "column", gap: 6, flexShrink: 0 }}>
@@ -7242,6 +7304,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   params.set("offset", String(profReviewsList.length));
                   fetch(`/api/study-hub/professor-reviews?${params}`).then(r => r.json()).then(data => {
                     setProfReviewsList((prev) => [...prev, ...(data.reviews || [])]);
+                    if (data.userVotes) setProfReviewUserVotes((prev) => ({ ...prev, ...data.userVotes }));
                   });
                 }} style={{ ...S.viewAllBtn, padding: "12px 32px", background: "#C8956C" }}>
                   {t.loadMore} ({profReviewsTotal - profReviewsList.length})

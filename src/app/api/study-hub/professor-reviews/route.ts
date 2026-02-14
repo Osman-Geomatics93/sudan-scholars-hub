@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { professorReviewSchema } from '@/lib/validations/professor-review';
 import { requireAuth } from '@/lib/auth-utils';
+import { auth } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,7 +89,26 @@ export async function GET(request: NextRequest) {
       prisma.professorReview.count({ where }),
     ]);
 
-    return NextResponse.json({ reviews, total });
+    // Fetch current user's votes if logged in
+    let userVotes: Record<string, boolean> = {};
+    try {
+      const session = await auth();
+      if (session?.user?.email) {
+        const dbUser = await prisma.user.findUnique({ where: { email: session.user.email } });
+        if (dbUser) {
+          const reviewIds = reviews.map((r: { id: string }) => r.id);
+          if (reviewIds.length > 0) {
+            const votes = await prisma.professorReviewVote.findMany({
+              where: { userId: dbUser.id, reviewId: { in: reviewIds } },
+              select: { reviewId: true, isHelpful: true },
+            });
+            votes.forEach((v) => { userVotes[v.reviewId] = v.isHelpful; });
+          }
+        }
+      }
+    } catch { /* not logged in, skip */ }
+
+    return NextResponse.json({ reviews, total, userVotes });
   } catch (error) {
     console.error('Error fetching professor reviews:', error);
     return NextResponse.json(

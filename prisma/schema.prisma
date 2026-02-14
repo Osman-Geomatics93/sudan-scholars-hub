@@ -62,7 +62,8 @@ model User {
   materialRequests  MaterialRequest[]
   studyGroups       StudyGroup[]
   collections       MaterialCollection[]
-  professorReviews  ProfessorReview[]
+  professorReviews      ProfessorReview[]
+  professorReviewVotes  ProfessorReviewVote[]
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -936,12 +937,31 @@ model ProfessorReview {
   status         MaterialStatus @default(PENDING)
   rejectionNote  String?
   reviewedAt     DateTime?
+  helpfulCount   Int            @default(0)
+  unhelpfulCount Int            @default(0)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+
+  votes          ProfessorReviewVote[]
 
   @@index([professorName])
   @@index([universityId])
   @@index([userId])
   @@index([createdAt])
   @@index([status])
+}
+
+// ============ PROFESSOR REVIEW VOTES ============
+model ProfessorReviewVote {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  isHelpful Boolean  // true = helpful, false = not helpful
+  createdAt DateTime @default(now())
+
+  user   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review ProfessorReview   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
+  @@index([reviewId])
 }
