@@ -12,10 +12,6 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: 'Sudan Scholars Hub | بوابة منح السودان',
-    template: '%s | Sudan Scholars Hub',
-  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -35,20 +31,6 @@ export const metadata: Metadata = {
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
-  description: 'Your gateway to scholarships and study opportunities for Sudanese students. Find fully funded scholarships in Turkey, UK, USA, Germany and more. | بوابتك للمنح الدراسية وفرص الدراسة للطلاب السودانيين',
-  keywords: [
-    'scholarships for Sudanese students',
-    'Sudan scholarships',
-    'Türkiye Burslari',
-    'Turkey scholarship',
-    'fully funded scholarships',
-    'study abroad Sudan',
-    'منح دراسية للسودانيين',
-    'منحة تركيا',
-    'منح دراسية ممولة بالكامل',
-    'الدراسة في الخارج',
-    'منح السودان',
-  ],
   authors: [{ name: 'Sudan Scholars Hub' }],
   creator: 'Sudan Scholars Hub',
   publisher: 'Sudan Scholars Hub',
@@ -63,37 +45,8 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    alternateLocale: 'ar_SD',
-    url: siteUrl,
-    siteName: 'Sudan Scholars Hub',
-    title: 'Sudan Scholars Hub | بوابة منح السودان',
-    description: 'Your gateway to scholarships and study opportunities for Sudanese students. Find fully funded scholarships worldwide.',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Sudan Scholars Hub - Scholarship Portal',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Sudan Scholars Hub | بوابة منح السودان',
-    description: 'Your gateway to scholarships and study opportunities for Sudanese students.',
-    images: ['/og-image.png'],
-  },
   verification: {
     google: 'googlec10fe0b2015cde8a',
-  },
-  alternates: {
-    languages: {
-      'en': `${siteUrl}/en`,
-      'ar': `${siteUrl}/ar`,
-    },
   },
 };
 
