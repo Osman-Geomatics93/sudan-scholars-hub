@@ -65,14 +65,15 @@ export async function GET(
       return NextResponse.json({ error: 'Not authorized' }, { status: 403 });
     }
 
-    // Hide correct answers if user hasn't submitted yet
     const isChallenger = battle.challengerId === userId;
     const hasSubmitted = isChallenger ? !!battle.challengerAnswers : !!battle.opponentAnswers;
     const questions = battle.questions as unknown as BattleQuestion[];
 
-    const sanitizedQuestions = hasSubmitted || battle.status === 'completed'
-      ? questions
-      : questions.map(q => ({ ...q, correctOption: undefined }));
+    // Only hide correct answers for pending battles (before acceptance).
+    // In active/completed battles, correct answers are needed for quiz feedback.
+    const sanitizedQuestions = battle.status === 'pending'
+      ? questions.map(q => ({ ...q, correctOption: undefined }))
+      : questions;
 
     return NextResponse.json({
       battle: {
