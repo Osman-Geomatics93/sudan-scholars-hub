@@ -2,6 +2,9 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { COUNTRIES } from "@/lib/constants/countries";
+import AIStudyAssistant from "@/components/study-hub/ai-study-assistant";
+import SmartFlashcards from "@/components/study-hub/smart-flashcards";
+import StudyPlanner from "@/components/study-hub/study-planner";
 
 
 const TELEGRAM_LINK = "https://t.me/+uNRCkz0PUfQzOGZk";
@@ -796,6 +799,13 @@ const T = {
     helpful: "Helpful",
     notHelpful: "Not Helpful",
     loginToVote: "Please log in to vote on reviews",
+    // AI Study Assistant, Flashcards, Study Planner
+    aiAssistant: "AI Study Assistant",
+    aiAssistantSub: "Chat with your study materials using AI",
+    flashcards: "Smart Flashcards",
+    flashcardsSub: "Spaced repetition for better memorization",
+    studyPlanner: "Study Planner",
+    studyPlannerSub: "Track study habits and analytics",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -1230,6 +1240,13 @@ const T = {
     helpful: "مفيد",
     notHelpful: "غير مفيد",
     loginToVote: "يرجى تسجيل الدخول للتصويت على التقييمات",
+    // AI Study Assistant, Flashcards, Study Planner
+    aiAssistant: "مساعد الدراسة الذكي",
+    aiAssistantSub: "تحدث مع موادك الدراسية باستخدام الذكاء الاصطناعي",
+    flashcards: "البطاقات الذكية",
+    flashcardsSub: "التكرار المتباعد لحفظ أفضل",
+    studyPlanner: "مخطط الدراسة",
+    studyPlannerSub: "تتبع عادات الدراسة والتحليلات",
   },
 };
 
@@ -4672,6 +4689,24 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             >
               ⭐ {t.profReviews}
             </button>
+            <button
+              onClick={() => { navigate("ai-assistant"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              🤖 {t.aiAssistant}
+            </button>
+            <button
+              onClick={() => { navigate("flashcards"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              🧠 {t.flashcards}
+            </button>
+            <button
+              onClick={() => { navigate("study-planner"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              📊 {t.studyPlanner}
+            </button>
             <a
               href={TELEGRAM_LINK}
               target="_blank"
@@ -4800,7 +4835,25 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>🏆 {t.leaderboard}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && (
+          {view === "ai-assistant" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>🤖 {t.aiAssistant}</span>
+            </>
+          )}
+          {view === "flashcards" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>🧠 {t.flashcards}</span>
+            </>
+          )}
+          {view === "study-planner" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📊 {t.studyPlanner}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -4914,6 +4967,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >⭐ {t.profReviews}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(16,185,129,0.4)", background: "rgba(16,185,129,0.15)" }} onClick={() => navigate("ai-assistant")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >🤖 {t.aiAssistant}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.15)" }} onClick={() => navigate("flashcards")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(139,92,246,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(139,92,246,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >🧠 {t.flashcards}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(59,130,246,0.4)", background: "rgba(59,130,246,0.15)" }} onClick={() => navigate("study-planner")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(59,130,246,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(59,130,246,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >📊 {t.studyPlanner}</button>
               </div>
 
               {/* Inline Platform Stats */}
@@ -7619,6 +7684,27 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 </button>
               </div>
             )}
+          </div>
+        )}
+
+        {/* === AI STUDY ASSISTANT VIEW === */}
+        {view === "ai-assistant" && (
+          <div>
+            <AIStudyAssistant locale={locale} userId={currentUserId} />
+          </div>
+        )}
+
+        {/* === SMART FLASHCARDS VIEW === */}
+        {view === "flashcards" && (
+          <div>
+            <SmartFlashcards locale={locale} userId={currentUserId} />
+          </div>
+        )}
+
+        {/* === STUDY PLANNER VIEW === */}
+        {view === "study-planner" && (
+          <div>
+            <StudyPlanner locale={locale} userId={currentUserId} />
           </div>
         )}
 
