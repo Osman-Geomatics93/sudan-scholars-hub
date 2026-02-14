@@ -131,8 +131,9 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error('Error creating professor review:', error);
+    const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to submit review' },
+      { error: `Failed to submit review: ${message}` },
       { status: 500 }
     );
   }
