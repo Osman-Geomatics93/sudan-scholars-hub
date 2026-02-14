@@ -6147,12 +6147,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 onClick={() => { setExamsList([]); fetchExams(examSearch, examFilterType, examFilterYear); }}
                 style={{ ...S.viewAllBtn, padding: "12px 24px", background: "#DC2626" }}
               >🔍</button>
-              {selectedSemester && (
-                <button
-                  onClick={() => { if (requireLogin()) return; setShowExamModal(true); }}
-                  style={{ ...S.viewAllBtn, padding: "12px 24px", background: "linear-gradient(135deg, #DC2626, #991B1B)" }}
-                >📤 {t.uploadExam}</button>
-              )}
+              <button
+                onClick={() => { if (requireLogin()) return; if (selectedSemester) setShowExamModal(true); else { navigate("home"); showNotif(t.selectSemesterFirst, "error"); } }}
+                style={{ ...S.viewAllBtn, padding: "12px 24px", background: "linear-gradient(135deg, #DC2626, #991B1B)" }}
+              >📤 {t.uploadExam}</button>
             </div>
 
             {/* Exam Type filter chips */}
@@ -6205,11 +6203,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <span style={{ fontSize: 48 }}>📝</span>
                 <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.noExams}</h3>
                 <p style={{ color: "#888", fontSize: 14, margin: 0 }}>{t.noExamsDesc}</p>
-                {selectedSemester && (
-                  <button onClick={() => { if (!requireLogin()) setShowExamModal(true); }} style={{ ...S.viewAllBtn, marginTop: 16, background: "linear-gradient(135deg, #DC2626, #991B1B)" }}>
-                    📤 {t.uploadFirstExam}
-                  </button>
-                )}
+                <button onClick={() => { if (!requireLogin()) { if (selectedSemester) setShowExamModal(true); else { navigate("home"); showNotif(t.selectSemesterFirst, "error"); } } }} style={{ ...S.viewAllBtn, marginTop: 16, background: "linear-gradient(135deg, #DC2626, #991B1B)" }}>
+                  📤 {t.uploadFirstExam}
+                </button>
               </div>
             ) : (
               <div className="studyhub-mat-list" style={S.matList}>
