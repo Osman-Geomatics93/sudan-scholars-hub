@@ -73,6 +73,10 @@ model User {
   studyExams            StudyExam[]
   smartStudyPaths       SmartStudyPath[]
   topicMasteries        TopicMastery[]
+  focusIsland           FocusIsland?
+  battleQuestions       BattleQuestion[]
+  battlesAsChallenger   Battle[]  @relation("challenger")
+  battlesAsOpponent     Battle[]  @relation("opponent")
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -1186,4 +1190,66 @@ model TopicMastery {
 
   @@unique([userId, subject, topic])
   @@index([userId])
+}
+
+// ============ FOCUS ISLAND ============
+model FocusIsland {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  level          Int      @default(1)
+  growthPoints   Int      @default(0)
+  totalStudyMin  Int      @default(0)
+  theme          String   @default("forest")
+  buildings      Json     @default("[]")
+  weather        String   @default("sunny")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+}
+
+// ============ BATTLE ARENA ============
+model BattleQuestion {
+  id            String   @id @default(cuid())
+  userId        String
+  subject       String
+  question      String   @db.Text
+  optionA       String
+  optionB       String
+  optionC       String
+  optionD       String
+  correctOption String
+  difficulty    String   @default("medium")
+  usedCount     Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([subject])
+  @@index([difficulty])
+}
+
+model Battle {
+  id                String    @id @default(cuid())
+  challengerId      String
+  opponentId        String
+  subject           String
+  status            String    @default("pending")
+  questions         Json      @default("[]")
+  challengerAnswers Json?
+  opponentAnswers   Json?
+  challengerScore   Int?
+  opponentScore     Int?
+  winnerId          String?
+  createdAt         DateTime  @default(now())
+  completedAt       DateTime?
+
+  challenger User @relation("challenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  opponent   User @relation("opponent", fields: [opponentId], references: [id], onDelete: Cascade)
+
+  @@index([challengerId])
+  @@index([opponentId])
+  @@index([status])
+  @@index([createdAt])
 }
