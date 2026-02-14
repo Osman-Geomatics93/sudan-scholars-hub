@@ -750,6 +750,12 @@ const T = {
     urgencyMedium: "Soon",
     urgencyLow: "Upcoming",
     urgencySafe: "Plenty of time",
+    examPlannerLogin: "Sign in to use Exam Planner",
+    examPlannerLoginSub: "Track your exams, get smart study plans, and never miss a deadline.",
+    examPlannerFeature1: "Countdown timers for each exam",
+    examPlannerFeature2: "Smart study plan generation",
+    examPlannerFeature3: "Urgency-based color coding",
+    examPlannerFeature4: "Track multiple exams at once",
     // Professor Reviews
     profReviews: "Professor Reviews",
     profReviewsSub: "Rate and review your professors",
@@ -1178,6 +1184,12 @@ const T = {
     urgencyMedium: "قريب",
     urgencyLow: "قادم",
     urgencySafe: "وقت كافٍ",
+    examPlannerLogin: "سجّل الدخول لاستخدام مخطط الامتحانات",
+    examPlannerLoginSub: "تتبع امتحاناتك، احصل على خطط دراسة ذكية، ولا تفوّت أي موعد.",
+    examPlannerFeature1: "عداد تنازلي لكل امتحان",
+    examPlannerFeature2: "توليد خطط دراسة ذكية",
+    examPlannerFeature3: "ترميز لوني حسب الاستعجال",
+    examPlannerFeature4: "تتبع عدة امتحانات في وقت واحد",
     // Professor Reviews
     profReviews: "تقييمات الأساتذة",
     profReviewsSub: "قيّم واكتب مراجعة عن أساتذتك",
@@ -7146,77 +7158,156 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: isRTL ? "flex-start" : "flex-end", marginBottom: 20 }}>
-              <button onClick={() => { setEditingPlannerExam(null); setPlannerForm({ name: "", date: "", subject: "", color: "#0891B2" }); setShowPlannerModal(true); }}
-                style={{ ...S.viewAllBtn, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>+ {t.addExam}</button>
-            </div>
+            {!isLoggedIn ? (
+              <div style={{
+                background: darkMode ? "#1e1e2e" : "white", borderRadius: 24, overflow: "hidden",
+                boxShadow: "0 8px 40px rgba(0,0,0,0.08)", border: `1px solid ${darkMode ? "#333" : "#e8ddd0"}`,
+                textAlign: "center", padding: "clamp(32px, 5vw, 56px) clamp(20px, 4vw, 40px)",
+                position: "relative",
+              }}>
+                {/* Background decorations */}
+                <div style={{ position: "absolute", top: -40, [isRTL ? "left" : "right"]: -30, fontSize: 140, opacity: 0.04, pointerEvents: "none" }}>📅</div>
+                <div style={{ position: "absolute", bottom: -20, [isRTL ? "right" : "left"]: -20, fontSize: 100, opacity: 0.04, pointerEvents: "none" }}>🔒</div>
 
-            {plannerExams.length === 0 ? (
-              <div style={{ ...S.myEmptyCard, borderColor: "#0891B240" }}>
-                <span style={{ fontSize: 52, display: "block", marginBottom: 12, opacity: 0.5 }}>📅</span>
-                <h3 style={{ color: darkMode ? "#fff" : "#1B3A4B", margin: "0 0 8px", fontSize: 18, fontWeight: 800 }}>{t.noExamsPlanner}</h3>
-                <p style={{ color: "#888", fontSize: 14, margin: "0 0 16px" }}>{t.addFirstExam}</p>
-                <button onClick={() => setShowPlannerModal(true)} style={{ ...S.viewAllBtn, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>+ {t.addExam}</button>
+                {/* Lock icon */}
+                <div style={{
+                  width: 80, height: 80, borderRadius: "50%", margin: "0 auto 24px",
+                  background: "linear-gradient(135deg, #0891B215, #0E749025)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  border: "2px solid #0891B230",
+                }}>
+                  <span style={{ fontSize: 36 }}>🔒</span>
+                </div>
+
+                <h3 style={{
+                  fontSize: "clamp(20px, 3vw, 26px)", fontWeight: 900, margin: "0 0 12px",
+                  color: darkMode ? "#fff" : "#1B3A4B", lineHeight: 1.3,
+                }}>{t.examPlannerLogin}</h3>
+                <p style={{
+                  fontSize: "clamp(13px, 2vw, 15px)", color: darkMode ? "#aaa" : "#6B7280",
+                  maxWidth: 420, margin: "0 auto 32px", lineHeight: 1.7,
+                }}>{t.examPlannerLoginSub}</p>
+
+                {/* Feature highlights */}
+                <div style={{
+                  display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12,
+                  maxWidth: 520, margin: "0 auto 36px",
+                }}>
+                  {[
+                    { icon: "⏱️", text: t.examPlannerFeature1, color: "#0891B2" },
+                    { icon: "📚", text: t.examPlannerFeature2, color: "#16A34A" },
+                    { icon: "🎨", text: t.examPlannerFeature3, color: "#EAB308" },
+                    { icon: "📋", text: t.examPlannerFeature4, color: "#8B5CF6" },
+                  ].map((f, i) => (
+                    <div key={i} style={{
+                      display: "flex", alignItems: "center", gap: 10, padding: "12px 16px",
+                      borderRadius: 14, background: darkMode ? "#2a2a3a" : "#FDFBF9",
+                      border: `1px solid ${darkMode ? "#333" : "#f0e8de"}`,
+                      textAlign: isRTL ? "right" : "left",
+                    }}>
+                      <span style={{
+                        fontSize: 20, width: 36, height: 36, borderRadius: 10,
+                        background: f.color + "15", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                      }}>{f.icon}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: darkMode ? "#ccc" : "#4B5563", lineHeight: 1.4 }}>{f.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Sign in button */}
+                <a
+                  href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 36px",
+                    borderRadius: 14, background: "linear-gradient(135deg, #0891B2, #0E7490)",
+                    color: "white", fontSize: 16, fontWeight: 800, textDecoration: "none",
+                    boxShadow: "0 4px 16px rgba(8,145,178,0.3)", transition: "all 0.2s",
+                    fontFamily: "inherit",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(8,145,178,0.4)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(8,145,178,0.3)"; }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" />
+                  </svg>
+                  {t.signIn}
+                </a>
               </div>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-                {[...plannerExams].sort((a, b) => new Date(a.date) - new Date(b.date)).map((exam) => {
-                  const cd = plannerCountdowns[exam.id] || getCountdown(exam.date);
-                  const urgColor = getUrgencyColor(cd.days);
-                  const plan = generateStudyPlan(exam);
-                  const totalDays = Math.max(1, Math.ceil((new Date(exam.date) - new Date(exam.date.replace(/-\d{2}$/, "-01"))) / 86400000) + 30);
-                  const elapsed = totalDays - cd.days;
-                  const progressPct = cd.isPassed ? 100 : Math.min(100, Math.max(0, (elapsed / totalDays) * 100));
-                  return (
-                    <div key={exam.id} style={{ background: darkMode ? "#1e1e2e" : "white", borderRadius: 18, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, [isRTL ? "borderRight" : "borderLeft"]: `5px solid ${exam.color || urgColor}` }}>
-                      <div style={{ padding: "20px 22px" }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                          <h4 style={{ fontSize: 17, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", margin: 0 }}>{exam.name}</h4>
-                          <span style={{ padding: "3px 12px", borderRadius: 50, fontSize: 11, fontWeight: 700, background: urgColor + "18", color: urgColor }}>{getUrgencyLabel(cd.days)}</span>
-                        </div>
-                        {exam.subject && <p style={{ fontSize: 12, color: "#888", margin: "0 0 12px" }}>📖 {exam.subject}</p>}
+              <>
+              <div style={{ display: "flex", justifyContent: isRTL ? "flex-start" : "flex-end", marginBottom: 20 }}>
+                <button onClick={() => { setEditingPlannerExam(null); setPlannerForm({ name: "", date: "", subject: "", color: "#0891B2" }); setShowPlannerModal(true); }}
+                  style={{ ...S.viewAllBtn, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>+ {t.addExam}</button>
+              </div>
 
-                        {/* Countdown */}
-                        <div style={{ textAlign: "center", marginBottom: 14 }}>
-                          {cd.isPassed ? (
-                            <span style={{ fontSize: 20, fontWeight: 900, color: "#6B7280" }}>{t.examPassed}</span>
-                          ) : cd.isToday ? (
-                            <span style={{ fontSize: 24, fontWeight: 900, color: "#DC2626" }}>🔴 {t.examToday}</span>
-                          ) : (
-                            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
-                              <div><span style={{ display: "block", fontSize: 32, fontWeight: 900, color: urgColor }}>{cd.days}</span><span style={{ fontSize: 11, color: "#888", fontWeight: 700 }}>{t.daysLeft}</span></div>
-                              <div><span style={{ display: "block", fontSize: 32, fontWeight: 900, color: urgColor }}>{cd.hours}</span><span style={{ fontSize: 11, color: "#888", fontWeight: 700 }}>{t.hoursLeft}</span></div>
+              {plannerExams.length === 0 ? (
+                <div style={{ ...S.myEmptyCard, borderColor: "#0891B240" }}>
+                  <span style={{ fontSize: 52, display: "block", marginBottom: 12, opacity: 0.5 }}>📅</span>
+                  <h3 style={{ color: darkMode ? "#fff" : "#1B3A4B", margin: "0 0 8px", fontSize: 18, fontWeight: 800 }}>{t.noExamsPlanner}</h3>
+                  <p style={{ color: "#888", fontSize: 14, margin: "0 0 16px" }}>{t.addFirstExam}</p>
+                  <button onClick={() => setShowPlannerModal(true)} style={{ ...S.viewAllBtn, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>+ {t.addExam}</button>
+                </div>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+                  {[...plannerExams].sort((a, b) => new Date(a.date) - new Date(b.date)).map((exam) => {
+                    const cd = plannerCountdowns[exam.id] || getCountdown(exam.date);
+                    const urgColor = getUrgencyColor(cd.days);
+                    const plan = generateStudyPlan(exam);
+                    const totalDays = Math.max(1, Math.ceil((new Date(exam.date) - new Date(exam.date.replace(/-\d{2}$/, "-01"))) / 86400000) + 30);
+                    const elapsed = totalDays - cd.days;
+                    const progressPct = cd.isPassed ? 100 : Math.min(100, Math.max(0, (elapsed / totalDays) * 100));
+                    return (
+                      <div key={exam.id} style={{ background: darkMode ? "#1e1e2e" : "white", borderRadius: 18, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, [isRTL ? "borderRight" : "borderLeft"]: `5px solid ${exam.color || urgColor}` }}>
+                        <div style={{ padding: "20px 22px" }}>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                            <h4 style={{ fontSize: 17, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", margin: 0 }}>{exam.name}</h4>
+                            <span style={{ padding: "3px 12px", borderRadius: 50, fontSize: 11, fontWeight: 700, background: urgColor + "18", color: urgColor }}>{getUrgencyLabel(cd.days)}</span>
+                          </div>
+                          {exam.subject && <p style={{ fontSize: 12, color: "#888", margin: "0 0 12px" }}>📖 {exam.subject}</p>}
+
+                          {/* Countdown */}
+                          <div style={{ textAlign: "center", marginBottom: 14 }}>
+                            {cd.isPassed ? (
+                              <span style={{ fontSize: 20, fontWeight: 900, color: "#6B7280" }}>{t.examPassed}</span>
+                            ) : cd.isToday ? (
+                              <span style={{ fontSize: 24, fontWeight: 900, color: "#DC2626" }}>🔴 {t.examToday}</span>
+                            ) : (
+                              <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+                                <div><span style={{ display: "block", fontSize: 32, fontWeight: 900, color: urgColor }}>{cd.days}</span><span style={{ fontSize: 11, color: "#888", fontWeight: 700 }}>{t.daysLeft}</span></div>
+                                <div><span style={{ display: "block", fontSize: 32, fontWeight: 900, color: urgColor }}>{cd.hours}</span><span style={{ fontSize: 11, color: "#888", fontWeight: 700 }}>{t.hoursLeft}</span></div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Progress bar */}
+                          <div style={{ height: 6, borderRadius: 3, background: darkMode ? "#333" : "#f0ebe4", marginBottom: 14 }}>
+                            <div style={{ height: "100%", borderRadius: 3, background: urgColor, width: `${progressPct}%`, transition: "width 0.5s" }} />
+                          </div>
+
+                          {/* Study Plan */}
+                          {!cd.isPassed && cd.days > 0 && (
+                            <div style={{ display: "flex", gap: 12, justifyContent: "center", fontSize: 12, color: "#888", marginBottom: 14 }}>
+                              <span>📚 {plan.blocks} {t.studyBlocks}</span>
+                              <span>⏰ {plan.hoursPerDay} {t.hoursPerDay}</span>
                             </div>
                           )}
-                        </div>
 
-                        {/* Progress bar */}
-                        <div style={{ height: 6, borderRadius: 3, background: darkMode ? "#333" : "#f0ebe4", marginBottom: 14 }}>
-                          <div style={{ height: "100%", borderRadius: 3, background: urgColor, width: `${progressPct}%`, transition: "width 0.5s" }} />
-                        </div>
-
-                        {/* Study Plan */}
-                        {!cd.isPassed && cd.days > 0 && (
-                          <div style={{ display: "flex", gap: 12, justifyContent: "center", fontSize: 12, color: "#888", marginBottom: 14 }}>
-                            <span>📚 {plan.blocks} {t.studyBlocks}</span>
-                            <span>⏰ {plan.hoursPerDay} {t.hoursPerDay}</span>
+                          {/* Actions */}
+                          <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+                            <button onClick={() => { setEditingPlannerExam(exam); setPlannerForm({ name: exam.name, date: exam.date, subject: exam.subject || "", color: exam.color || "#0891B2" }); setShowPlannerModal(true); }}
+                              style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${darkMode ? "#444" : "#e8ddd0"}`, background: "transparent", color: darkMode ? "#ccc" : "#666", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                            >✏️ {t.editExamPlanner}</button>
+                            <button onClick={() => deletePlannerExam(exam.id)}
+                              style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid #fecaca", background: "transparent", color: "#DC2626", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                            >🗑️ {t.deleteExamPlanner}</button>
                           </div>
-                        )}
-
-                        {/* Actions */}
-                        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-                          <button onClick={() => { setEditingPlannerExam(exam); setPlannerForm({ name: exam.name, date: exam.date, subject: exam.subject || "", color: exam.color || "#0891B2" }); setShowPlannerModal(true); }}
-                            style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${darkMode ? "#444" : "#e8ddd0"}`, background: "transparent", color: darkMode ? "#ccc" : "#666", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
-                          >✏️ {t.editExamPlanner}</button>
-                          <button onClick={() => deletePlannerExam(exam.id)}
-                            style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid #fecaca", background: "transparent", color: "#DC2626", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
-                          >🗑️ {t.deleteExamPlanner}</button>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
+              </>
             )}
           </div>
         )}
