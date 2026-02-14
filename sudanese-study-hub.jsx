@@ -5,6 +5,7 @@ import { COUNTRIES } from "@/lib/constants/countries";
 import AIStudyAssistant from "@/components/study-hub/ai-study-assistant";
 import SmartFlashcards from "@/components/study-hub/smart-flashcards";
 import StudyPlanner from "@/components/study-hub/study-planner";
+import SmartStudyPath from "@/components/study-hub/smart-study-path";
 
 
 const TELEGRAM_LINK = "https://t.me/+uNRCkz0PUfQzOGZk";
@@ -806,6 +807,8 @@ const T = {
     flashcardsSub: "Spaced repetition for better memorization",
     studyPlanner: "Study Planner",
     studyPlannerSub: "Track study habits and analytics",
+    smartStudyPath: "AI Study Path",
+    smartStudyPathSub: "Personalized study plan powered by AI",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -1247,6 +1250,8 @@ const T = {
     flashcardsSub: "التكرار المتباعد لحفظ أفضل",
     studyPlanner: "مخطط الدراسة",
     studyPlannerSub: "تتبع عادات الدراسة والتحليلات",
+    smartStudyPath: "مسار الدراسة الذكي",
+    smartStudyPathSub: "خطة دراسية مخصصة بالذكاء الاصطناعي",
   },
 };
 
@@ -4707,6 +4712,12 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             >
               📊 {t.studyPlanner}
             </button>
+            <button
+              onClick={() => { navigate("smart-path"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              🎯 {t.smartStudyPath}
+            </button>
             <a
               href={TELEGRAM_LINK}
               target="_blank"
@@ -4853,7 +4864,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>📊 {t.studyPlanner}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && (
+          {view === "smart-path" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>🎯 {t.smartStudyPath}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -4979,6 +4996,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(59,130,246,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(59,130,246,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >📊 {t.studyPlanner}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(245,158,11,0.4)", background: "rgba(245,158,11,0.15)" }} onClick={() => navigate("smart-path")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(245,158,11,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(245,158,11,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >🎯 {t.smartStudyPath}</button>
               </div>
 
               {/* Inline Platform Stats */}
@@ -7705,6 +7726,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {view === "study-planner" && (
           <div>
             <StudyPlanner locale={locale} userId={currentUserId} />
+          </div>
+        )}
+
+        {/* === SMART STUDY PATH VIEW === */}
+        {view === "smart-path" && (
+          <div>
+            <SmartStudyPath locale={locale} userId={currentUserId} />
           </div>
         )}
 
