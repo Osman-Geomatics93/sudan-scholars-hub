@@ -7189,32 +7189,6 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
                 />
               </div>
-              <div style={{ position: "relative", minWidth: 200 }}>
-                <span style={{ position: "absolute", [isRTL ? "right" : "left"]: 12, top: "50%", transform: "translateY(-50%)", fontSize: 14, pointerEvents: "none" }}>🏛️</span>
-                <select
-                  value={profFilterUniversity}
-                  onChange={(e) => { setProfFilterUniversity(e.target.value); fetchProfReviews(profSearchQuery, e.target.value); }}
-                  style={{
-                    width: "100%", padding: "10px 14px", [isRTL ? "paddingRight" : "paddingLeft"]: 34, borderRadius: 12,
-                    border: `1.5px solid ${profFilterUniversity ? "#C8956C" : (darkMode ? "#444" : "#e8ddd0")}`,
-                    background: profFilterUniversity ? (darkMode ? "#3a2a1a" : "#FFF8F0") : (darkMode ? "#2a2a3a" : "#FDFBF9"),
-                    color: profFilterUniversity ? "#C8956C" : (darkMode ? "#fff" : "#1B3A4B"),
-                    fontSize: 13, fontWeight: 600, fontFamily: "inherit", cursor: "pointer",
-                    appearance: "auto", outline: "none", transition: "all 0.2s",
-                  }}
-                  onFocus={(e) => { e.target.style.borderColor = "#C8956C"; }}
-                  onBlur={(e) => { if (!profFilterUniversity) e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
-                >
-                  <option value="">{t.allUniversitiesFilter}</option>
-                  {profUniversities.map((u) => (
-                    <option key={u.universityId} value={u.universityId}>{u.universityName}</option>
-                  ))}
-                </select>
-                {profFilterUniversity && (
-                  <button onClick={() => { setProfFilterUniversity(""); fetchProfReviews(profSearchQuery, ""); }}
-                    style={{ position: "absolute", [isRTL ? "left" : "right"]: 8, top: "50%", transform: "translateY(-50%)", background: darkMode ? "#444" : "#e8ddd0", border: "none", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 11, color: darkMode ? "#fff" : "#666", fontFamily: "inherit", lineHeight: 1 }}>✕</button>
-                )}
-              </div>
               <button onClick={() => fetchProfReviews(profSearchQuery, profFilterUniversity)}
                 style={{ ...S.viewAllBtn, padding: "12px 24px", background: "#C8956C" }}>🔍</button>
               {isLoggedIn && (
@@ -7222,6 +7196,38 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   style={{ ...S.viewAllBtn, padding: "12px 24px", background: "linear-gradient(135deg, #92400E, #C8956C)" }}>✍️ {t.writeProfReview}</button>
               )}
             </div>
+
+            {/* University Filter Chips */}
+            {profUniversities.length > 0 && (
+              <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: darkMode ? "#aaa" : "#888", [isRTL ? "marginLeft" : "marginRight"]: 4 }}>🏛️ {t.profFilterUniversity}:</span>
+                <button
+                  onClick={() => { if (profFilterUniversity) { setProfFilterUniversity(""); fetchProfReviews(profSearchQuery, ""); } }}
+                  style={{
+                    padding: "6px 16px", borderRadius: 50, fontSize: 12, fontWeight: 700, cursor: "pointer",
+                    border: `1.5px solid ${!profFilterUniversity ? "#C8956C" : (darkMode ? "#444" : "#e0d6cc")}`,
+                    background: !profFilterUniversity ? (darkMode ? "#C8956C22" : "#C8956C15") : "transparent",
+                    color: !profFilterUniversity ? "#C8956C" : (darkMode ? "#aaa" : "#777"),
+                    fontFamily: "inherit", transition: "all 0.2s",
+                  }}
+                >{t.allUniversitiesFilter}</button>
+                {profUniversities.map((u) => {
+                  const isActive = profFilterUniversity === u.universityId;
+                  return (
+                    <button key={u.universityId}
+                      onClick={() => { setProfFilterUniversity(isActive ? "" : u.universityId); fetchProfReviews(profSearchQuery, isActive ? "" : u.universityId); }}
+                      style={{
+                        padding: "6px 16px", borderRadius: 50, fontSize: 12, fontWeight: 700, cursor: "pointer",
+                        border: `1.5px solid ${isActive ? "#C8956C" : (darkMode ? "#444" : "#e0d6cc")}`,
+                        background: isActive ? (darkMode ? "#C8956C22" : "#C8956C15") : "transparent",
+                        color: isActive ? "#C8956C" : (darkMode ? "#aaa" : "#777"),
+                        fontFamily: "inherit", transition: "all 0.2s",
+                      }}
+                    >{u.universityName}</button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Aggregates */}
             {profAggregates.totalCount > 0 && (
