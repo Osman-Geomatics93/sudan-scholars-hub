@@ -4434,7 +4434,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               {t.finalGradeCalc}
             </button>
             <button
-              onClick={() => { navigate("pomodoro"); setIsMobileMenuOpen(false); }}
+              onClick={() => { window.open(`/${locale}/study-hub/pomodoro`, '_blank'); setIsMobileMenuOpen(false); }}
               className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors py-2.5 px-2`}
             >
               🍅 {t.pomodoroTimer}
@@ -4675,7 +4675,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >🎯 {t.finalGradeCalc}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(234,88,12,0.4)", background: "rgba(234,88,12,0.15)" }} onClick={() => navigate("pomodoro")}
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(234,88,12,0.4)", background: "rgba(234,88,12,0.15)" }} onClick={() => window.open(`/${locale}/study-hub/pomodoro`, '_blank')}
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(234,88,12,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(234,88,12,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >🍅 {t.pomodoroTimer}</button>
