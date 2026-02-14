@@ -1,5 +1,3 @@
-import { PDFParse } from 'pdf-parse';
-
 export async function extractTextFromPdfUrl(url: string): Promise<string> {
   const response = await fetch(url);
   if (!response.ok) {
@@ -9,6 +7,8 @@ export async function extractTextFromPdfUrl(url: string): Promise<string> {
   const arrayBuffer = await response.arrayBuffer();
   const data = new Uint8Array(arrayBuffer);
 
+  // Dynamic import to prevent pdf-parse from crashing Next.js worker processes
+  const { PDFParse } = await import('pdf-parse');
   const parser = new PDFParse({ data });
   const result = await parser.getText();
   await parser.destroy();
