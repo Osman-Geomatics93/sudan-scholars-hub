@@ -68,7 +68,7 @@ export async function GET(
     // Hide correct answers if user hasn't submitted yet
     const isChallenger = battle.challengerId === userId;
     const hasSubmitted = isChallenger ? !!battle.challengerAnswers : !!battle.opponentAnswers;
-    const questions = battle.questions as BattleQuestion[];
+    const questions = battle.questions as unknown as BattleQuestion[];
 
     const sanitizedQuestions = hasSubmitted || battle.status === 'completed'
       ? questions
@@ -182,7 +182,7 @@ export async function PATCH(
       }
 
       const answers = result.data.answers;
-      const questions = battle.questions as BattleQuestion[];
+      const questions = battle.questions as unknown as BattleQuestion[];
       const score = calculateScore(questions, answers);
 
       const updateData: Record<string, unknown> = {};
