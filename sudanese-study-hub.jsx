@@ -662,6 +662,25 @@ const T = {
     pastExamsBadge: "Past Exams Database",
     pastExamsHeroTitle: "Past Exams & Papers",
     pastExamsHeroSub: "Find midterms, finals, quizzes, and assignments from previous years",
+    // Grade Calculators
+    gpaCalculator: "GPA Calculator",
+    finalGradeCalc: "Final Grade Calculator",
+    finalGradeTitle: "Final Grade Calculator",
+    finalGradeSub: "Find out what grade you need on the final exam to reach your target",
+    currentGrade: "Current Grade",
+    finalWeight: "Final Exam Weight",
+    desiredGrade: "Desired Final Grade",
+    neededGrade: "Needed Grade",
+    youNeed: "You need",
+    onTheFinal: "on the final exam",
+    toGet: "to get",
+    impossibleGrade: "Impossible — maximum achievable grade is",
+    alreadyPassing: "You've already achieved your target! Even a 0% on the final gives you",
+    gradeScenarios: "Grade Scenarios",
+    openGpaCalc: "Open Full GPA Calculator",
+    toolsSection: "Student Tools",
+    targetGrade: "Target",
+    gradeNeeded: "Grade Needed on Final",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -962,6 +981,25 @@ const T = {
     pastExamsBadge: "بنك الامتحانات السابقة",
     pastExamsHeroTitle: "الامتحانات والأوراق السابقة",
     pastExamsHeroSub: "ابحث عن امتحانات نصفية ونهائية وكويزات وواجبات من سنوات سابقة",
+    // Grade Calculators
+    gpaCalculator: "حاسبة المعدل التراكمي",
+    finalGradeCalc: "حاسبة درجة الفاينال",
+    finalGradeTitle: "حاسبة درجة الامتحان النهائي",
+    finalGradeSub: "اكتشف الدرجة التي تحتاجها في الامتحان النهائي لتحقيق هدفك",
+    currentGrade: "درجتك الحالية",
+    finalWeight: "وزن الامتحان النهائي",
+    desiredGrade: "الدرجة المطلوبة",
+    neededGrade: "الدرجة المطلوبة",
+    youNeed: "تحتاج",
+    onTheFinal: "في الامتحان النهائي",
+    toGet: "للحصول على",
+    impossibleGrade: "مستحيل — أقصى درجة يمكن تحقيقها هي",
+    alreadyPassing: "لقد حققت هدفك بالفعل! حتى 0% في الامتحان النهائي ستعطيك",
+    gradeScenarios: "سيناريوهات الدرجات",
+    openGpaCalc: "فتح حاسبة المعدل التراكمي الكاملة",
+    toolsSection: "أدوات الطالب",
+    targetGrade: "الهدف",
+    gradeNeeded: "الدرجة المطلوبة في الفاينال",
   },
 };
 
@@ -1335,6 +1373,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [editingExam, setEditingExam] = useState(null);
   const [deleteExamConfirm, setDeleteExamConfirm] = useState(null);
   const [examSortOrder, setExamSortOrder] = useState("newest");
+
+  // Final Grade Calculator
+  const [finalGradeForm, setFinalGradeForm] = useState({ currentGrade: "", finalWeight: "", desiredGrade: "" });
+  const [finalGradeResult, setFinalGradeResult] = useState(null);
+  const [gradeScenarios, setGradeScenarios] = useState([]);
 
   // Sync with main app's theme system (next-themes)
   const { theme, setTheme } = useTheme();
@@ -2434,6 +2477,50 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       setExamSortOrder("newest");
       fetchExams("", "all", "");
     }
+    if (newView === "grade-calc") {
+      setFinalGradeForm({ currentGrade: "", finalWeight: "", desiredGrade: "" });
+      setFinalGradeResult(null);
+      setGradeScenarios([]);
+    }
+  };
+
+  // Final Grade Calculator functions
+  const calculateFinalGrade = (current, weight, desired) => {
+    const c = parseFloat(current);
+    const w = parseFloat(weight) / 100;
+    const d = parseFloat(desired);
+    if (isNaN(c) || isNaN(w) || isNaN(d) || w <= 0 || w > 1) return null;
+    const needed = (d - c * (1 - w)) / w;
+    const maxAchievable = c * (1 - w) + 100 * w;
+    const minAchievable = c * (1 - w);
+    if (d <= minAchievable) return { type: "already", needed: 0, minAchievable: Math.round(minAchievable * 10) / 10 };
+    if (needed > 100) return { type: "impossible", needed: Math.round(needed * 10) / 10, maxAchievable: Math.round(maxAchievable * 10) / 10 };
+    return { type: "ok", needed: Math.round(needed * 10) / 10 };
+  };
+
+  const generateScenarios = (current, weight) => {
+    const c = parseFloat(current);
+    const w = parseFloat(weight) / 100;
+    if (isNaN(c) || isNaN(w) || w <= 0 || w > 1) return [];
+    const targets = [50, 60, 70, 75, 80, 85, 90, 95, 100];
+    return targets.map((target) => {
+      const needed = (target - c * (1 - w)) / w;
+      const maxAchievable = c * (1 - w) + 100 * w;
+      const minAchievable = c * (1 - w);
+      let status = "ok";
+      let neededClamped = Math.round(needed * 10) / 10;
+      if (target <= minAchievable) { status = "already"; neededClamped = 0; }
+      else if (needed > 100) { status = "impossible"; }
+      return { target, needed: neededClamped, status, maxAchievable: Math.round(maxAchievable * 10) / 10 };
+    });
+  };
+
+  const handleFinalGradeCalc = () => {
+    const { currentGrade, finalWeight, desiredGrade } = finalGradeForm;
+    if (!currentGrade || !finalWeight || !desiredGrade) return;
+    const result = calculateFinalGrade(currentGrade, finalWeight, desiredGrade);
+    setFinalGradeResult(result);
+    setGradeScenarios(generateScenarios(currentGrade, finalWeight));
   };
 
   const countMats = (cId, uId, dId, sem, facId) => {
@@ -3157,6 +3244,65 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             border-radius: 12px !important;
           }
         }
+
+        /* === GRADE CALCULATOR SLIDER === */
+        .studyhub-grade-slider {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 8px;
+          border-radius: 99px;
+          background: linear-gradient(90deg, #e8e0f0, #d4c5f0);
+          outline: none;
+          transition: background 0.2s;
+        }
+        .dark .studyhub-grade-slider {
+          background: linear-gradient(90deg, #2d2d4a, #3d3d5c);
+        }
+        .studyhub-grade-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #7C3AED, #5B21B6);
+          cursor: pointer;
+          border: 3px solid white;
+          box-shadow: 0 2px 8px rgba(124,58,237,0.4);
+          transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .studyhub-grade-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.15);
+          box-shadow: 0 4px 16px rgba(124,58,237,0.5);
+        }
+        .studyhub-grade-slider::-moz-range-thumb {
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #7C3AED, #5B21B6);
+          cursor: pointer;
+          border: 3px solid white;
+          box-shadow: 0 2px 8px rgba(124,58,237,0.4);
+        }
+        .studyhub-grade-slider::-moz-range-track {
+          height: 8px;
+          border-radius: 99px;
+          background: linear-gradient(90deg, #e8e0f0, #d4c5f0);
+        }
+        .dark .studyhub-grade-slider::-moz-range-track {
+          background: linear-gradient(90deg, #2d2d4a, #3d3d5c);
+        }
+
+        /* Hide number input spinner arrows for cleaner look */
+        .studyhub-grade-slider + div input[type=number]::-webkit-outer-spin-button,
+        .studyhub-grade-slider + div input[type=number]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        /* Grade calc button pulse animation */
+        .studyhub-grade-calc-btn:not(:disabled):hover {
+          filter: brightness(1.08);
+        }
       ` }} />
 
       {notification && (
@@ -3761,6 +3907,12 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             >
               {t.pastExams}
             </button>
+            <button
+              onClick={() => { navigate("grade-calc"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              {t.finalGradeCalc}
+            </button>
             <a
               href={TELEGRAM_LINK}
               target="_blank"
@@ -3859,7 +4011,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>📝 {t.pastExams}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && (
+          {view === "grade-calc" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>🎯 {t.finalGradeCalc}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -3953,6 +4111,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(220,38,38,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(220,38,38,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >📝 {t.pastExams}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(22,163,74,0.4)", background: "rgba(22,163,74,0.15)" }} onClick={() => window.open(`/${locale}/gpa-calculator`, '_blank')}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(22,163,74,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(22,163,74,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >📊 {t.gpaCalculator}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(124,58,237,0.4)", background: "rgba(124,58,237,0.15)" }} onClick={() => navigate("grade-calc")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >🎯 {t.finalGradeCalc}</button>
               </div>
 
               {/* Inline Platform Stats */}
@@ -5290,6 +5456,301 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             )}
 
             {examsLoading && examsList.length === 0 && <LoadingSpinner text={t.loadingUniversities} />}
+          </div>
+        )}
+
+        {/* === FINAL GRADE CALCULATOR === */}
+        {view === "grade-calc" && (
+          <div>
+            {/* Banner */}
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, background: "linear-gradient(135deg, #4C1D95 0%, #7C3AED 100%)", marginBottom: 28 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>🎯</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>🎯</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.finalGradeTitle}</h2>
+                  <p style={S.myMatBannerSub}>{t.finalGradeSub}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Calculator Card */}
+            <div style={{ maxWidth: 560, margin: "0 auto" }}>
+              <div style={{
+                background: darkMode ? "#1e1e2e" : "white",
+                borderRadius: 20, padding: "32px 28px",
+                boxShadow: "0 8px 40px rgba(124,58,237,0.10), 0 1px 3px rgba(0,0,0,0.06)",
+                border: darkMode ? "1px solid #2d2d3d" : "1px solid rgba(124,58,237,0.12)",
+              }}>
+                {/* Section Header */}
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: "linear-gradient(135deg, #7C3AED, #5B21B6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>📐</div>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: darkMode ? "#e0e0e0" : "#1B3A4B" }}>{isRTL ? "أدخل بياناتك" : "Enter Your Grades"}</h3>
+                    <p style={{ margin: 0, fontSize: 12, color: "#888" }}>{isRTL ? "حرك المؤشر أو اكتب الرقم" : "Drag the slider or type a value"}</p>
+                  </div>
+                </div>
+
+                {[
+                  { key: "currentGrade", label: t.currentGrade, icon: "📊", min: 0, max: 100, step: 0.5, placeholder: "75", color: "#7C3AED" },
+                  { key: "finalWeight", label: t.finalWeight, icon: "⚖️", min: 10, max: 80, step: 5, placeholder: "40", color: "#8B5CF6" },
+                  { key: "desiredGrade", label: t.desiredGrade, icon: "🎯", min: 0, max: 100, step: 0.5, placeholder: "80", color: "#6D28D9" },
+                ].map((field, fi) => (
+                  <div key={field.key} style={{ marginBottom: fi < 2 ? 24 : 28 }}>
+                    {/* Label row with icon */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: darkMode ? "#c4b5fd" : "#4C1D95", display: "flex", alignItems: "center", gap: 6 }}>
+                        {field.icon} {field.label}
+                      </span>
+                      {/* Big value badge */}
+                      <span style={{
+                        fontSize: 22, fontWeight: 900, color: darkMode ? "#a78bfa" : field.color,
+                        minWidth: 60, textAlign: "center",
+                        letterSpacing: "-0.5px",
+                      }}>
+                        {finalGradeForm[field.key] || "—"}<span style={{ fontSize: 13, fontWeight: 600, opacity: 0.7 }}>%</span>
+                      </span>
+                    </div>
+                    {/* Slider */}
+                    <div style={{ position: "relative", marginBottom: 8 }}>
+                      <input
+                        type="range" min={field.min} max={field.max} step={field.step}
+                        value={finalGradeForm[field.key] || field.min}
+                        onChange={(e) => setFinalGradeForm({ ...finalGradeForm, [field.key]: e.target.value })}
+                        className="studyhub-grade-slider"
+                        style={{ width: "100%", height: 8, accentColor: field.color, cursor: "pointer" }}
+                      />
+                      {/* Min/Max labels */}
+                      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4 }}>
+                        <span style={{ fontSize: 11, color: "#aaa", fontWeight: 600 }}>{field.min}%</span>
+                        <span style={{ fontSize: 11, color: "#aaa", fontWeight: 600 }}>{field.max}%</span>
+                      </div>
+                    </div>
+                    {/* Direct input field */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ position: "relative", flex: 1 }}>
+                        <input
+                          type="number" min={field.min} max={field.max} step={field.step}
+                          value={finalGradeForm[field.key]}
+                          onChange={(e) => setFinalGradeForm({ ...finalGradeForm, [field.key]: e.target.value })}
+                          placeholder={field.placeholder}
+                          style={{
+                            width: "100%", padding: "12px 40px 12px 16px",
+                            borderRadius: 12, border: darkMode ? "2px solid #3d3d5c" : "2px solid #e8e0f0",
+                            background: darkMode ? "#16162a" : "#faf7ff",
+                            fontSize: 16, fontWeight: 700, fontFamily: "inherit",
+                            color: darkMode ? "#e0e0e0" : "#1B3A4B",
+                            outline: "none", transition: "all 0.2s",
+                            textAlign: isRTL ? "right" : "left",
+                            boxSizing: "border-box",
+                          }}
+                          onFocus={(e) => { e.target.style.borderColor = field.color; e.target.style.boxShadow = `0 0 0 4px ${field.color}15`; e.target.style.background = darkMode ? "#1a1a35" : "#f5f0ff"; }}
+                          onBlur={(e) => { e.target.style.borderColor = darkMode ? "#3d3d5c" : "#e8e0f0"; e.target.style.boxShadow = "none"; e.target.style.background = darkMode ? "#16162a" : "#faf7ff"; }}
+                        />
+                        <span style={{ position: "absolute", [isRTL ? "left" : "right"]: 14, top: "50%", transform: "translateY(-50%)", fontSize: 14, fontWeight: 700, color: "#aaa", pointerEvents: "none" }}>%</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Divider */}
+                <div style={{ height: 1, background: darkMode ? "#2d2d3d" : "linear-gradient(90deg, transparent, #e8e0f0, transparent)", margin: "4px 0 24px" }} />
+
+                {/* Calculate Button */}
+                <button
+                  onClick={handleFinalGradeCalc}
+                  disabled={!finalGradeForm.currentGrade || !finalGradeForm.finalWeight || !finalGradeForm.desiredGrade}
+                  className="studyhub-grade-calc-btn"
+                  style={{
+                    width: "100%", padding: "16px 24px", borderRadius: 14, border: "none",
+                    background: (!finalGradeForm.currentGrade || !finalGradeForm.finalWeight || !finalGradeForm.desiredGrade)
+                      ? (darkMode ? "#2d2d3d" : "#e0d8f0")
+                      : "linear-gradient(135deg, #7C3AED, #5B21B6)",
+                    color: (!finalGradeForm.currentGrade || !finalGradeForm.finalWeight || !finalGradeForm.desiredGrade)
+                      ? "#999" : "white",
+                    cursor: (!finalGradeForm.currentGrade || !finalGradeForm.finalWeight || !finalGradeForm.desiredGrade) ? "not-allowed" : "pointer",
+                    fontSize: 17, fontWeight: 800, fontFamily: "inherit",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    boxShadow: (!finalGradeForm.currentGrade || !finalGradeForm.finalWeight || !finalGradeForm.desiredGrade)
+                      ? "none" : "0 6px 24px rgba(124,58,237,0.35)",
+                    transition: "all 0.3s",
+                    letterSpacing: "0.3px",
+                  }}
+                  onMouseEnter={(e) => { if (finalGradeForm.currentGrade && finalGradeForm.finalWeight && finalGradeForm.desiredGrade) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(124,58,237,0.45)"; } }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = (finalGradeForm.currentGrade && finalGradeForm.finalWeight && finalGradeForm.desiredGrade) ? "0 6px 24px rgba(124,58,237,0.35)" : "none"; }}
+                >
+                  🎯 {t.neededGrade}
+                </button>
+              </div>
+
+              {/* Result Display */}
+              {finalGradeResult && (() => {
+                const resultColor =
+                  finalGradeResult.type === "already" ? "#16A34A" :
+                  finalGradeResult.type === "impossible" ? "#DC2626" :
+                  finalGradeResult.needed <= 60 ? "#16A34A" :
+                  finalGradeResult.needed <= 80 ? "#EAB308" :
+                  finalGradeResult.needed <= 95 ? "#EA580C" : "#DC2626";
+                const resultBg =
+                  finalGradeResult.type === "already" ? (darkMode ? "rgba(22,163,74,0.08)" : "rgba(22,163,74,0.04)") :
+                  finalGradeResult.type === "impossible" ? (darkMode ? "rgba(220,38,38,0.08)" : "rgba(220,38,38,0.04)") :
+                  (darkMode ? "rgba(124,58,237,0.06)" : "rgba(124,58,237,0.03)");
+                return (
+                  <div style={{
+                    marginTop: 24, borderRadius: 20, overflow: "hidden",
+                    background: darkMode ? "#1e1e2e" : "white",
+                    boxShadow: `0 8px 40px ${resultColor}15, 0 1px 3px rgba(0,0,0,0.06)`,
+                    border: `2px solid ${resultColor}30`,
+                  }}>
+                    {/* Color bar at top */}
+                    <div style={{ height: 5, background: `linear-gradient(90deg, ${resultColor}, ${resultColor}88)` }} />
+                    <div style={{ padding: "32px 28px", textAlign: "center", background: resultBg }}>
+                      {finalGradeResult.type === "already" ? (
+                        <>
+                          <div style={{ fontSize: 56, marginBottom: 12, lineHeight: 1 }}>🎉</div>
+                          <p style={{ fontSize: 18, fontWeight: 800, color: "#16A34A", margin: "0 0 6px" }}>
+                            {t.alreadyPassing}
+                          </p>
+                          <span style={{ fontSize: 32, fontWeight: 900, color: "#16A34A" }}>{finalGradeResult.minAchievable}%</span>
+                        </>
+                      ) : finalGradeResult.type === "impossible" ? (
+                        <>
+                          <div style={{ fontSize: 56, marginBottom: 12, lineHeight: 1 }}>😰</div>
+                          <p style={{ fontSize: 18, fontWeight: 800, color: "#DC2626", margin: "0 0 8px" }}>
+                            {t.impossibleGrade}
+                          </p>
+                          <span style={{ fontSize: 32, fontWeight: 900, color: "#DC2626" }}>{finalGradeResult.maxAchievable}%</span>
+                          <p style={{ fontSize: 13, color: "#888", margin: "12px 0 0", fontWeight: 600 }}>
+                            ({t.youNeed} {finalGradeResult.needed}% {t.onTheFinal})
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p style={{ fontSize: 13, color: "#888", margin: "0 0 6px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px" }}>{t.youNeed}</p>
+                          <div style={{
+                            fontSize: 72, fontWeight: 900, color: resultColor,
+                            lineHeight: 1, margin: "4px 0 8px",
+                            textShadow: `0 4px 20px ${resultColor}25`,
+                          }}>
+                            {finalGradeResult.needed}<span style={{ fontSize: 36 }}>%</span>
+                          </div>
+                          <p style={{ fontSize: 14, color: "#888", margin: 0, fontWeight: 600 }}>
+                            {t.onTheFinal} {t.toGet} <span style={{ color: darkMode ? "#c4b5fd" : "#7C3AED", fontWeight: 800 }}>{finalGradeForm.desiredGrade}%</span>
+                          </p>
+                          {/* Difficulty indicator */}
+                          <div style={{
+                            display: "inline-flex", alignItems: "center", gap: 6,
+                            marginTop: 16, padding: "8px 18px", borderRadius: 50,
+                            background: `${resultColor}15`, border: `1px solid ${resultColor}30`,
+                          }}>
+                            <span style={{ fontSize: 16 }}>
+                              {finalGradeResult.needed <= 60 ? "😊" : finalGradeResult.needed <= 80 ? "💪" : finalGradeResult.needed <= 95 ? "😤" : "🔥"}
+                            </span>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: resultColor }}>
+                              {finalGradeResult.needed <= 60 ? (isRTL ? "سهل" : "Easy") :
+                               finalGradeResult.needed <= 80 ? (isRTL ? "ممكن" : "Doable") :
+                               finalGradeResult.needed <= 95 ? (isRTL ? "صعب" : "Hard") :
+                               (isRTL ? "صعب جداً" : "Very Hard")}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Scenarios Table */}
+              {gradeScenarios.length > 0 && (
+                <div style={{
+                  marginTop: 24, borderRadius: 20, overflow: "hidden",
+                  background: darkMode ? "#1e1e2e" : "white",
+                  boxShadow: "0 4px 24px rgba(124,58,237,0.08), 0 1px 3px rgba(0,0,0,0.04)",
+                  border: darkMode ? "1px solid #2d2d3d" : "1px solid rgba(124,58,237,0.1)",
+                }}>
+                  <div style={{
+                    padding: "18px 24px",
+                    background: "linear-gradient(135deg, #4C1D95, #7C3AED)",
+                    display: "flex", alignItems: "center", gap: 10,
+                  }}>
+                    <span style={{ fontSize: 20 }}>📊</span>
+                    <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: "white" }}>{t.gradeScenarios}</h3>
+                  </div>
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                      <thead>
+                        <tr style={{ background: darkMode ? "#16162a" : "#f8f5ff" }}>
+                          <th style={{ padding: "14px 20px", textAlign: isRTL ? "right" : "left", fontSize: 12, fontWeight: 800, color: darkMode ? "#a78bfa" : "#6D28D9", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: darkMode ? "2px solid #2d2d3d" : "2px solid #ede8f7" }}>{t.targetGrade}</th>
+                          <th style={{ padding: "14px 20px", textAlign: isRTL ? "right" : "left", fontSize: 12, fontWeight: 800, color: darkMode ? "#a78bfa" : "#6D28D9", textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: darkMode ? "2px solid #2d2d3d" : "2px solid #ede8f7" }}>{t.gradeNeeded}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {gradeScenarios.map((row, idx) => {
+                          const isHighlighted = row.target === parseFloat(finalGradeForm.desiredGrade);
+                          const rowColor = row.status === "already" ? "#16A34A" :
+                                           row.status === "impossible" ? "#DC2626" :
+                                           row.needed <= 60 ? "#16A34A" :
+                                           row.needed <= 80 ? "#EAB308" :
+                                           row.needed <= 95 ? "#EA580C" : "#DC2626";
+                          const borderSide = isRTL ? "borderRight" : "borderLeft";
+                          return (
+                            <tr key={row.target} style={{
+                              background: isHighlighted
+                                ? (darkMode ? "rgba(124,58,237,0.12)" : "rgba(124,58,237,0.05)")
+                                : idx % 2 === 0 ? (darkMode ? "#1e1e2e" : "white") : (darkMode ? "#1a1a2e" : "#fcfaff"),
+                              [borderSide]: isHighlighted ? `4px solid #7C3AED` : `4px solid transparent`,
+                              transition: "all 0.15s",
+                            }}>
+                              <td style={{ padding: "13px 20px", fontSize: 15, fontWeight: isHighlighted ? 800 : 600, color: isHighlighted ? "#7C3AED" : (darkMode ? "#d0d0d0" : "#1B3A4B") }}>
+                                {isHighlighted && <span style={{ marginInlineEnd: 6 }}>👉</span>}
+                                {row.target}%
+                              </td>
+                              <td style={{ padding: "13px 20px" }}>
+                                {row.status === "already" ? (
+                                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 8, background: `${rowColor}15`, color: rowColor, fontSize: 13, fontWeight: 700 }}>
+                                    ✅ {isRTL ? "محقق بالفعل" : "Already achieved"}
+                                  </span>
+                                ) : row.status === "impossible" ? (
+                                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 8, background: `${rowColor}15`, color: rowColor, fontSize: 13, fontWeight: 700 }}>
+                                    ❌ {row.needed}% — {isRTL ? "مستحيل" : "Impossible"}
+                                  </span>
+                                ) : (
+                                  <span style={{ fontSize: 15, fontWeight: 800, color: rowColor }}>{row.needed}%</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Link to Full GPA Calculator */}
+              <div style={{ textAlign: "center", marginTop: 28, marginBottom: 36 }}>
+                <a
+                  href={`/${locale}/gpa-calculator`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 10,
+                    padding: "16px 32px", borderRadius: 14,
+                    background: "linear-gradient(135deg, #16A34A, #15803D)",
+                    color: "white", fontWeight: 800, fontSize: 15,
+                    textDecoration: "none",
+                    boxShadow: "0 6px 24px rgba(22,163,74,0.3)",
+                    transition: "all 0.3s", fontFamily: "inherit",
+                    letterSpacing: "0.3px",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(22,163,74,0.4)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(22,163,74,0.3)"; }}
+                >
+                  📊 {t.openGpaCalc}
+                  <span style={{ fontSize: 18, marginInlineStart: 2 }}>{isRTL ? "←" : "→"}</span>
+                </a>
+              </div>
+            </div>
           </div>
         )}
 
