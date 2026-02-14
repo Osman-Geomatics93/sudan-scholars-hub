@@ -627,6 +627,12 @@ const T = {
     createGroupSuccess: "Group created!",
     noGroups: "No study groups yet",
     members: "members",
+    editGroup: "Edit Group",
+    deleteGroup: "Delete",
+    deleteGroupConfirm: "Are you sure you want to delete this group?",
+    groupUpdated: "Group updated!",
+    groupDeleted: "Group deleted!",
+    createdBy: "Created by",
     // Collections
     collections: "Collections",
     createCollection: "Create Collection",
@@ -1038,6 +1044,12 @@ const T = {
     createGroupSuccess: "تم إنشاء المجموعة!",
     noGroups: "لا توجد مجموعات دراسية بعد",
     members: "أعضاء",
+    editGroup: "تعديل المجموعة",
+    deleteGroup: "حذف",
+    deleteGroupConfirm: "هل أنت متأكد من حذف هذه المجموعة؟",
+    groupUpdated: "تم تحديث المجموعة!",
+    groupDeleted: "تم حذف المجموعة!",
+    createdBy: "أنشأها",
     // Collections
     collections: "المجموعات",
     createCollection: "إنشاء مجموعة",
@@ -1535,6 +1547,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [groupForm, setGroupForm] = useState({ name: "", description: "", platform: "whatsapp", chatLink: "" });
   const [groupsList, setGroupsList] = useState([]);
   const [groupsLoading, setGroupsLoading] = useState(false);
+  const [editingGroup, setEditingGroup] = useState(null);
   // Collections
   const [showCollectionModal, setShowCollectionModal] = useState(false);
   const [collectionForm, setCollectionForm] = useState({ name: "", description: "", isPublic: false });
@@ -2534,6 +2547,35 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         fetchGroups();
       }
     } catch (err) { console.error("Group error:", err); }
+  };
+
+  const handleEditGroup = async () => {
+    if (!editingGroup || !groupForm.name || !groupForm.chatLink) { showNotif(t.fillRequired, "error"); return; }
+    try {
+      const res = await fetch(`/api/study-hub/groups/${editingGroup.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(groupForm),
+      });
+      if (res.ok) {
+        showNotif(t.groupUpdated);
+        setShowGroupModal(false);
+        setEditingGroup(null);
+        setGroupForm({ name: "", description: "", platform: "whatsapp", chatLink: "" });
+        fetchGroups();
+      }
+    } catch (err) { console.error("Edit group error:", err); }
+  };
+
+  const handleDeleteGroup = async (groupId) => {
+    if (!confirm(t.deleteGroupConfirm)) return;
+    try {
+      const res = await fetch(`/api/study-hub/groups/${groupId}`, { method: "DELETE" });
+      if (res.ok) {
+        showNotif(t.groupDeleted);
+        fetchGroups();
+      }
+    } catch (err) { console.error("Delete group error:", err); }
   };
 
   // Collections
@@ -6617,7 +6659,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             </div>
             {isLoggedIn && (
-              <button onClick={() => setShowGroupModal(true)} style={{ ...S.uploadBtn, marginBottom: 20, marginLeft: 0 }}>
+              <button onClick={() => { setEditingGroup(null); setGroupForm({ name: "", description: "", platform: "whatsapp", chatLink: "" }); setShowGroupModal(true); }} style={{ ...S.uploadBtn, marginBottom: 20, marginLeft: 0 }}>
                 + {t.createGroup}
               </button>
             )}
@@ -6630,8 +6672,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
                 {groupsList.map((group) => {
                   const platformIcons = { whatsapp: "💬", telegram: "📱", discord: "🎮" };
+                  const platformColors = { whatsapp: "#25D366", telegram: "#0088cc", discord: "#5865F2" };
+                  const isOwner = isLoggedIn && group.createdBy === currentUserId;
                   return (
-                    <div key={group.id} style={{ ...S.recentCard, borderTop: "3px solid #C8956C" }}>
+                    <div key={group.id} style={{ ...S.recentCard, borderTop: `3px solid ${platformColors[group.platform] || "#C8956C"}` }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ fontSize: 28 }}>{platformIcons[group.platform] || "💬"}</span>
                         <div style={{ flex: 1 }}>
@@ -6639,14 +6683,32 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                           {group.description && <p style={{ fontSize: 12, color: "#888", margin: "4px 0 0" }}>{group.description}</p>}
                         </div>
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#888" }}>
-                        <span>{platformIcons[group.platform]} {group.platform}</span>
+                      <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8, fontSize: 12, color: "#888", margin: "8px 0" }}>
+                        <span style={{ background: `${platformColors[group.platform] || "#C8956C"}18`, color: platformColors[group.platform] || "#C8956C", padding: "2px 8px", borderRadius: 12, fontWeight: 600 }}>{group.platform}</span>
                         <span>👤 {group.memberCount} {t.members}</span>
-                        {group.creator && <span>by {group.creator.name}</span>}
+                        {group.creator && <span>{t.createdBy} {group.creator.name}</span>}
                       </div>
-                      <a href={group.chatLink} target="_blank" rel="noopener noreferrer" style={{ ...S.dlBtn, textAlign: "center", display: "block", fontSize: 13 }}>
-                        {t.joinGroup} →
-                      </a>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        <a href={group.chatLink} target="_blank" rel="noopener noreferrer" style={{ ...S.dlBtn, textAlign: "center", flex: 1, display: "block", fontSize: 13 }}>
+                          {t.joinGroup} →
+                        </a>
+                      </div>
+                      {isOwner && (
+                        <div style={{ display: "flex", gap: 6, marginTop: 8, borderTop: "1px solid #f0ebe4", paddingTop: 8 }}>
+                          <button
+                            onClick={() => {
+                              setEditingGroup(group);
+                              setGroupForm({ name: group.name, description: group.description || "", platform: group.platform, chatLink: group.chatLink });
+                              setShowGroupModal(true);
+                            }}
+                            style={{ ...S.viewAllBtn, padding: "6px 14px", fontSize: 12 }}
+                          >✏️ {t.editGroup}</button>
+                          <button
+                            onClick={() => handleDeleteGroup(group.id)}
+                            style={{ ...S.viewAllBtn, padding: "6px 14px", fontSize: 12, background: "#ef4444", color: "#fff", border: "none", borderRadius: 6 }}
+                          >🗑️ {t.deleteGroup}</button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -7719,13 +7781,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         </div>
       )}
 
-      {/* GROUP CREATION MODAL */}
+      {/* GROUP CREATION/EDIT MODAL */}
       {showGroupModal && (
-        <div className="studyhub-overlay" style={S.overlay} onClick={() => setShowGroupModal(false)}>
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowGroupModal(false); setEditingGroup(null); setGroupForm({ name: "", description: "", platform: "whatsapp", chatLink: "" }); }}>
           <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 460 }} onClick={(e) => e.stopPropagation()}>
             <div className="studyhub-modal-head" style={S.modalHead}>
-              <h3 style={S.modalTitle}>👥 {t.createGroup}</h3>
-              <button onClick={() => setShowGroupModal(false)} style={S.modalX}>✕</button>
+              <h3 style={S.modalTitle}>👥 {editingGroup ? t.editGroup : t.createGroup}</h3>
+              <button onClick={() => { setShowGroupModal(false); setEditingGroup(null); setGroupForm({ name: "", description: "", platform: "whatsapp", chatLink: "" }); }} style={S.modalX}>✕</button>
             </div>
             <div style={S.modalBody}>
               <label style={{ ...S.label, marginTop: 0 }}>{t.groupName} <span style={{ color: "#C8956C" }}>*</span></label>
@@ -7749,7 +7811,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
               <label style={S.label}>{t.chatLink} <span style={{ color: "#C8956C" }}>*</span></label>
               <input type="url" value={groupForm.chatLink} onChange={(e) => setGroupForm({ ...groupForm, chatLink: e.target.value })} style={S.input} placeholder="https://..." />
-              <button onClick={handleSubmitGroup} style={S.submitBtn}>{t.createGroup}</button>
+              <button onClick={editingGroup ? handleEditGroup : handleSubmitGroup} style={S.submitBtn}>{editingGroup ? t.editGroup : t.createGroup}</button>
             </div>
           </div>
         </div>
