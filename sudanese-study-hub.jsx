@@ -672,6 +672,9 @@ const T = {
     uploadPastExam: "Upload Past Exam",
     examSubmitted: "Past exam submitted for review!",
     examDeleted: "Past exam deleted",
+    examUpdated: "Exam updated successfully",
+    editExam: "Edit Exam",
+    deleteExamConfirmMsg: "Are you sure you want to delete this exam?",
     allExamTypes: "All Types",
     allYears: "All Years",
     examViews: "views",
@@ -1093,6 +1096,9 @@ const T = {
     uploadPastExam: "رفع امتحان سابق",
     examSubmitted: "تم إرسال الامتحان للمراجعة!",
     examDeleted: "تم حذف الامتحان",
+    examUpdated: "تم تحديث الامتحان بنجاح",
+    editExam: "تعديل الامتحان",
+    deleteExamConfirmMsg: "هل أنت متأكد من حذف هذا الامتحان؟",
     allExamTypes: "جميع الأنواع",
     allYears: "جميع السنوات",
     examViews: "مشاهدات",
@@ -2166,7 +2172,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         setEditingExam(null);
         resetExamForm();
         setShowExamModal(false);
-        showNotif(`${t.examSubmitted}\n${t.pendingReviewMsg}`);
+        showNotif(t.examUpdated);
         fetchExams();
       } catch {
         showNotif(t.fillRequired, "error");
@@ -6112,15 +6118,51 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                           <span>{exam.countryName} › {exam.universityName}</span>
                         </div>
                       </div>
-                      <a
-                        href={exam.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => trackExamAction(exam.id, "download")}
-                        style={{ ...S.viewAllBtn, padding: "8px 16px", fontSize: 12, background: "linear-gradient(135deg, #DC2626, #991B1B)", textDecoration: "none", whiteSpace: "nowrap" }}
-                      >
-                        {exam.type === "folder" ? t.openFolder : t.download}
-                      </a>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6, flexShrink: 0 }}>
+                        <a
+                          href={exam.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => trackExamAction(exam.id, "download")}
+                          style={{ ...S.viewAllBtn, padding: "8px 16px", fontSize: 12, background: "linear-gradient(135deg, #DC2626, #991B1B)", textDecoration: "none", whiteSpace: "nowrap" }}
+                        >
+                          {exam.type === "folder" ? t.openFolder : t.download}
+                        </a>
+                        {isLoggedIn && currentUserId && exam.userId === currentUserId && (
+                          <div style={{ display: "flex", gap: 4 }}>
+                            <button
+                              onClick={() => {
+                                setEditingExam(exam);
+                                setExamForm({
+                                  title: exam.title || "",
+                                  type: exam.type || "pdf",
+                                  url: exam.url || "",
+                                  description: exam.description || "",
+                                  subject: exam.subject || "",
+                                  facultyId: exam.facultyId || "",
+                                  specialtyId: exam.specialtyId || "",
+                                  uploaderRole: exam.uploaderRole || "student",
+                                  examType: exam.examType || "MIDTERM",
+                                  year: exam.year || `${new Date().getFullYear()}`,
+                                  professorName: exam.professorName || "",
+                                });
+                                setShowExamModal(true);
+                              }}
+                              style={S.editBtn}
+                              title={t.editExam}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = "#f0e8df"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                            >✏️</button>
+                            <button
+                              onClick={() => setDeleteExamConfirm({ id: exam.id, title: exam.title })}
+                              style={S.delBtn}
+                              title={t.deleteExamConfirmMsg}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = "#fee2e2"; e.currentTarget.style.borderColor = "#fca5a5"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "#e0d5c8"; }}
+                            >🗑️</button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
