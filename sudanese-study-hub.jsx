@@ -3120,13 +3120,20 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   }, []);
 
   const handleSubmitProfReview = async () => {
-    if (!profReviewForm.professorName || !profReviewForm.courseName || profReviewForm.rating === 0 || profReviewForm.difficulty === 0) {
+    if (!profReviewForm.professorName || !profReviewForm.universityName || !profReviewForm.courseName || profReviewForm.rating === 0 || profReviewForm.difficulty === 0) {
       showNotif(t.fillRequired, "error"); return;
     }
+    if (requireLogin()) return;
     try {
+      // Ensure universityId is set
+      const payload = {
+        ...profReviewForm,
+        universityId: profReviewForm.universityId || profReviewForm.universityName.toLowerCase().replace(/\s+/g, "_"),
+        comment: profReviewForm.comment || null,
+      };
       const url = editingProfReview ? `/api/study-hub/professor-reviews/${editingProfReview.id}` : "/api/study-hub/professor-reviews";
       const method = editingProfReview ? "PATCH" : "POST";
-      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(profReviewForm) });
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       if (res.ok) {
         showNotif(editingProfReview ? t.profReviewUpdated : t.profReviewSuccess);
         setShowProfReviewModal(false);
