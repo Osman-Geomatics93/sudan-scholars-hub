@@ -585,6 +585,7 @@ const T = {
     yourPoints: "Your Points",
     rank: "Rank",
     topContributors: "Top Contributors",
+    viewFullLeaderboard: "View Full Leaderboard",
     pointsEarned: "points earned",
     // Search
     sortBy: "Sort by",
@@ -1012,6 +1013,7 @@ const T = {
     yourPoints: "نقاطك",
     rank: "الترتيب",
     topContributors: "أبرز المساهمين",
+    viewFullLeaderboard: "عرض لوحة المتصدرين كاملة",
     pointsEarned: "نقاط مكتسبة",
     // Search
     sortBy: "ترتيب حسب",
@@ -1555,6 +1557,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [editingRequest, setEditingRequest] = useState(null);
   // Leaderboard
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [leaderboardTotal, setLeaderboardTotal] = useState(0);
   const [userPoints, setUserPoints] = useState(0);
   const [userBadge, setUserBadge] = useState(null);
   // Search
@@ -2547,10 +2550,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   // Leaderboard
   const fetchLeaderboard = useCallback(async () => {
     try {
-      const res = await fetch("/api/study-hub/leaderboard");
+      const res = await fetch("/api/study-hub/leaderboard?limit=20");
       if (res.ok) {
         const data = await res.json();
         setLeaderboardData(data.users || []);
+        setLeaderboardTotal(data.total || 0);
         if (isLoggedIn && currentUserId) {
           const me = data.users.find((u) => u.id === currentUserId);
           if (me) { setUserPoints(me.points); setUserBadge(me.badge); }
@@ -4778,7 +4782,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>⭐ {t.profReviews}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && (
+          {view === "leaderboard" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>🏆 {t.leaderboard}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -5625,29 +5635,52 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             )}
 
-            {/* ══════ 6. TOP CONTRIBUTORS — Leaderboard teaser ══════ */}
+            {/* ══════ 6. TOP CONTRIBUTORS — Leaderboard teaser (top 3 podium) ══════ */}
             {leaderboardData.length > 0 && (
               <div className="studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
                 <div style={S.sectionHead}>
                   <h3 style={S.sectionHeadTitle}>🏆 {t.topContributors}</h3>
                   <div style={S.sectionDivider} />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  {leaderboardData.slice(0, 5).map((user, idx) => (
-                    <div key={user.id} style={{ ...S.leaderRow, ...(idx === 0 ? S.leaderRowFirst : {}) }}>
-                      <span style={S.leaderRank}>{idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`}</span>
-                      {user.image ? (
-                        <img src={user.image} alt="" style={S.leaderAvatar} referrerPolicy="no-referrer" />
-                      ) : (
-                        <div style={{ ...S.leaderAvatar, background: "#C8956C", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800 }}>
-                          {(user.name || "U").charAt(0).toUpperCase()}
+                {/* Podium — top 3 */}
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 12, marginBottom: 16, padding: "10px 0" }}>
+                  {[1, 0, 2].map((idx) => {
+                    const user = leaderboardData[idx];
+                    if (!user) return null;
+                    const isFirst = idx === 0;
+                    const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉";
+                    const podiumHeight = idx === 0 ? 100 : idx === 1 ? 76 : 60;
+                    const avatarSize = isFirst ? 56 : 44;
+                    const podiumBg = idx === 0 ? "linear-gradient(135deg, #FEF3C7, #FDE68A)" : idx === 1 ? "linear-gradient(135deg, #E5E7EB, #D1D5DB)" : "linear-gradient(135deg, #FED7AA, #FDBA74)";
+                    return (
+                      <div key={user.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: isFirst ? 120 : 100 }}>
+                        <div style={{ position: "relative", marginBottom: 8 }}>
+                          {user.image ? (
+                            <img src={user.image} alt="" style={{ width: avatarSize, height: avatarSize, borderRadius: "50%", objectFit: "cover", border: `3px solid ${idx === 0 ? "#F59E0B" : idx === 1 ? "#9CA3AF" : "#F97316"}` }} referrerPolicy="no-referrer" />
+                          ) : (
+                            <div style={{ width: avatarSize, height: avatarSize, borderRadius: "50%", background: "#C8956C", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: isFirst ? 20 : 16, fontWeight: 800, border: `3px solid ${idx === 0 ? "#F59E0B" : idx === 1 ? "#9CA3AF" : "#F97316"}` }}>
+                              {(user.name || "U").charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                          <span style={{ position: "absolute", bottom: -4, left: "50%", transform: "translateX(-50%)", fontSize: isFirst ? 20 : 16 }}>{medal}</span>
                         </div>
-                      )}
-                      <span style={{ flex: 1, fontWeight: 700, fontSize: 14, color: "#1B3A4B" }}>{user.name || "Anonymous"}</span>
-                      <span style={S.leaderPoints}>{user.points} {t.points}</span>
-                    </div>
-                  ))}
+                        <span style={{ fontSize: isFirst ? 13 : 12, fontWeight: 700, color: darkMode ? "#fff" : "#1B3A4B", textAlign: "center", lineHeight: 1.3, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block" }}>{user.name || "Anonymous"}</span>
+                        <span style={{ fontSize: 12, fontWeight: 800, color: "#C8956C", marginTop: 2 }}>{user.points} {t.points}</span>
+                        <div style={{ width: "100%", height: podiumHeight, borderRadius: "12px 12px 0 0", background: podiumBg, marginTop: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <span style={{ fontSize: isFirst ? 28 : 22, fontWeight: 900, color: darkMode ? "#1B3A4B" : "#1B3A4B", opacity: 0.3 }}>#{idx + 1}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
+                {/* View full leaderboard */}
+                {leaderboardTotal > 3 && (
+                  <div style={{ textAlign: "center", marginTop: 8 }}>
+                    <button style={S.viewAllBtn} onClick={() => navigate("leaderboard")}>
+                      🏆 {t.viewFullLeaderboard} ({leaderboardTotal}) →
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -7183,6 +7216,60 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* === FULL LEADERBOARD VIEW === */}
+        {view === "leaderboard" && (
+          <div>
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, background: "linear-gradient(135deg, #92400E 0%, #C8956C 100%)", marginBottom: 28 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, position: "relative", zIndex: 1 }}>
+                <span style={{ fontSize: 32 }}>🏆</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.leaderboard}</h2>
+                  <p style={S.myMatBannerSub}>{t.topContributors} — {leaderboardTotal} {isRTL ? "مساهم" : "contributors"}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Full list */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {leaderboardData.map((user, idx) => (
+                <div key={user.id} style={{
+                  ...S.leaderRow,
+                  ...(idx === 0 ? S.leaderRowFirst : {}),
+                  background: idx === 0 ? "linear-gradient(135deg, #FEF3C7, #FDE68A)" : idx === 1 ? (darkMode ? "#2a2a3a" : "linear-gradient(135deg, #F3F4F6, #E5E7EB)") : idx === 2 ? (darkMode ? "#2a2a3a" : "linear-gradient(135deg, #FFF7ED, #FED7AA)") : (darkMode ? "#1e1e2e" : "#FAF6F1"),
+                  border: idx < 3 ? `1px solid ${idx === 0 ? "#F59E0B40" : idx === 1 ? "#9CA3AF40" : "#F9731640"}` : `1px solid ${darkMode ? "#333" : "#ede5da"}`,
+                }}>
+                  <span style={{ ...S.leaderRank, color: idx === 0 ? "#F59E0B" : idx === 1 ? "#6B7280" : idx === 2 ? "#F97316" : (darkMode ? "#aaa" : "#888") }}>
+                    {idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`}
+                  </span>
+                  {user.image ? (
+                    <img src={user.image} alt="" style={S.leaderAvatar} referrerPolicy="no-referrer" />
+                  ) : (
+                    <div style={{ ...S.leaderAvatar, background: "#C8956C", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800 }}>
+                      {(user.name || "U").charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <span style={{ flex: 1, fontWeight: 700, fontSize: 14, color: darkMode ? "#fff" : "#1B3A4B" }}>{user.name || "Anonymous"}</span>
+                  {user.badge && <span style={{ fontSize: 16 }}>{user.badge}</span>}
+                  <span style={S.leaderPoints}>{user.points} {t.points}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Load More */}
+            {leaderboardTotal > leaderboardData.length && (
+              <div style={{ textAlign: "center", marginTop: 24 }}>
+                <button onClick={() => {
+                  fetch(`/api/study-hub/leaderboard?limit=20&offset=${leaderboardData.length}`).then(r => r.json()).then(data => {
+                    setLeaderboardData((prev) => [...prev, ...(data.users || [])]);
+                  });
+                }} style={{ ...S.viewAllBtn, padding: "12px 32px", background: "#C8956C" }}>
+                  {t.loadMore} ({leaderboardTotal - leaderboardData.length})
+                </button>
               </div>
             )}
           </div>
