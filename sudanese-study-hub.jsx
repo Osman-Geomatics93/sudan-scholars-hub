@@ -1490,6 +1490,12 @@ const DS = {
   footerText: { fontSize: 11, color: "#aaa", fontWeight: 600 },
 };
 
+const formatCount = (n) => {
+  if (n < 1000) return String(n);
+  const k = n / 1000;
+  return k % 1 === 0 ? `${k}k` : `${parseFloat(k.toFixed(1))}k`;
+};
+
 export default function SudaneseStudyHub({ locale = "en" }) {
   const [view, setView] = useState("home");
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -1646,6 +1652,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [profAggregates, setProfAggregates] = useState({ avgRating: 0, avgDifficulty: 0, wouldTakeAgainPct: 0, totalCount: 0, tagCounts: {} });
   const [mostReviewedProfs, setMostReviewedProfs] = useState([]);
   const [profReviewUserVotes, setProfReviewUserVotes] = useState({}); // { reviewId: true/false/null }
+  const [profUniversities, setProfUniversities] = useState([]); // [{ universityId, universityName }]
 
   // Sync with main app's theme system (next-themes)
   const { theme, setTheme } = useTheme();
@@ -2835,6 +2842,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       setProfFilterUniversity("");
       fetchProfReviews("", "");
       fetchMostReviewedProfs();
+      fetchProfUniversities();
     }
   };
 
@@ -3133,6 +3141,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     } catch (err) { console.error("Failed to fetch most reviewed:", err); }
   }, []);
 
+  const fetchProfUniversities = useCallback(async () => {
+    try {
+      const res = await fetch("/api/study-hub/professor-reviews?universities=true");
+      if (res.ok) {
+        const data = await res.json();
+        setProfUniversities(data.universities || []);
+      }
+    } catch (err) { console.error("Failed to fetch prof universities:", err); }
+  }, []);
+
   const handleSubmitProfReview = async () => {
     if (!profReviewForm.professorName || !profReviewForm.universityName || !profReviewForm.courseName || profReviewForm.rating === 0 || profReviewForm.difficulty === 0) {
       showNotif(t.fillRequired, "error"); return;
@@ -3155,6 +3173,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         setProfReviewForm({ professorName: "", universityId: "", universityName: "", courseName: "", rating: 0, difficulty: 0, wouldTakeAgain: true, comment: "", tags: [], isAnonymous: false });
         fetchProfReviews(profSearchQuery, profFilterUniversity);
         fetchMostReviewedProfs();
+        fetchProfUniversities();
       } else {
         const data = await res.json();
         showNotif(data.error || "Error", "error");
@@ -3170,6 +3189,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         showNotif(t.profReviewDeleted);
         fetchProfReviews(profSearchQuery, profFilterUniversity);
         fetchMostReviewedProfs();
+        fetchProfUniversities();
       }
     } catch (err) { showNotif("Error", "error"); }
   };
@@ -7167,6 +7187,23 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
                 />
               </div>
+              <select
+                value={profFilterUniversity}
+                onChange={(e) => { setProfFilterUniversity(e.target.value); fetchProfReviews(profSearchQuery, e.target.value); }}
+                style={{
+                  padding: "10px 14px", borderRadius: 12, border: `1.5px solid ${darkMode ? "#444" : "#e8ddd0"}`,
+                  background: darkMode ? "#2a2a3a" : "#FDFBF9", color: darkMode ? "#fff" : "#1B3A4B",
+                  fontSize: 13, fontWeight: 600, fontFamily: "inherit", cursor: "pointer", minWidth: 180,
+                  appearance: "auto", outline: "none", transition: "border-color 0.2s",
+                }}
+                onFocus={(e) => { e.target.style.borderColor = "#C8956C"; }}
+                onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
+              >
+                <option value="">{t.allUniversitiesFilter}</option>
+                {profUniversities.map((u) => (
+                  <option key={u.universityId} value={u.universityId}>{u.universityName}</option>
+                ))}
+              </select>
               <button onClick={() => fetchProfReviews(profSearchQuery, profFilterUniversity)}
                 style={{ ...S.viewAllBtn, padding: "12px 24px", background: "#C8956C" }}>🔍</button>
               {isLoggedIn && (
@@ -7255,28 +7292,32 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                         {/* Vote Buttons */}
                         <div style={{ display: "flex", gap: 8, marginTop: 8, alignItems: "center" }}>
                           <button
-                            onClick={() => handleProfReviewVote(review.id, true)}
+                            {...(isLoggedIn ? { onClick: () => handleProfReviewVote(review.id, true) } : {})}
+                            title={!isLoggedIn ? t.loginToVote : undefined}
                             style={{
                               display: "flex", alignItems: "center", gap: 4, padding: "4px 12px", borderRadius: 20,
                               border: `1.5px solid ${profReviewUserVotes[review.id] === true ? "#16A34A" : (darkMode ? "#444" : "#e0e0e0")}`,
                               background: profReviewUserVotes[review.id] === true ? "#16A34A18" : "transparent",
                               color: profReviewUserVotes[review.id] === true ? "#16A34A" : (darkMode ? "#aaa" : "#666"),
-                              fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s",
+                              fontSize: 12, fontWeight: 600, cursor: isLoggedIn ? "pointer" : "not-allowed", fontFamily: "inherit", transition: "all 0.2s",
+                              opacity: isLoggedIn ? 1 : 0.5,
                             }}
                           >
-                            <span>👍</span> {t.helpful} {(review.helpfulCount || 0) > 0 && <span style={{ fontWeight: 700 }}>({review.helpfulCount})</span>}
+                            <span>👍</span> {t.helpful} {(review.helpfulCount || 0) > 0 && <span style={{ fontWeight: 700 }}>({formatCount(review.helpfulCount)})</span>}
                           </button>
                           <button
-                            onClick={() => handleProfReviewVote(review.id, false)}
+                            {...(isLoggedIn ? { onClick: () => handleProfReviewVote(review.id, false) } : {})}
+                            title={!isLoggedIn ? t.loginToVote : undefined}
                             style={{
                               display: "flex", alignItems: "center", gap: 4, padding: "4px 12px", borderRadius: 20,
                               border: `1.5px solid ${profReviewUserVotes[review.id] === false ? "#DC2626" : (darkMode ? "#444" : "#e0e0e0")}`,
                               background: profReviewUserVotes[review.id] === false ? "#DC262618" : "transparent",
                               color: profReviewUserVotes[review.id] === false ? "#DC2626" : (darkMode ? "#aaa" : "#666"),
-                              fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s",
+                              fontSize: 12, fontWeight: 600, cursor: isLoggedIn ? "pointer" : "not-allowed", fontFamily: "inherit", transition: "all 0.2s",
+                              opacity: isLoggedIn ? 1 : 0.5,
                             }}
                           >
-                            <span>👎</span> {t.notHelpful} {(review.unhelpfulCount || 0) > 0 && <span style={{ fontWeight: 700 }}>({review.unhelpfulCount})</span>}
+                            <span>👎</span> {t.notHelpful} {(review.unhelpfulCount || 0) > 0 && <span style={{ fontWeight: 700 }}>({formatCount(review.unhelpfulCount)})</span>}
                           </button>
                         </div>
                       </div>

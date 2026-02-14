@@ -17,6 +17,24 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0', 10);
     const aggregatesOnly = searchParams.get('aggregatesOnly') === 'true';
     const mostReviewed = searchParams.get('mostReviewed') === 'true';
+    const universities = searchParams.get('universities') === 'true';
+
+    // Distinct universities from approved reviews (for filter dropdown)
+    if (universities) {
+      const results = await prisma.professorReview.findMany({
+        where: { status: 'APPROVED' },
+        select: { universityId: true, universityName: true },
+        distinct: ['universityId'],
+        orderBy: { universityName: 'asc' },
+      });
+
+      return NextResponse.json({
+        universities: results.map((r) => ({
+          universityId: r.universityId,
+          universityName: r.universityName,
+        })),
+      });
+    }
 
     // Most reviewed professors — aggregation query (only APPROVED)
     if (mostReviewed) {
