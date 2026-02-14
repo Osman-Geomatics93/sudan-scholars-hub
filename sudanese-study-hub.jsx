@@ -529,6 +529,10 @@ const T = {
     noSavedMaterials: "No saved materials yet",
     saveMaterialSuccess: "Material saved!",
     removeMaterialSuccess: "Material removed from saved",
+    removeFromSaved: "Remove from Saved",
+    removeFromSavedConfirm: "Remove this material from your saved list?",
+    savedCount: "saved materials",
+    browseMaterials: "Browse Materials",
     uploaded: "Uploaded",
     saved: "Saved",
     // Counters
@@ -946,6 +950,10 @@ const T = {
     noSavedMaterials: "لا توجد مواد محفوظة بعد",
     saveMaterialSuccess: "تم حفظ المادة!",
     removeMaterialSuccess: "تم إزالة المادة من المحفوظات",
+    removeFromSaved: "إزالة من المحفوظات",
+    removeFromSavedConfirm: "هل تريد إزالة هذه المادة من قائمة المحفوظات؟",
+    savedCount: "مادة محفوظة",
+    browseMaterials: "تصفح المواد",
     uploaded: "المرفوعة",
     saved: "المحفوظة",
     // Counters
@@ -6487,10 +6495,38 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <div style={S.myEmptyCard}>
                   <span style={{ fontSize: 52, display: "block", marginBottom: 12, opacity: 0.5 }}>🔖</span>
                   <h3 style={{ color: "#1B3A4B", margin: "0 0 8px", fontSize: 18, fontWeight: 800 }}>{t.noSavedMaterials}</h3>
+                  <p style={{ color: "#999", fontSize: 14, margin: "0 0 16px" }}>{isRTL ? "احفظ المواد من صفحة التصفح للوصول إليها بسرعة" : "Save materials from the browse page to access them quickly"}</p>
+                  <button onClick={() => navigate("browse")} style={{ ...S.uploadBtn, marginLeft: 0 }}>📚 {t.browseMaterials}</button>
                 </div>
               ) : (
-                <div className="studyhub-mat-list" style={S.matList}>
-                  {savedMaterialsList.map((mat) => renderMaterialCard(mat, true))}
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                    <span style={{ fontSize: 13, color: "#888", fontWeight: 600 }}>🔖 {savedMaterialsList.length} {t.savedCount}</span>
+                  </div>
+                  <div className="studyhub-mat-list" style={S.matList}>
+                    {savedMaterialsList.map((mat) => (
+                      <div key={mat.id} style={{ position: "relative" }}>
+                        {renderMaterialCard(mat, true)}
+                        <button
+                          onClick={() => {
+                            if (confirm(t.removeFromSavedConfirm)) {
+                              handleToggleBookmark(mat.id);
+                            }
+                          }}
+                          style={{
+                            position: "absolute", top: 8, [isRTL ? "left" : "right"]: 8,
+                            background: "#fee2e2", color: "#dc2626", border: "1px solid #fca5a5",
+                            borderRadius: 8, padding: "4px 10px", fontSize: 11, fontWeight: 700,
+                            cursor: "pointer", zIndex: 2, display: "flex", alignItems: "center", gap: 4,
+                            transition: "all 0.2s",
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "#dc2626"; e.currentTarget.style.color = "#fff"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "#fee2e2"; e.currentTarget.style.color = "#dc2626"; }}
+                          title={t.removeFromSaved}
+                        >✕ {t.removeFromSaved}</button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )
             ) : loadingMyMaterials ? (
