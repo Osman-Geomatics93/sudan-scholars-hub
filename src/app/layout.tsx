@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { getLocale } from 'next-intl/server';
 import './globals.css';
 import { inter, cairo } from '@/lib/fonts';
 
@@ -96,13 +97,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+  const dir = locale === 'ar' ? 'rtl' : 'ltr';
+
   return (
-    <html className={`${inter.variable} ${cairo.variable}`} suppressHydrationWarning>
+    <html lang={locale} dir={dir} className={`${inter.variable} ${cairo.variable}`} suppressHydrationWarning>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

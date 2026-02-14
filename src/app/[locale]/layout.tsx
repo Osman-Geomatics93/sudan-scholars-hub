@@ -9,7 +9,6 @@ import { Providers } from '@/components/providers';
 import { GoogleAnalytics } from '@/components/analytics/google-analytics';
 import { CookieConsent } from '@/components/analytics/cookie-consent';
 import { ChatWidget } from '@/components/chatbot/chat-widget';
-import { HtmlLangSetter } from '@/components/html-lang-setter';
 
 const siteUrl = 'https://www.deltaroots.store';
 
@@ -49,7 +48,6 @@ export default async function LocaleLayout({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <HtmlLangSetter locale={locale} />
       <GoogleAnalytics />
       <Providers>
         <NextIntlClientProvider messages={messages}>
