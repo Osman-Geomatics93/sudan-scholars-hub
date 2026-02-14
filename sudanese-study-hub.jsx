@@ -567,6 +567,13 @@ const T = {
     fulfillRequest: "Fulfill",
     closeRequest: "Close",
     requestFulfilled: "Request fulfilled!",
+    requestClosed: "Request closed!",
+    requestDeleted: "Request deleted!",
+    requestUpdated: "Request updated!",
+    editRequest: "Edit",
+    deleteRequest: "Delete",
+    deleteRequestConfirm: "Are you sure you want to delete this request?",
+    closeRequestConfirm: "Mark this request as closed/resolved?",
     noRequests: "No requests yet",
     // Points
     points: "Points",
@@ -971,6 +978,13 @@ const T = {
     fulfillRequest: "تلبية",
     closeRequest: "إغلاق",
     requestFulfilled: "تم تلبية الطلب!",
+    requestClosed: "تم إغلاق الطلب!",
+    requestDeleted: "تم حذف الطلب!",
+    requestUpdated: "تم تحديث الطلب!",
+    editRequest: "تعديل",
+    deleteRequest: "حذف",
+    deleteRequestConfirm: "هل أنت متأكد من حذف هذا الطلب؟",
+    closeRequestConfirm: "هل تريد إغلاق هذا الطلب؟",
     noRequests: "لا توجد طلبات بعد",
     // Points
     points: "نقاط",
@@ -1500,6 +1514,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [requestForm, setRequestForm] = useState({ title: "", description: "", subject: "" });
   const [requestsList, setRequestsList] = useState([]);
   const [requestsLoading, setRequestsLoading] = useState(false);
+  const [editingRequest, setEditingRequest] = useState(null);
   // Leaderboard
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [userPoints, setUserPoints] = useState(0);
@@ -2404,7 +2419,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const fetchRequests = useCallback(async () => {
     setRequestsLoading(true);
     try {
-      const res = await fetch("/api/study-hub/requests?status=OPEN");
+      const res = await fetch("/api/study-hub/requests");
       if (res.ok) {
         const data = await res.json();
         setRequestsList(data.requests || []);
@@ -2428,6 +2443,50 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         fetchRequests();
       }
     } catch (err) { console.error("Request error:", err); }
+  };
+
+  const handleEditRequest = async () => {
+    if (!editingRequest || !requestForm.title) { showNotif(t.fillRequired, "error"); return; }
+    try {
+      const res = await fetch(`/api/study-hub/requests/${editingRequest.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestForm),
+      });
+      if (res.ok) {
+        showNotif(t.requestUpdated);
+        setShowRequestModal(false);
+        setEditingRequest(null);
+        setRequestForm({ title: "", description: "", subject: "" });
+        fetchRequests();
+      }
+    } catch (err) { console.error("Edit request error:", err); }
+  };
+
+  const handleDeleteMaterialRequest = async (reqId) => {
+    if (!confirm(t.deleteRequestConfirm)) return;
+    try {
+      const res = await fetch(`/api/study-hub/requests/${reqId}`, { method: "DELETE" });
+      if (res.ok) {
+        showNotif(t.requestDeleted);
+        fetchRequests();
+      }
+    } catch (err) { console.error("Delete request error:", err); }
+  };
+
+  const handleCloseMaterialRequest = async (reqId) => {
+    if (!confirm(t.closeRequestConfirm)) return;
+    try {
+      const res = await fetch(`/api/study-hub/requests/${reqId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "CLOSED" }),
+      });
+      if (res.ok) {
+        showNotif(t.requestClosed);
+        fetchRequests();
+      }
+    } catch (err) { console.error("Close request error:", err); }
   };
 
   // Leaderboard
@@ -6471,7 +6530,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             </div>
             {isLoggedIn && (
-              <button onClick={() => setShowRequestModal(true)} style={{ ...S.uploadBtn, marginBottom: 20, marginLeft: 0 }}>
+              <button onClick={() => { setEditingRequest(null); setRequestForm({ title: "", description: "", subject: "" }); setShowRequestModal(true); }} style={{ ...S.uploadBtn, marginBottom: 20, marginLeft: 0 }}>
                 + {t.requestMaterial}
               </button>
             )}
@@ -6483,28 +6542,59 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             ) : (
               <div style={S.matList}>
                 {requestsList.map((req) => (
-                  <div key={req.id} style={{ ...S.matCard, borderLeft: "4px solid #f59e0b" }}>
-                    <div style={{ ...S.matIcon, background: "#f59e0b15", color: "#f59e0b" }}>📌</div>
+                  <div key={req.id} style={{ ...S.matCard, borderLeft: `4px solid ${req.status === "OPEN" ? "#f59e0b" : req.status === "FULFILLED" ? "#10b981" : "#6b7280"}` }}>
+                    <div style={{ ...S.matIcon, background: req.status === "OPEN" ? "#f59e0b15" : req.status === "FULFILLED" ? "#10b98115" : "#6b728015", color: req.status === "OPEN" ? "#f59e0b" : req.status === "FULFILLED" ? "#10b981" : "#6b7280" }}>
+                      {req.status === "OPEN" ? "📌" : req.status === "FULFILLED" ? "✅" : "🔒"}
+                    </div>
                     <div style={S.matInfo}>
                       <h4 style={S.matTitle}>{req.title}</h4>
                       {req.subject && <p style={S.matSubject}>📖 {req.subject}</p>}
                       {req.description && <p style={S.matDesc}>{req.description}</p>}
                       <div style={S.matMeta}>
-                        <span style={{ ...S.matBadge, background: req.status === "OPEN" ? "#f59e0b" : "#10b981" }}>{req.status}</span>
+                        <span style={{ ...S.matBadge, background: req.status === "OPEN" ? "#f59e0b" : req.status === "FULFILLED" ? "#10b981" : "#6b7280" }}>
+                          {req.status === "OPEN" ? (isRTL ? "مفتوح" : "OPEN") : req.status === "FULFILLED" ? (isRTL ? "تم التلبية" : "FULFILLED") : (isRTL ? "مغلق" : "CLOSED")}
+                        </span>
                         {req.user && <span style={{ fontSize: 12, color: "#888" }}>👤 {req.user.name}</span>}
                         <span style={S.matDate}>{new Date(req.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
                       </div>
                     </div>
-                    {isLoggedIn && req.status === "OPEN" && req.userId !== currentUserId && (
-                      <button
-                        onClick={async () => {
-                          await fetch(`/api/study-hub/requests/${req.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: "FULFILLED" }) });
-                          showNotif(t.requestFulfilled);
-                          fetchRequests();
-                        }}
-                        style={{ ...S.viewAllBtn, padding: "8px 16px", fontSize: 12 }}
-                      >{t.fulfillRequest}</button>
-                    )}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end", minWidth: 80 }}>
+                      {/* Other users can fulfill open requests */}
+                      {isLoggedIn && req.status === "OPEN" && req.userId !== currentUserId && (
+                        <button
+                          onClick={async () => {
+                            await fetch(`/api/study-hub/requests/${req.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: "FULFILLED" }) });
+                            showNotif(t.requestFulfilled);
+                            fetchRequests();
+                          }}
+                          style={{ ...S.viewAllBtn, padding: "6px 14px", fontSize: 12, background: "#10b981", color: "#fff", border: "none", borderRadius: 6 }}
+                        >✅ {t.fulfillRequest}</button>
+                      )}
+                      {/* Owner controls: Edit, Close, Delete */}
+                      {isLoggedIn && req.userId === currentUserId && req.status === "OPEN" && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setEditingRequest(req);
+                              setRequestForm({ title: req.title, description: req.description || "", subject: req.subject || "" });
+                              setShowRequestModal(true);
+                            }}
+                            style={{ ...S.viewAllBtn, padding: "6px 14px", fontSize: 12 }}
+                          >✏️ {t.editRequest}</button>
+                          <button
+                            onClick={() => handleCloseMaterialRequest(req.id)}
+                            style={{ ...S.viewAllBtn, padding: "6px 14px", fontSize: 12, background: "#6b7280", color: "#fff", border: "none", borderRadius: 6 }}
+                          >🔒 {t.closeRequest}</button>
+                        </>
+                      )}
+                      {/* Owner or admin can delete any status */}
+                      {isLoggedIn && req.userId === currentUserId && (
+                        <button
+                          onClick={() => handleDeleteMaterialRequest(req.id)}
+                          style={{ ...S.viewAllBtn, padding: "6px 14px", fontSize: 12, background: "#ef4444", color: "#fff", border: "none", borderRadius: 6 }}
+                        >🗑️ {t.deleteRequest}</button>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -7609,11 +7699,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
       {/* REQUEST MODAL */}
       {showRequestModal && (
-        <div className="studyhub-overlay" style={S.overlay} onClick={() => setShowRequestModal(false)}>
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowRequestModal(false); setEditingRequest(null); setRequestForm({ title: "", description: "", subject: "" }); }}>
           <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 460 }} onClick={(e) => e.stopPropagation()}>
             <div className="studyhub-modal-head" style={S.modalHead}>
-              <h3 style={S.modalTitle}>📋 {t.requestMaterial}</h3>
-              <button onClick={() => setShowRequestModal(false)} style={S.modalX}>✕</button>
+              <h3 style={S.modalTitle}>📋 {editingRequest ? t.editRequest : t.requestMaterial}</h3>
+              <button onClick={() => { setShowRequestModal(false); setEditingRequest(null); setRequestForm({ title: "", description: "", subject: "" }); }} style={S.modalX}>✕</button>
             </div>
             <div style={S.modalBody}>
               <label style={{ ...S.label, marginTop: 0 }}>{t.requestTitle} <span style={{ color: "#C8956C" }}>*</span></label>
@@ -7622,7 +7712,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <input type="text" value={requestForm.subject} onChange={(e) => setRequestForm({ ...requestForm, subject: e.target.value })} style={S.input} placeholder={t.subjectPlaceholder} />
               <label style={S.label}>{t.description}</label>
               <textarea value={requestForm.description} onChange={(e) => setRequestForm({ ...requestForm, description: e.target.value })} style={{ ...S.input, height: 80, resize: "vertical" }} placeholder={t.requestDesc} />
-              <button onClick={handleSubmitRequest} style={S.submitBtn}>{t.submitRequest}</button>
+              <button onClick={editingRequest ? handleEditRequest : handleSubmitRequest} style={S.submitBtn}>{editingRequest ? t.requestUpdated : t.submitRequest}</button>
             </div>
           </div>
         </div>
