@@ -1653,6 +1653,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [mostReviewedProfs, setMostReviewedProfs] = useState([]);
   const [profReviewUserVotes, setProfReviewUserVotes] = useState({}); // { reviewId: true/false/null }
   const [profUniversities, setProfUniversities] = useState([]); // [{ universityId, universityName }]
+  const [profReviewCountry, setProfReviewCountry] = useState(""); // country code for review form
 
   // Sync with main app's theme system (next-themes)
   const { theme, setTheme } = useTheme();
@@ -3170,6 +3171,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         showNotif(editingProfReview ? t.profReviewUpdated : t.profReviewSuccess);
         setShowProfReviewModal(false);
         setEditingProfReview(null);
+        setProfReviewCountry("");
         setProfReviewForm({ professorName: "", universityId: "", universityName: "", courseName: "", rating: 0, difficulty: 0, wouldTakeAgain: true, comment: "", tags: [], isAnonymous: false });
         fetchProfReviews(profSearchQuery, profFilterUniversity);
         fetchMostReviewedProfs();
@@ -7187,27 +7189,36 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
                 />
               </div>
-              <select
-                value={profFilterUniversity}
-                onChange={(e) => { setProfFilterUniversity(e.target.value); fetchProfReviews(profSearchQuery, e.target.value); }}
-                style={{
-                  padding: "10px 14px", borderRadius: 12, border: `1.5px solid ${darkMode ? "#444" : "#e8ddd0"}`,
-                  background: darkMode ? "#2a2a3a" : "#FDFBF9", color: darkMode ? "#fff" : "#1B3A4B",
-                  fontSize: 13, fontWeight: 600, fontFamily: "inherit", cursor: "pointer", minWidth: 180,
-                  appearance: "auto", outline: "none", transition: "border-color 0.2s",
-                }}
-                onFocus={(e) => { e.target.style.borderColor = "#C8956C"; }}
-                onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
-              >
-                <option value="">{t.allUniversitiesFilter}</option>
-                {profUniversities.map((u) => (
-                  <option key={u.universityId} value={u.universityId}>{u.universityName}</option>
-                ))}
-              </select>
+              <div style={{ position: "relative", minWidth: 200 }}>
+                <span style={{ position: "absolute", [isRTL ? "right" : "left"]: 12, top: "50%", transform: "translateY(-50%)", fontSize: 14, pointerEvents: "none" }}>🏛️</span>
+                <select
+                  value={profFilterUniversity}
+                  onChange={(e) => { setProfFilterUniversity(e.target.value); fetchProfReviews(profSearchQuery, e.target.value); }}
+                  style={{
+                    width: "100%", padding: "10px 14px", [isRTL ? "paddingRight" : "paddingLeft"]: 34, borderRadius: 12,
+                    border: `1.5px solid ${profFilterUniversity ? "#C8956C" : (darkMode ? "#444" : "#e8ddd0")}`,
+                    background: profFilterUniversity ? (darkMode ? "#3a2a1a" : "#FFF8F0") : (darkMode ? "#2a2a3a" : "#FDFBF9"),
+                    color: profFilterUniversity ? "#C8956C" : (darkMode ? "#fff" : "#1B3A4B"),
+                    fontSize: 13, fontWeight: 600, fontFamily: "inherit", cursor: "pointer",
+                    appearance: "auto", outline: "none", transition: "all 0.2s",
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = "#C8956C"; }}
+                  onBlur={(e) => { if (!profFilterUniversity) e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
+                >
+                  <option value="">{t.allUniversitiesFilter}</option>
+                  {profUniversities.map((u) => (
+                    <option key={u.universityId} value={u.universityId}>{u.universityName}</option>
+                  ))}
+                </select>
+                {profFilterUniversity && (
+                  <button onClick={() => { setProfFilterUniversity(""); fetchProfReviews(profSearchQuery, ""); }}
+                    style={{ position: "absolute", [isRTL ? "left" : "right"]: 8, top: "50%", transform: "translateY(-50%)", background: darkMode ? "#444" : "#e8ddd0", border: "none", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 11, color: darkMode ? "#fff" : "#666", fontFamily: "inherit", lineHeight: 1 }}>✕</button>
+                )}
+              </div>
               <button onClick={() => fetchProfReviews(profSearchQuery, profFilterUniversity)}
                 style={{ ...S.viewAllBtn, padding: "12px 24px", background: "#C8956C" }}>🔍</button>
               {isLoggedIn && (
-                <button onClick={() => { setEditingProfReview(null); setProfReviewForm({ professorName: "", universityId: "", universityName: "", courseName: "", rating: 0, difficulty: 0, wouldTakeAgain: true, comment: "", tags: [], isAnonymous: false }); setShowProfReviewModal(true); }}
+                <button onClick={() => { setEditingProfReview(null); setProfReviewCountry(""); setProfReviewForm({ professorName: "", universityId: "", universityName: "", courseName: "", rating: 0, difficulty: 0, wouldTakeAgain: true, comment: "", tags: [], isAnonymous: false }); setShowProfReviewModal(true); }}
                   style={{ ...S.viewAllBtn, padding: "12px 24px", background: "linear-gradient(135deg, #92400E, #C8956C)" }}>✍️ {t.writeProfReview}</button>
               )}
             </div>
@@ -7323,7 +7334,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       </div>
                       {isLoggedIn && currentUserId === review.userId && (
                         <div style={{ display: "flex", flexDirection: "column", gap: 6, flexShrink: 0 }}>
-                          <button onClick={() => { setEditingProfReview(review); setProfReviewForm({ professorName: review.professorName, universityId: review.universityId, universityName: review.universityName, courseName: review.courseName, rating: review.rating, difficulty: review.difficulty, wouldTakeAgain: review.wouldTakeAgain, comment: review.comment || "", tags: review.tags || [], isAnonymous: review.isAnonymous }); setShowProfReviewModal(true); }}
+                          <button onClick={() => { setEditingProfReview(review); setProfReviewCountry(""); setProfReviewForm({ professorName: review.professorName, universityId: review.universityId, universityName: review.universityName, courseName: review.courseName, rating: review.rating, difficulty: review.difficulty, wouldTakeAgain: review.wouldTakeAgain, comment: review.comment || "", tags: review.tags || [], isAnonymous: review.isAnonymous }); setShowProfReviewModal(true); }}
                             style={S.editBtn}>✏️</button>
                           <button onClick={() => handleDeleteProfReview(review.id)}
                             style={S.delBtn}>🗑️</button>
@@ -7397,10 +7408,48 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <label style={{ ...S.label, marginTop: 0 }}>{t.profName} <span style={{ color: "#C8956C" }}>*</span></label>
               <input type="text" value={profReviewForm.professorName} onChange={(e) => setProfReviewForm({ ...profReviewForm, professorName: e.target.value })} style={S.input} placeholder={t.professorNamePlaceholder} />
 
+              <label style={S.label}>{isRTL ? "الدولة" : "Country"} <span style={{ color: "#C8956C" }}>*</span></label>
+              <select
+                value={profReviewCountry}
+                onChange={(e) => {
+                  const code = e.target.value;
+                  setProfReviewCountry(code);
+                  setProfReviewForm({ ...profReviewForm, universityId: "", universityName: "" });
+                  if (code) fetchUniversities(code);
+                }}
+                style={{ ...S.input, cursor: "pointer", appearance: "auto" }}
+              >
+                <option value="">{isRTL ? "-- اختر الدولة --" : "-- Select Country --"}</option>
+                {ALL_COUNTRIES.map((c) => (
+                  <option key={c.id} value={c.id}>{c.flag} {countryName(c)}</option>
+                ))}
+              </select>
+
               <label style={S.label}>{isRTL ? "الجامعة" : "University"} <span style={{ color: "#C8956C" }}>*</span></label>
-              <input type="text" value={profReviewForm.universityName}
-                onChange={(e) => setProfReviewForm({ ...profReviewForm, universityName: e.target.value, universityId: e.target.value.toLowerCase().replace(/\s+/g, "_") })}
-                style={S.input} placeholder={isRTL ? "اسم الجامعة" : "University name"} />
+              {profReviewCountry && universityCache[profReviewCountry] ? (
+                <SearchableUniversitySelect
+                  universities={universityCache[profReviewCountry]}
+                  onSelect={(uni) => setProfReviewForm({ ...profReviewForm, universityId: uni.id, universityName: uni.name })}
+                  isRTL={isRTL}
+                  t={t}
+                />
+              ) : profReviewCountry && loadingUniversities ? (
+                <div style={{ ...S.input, display: "flex", alignItems: "center", gap: 8, color: "#888" }}>
+                  <span style={{ animation: "spin 1s linear infinite", display: "inline-block" }}>⏳</span> {t.loadingUniversities}
+                </div>
+              ) : (
+                <div style={{ ...S.input, color: "#aaa", cursor: "default" }}>
+                  {isRTL ? "اختر الدولة أولاً" : "Select a country first"}
+                </div>
+              )}
+              {profReviewForm.universityName && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", marginTop: 4, marginBottom: 4, borderRadius: 12, background: darkMode ? "#1e3a2e" : "#f0fdf4", border: `1.5px solid ${darkMode ? "#16A34A44" : "#bbf7d0"}` }}>
+                  <span style={{ fontSize: 14 }}>🏛️</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: darkMode ? "#4ade80" : "#16A34A" }}>{profReviewForm.universityName}</span>
+                  <button onClick={() => setProfReviewForm({ ...profReviewForm, universityId: "", universityName: "" })}
+                    style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 14, color: "#888", fontFamily: "inherit" }}>✕</button>
+                </div>
+              )}
 
               <label style={S.label}>{t.courseNameLabel} <span style={{ color: "#C8956C" }}>*</span></label>
               <input type="text" value={profReviewForm.courseName} onChange={(e) => setProfReviewForm({ ...profReviewForm, courseName: e.target.value })} style={S.input} placeholder={t.courseNameLabel} />
