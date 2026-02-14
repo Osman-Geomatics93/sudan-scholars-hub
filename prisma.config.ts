@@ -9,6 +9,7 @@ export default defineConfig({
   migrations: {
     path: "prisma/migrations",
   },
+  // @ts-ignore -- seed is a valid Prisma config option but not yet in the type definitions for classic engine
   seed: "npx tsx prisma/seed.ts",
   engine: "classic",
   datasource: {
