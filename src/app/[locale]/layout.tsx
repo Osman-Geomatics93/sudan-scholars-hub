@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -8,9 +9,28 @@ import { Providers } from '@/components/providers';
 import { GoogleAnalytics } from '@/components/analytics/google-analytics';
 import { CookieConsent } from '@/components/analytics/cookie-consent';
 import { ChatWidget } from '@/components/chatbot/chat-widget';
+import { HtmlLangSetter } from '@/components/html-lang-setter';
+
+const siteUrl = 'https://www.deltaroots.store';
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return {
+    alternates: {
+      canonical: `${siteUrl}/${locale}`,
+      languages: {
+        en: `${siteUrl}/en`,
+        ar: `${siteUrl}/ar`,
+      },
+    },
+  };
 }
 
 export default async function LocaleLayout({
@@ -26,10 +46,10 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
   return (
-    <div lang={locale} dir={dir} className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
+      <HtmlLangSetter locale={locale} />
       <GoogleAnalytics />
       <Providers>
         <NextIntlClientProvider messages={messages}>

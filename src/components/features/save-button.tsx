@@ -127,6 +127,7 @@ export function SaveButton({ scholarshipId, className, size = 'md' }: SaveButton
         className
       )}
       title={showSaved ? 'Remove from saved' : 'Save scholarship'}
+      aria-label={showSaved ? 'Remove from saved' : 'Save scholarship'}
     >
       <Heart
         className={cn(

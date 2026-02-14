@@ -10,5 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: 'https://www.deltaroots.store/sitemap.xml',
+    host: 'https://www.deltaroots.store',
   };
 }

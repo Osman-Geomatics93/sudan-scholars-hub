@@ -141,6 +141,10 @@ const securityHeaders = [
     value: 'camera=(), microphone=(), geolocation=()'
   },
   {
+    key: 'Cross-Origin-Opener-Policy',
+    value: 'same-origin-allow-popups'
+  },
+  {
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
@@ -158,6 +162,7 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

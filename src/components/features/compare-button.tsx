@@ -57,6 +57,13 @@ export function CompareButton({ scholarship, locale = 'en', size = 'sm' }: Compa
           ? (locale === 'ar' ? 'الحد الأقصى 3 منح' : 'Max 3 scholarships')
           : (locale === 'ar' ? 'أضف للمقارنة' : 'Add to compare')
       }
+      aria-label={
+        isSelected
+          ? (locale === 'ar' ? 'إزالة من المقارنة' : 'Remove from compare')
+          : isDisabled
+          ? (locale === 'ar' ? 'الحد الأقصى 3 منح' : 'Max 3 scholarships')
+          : (locale === 'ar' ? 'أضف للمقارنة' : 'Add to compare')
+      }
     >
       {isSelected ? (
         <Check className={iconSizes[size]} />

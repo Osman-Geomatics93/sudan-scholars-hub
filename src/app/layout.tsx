@@ -89,7 +89,6 @@ export const metadata: Metadata = {
     google: 'googlec10fe0b2015cde8a',
   },
   alternates: {
-    canonical: siteUrl,
     languages: {
       'en': `${siteUrl}/en`,
       'ar': `${siteUrl}/ar`,
