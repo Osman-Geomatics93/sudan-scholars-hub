@@ -3092,6 +3092,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   };
 
   const handleDeleteProfReview = async (id) => {
+    if (!confirm(isRTL ? "هل أنت متأكد من حذف هذا التقييم؟" : "Are you sure you want to delete this review?")) return;
     try {
       const res = await fetch(`/api/study-hub/professor-reviews/${id}`, { method: "DELETE" });
       if (res.ok) {

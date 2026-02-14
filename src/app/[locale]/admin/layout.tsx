@@ -21,6 +21,7 @@ import {
   BookOpen,
   ClipboardList,
   MessageSquare,
+  Star,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -121,6 +122,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Material Requests',
       labelAr: 'طلبات المواد',
       icon: MessageSquare,
+    },
+    {
+      href: `/${locale}/admin/professor-reviews`,
+      label: 'Professor Reviews',
+      labelAr: 'تقييمات الأساتذة',
+      icon: Star,
     },
     {
       href: `/${locale}/admin/analytics`,

@@ -53,7 +53,7 @@ export async function PATCH(
   }
 }
 
-// DELETE - Delete a professor review (owner only)
+// DELETE - Delete a professor review (owner or admin)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -64,6 +64,8 @@ export async function DELETE(
   try {
     const { id } = await params;
     const userId = (session!.user as { id: string }).id;
+    const userRole = (session!.user as { role?: string; isAdmin?: boolean }).role;
+    const isAdmin = (session!.user as { isAdmin?: boolean }).isAdmin === true;
 
     const review = await prisma.professorReview.findUnique({ where: { id } });
 
@@ -71,7 +73,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Review not found' }, { status: 404 });
     }
 
-    if (review.userId !== userId) {
+    if (review.userId !== userId && userRole !== 'ADMIN' && !isAdmin) {
       return NextResponse.json({ error: 'Forbidden - You can only delete your own reviews' }, { status: 403 });
     }
 
