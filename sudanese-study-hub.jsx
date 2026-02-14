@@ -1654,6 +1654,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [profReviewUserVotes, setProfReviewUserVotes] = useState({}); // { reviewId: true/false/null }
   const [profUniversities, setProfUniversities] = useState([]); // [{ universityId, universityName }]
   const [profReviewCountry, setProfReviewCountry] = useState(""); // country code for review form
+  const [profUniFilterOpen, setProfUniFilterOpen] = useState(false);
+  const [profUniFilterSearch, setProfUniFilterSearch] = useState("");
+  const profUniFilterRef = useRef(null);
 
   // Sync with main app's theme system (next-themes)
   const { theme, setTheme } = useTheme();
@@ -2417,6 +2420,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [showNotifications]);
+
+  // Close university filter dropdown on outside click
+  useEffect(() => {
+    if (!profUniFilterOpen) return;
+    const handler = (e) => {
+      if (profUniFilterRef.current && !profUniFilterRef.current.contains(e.target)) { setProfUniFilterOpen(false); setProfUniFilterSearch(""); }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [profUniFilterOpen]);
 
   const handleMarkAllRead = async () => {
     try {
@@ -4305,24 +4318,32 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   )}
                 </button>
                 {showNotifications && (
-                  <div className="studyhub-notif-dropdown absolute top-[calc(100%+8px)] right-0 w-[340px] max-w-[calc(100vw-32px)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[100] overflow-hidden">
+                  <div
+                    className="studyhub-notif-dropdown"
+                    style={{
+                      position: "fixed", top: 60, [isRTL ? "left" : "right"]: 16,
+                      width: 400, maxWidth: "calc(100vw - 32px)", maxHeight: "calc(100vh - 80px)",
+                      background: darkMode ? "#111827" : "#fff", borderRadius: 20,
+                      boxShadow: "0 12px 48px rgba(0,0,0,0.18)", border: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}`,
+                      zIndex: 100, overflow: "hidden", display: "flex", flexDirection: "column",
+                    }}
+                  >
                     {/* Header */}
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-                      <div className="flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: `1px solid ${darkMode ? "#1f2937" : "#f3f4f6"}` }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8956C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
                         </svg>
-                        <span className="font-bold text-sm text-gray-900 dark:text-gray-100">{t.notifications}</span>
+                        <span style={{ fontWeight: 800, fontSize: 15, color: darkMode ? "#f3f4f6" : "#111827" }}>{t.notifications}</span>
                         {unreadCount > 0 && (
-                          <span className="bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5 leading-none">{unreadCount}</span>
+                          <span style={{ background: "#ef4444", color: "#fff", fontSize: 10, fontWeight: 700, borderRadius: 50, padding: "2px 7px", lineHeight: "1.2" }}>{unreadCount}</span>
                         )}
                       </div>
                       <button
                         onClick={() => setShowNotifications(false)}
-                        className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        title="Close"
+                        style={{ background: "none", border: "none", cursor: "pointer", padding: 4, borderRadius: 8, color: darkMode ? "#9ca3af" : "#6b7280", display: "flex" }}
                       >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M18 6L6 18" /><path d="M6 6l12 12" />
                         </svg>
                       </button>
@@ -4330,43 +4351,47 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
                     {/* Actions bar */}
                     {notificationsList.length > 0 && (
-                      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 18px", background: darkMode ? "#1f293780" : "#f9fafb", borderBottom: `1px solid ${darkMode ? "#1f2937" : "#f3f4f6"}` }}>
                         {unreadCount > 0 ? (
-                          <button onClick={handleMarkAllRead} className="text-[11px] font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors">
+                          <button onClick={handleMarkAllRead} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600, color: "#C8956C", fontFamily: "inherit" }}>
                             {t.markAllRead}
                           </button>
                         ) : <span />}
-                        <button onClick={handleClearAllNotifications} className="text-[11px] font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors">
+                        <button onClick={handleClearAllNotifications} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600, color: "#ef4444", fontFamily: "inherit" }}>
                           {t.clearAll}
                         </button>
                       </div>
                     )}
 
                     {/* Notification list */}
-                    <div className="max-h-[320px] overflow-y-auto overscroll-contain">
+                    <div style={{ flex: 1, overflowY: "auto", maxHeight: 420 }}>
                       {notificationsList.length === 0 ? (
-                        <div className="py-10 px-4 text-center">
-                          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-500">
+                        <div style={{ padding: "40px 20px", textAlign: "center" }}>
+                          <div style={{ width: 48, height: 48, margin: "0 auto 12px", borderRadius: "50%", background: darkMode ? "#1f2937" : "#f3f4f6", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={darkMode ? "#6b7280" : "#9ca3af"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /><line x1="1" y1="1" x2="23" y2="23" />
                             </svg>
                           </div>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{t.noNotifications}</p>
+                          <p style={{ fontSize: 14, color: darkMode ? "#9ca3af" : "#6b7280" }}>{t.noNotifications}</p>
                         </div>
                       ) : notificationsList.map((n) => (
                         <div
                           key={n.id}
-                          className={`group relative px-4 py-3 border-b border-gray-50 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 ${!n.read ? (isRTL ? "border-r-[3px] border-r-amber-500 bg-amber-50/50 dark:bg-amber-900/10" : "border-l-[3px] border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/10") : ""}`}
+                          style={{
+                            padding: "14px 18px", borderBottom: `1px solid ${darkMode ? "#1f2937" : "#f3f4f6"}`,
+                            background: !n.read ? (darkMode ? "rgba(245,158,11,0.06)" : "rgba(245,158,11,0.05)") : "transparent",
+                            [isRTL ? "borderRight" : "borderLeft"]: !n.read ? "3px solid #C8956C" : "3px solid transparent",
+                          }}
                         >
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="flex-1 min-w-0">
-                              <div className={`text-[13px] text-gray-900 dark:text-gray-100 ${!n.read ? "font-bold" : "font-medium"}`}>{n.title}</div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{n.message}</div>
-                              <div className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{new Date(n.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</div>
+                          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontSize: 14, color: darkMode ? "#f3f4f6" : "#111827", fontWeight: !n.read ? 700 : 500, lineHeight: 1.4 }}>{n.title}</div>
+                              <div style={{ fontSize: 13, color: darkMode ? "#9ca3af" : "#6b7280", marginTop: 4, lineHeight: 1.5, wordBreak: "break-word" }}>{n.message}</div>
+                              <div style={{ fontSize: 11, color: darkMode ? "#6b7280" : "#9ca3af", marginTop: 6 }}>{new Date(n.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</div>
                             </div>
                             <button
                               onClick={(e) => { e.stopPropagation(); handleDeleteNotification(n.id); }}
-                              className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-400 hover:text-red-500 transition-all shrink-0"
+                              style={{ background: "none", border: "none", cursor: "pointer", padding: 6, borderRadius: 8, color: darkMode ? "#6b7280" : "#9ca3af", flexShrink: 0, display: "flex" }}
                               title={t.deleteNotification}
                             >
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -7189,6 +7214,89 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
                 />
               </div>
+              {/* University Filter Dropdown */}
+              {profUniversities.length > 0 && (
+                <div ref={profUniFilterRef} style={{ position: "relative" }}>
+                  <button
+                    onClick={() => { setProfUniFilterOpen(!profUniFilterOpen); setProfUniFilterSearch(""); }}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", borderRadius: 12, cursor: "pointer",
+                      border: `1.5px solid ${profFilterUniversity ? "#C8956C" : (darkMode ? "#444" : "#e8ddd0")}`,
+                      background: profFilterUniversity ? (darkMode ? "#3a2a1a" : "#FFF8F0") : (darkMode ? "#2a2a3a" : "#FDFBF9"),
+                      color: profFilterUniversity ? "#C8956C" : (darkMode ? "#fff" : "#1B3A4B"),
+                      fontSize: 13, fontWeight: 600, fontFamily: "inherit", transition: "all 0.2s", whiteSpace: "nowrap",
+                    }}
+                  >
+                    <span>🏛️</span>
+                    <span>{profFilterUniversity ? profUniversities.find((u) => u.universityId === profFilterUniversity)?.universityName || t.profFilterUniversity : t.profFilterUniversity}</span>
+                    {profFilterUniversity ? (
+                      <span onClick={(e) => { e.stopPropagation(); setProfFilterUniversity(""); fetchProfReviews(profSearchQuery, ""); setProfUniFilterOpen(false); }}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: darkMode ? "#555" : "#e0d6cc", fontSize: 10, color: darkMode ? "#fff" : "#666", lineHeight: 1 }}>✕</span>
+                    ) : (
+                      <span style={{ fontSize: 10, opacity: 0.6 }}>▼</span>
+                    )}
+                  </button>
+                  {profUniFilterOpen && (
+                    <div style={{
+                      position: "absolute", top: "calc(100% + 6px)", [isRTL ? "right" : "left"]: 0, zIndex: 50,
+                      width: 300, maxWidth: "calc(100vw - 32px)", borderRadius: 16, overflow: "hidden",
+                      background: darkMode ? "#1e1e2e" : "#fff", border: `1.5px solid ${darkMode ? "#333" : "#e8ddd0"}`,
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+                    }}>
+                      {/* Search */}
+                      <div style={{ padding: "10px 12px", borderBottom: `1px solid ${darkMode ? "#333" : "#f0e8de"}` }}>
+                        <input
+                          type="text" autoFocus value={profUniFilterSearch}
+                          onChange={(e) => setProfUniFilterSearch(e.target.value)}
+                          placeholder={isRTL ? "ابحث عن جامعة..." : "Search university..."}
+                          style={{
+                            width: "100%", padding: "8px 12px", borderRadius: 10, fontSize: 13, fontFamily: "inherit",
+                            border: `1px solid ${darkMode ? "#444" : "#e8ddd0"}`, background: darkMode ? "#2a2a3a" : "#FDFBF9",
+                            color: darkMode ? "#fff" : "#1B3A4B", outline: "none",
+                          }}
+                          onFocus={(e) => { e.target.style.borderColor = "#C8956C"; }}
+                          onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
+                        />
+                      </div>
+                      {/* List */}
+                      <div style={{ maxHeight: 240, overflowY: "auto" }}>
+                        <button
+                          onClick={() => { setProfFilterUniversity(""); fetchProfReviews(profSearchQuery, ""); setProfUniFilterOpen(false); setProfUniFilterSearch(""); }}
+                          style={{
+                            width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", border: "none", cursor: "pointer", fontFamily: "inherit",
+                            background: !profFilterUniversity ? (darkMode ? "#C8956C22" : "#FFF8F0") : "transparent",
+                            color: !profFilterUniversity ? "#C8956C" : (darkMode ? "#ccc" : "#555"), fontSize: 13, fontWeight: !profFilterUniversity ? 700 : 500,
+                            borderBottom: `1px solid ${darkMode ? "#2a2a3a" : "#f8f4ef"}`, textAlign: isRTL ? "right" : "left", transition: "background 0.15s",
+                          }}
+                          onMouseEnter={(e) => { if (profFilterUniversity) e.target.style.background = darkMode ? "#2a2a3a" : "#faf6f1"; }}
+                          onMouseLeave={(e) => { if (profFilterUniversity) e.target.style.background = "transparent"; }}
+                        >{t.allUniversitiesFilter} <span style={{ fontSize: 11, opacity: 0.5, [isRTL ? "marginRight" : "marginLeft"]: "auto" }}>({profUniversities.length})</span></button>
+                        {profUniversities
+                          .filter((u) => !profUniFilterSearch || u.universityName.toLowerCase().includes(profUniFilterSearch.toLowerCase()))
+                          .map((u) => {
+                            const isActive = profFilterUniversity === u.universityId;
+                            return (
+                              <button key={u.universityId}
+                                onClick={() => { setProfFilterUniversity(u.universityId); fetchProfReviews(profSearchQuery, u.universityId); setProfUniFilterOpen(false); setProfUniFilterSearch(""); }}
+                                style={{
+                                  width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", border: "none", cursor: "pointer", fontFamily: "inherit",
+                                  background: isActive ? (darkMode ? "#C8956C22" : "#FFF8F0") : "transparent",
+                                  color: isActive ? "#C8956C" : (darkMode ? "#ccc" : "#555"), fontSize: 13, fontWeight: isActive ? 700 : 500,
+                                  borderBottom: `1px solid ${darkMode ? "#2a2a3a" : "#f8f4ef"}`, textAlign: isRTL ? "right" : "left", transition: "background 0.15s",
+                                }}
+                                onMouseEnter={(e) => { if (!isActive) e.target.style.background = darkMode ? "#2a2a3a" : "#faf6f1"; }}
+                                onMouseLeave={(e) => { if (!isActive) e.target.style.background = "transparent"; }}
+                              >🏛️ {u.universityName} {isActive && <span style={{ [isRTL ? "marginRight" : "marginLeft"]: "auto", fontSize: 12 }}>✓</span>}</button>
+                            );
+                          })}
+                        {profUniFilterSearch && profUniversities.filter((u) => u.universityName.toLowerCase().includes(profUniFilterSearch.toLowerCase())).length === 0 && (
+                          <div style={{ padding: "16px", textAlign: "center", color: "#888", fontSize: 13 }}>{isRTL ? "لا توجد نتائج" : "No results"}</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
               <button onClick={() => fetchProfReviews(profSearchQuery, profFilterUniversity)}
                 style={{ ...S.viewAllBtn, padding: "12px 24px", background: "#C8956C" }}>🔍</button>
               {isLoggedIn && (
@@ -7196,38 +7304,6 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   style={{ ...S.viewAllBtn, padding: "12px 24px", background: "linear-gradient(135deg, #92400E, #C8956C)" }}>✍️ {t.writeProfReview}</button>
               )}
             </div>
-
-            {/* University Filter Chips */}
-            {profUniversities.length > 0 && (
-              <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: darkMode ? "#aaa" : "#888", [isRTL ? "marginLeft" : "marginRight"]: 4 }}>🏛️ {t.profFilterUniversity}:</span>
-                <button
-                  onClick={() => { if (profFilterUniversity) { setProfFilterUniversity(""); fetchProfReviews(profSearchQuery, ""); } }}
-                  style={{
-                    padding: "6px 16px", borderRadius: 50, fontSize: 12, fontWeight: 700, cursor: "pointer",
-                    border: `1.5px solid ${!profFilterUniversity ? "#C8956C" : (darkMode ? "#444" : "#e0d6cc")}`,
-                    background: !profFilterUniversity ? (darkMode ? "#C8956C22" : "#C8956C15") : "transparent",
-                    color: !profFilterUniversity ? "#C8956C" : (darkMode ? "#aaa" : "#777"),
-                    fontFamily: "inherit", transition: "all 0.2s",
-                  }}
-                >{t.allUniversitiesFilter}</button>
-                {profUniversities.map((u) => {
-                  const isActive = profFilterUniversity === u.universityId;
-                  return (
-                    <button key={u.universityId}
-                      onClick={() => { setProfFilterUniversity(isActive ? "" : u.universityId); fetchProfReviews(profSearchQuery, isActive ? "" : u.universityId); }}
-                      style={{
-                        padding: "6px 16px", borderRadius: 50, fontSize: 12, fontWeight: 700, cursor: "pointer",
-                        border: `1.5px solid ${isActive ? "#C8956C" : (darkMode ? "#444" : "#e0d6cc")}`,
-                        background: isActive ? (darkMode ? "#C8956C22" : "#C8956C15") : "transparent",
-                        color: isActive ? "#C8956C" : (darkMode ? "#aaa" : "#777"),
-                        fontFamily: "inherit", transition: "all 0.2s",
-                      }}
-                    >{u.universityName}</button>
-                  );
-                })}
-              </div>
-            )}
 
             {/* Aggregates */}
             {profAggregates.totalCount > 0 && (
