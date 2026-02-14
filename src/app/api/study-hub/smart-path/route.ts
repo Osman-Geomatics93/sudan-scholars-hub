@@ -16,8 +16,10 @@ export async function GET() {
   try {
     const userId = (session!.user as { id: string }).id;
 
+    // Return the most recent active or completed path (not archived)
     const path = await prisma.smartStudyPath.findFirst({
-      where: { userId, status: 'active' },
+      where: { userId, status: { in: ['active', 'completed'] } },
+      orderBy: { createdAt: 'desc' },
       include: {
         days: { orderBy: { dayNumber: 'asc' } },
       },

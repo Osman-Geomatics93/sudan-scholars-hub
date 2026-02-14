@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
@@ -70,6 +70,13 @@ const T = {
     updating: "Updating...",
     overdue: "Overdue",
     radarTitle: "Subject Mastery Radar",
+    loading: "Loading study path...",
+    error: "Failed to load study path",
+    retry: "Retry",
+    dayUpdated: "Day status updated!",
+    dayUpdateError: "Failed to update day status",
+    pathGenerated: "Study path generated!",
+    confirmRegenerate: "This will archive your current path. Continue?",
   },
   ar: {
     title: "مسار الدراسة الذكي",
@@ -133,6 +140,13 @@ const T = {
     updating: "جاري التحديث...",
     overdue: "متأخر",
     radarTitle: "رادار إتقان المواد",
+    loading: "جاري تحميل مسار الدراسة...",
+    error: "فشل تحميل مسار الدراسة",
+    retry: "إعادة المحاولة",
+    dayUpdated: "تم تحديث حالة اليوم!",
+    dayUpdateError: "فشل تحديث حالة اليوم",
+    pathGenerated: "تم إنشاء مسار الدراسة!",
+    confirmRegenerate: "سيتم أرشفة مسارك الحالي. هل تريد المتابعة؟",
   },
 };
 
@@ -146,6 +160,14 @@ const STATUS_COLORS = {
 const PRIORITY_COLORS = { high: "#EF4444", normal: "#3B82F6", low: "#6B7280" };
 
 const TASK_TYPE_ICONS = { study: "📖", review: "🔄", practice: "✏️", "exam-prep": "📝" };
+
+/* ── keyframes (ssp- prefix to avoid collision with study-planner sp-) ── */
+const sspKf = `
+@keyframes ssp-spin { to { transform: rotate(360deg); } }
+@keyframes ssp-fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ssp-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes ssp-toast { 0% { opacity: 0; transform: translateY(12px); } 10% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px); } }
+`;
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
@@ -173,20 +195,34 @@ export default function SmartStudyPath({ locale = "en", userId }) {
   const [path, setPath] = useState(null);
   const [mastery, setMastery] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const [generating, setGenerating] = useState(false);
   const [updatingDay, setUpdatingDay] = useState(null);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [formDuration, setFormDuration] = useState(14);
   const [formFocus, setFormFocus] = useState("");
-  const [error, setError] = useState("");
+  const [genError, setGenError] = useState("");
+
+  // Toast
+  const [toast, setToast] = useState(null);
+  const showToast = (msg, type = "success") => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  // Scroll to today ref
+  const todayRef = useRef(null);
 
   const fetchPath = useCallback(async () => {
     try {
       const res = await fetch("/api/study-hub/smart-path");
+      if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
       setPath(data.path || null);
-    } catch {
+      setFetchError(null);
+    } catch (e) {
       setPath(null);
+      setFetchError(e.message);
     } finally {
       setLoading(false);
     }
@@ -195,8 +231,10 @@ export default function SmartStudyPath({ locale = "en", userId }) {
   const fetchMastery = useCallback(async () => {
     try {
       const res = await fetch("/api/study-hub/smart-path/mastery");
-      const data = await res.json();
-      setMastery(data.mastery || []);
+      if (res.ok) {
+        const data = await res.json();
+        setMastery(data.mastery || []);
+      }
     } catch {
       setMastery([]);
     }
@@ -211,9 +249,24 @@ export default function SmartStudyPath({ locale = "en", userId }) {
     }
   }, [userId, fetchPath, fetchMastery]);
 
+  // Scroll to today when switching to timeline
+  useEffect(() => {
+    if (tab === "timeline" && todayRef.current) {
+      setTimeout(() => todayRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+    }
+  }, [tab]);
+
+  const openGenerateModal = (isRegenerate = false) => {
+    if (isRegenerate && path) {
+      if (!confirm(t.confirmRegenerate)) return;
+    }
+    setGenError("");
+    setShowGenerateModal(true);
+  };
+
   const handleGenerate = async () => {
     setGenerating(true);
-    setError("");
+    setGenError("");
     try {
       const focusSubjects = formFocus.split(",").map((s) => s.trim()).filter(Boolean);
       const res = await fetch("/api/study-hub/smart-path", {
@@ -230,9 +283,10 @@ export default function SmartStudyPath({ locale = "en", userId }) {
       setPath(data.path);
       setShowGenerateModal(false);
       setFormFocus("");
+      showToast(t.pathGenerated);
       fetchMastery();
     } catch (err) {
-      setError(err.message || t.errorGenerating);
+      setGenError(err.message || t.errorGenerating);
     } finally {
       setGenerating(false);
     }
@@ -247,7 +301,8 @@ export default function SmartStudyPath({ locale = "en", userId }) {
         body: JSON.stringify({ status }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || t.dayUpdateError);
+
       // Update local state
       setPath((prev) => {
         if (!prev) return prev;
@@ -257,28 +312,50 @@ export default function SmartStudyPath({ locale = "en", userId }) {
         const allDone = updatedDays.every((d) => d.status !== "pending");
         return { ...prev, days: updatedDays, status: allDone ? "completed" : prev.status };
       });
+
+      const statusLabel = t[status] || status;
+      showToast(`${t.dayUpdated} (${statusLabel})`);
       fetchMastery();
-    } catch {
-      // silently fail
+    } catch (err) {
+      showToast(err.message || t.dayUpdateError, "error");
     } finally {
       setUpdatingDay(null);
     }
   };
 
+  // Login gate
   if (!userId) {
     return (
       <div style={{ textAlign: "center", padding: "60px 20px", color: "#888" }}>
+        <style>{sspKf}</style>
         <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
         <p style={{ fontSize: 16, fontWeight: 600 }}>{t.loginRequired}</p>
       </div>
     );
   }
 
+  // Loading
   if (loading) {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "48px 20px" }}>
-        <div style={{ width: 44, height: 44, border: "4px solid #e8ddd0", borderTopColor: "#F59E0B", borderRadius: "50%", animation: "sp-spin 0.8s linear infinite" }} />
-        <style>{`@keyframes sp-spin { to { transform: rotate(360deg); } }`}</style>
+        <style>{sspKf}</style>
+        <div style={{ width: 44, height: 44, border: "4px solid #e8ddd0", borderTopColor: "#F59E0B", borderRadius: "50%", animation: "ssp-spin 0.8s linear infinite" }} />
+        <p style={{ color: "var(--text-secondary, #888)", fontSize: 14 }}>{t.loading}</p>
+      </div>
+    );
+  }
+
+  // Fetch error (only show if no path loaded)
+  if (fetchError && !path) {
+    return (
+      <div style={{ textAlign: "center", padding: 60 }}>
+        <style>{sspKf}</style>
+        <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
+        <h3 style={{ marginBottom: 8, color: "var(--foreground, #222)" }}>{t.error}</h3>
+        <button onClick={() => { setLoading(true); setFetchError(null); fetchPath(); fetchMastery(); }} style={{
+          padding: "10px 24px", borderRadius: 10, border: "none", fontFamily: "inherit",
+          background: "linear-gradient(135deg, #F59E0B, #D97706)", color: "#fff", fontWeight: 600, cursor: "pointer", fontSize: 14,
+        }}>{t.retry}</button>
       </div>
     );
   }
@@ -344,6 +421,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
     tabs: { display: "flex", gap: 4, justifyContent: "center", marginBottom: 24, flexWrap: "wrap" },
     tab: (active) => ({
       padding: "8px 18px", borderRadius: 20, border: "none", cursor: "pointer", fontWeight: 600, fontSize: 13,
+      fontFamily: "inherit",
       background: active ? "linear-gradient(135deg, #F59E0B, #D97706)" : "rgba(200,149,108,0.12)",
       color: active ? "#fff" : "#888", transition: "all 0.2s",
     }),
@@ -355,19 +433,22 @@ export default function SmartStudyPath({ locale = "en", userId }) {
       display: "inline-block", padding: "2px 10px", borderRadius: 12, fontSize: 11, fontWeight: 700,
       background: color.bg, color: color.text, border: `1px solid ${color.border}`,
     }),
-    priorityDot: (color) => ({ width: 8, height: 8, borderRadius: "50%", background: color, display: "inline-block", marginRight: isRTL ? 0 : 4, marginLeft: isRTL ? 4 : 0 }),
+    priorityDot: (color) => ({ width: 8, height: 8, borderRadius: "50%", background: color, display: "inline-block", marginInlineEnd: 4 }),
     btn: (bg) => ({
       padding: "8px 16px", borderRadius: 10, border: "none", cursor: "pointer", fontWeight: 600, fontSize: 13,
-      background: bg, color: "#fff", transition: "all 0.2s",
+      fontFamily: "inherit", background: bg, color: "#fff", transition: "all 0.2s",
     }),
-    btnOutline: { padding: "8px 16px", borderRadius: 10, border: "1px solid rgba(200,149,108,0.3)", cursor: "pointer", fontWeight: 600, fontSize: 13, background: "transparent", color: "#888", transition: "all 0.2s" },
+    btnOutline: {
+      padding: "8px 16px", borderRadius: 10, border: "1px solid rgba(200,149,108,0.3)", cursor: "pointer", fontWeight: 600, fontSize: 13,
+      fontFamily: "inherit", background: "transparent", color: "#888", transition: "all 0.2s",
+    },
     emptyState: { textAlign: "center", padding: "60px 20px" },
     emptyIcon: { fontSize: 64, marginBottom: 16 },
     emptyTitle: { fontSize: 20, fontWeight: 700, color: "var(--foreground, #222)", margin: "0 0 8px" },
     emptyDesc: { fontSize: 14, color: "#888", margin: "0 0 24px", maxWidth: 400, marginInline: "auto" },
-    modal: { position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.5)", padding: 20 },
+    modal: { position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", padding: 20 },
     modalCard: { background: "var(--background, #fff)", borderRadius: 20, padding: 24, width: "100%", maxWidth: 420, boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
-    input: { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1px solid rgba(200,149,108,0.3)", fontSize: 14, outline: "none", background: "transparent", color: "var(--foreground, #222)", boxSizing: "border-box" },
+    input: { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1px solid rgba(200,149,108,0.3)", fontSize: 14, outline: "none", background: "transparent", color: "var(--foreground, #222)", boxSizing: "border-box", fontFamily: "inherit" },
     label: { display: "block", fontSize: 13, fontWeight: 600, marginBottom: 6, marginTop: 14, color: "#888" },
     dayCard: (isCurrentDay, status) => ({
       background: isCurrentDay ? "rgba(245,158,11,0.08)" : status !== "pending" ? STATUS_COLORS[status]?.bg + "22" : "rgba(200,149,108,0.04)",
@@ -385,10 +466,9 @@ export default function SmartStudyPath({ locale = "en", userId }) {
       border: `1px solid ${STATUS_COLORS[status]?.border || "rgba(200,149,108,0.12)"}`,
     }),
     masteryCard: (color) => ({
-      background: "rgba(200,149,108,0.04)", border: `1px solid rgba(200,149,108,0.12)`,
+      background: "rgba(200,149,108,0.04)", border: "1px solid rgba(200,149,108,0.12)",
       borderRadius: 14, padding: 16, marginBottom: 10,
-      borderLeft: isRTL ? "none" : `4px solid ${color}`,
-      borderRight: isRTL ? `4px solid ${color}` : "none",
+      borderInlineStart: `4px solid ${color}`,
     }),
   };
 
@@ -396,15 +476,16 @@ export default function SmartStudyPath({ locale = "en", userId }) {
   if (!path) {
     return (
       <div style={S.container}>
+        <style>{sspKf}</style>
         <div style={S.header}>
           <h2 style={S.headerTitle}>{t.title}</h2>
           <p style={S.headerSub}>{t.subtitle}</p>
         </div>
-        <div style={S.emptyState}>
+        <div style={{ ...S.emptyState, animation: "ssp-fadeIn 0.3s ease" }}>
           <div style={S.emptyIcon}>🎯</div>
           <h3 style={S.emptyTitle}>{t.emptyTitle}</h3>
           <p style={S.emptyDesc}>{t.emptyDesc}</p>
-          <button style={S.btn("#F59E0B")} onClick={() => setShowGenerateModal(true)}>
+          <button style={S.btn("#F59E0B")} onClick={() => openGenerateModal(false)}>
             {t.getStarted}
           </button>
         </div>
@@ -416,7 +497,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
   function renderGenerateModal() {
     return (
       <div style={S.modal} onClick={() => !generating && setShowGenerateModal(false)}>
-        <div style={S.modalCard} onClick={(e) => e.stopPropagation()}>
+        <div style={{ ...S.modalCard, animation: "ssp-fadeIn 0.2s ease" }} onClick={(e) => e.stopPropagation()}>
           <h3 style={{ fontSize: 18, fontWeight: 700, margin: "0 0 4px", color: "var(--foreground, #222)" }}>
             {t.generateBtn}
           </h3>
@@ -439,11 +520,11 @@ export default function SmartStudyPath({ locale = "en", userId }) {
             type="text" value={formFocus}
             onChange={(e) => setFormFocus(e.target.value)}
             placeholder={t.focusPlaceholder}
-            style={S.input}
+            style={{ ...S.input, direction: isRTL ? "rtl" : "ltr" }}
           />
 
-          {error && (
-            <p style={{ color: "#EF4444", fontSize: 13, marginTop: 10 }}>{error}</p>
+          {genError && (
+            <p style={{ color: "#EF4444", fontSize: 13, marginTop: 10 }}>{genError}</p>
           )}
 
           <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
@@ -454,7 +535,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
             >
               {generating ? t.generating : t.generate}
             </button>
-            <button style={{ ...S.btnOutline, flex: 0 }} onClick={() => setShowGenerateModal(false)} disabled={generating}>
+            <button style={S.btnOutline} onClick={() => setShowGenerateModal(false)} disabled={generating}>
               {t.cancel}
             </button>
           </div>
@@ -466,7 +547,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
   // === DASHBOARD TAB ===
   function renderDashboard() {
     return (
-      <>
+      <div style={{ animation: "ssp-fadeIn 0.3s ease" }}>
         {/* Path header card */}
         <div style={S.card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 10 }}>
@@ -479,7 +560,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
             {path.status === "completed" ? (
               <span style={S.badge(STATUS_COLORS.completed)}>{t.pathCompleted}</span>
             ) : (
-              <button style={S.btn("#D97706")} onClick={() => setShowGenerateModal(true)}>
+              <button style={S.btn("#D97706")} onClick={() => openGenerateModal(true)}>
                 {t.regenerateBtn}
               </button>
             )}
@@ -503,11 +584,11 @@ export default function SmartStudyPath({ locale = "en", userId }) {
 
         {/* Path completed message */}
         {path.status === "completed" && (
-          <div style={{ ...S.card, textAlign: "center", background: "rgba(16,163,127,0.06)", borderColor: "rgba(16,163,127,0.2)" }}>
+          <div style={{ ...S.card, textAlign: "center", background: "rgba(16,163,127,0.06)", borderColor: "rgba(16,163,127,0.2)", animation: "ssp-pulse 2s ease infinite" }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🎉</div>
             <h3 style={{ fontSize: 18, fontWeight: 700, margin: "0 0 4px", color: "#16A34A" }}>{t.pathCompleted}</h3>
             <p style={{ fontSize: 14, color: "#888", margin: "0 0 16px" }}>{t.pathCompletedDesc}</p>
-            <button style={S.btn("#F59E0B")} onClick={() => setShowGenerateModal(true)}>
+            <button style={S.btn("#F59E0B")} onClick={() => openGenerateModal(true)}>
               {t.generateBtn}
             </button>
           </div>
@@ -574,7 +655,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
             <span style={{ fontSize: 13, fontWeight: 600, color: "var(--foreground, #222)" }}>💡 {t.suggestion}</span>
             <p style={{ fontSize: 13, color: "#666", margin: "4px 0 0" }}>{suggestion}</p>
             {suggestionType === "danger" && (
-              <button style={{ ...S.btn("#D97706"), marginTop: 8, fontSize: 12 }} onClick={() => setShowGenerateModal(true)}>
+              <button style={{ ...S.btn("#D97706"), marginTop: 8, fontSize: 12 }} onClick={() => openGenerateModal(true)}>
                 {t.regenerateBtn}
               </button>
             )}
@@ -614,19 +695,23 @@ export default function SmartStudyPath({ locale = "en", userId }) {
             </div>
           </div>
         )}
-      </>
+      </div>
     );
   }
 
   // === TIMELINE TAB ===
   function renderTimeline() {
     return (
-      <>
-        {days.map((d) => {
+      <div style={{ animation: "ssp-fadeIn 0.3s ease" }}>
+        {days.map((d, i) => {
           const current = isToday(d.date);
           const overdue = d.status === "pending" && isPast(d.date) && !current;
           return (
-            <div key={d.id} style={S.dayCard(current, d.status)}>
+            <div
+              key={d.id}
+              ref={current ? todayRef : undefined}
+              style={{ ...S.dayCard(current, d.status), animation: `ssp-fadeIn 0.3s ease ${i * 0.03}s both` }}
+            >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: current ? "#F59E0B" : "var(--foreground, #222)" }}>
@@ -681,7 +766,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
             </div>
           );
         })}
-      </>
+      </div>
     );
   }
 
@@ -689,7 +774,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
   function renderMastery() {
     if (mastery.length === 0) {
       return (
-        <div style={{ textAlign: "center", padding: "40px 20px" }}>
+        <div style={{ textAlign: "center", padding: "40px 20px", animation: "ssp-fadeIn 0.3s ease" }}>
           <div style={{ fontSize: 48, marginBottom: 12 }}>📊</div>
           <p style={{ fontSize: 14, color: "#888" }}>{t.noMasteryData}</p>
         </div>
@@ -702,7 +787,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
     }));
 
     return (
-      <>
+      <div style={{ animation: "ssp-fadeIn 0.3s ease" }}>
         {/* Bar Chart */}
         <div style={S.card}>
           <h4 style={S.cardTitle}>{t.masteryBySubject}</h4>
@@ -724,7 +809,7 @@ export default function SmartStudyPath({ locale = "en", userId }) {
         {mastery.map((m, idx) => {
           const color = getMasteryColor(m.masteryPct);
           return (
-            <div key={m.id || idx} style={S.masteryCard(color)}>
+            <div key={m.id || idx} style={{ ...S.masteryCard(color), animation: `ssp-fadeIn 0.3s ease ${idx * 0.05}s both` }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                 <span style={{ fontSize: 15, fontWeight: 700, color: "var(--foreground, #222)" }}>{m.subject}</span>
                 <span style={{ fontSize: 14, fontWeight: 700, color }}>{Math.round(m.masteryPct)}%</span>
@@ -746,12 +831,24 @@ export default function SmartStudyPath({ locale = "en", userId }) {
             </div>
           );
         })}
-      </>
+      </div>
     );
   }
 
   return (
     <div style={S.container}>
+      <style>{sspKf}</style>
+
+      {/* Toast */}
+      {toast && (
+        <div style={{
+          position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)", zIndex: 9999,
+          padding: "10px 20px", borderRadius: 10, color: "#fff", fontSize: 14, fontWeight: 600,
+          background: toast.type === "error" ? "#EF4444" : "#10B981",
+          animation: "ssp-toast 3s ease forwards", boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+        }}>{toast.msg}</div>
+      )}
+
       <div style={S.header}>
         <h2 style={S.headerTitle}>{t.title}</h2>
         <p style={S.headerSub}>{t.subtitle}</p>
