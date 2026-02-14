@@ -20,6 +20,7 @@ import {
   Calendar,
   BookOpen,
   ClipboardList,
+  MessageSquare,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -114,6 +115,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       label: 'Past Exams',
       labelAr: 'الامتحانات السابقة',
       icon: ClipboardList,
+    },
+    {
+      href: `/${locale}/admin/requests`,
+      label: 'Material Requests',
+      labelAr: 'طلبات المواد',
+      icon: MessageSquare,
     },
     {
       href: `/${locale}/admin/analytics`,
