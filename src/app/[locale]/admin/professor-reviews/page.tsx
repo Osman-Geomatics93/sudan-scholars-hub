@@ -16,7 +16,13 @@ import {
   AlertTriangle,
   MessageSquare,
   Tag,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Shield,
 } from 'lucide-react';
+
+type StatusFilter = 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
 interface ProfessorReview {
   id: string;
@@ -32,6 +38,9 @@ interface ProfessorReview {
   isAnonymous: boolean;
   userId: string;
   userName: string | null;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  rejectionNote: string | null;
+  reviewedAt: string | null;
   createdAt: string;
   user: {
     id: string;
@@ -54,6 +63,22 @@ function StarRating({ value, max = 5, color = 'text-yellow-400' }: { value: numb
   );
 }
 
+function StatusBadge({ status, isRTL }: { status: string; isRTL: boolean }) {
+  const config = {
+    PENDING: { bg: 'bg-yellow-100', text: 'text-yellow-700', icon: Clock, label: isRTL ? 'قيد المراجعة' : 'Pending' },
+    APPROVED: { bg: 'bg-green-100', text: 'text-green-700', icon: CheckCircle, label: isRTL ? 'مقبول' : 'Approved' },
+    REJECTED: { bg: 'bg-red-100', text: 'text-red-700', icon: XCircle, label: isRTL ? 'مرفوض' : 'Rejected' },
+  }[status] || { bg: 'bg-gray-100', text: 'text-gray-700', icon: Clock, label: status };
+
+  const Icon = config.icon;
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.bg} ${config.text}`}>
+      <Icon className="h-3 w-3" />
+      {config.label}
+    </span>
+  );
+}
+
 export default function AdminProfessorReviewsPage() {
   const pathname = usePathname();
   const locale = pathname.split('/')[1];
@@ -63,9 +88,13 @@ export default function AdminProfessorReviewsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('PENDING');
   const [selectedReview, setSelectedReview] = useState<ProfessorReview | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState<string | null>(null);
+  const [showRejectModal, setShowRejectModal] = useState<string | null>(null);
+  const [rejectionNote, setRejectionNote] = useState('');
 
   useEffect(() => {
     fetchReviews();
@@ -76,11 +105,13 @@ export default function AdminProfessorReviewsPage() {
     try {
       const params = new URLSearchParams();
       if (search) params.set('search', search);
+      if (statusFilter !== 'ALL') params.set('status', statusFilter);
       const res = await fetch(`/api/admin/professor-reviews?${params}`);
       if (res.ok) {
         const data = await res.json();
         setReviews(data.reviews || []);
         setTotal(data.total || 0);
+        setPendingCount(data.pendingCount || 0);
       }
     } catch (error) {
       console.error('Failed to fetch reviews:', error);
@@ -94,7 +125,51 @@ export default function AdminProfessorReviewsPage() {
       fetchReviews();
     }, 300);
     return () => clearTimeout(timeout);
-  }, [search]);
+  }, [search, statusFilter]);
+
+  async function approveReview(id: string) {
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/admin/professor-reviews/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'APPROVED' }),
+      });
+      if (res.ok) {
+        if (selectedReview?.id === id) {
+          setSelectedReview((prev) => prev ? { ...prev, status: 'APPROVED', reviewedAt: new Date().toISOString(), rejectionNote: null } : null);
+        }
+        fetchReviews();
+      }
+    } catch (error) {
+      console.error('Failed to approve review:', error);
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function rejectReview(id: string) {
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/admin/professor-reviews/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'REJECTED', rejectionNote: rejectionNote || null }),
+      });
+      if (res.ok) {
+        fetchReviews();
+        if (selectedReview?.id === id) {
+          setSelectedReview((prev) => prev ? { ...prev, status: 'REJECTED', reviewedAt: new Date().toISOString(), rejectionNote: rejectionNote || null } : null);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to reject review:', error);
+    } finally {
+      setActionLoading(null);
+      setShowRejectModal(null);
+      setRejectionNote('');
+    }
+  }
 
   async function deleteReview(id: string) {
     setActionLoading(id);
@@ -104,6 +179,7 @@ export default function AdminProfessorReviewsPage() {
         setReviews((prev) => prev.filter((r) => r.id !== id));
         if (selectedReview?.id === id) setSelectedReview(null);
         setTotal((prev) => prev - 1);
+        fetchReviews();
       }
     } catch (error) {
       console.error('Failed to delete review:', error);
@@ -113,7 +189,12 @@ export default function AdminProfessorReviewsPage() {
     }
   }
 
-  const filteredReviews = reviews;
+  const statusTabs: { key: StatusFilter; label: string; labelAr: string }[] = [
+    { key: 'PENDING', label: 'Pending', labelAr: 'قيد المراجعة' },
+    { key: 'APPROVED', label: 'Approved', labelAr: 'مقبول' },
+    { key: 'REJECTED', label: 'Rejected', labelAr: 'مرفوض' },
+    { key: 'ALL', label: 'All', labelAr: 'الكل' },
+  ];
 
   if (loading && reviews.length === 0) {
     return (
@@ -137,6 +218,32 @@ export default function AdminProfessorReviewsPage() {
         </p>
       </div>
 
+      {/* Status Tabs */}
+      <div className="flex flex-wrap gap-2">
+        {statusTabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setStatusFilter(tab.key)}
+            className={`relative inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+              statusFilter === tab.key
+                ? 'bg-primary-600 text-white shadow-sm'
+                : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+            }`}
+          >
+            {isRTL ? tab.labelAr : tab.label}
+            {tab.key === 'PENDING' && pendingCount > 0 && (
+              <span className={`inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-xs font-bold leading-none ${
+                statusFilter === 'PENDING'
+                  ? 'bg-white text-primary-600'
+                  : 'bg-yellow-500 text-white'
+              }`}>
+                {pendingCount}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
       {/* Search */}
       <div className="relative">
         <Search className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${isRTL ? 'right-3' : 'left-3'}`} />
@@ -155,13 +262,13 @@ export default function AdminProfessorReviewsPage() {
       <div className="grid gap-6 lg:grid-cols-5">
         {/* Review List */}
         <div className="lg:col-span-2 space-y-2 max-h-[70vh] overflow-y-auto">
-          {filteredReviews.length === 0 ? (
+          {reviews.length === 0 ? (
             <div className="rounded-xl bg-white py-12 text-center text-gray-500 shadow-sm">
               <GraduationCap className="mx-auto mb-3 h-10 w-10 text-gray-300" />
               {isRTL ? 'لا توجد تقييمات' : 'No reviews found'}
             </div>
           ) : (
-            filteredReviews.map((review) => (
+            reviews.map((review) => (
               <button
                 key={review.id}
                 onClick={() => setSelectedReview(review)}
@@ -173,10 +280,7 @@ export default function AdminProfessorReviewsPage() {
               >
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="font-semibold text-gray-900 line-clamp-1">{review.professorName}</h3>
-                  <div className="shrink-0 flex items-center gap-1">
-                    <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
-                    <span className="text-sm font-medium text-gray-700">{review.rating}/5</span>
-                  </div>
+                  <StatusBadge status={review.status} isRTL={isRTL} />
                 </div>
                 <p className="mt-1 text-sm text-gray-500 line-clamp-1">
                   <BookOpen className="inline h-3 w-3 mr-1" /> {review.courseName}
@@ -184,15 +288,42 @@ export default function AdminProfessorReviewsPage() {
                 <p className="mt-0.5 text-xs text-gray-400 line-clamp-1">
                   <Building2 className="inline h-3 w-3 mr-1" /> {review.universityName}
                 </p>
-                <div className="mt-2 flex items-center gap-3 text-xs text-gray-400">
-                  <span className="flex items-center gap-1">
-                    <User className="h-3 w-3" />
-                    {review.isAnonymous ? (isRTL ? 'مجهول' : 'Anonymous') : (review.user?.name || 'Unknown')}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" /> {new Date(review.createdAt).toLocaleDateString(isRTL ? 'ar' : 'en')}
-                  </span>
+                <div className="mt-2 flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-xs text-gray-400">
+                    <span className="flex items-center gap-1">
+                      <User className="h-3 w-3" />
+                      {review.isAnonymous ? (isRTL ? 'مجهول' : 'Anonymous') : (review.user?.name || 'Unknown')}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" /> {new Date(review.createdAt).toLocaleDateString(isRTL ? 'ar' : 'en')}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
+                    <span className="text-sm font-medium text-gray-700">{review.rating}/5</span>
+                  </div>
                 </div>
+                {/* Quick action buttons for PENDING reviews in list */}
+                {review.status === 'PENDING' && (
+                  <div className="mt-2 flex gap-2" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => approveReview(review.id)}
+                      disabled={actionLoading === review.id}
+                      className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 hover:bg-green-100 disabled:opacity-50 transition-colors"
+                    >
+                      <CheckCircle className="h-3 w-3" />
+                      {isRTL ? 'قبول' : 'Approve'}
+                    </button>
+                    <button
+                      onClick={() => { setShowRejectModal(review.id); setRejectionNote(''); }}
+                      disabled={actionLoading === review.id}
+                      className="inline-flex items-center gap-1 rounded-md bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50 transition-colors"
+                    >
+                      <XCircle className="h-3 w-3" />
+                      {isRTL ? 'رفض' : 'Reject'}
+                    </button>
+                  </div>
+                )}
               </button>
             ))
           )}
@@ -202,6 +333,17 @@ export default function AdminProfessorReviewsPage() {
         <div className="lg:col-span-3">
           {selectedReview ? (
             <div className="rounded-xl bg-white p-6 shadow-sm">
+              {/* Status badge at top */}
+              <div className="mb-4 flex items-center justify-between">
+                <StatusBadge status={selectedReview.status} isRTL={isRTL} />
+                {selectedReview.reviewedAt && (
+                  <span className="text-xs text-gray-400">
+                    {isRTL ? 'تمت المراجعة: ' : 'Reviewed: '}
+                    {new Date(selectedReview.reviewedAt).toLocaleString(isRTL ? 'ar' : 'en')}
+                  </span>
+                )}
+              </div>
+
               {/* Professor & University */}
               <div className="mb-4">
                 <h2 className="text-xl font-bold text-gray-900">{selectedReview.professorName}</h2>
@@ -282,6 +424,17 @@ export default function AdminProfessorReviewsPage() {
                 </div>
               )}
 
+              {/* Rejection Note */}
+              {selectedReview.status === 'REJECTED' && selectedReview.rejectionNote && (
+                <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4">
+                  <p className="text-xs font-medium text-red-600 mb-2 flex items-center gap-1">
+                    <XCircle className="h-3 w-3" />
+                    {isRTL ? 'سبب الرفض' : 'Rejection Note'}
+                  </p>
+                  <p className="text-sm text-red-700 whitespace-pre-wrap">{selectedReview.rejectionNote}</p>
+                </div>
+              )}
+
               {/* User info */}
               <div className="mb-6 flex items-center gap-3 rounded-lg border border-gray-100 p-3">
                 {selectedReview.user?.image ? (
@@ -311,10 +464,33 @@ export default function AdminProfessorReviewsPage() {
 
               {/* Action buttons */}
               <div className="border-t pt-4">
-                <p className="mb-3 text-sm font-medium text-gray-700">
+                <p className="mb-3 text-sm font-medium text-gray-700 flex items-center gap-1.5">
+                  <Shield className="h-4 w-4" />
                   {isRTL ? 'إجراءات الإدارة' : 'Admin Actions'}
                 </p>
                 <div className="flex flex-wrap gap-2">
+                  {/* Approve (only for PENDING) */}
+                  {selectedReview.status === 'PENDING' && (
+                    <button
+                      onClick={() => approveReview(selectedReview.id)}
+                      disabled={actionLoading === selectedReview.id}
+                      className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-50"
+                    >
+                      <CheckCircle className="h-4 w-4" />
+                      {isRTL ? 'قبول التقييم' : 'Approve Review'}
+                    </button>
+                  )}
+                  {/* Reject (only for PENDING) */}
+                  {selectedReview.status === 'PENDING' && (
+                    <button
+                      onClick={() => { setShowRejectModal(selectedReview.id); setRejectionNote(''); }}
+                      disabled={actionLoading === selectedReview.id}
+                      className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:opacity-50"
+                    >
+                      <XCircle className="h-4 w-4" />
+                      {isRTL ? 'رفض التقييم' : 'Reject Review'}
+                    </button>
+                  )}
                   {/* Delete */}
                   <button
                     onClick={() => setShowDeleteModal(selectedReview.id)}
@@ -335,6 +511,54 @@ export default function AdminProfessorReviewsPage() {
           )}
         </div>
       </div>
+
+      {/* Rejection modal */}
+      {showRejectModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowRejectModal(null)}>
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                <XCircle className="h-5 w-5 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900">
+                  {isRTL ? 'رفض التقييم' : 'Reject Review'}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  {isRTL ? 'سيتم إخطار صاحب التقييم بالرفض.' : 'The reviewer will be notified about the rejection.'}
+                </p>
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {isRTL ? 'سبب الرفض (اختياري)' : 'Rejection note (optional)'}
+              </label>
+              <textarea
+                value={rejectionNote}
+                onChange={(e) => setRejectionNote(e.target.value)}
+                rows={3}
+                placeholder={isRTL ? 'اكتب سبب الرفض هنا...' : 'Enter reason for rejection...'}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowRejectModal(null)}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                {isRTL ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                onClick={() => rejectReview(showRejectModal)}
+                disabled={actionLoading === showRejectModal}
+                className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
+              >
+                {isRTL ? 'تأكيد الرفض' : 'Confirm Reject'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete confirmation modal */}
       {showDeleteModal && (

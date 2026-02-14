@@ -4,7 +4,7 @@ import { requireAdmin } from '@/lib/auth-utils';
 
 export const dynamic = 'force-dynamic';
 
-// GET - List all professor reviews (admin)
+// GET - List all professor reviews (admin, filterable by status)
 export async function GET(request: NextRequest) {
   const { session, error } = await requireAdmin();
   if (error) return error;
@@ -12,9 +12,11 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get('search');
-    const flagged = searchParams.get('flagged') === 'true';
+    const status = searchParams.get('status'); // PENDING, APPROVED, REJECTED
 
     const where: Record<string, unknown> = {};
+
+    if (status) where.status = status;
 
     if (search) {
       where.OR = [
@@ -25,17 +27,19 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    const reviews = await prisma.professorReview.findMany({
-      where,
-      include: {
-        user: { select: { id: true, name: true, email: true, image: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    const [reviews, total, pendingCount] = await Promise.all([
+      prisma.professorReview.findMany({
+        where,
+        include: {
+          user: { select: { id: true, name: true, email: true, image: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.professorReview.count({ where }),
+      prisma.professorReview.count({ where: { status: 'PENDING' } }),
+    ]);
 
-    const total = await prisma.professorReview.count();
-
-    return NextResponse.json({ reviews, total });
+    return NextResponse.json({ reviews, total, pendingCount });
   } catch (error) {
     console.error('Error fetching reviews:', error);
     return NextResponse.json({ error: 'Failed to fetch reviews' }, { status: 500 });

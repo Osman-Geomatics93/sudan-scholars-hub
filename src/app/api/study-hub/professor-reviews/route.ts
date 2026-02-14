@@ -17,10 +17,11 @@ export async function GET(request: NextRequest) {
     const aggregatesOnly = searchParams.get('aggregatesOnly') === 'true';
     const mostReviewed = searchParams.get('mostReviewed') === 'true';
 
-    // Most reviewed professors — aggregation query
+    // Most reviewed professors — aggregation query (only APPROVED)
     if (mostReviewed) {
       const results = await prisma.professorReview.groupBy({
         by: ['professorName', 'universityName'],
+        where: { status: 'APPROVED' },
         _count: { id: true },
         _avg: { rating: true, difficulty: true },
         orderBy: { _count: { id: 'desc' } },
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ mostReviewedProfs });
     }
 
-    const where: Record<string, unknown> = {};
+    const where: Record<string, unknown> = { status: 'APPROVED' };
 
     if (search) {
       where.OR = [
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { review, message: 'Review submitted successfully' },
+      { review, message: 'Review submitted successfully and is pending admin approval.' },
       { status: 201 }
     );
   } catch (error) {

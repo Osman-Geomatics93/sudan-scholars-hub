@@ -43,10 +43,14 @@ export async function PATCH(
         ...(tags !== undefined && { tags }),
         ...(isAnonymous !== undefined && { isAnonymous }),
         ...(isAnonymous !== undefined && { userName: isAnonymous ? null : (session!.user as { name?: string | null }).name || null }),
+        // Reset to PENDING so edited reviews go through moderation again
+        status: 'PENDING',
+        rejectionNote: null,
+        reviewedAt: null,
       },
     });
 
-    return NextResponse.json({ review: updated, message: 'Review updated successfully' });
+    return NextResponse.json({ review: updated, message: 'Review updated and is pending admin approval.' });
   } catch (error) {
     console.error('Error updating professor review:', error);
     return NextResponse.json({ error: 'Failed to update review' }, { status: 500 });
