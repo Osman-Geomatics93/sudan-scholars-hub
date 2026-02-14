@@ -681,6 +681,91 @@ const T = {
     toolsSection: "Student Tools",
     targetGrade: "Target",
     gradeNeeded: "Grade Needed on Final",
+    // Pomodoro Timer
+    pomodoroTimer: "Pomodoro Timer",
+    pomodoroSub: "Stay focused with timed study sessions",
+    pomodoroWork: "Focus",
+    pomodoroBreak: "Break",
+    pomodoroLongBreak: "Long Break",
+    pomodoroStart: "Start",
+    pomodoroPause: "Pause",
+    pomodoroReset: "Reset",
+    pomodoroSkip: "Skip",
+    pomodoroSessions: "Sessions",
+    pomodoroCompleted: "completed today",
+    pomodoroStreak: "Day Streak",
+    pomodoroSettings: "Settings",
+    pomodoroWorkDuration: "Focus Duration (min)",
+    pomodoroBreakDuration: "Break Duration (min)",
+    pomodoroLongBreakDuration: "Long Break Duration (min)",
+    pomodoroSaveSettings: "Save Settings",
+    pomodoroTotalFocus: "Total Focus",
+    pomodoroMinutes: "min",
+    pomodoroMotivation1: "Stay focused! You got this!",
+    pomodoroMotivation2: "Great work! Take a breather.",
+    pomodoroMotivation3: "You earned a long break!",
+    pomodoroSessionsBeforeLong: "Sessions before long break",
+    // Exam Countdown Planner
+    examPlanner: "Exam Planner",
+    examPlannerSub: "Countdown to your exams with smart study plans",
+    addExam: "Add Exam",
+    examNameLabel: "Exam Name",
+    examDateLabel: "Exam Date",
+    examSubjectLabel: "Subject",
+    saveExam: "Save Exam",
+    daysLeft: "days left",
+    hoursLeft: "hours left",
+    examToday: "TODAY!",
+    examPassed: "Passed",
+    studyPlan: "Study Plan",
+    studyBlocks: "study blocks",
+    hoursPerDay: "hrs/day",
+    noExamsPlanner: "No exams added yet",
+    addFirstExam: "Add your first exam",
+    editExamPlanner: "Edit Exam",
+    deleteExamPlanner: "Delete",
+    examColor: "Color",
+    urgencyHigh: "Urgent",
+    urgencyMedium: "Soon",
+    urgencyLow: "Upcoming",
+    urgencySafe: "Plenty of time",
+    // Professor Reviews
+    profReviews: "Professor Reviews",
+    profReviewsSub: "Rate and review your professors",
+    searchProfessor: "Search professor name...",
+    writeProfReview: "Write Review",
+    profName: "Professor Name",
+    courseNameLabel: "Course Name",
+    overallRating: "Overall Rating",
+    difficultyRating: "Difficulty",
+    wouldTakeAgain: "Would Take Again?",
+    wouldTakeAgainYes: "Yes",
+    wouldTakeAgainNo: "No",
+    anonymousReview: "Post Anonymously",
+    submitProfReview: "Submit Review",
+    profAvgRating: "Avg Rating",
+    profAvgDifficulty: "Avg Difficulty",
+    mostReviewed: "Most Reviewed",
+    profTakeAgainPct: "would take again",
+    profReviewCount: "reviews",
+    profNoReviews: "No reviews yet. Be the first!",
+    profReviewSuccess: "Review submitted!",
+    profReviewUpdated: "Review updated!",
+    profReviewDeleted: "Review deleted!",
+    profFilterUniversity: "Filter by University",
+    allUniversitiesFilter: "All Universities",
+    anonymousStudent: "Anonymous Student",
+    profTags: "Tags",
+    tagClearLectures: "Clear Lectures",
+    tagHardGrader: "Hard Grader",
+    tagGivesNotes: "Gives Notes",
+    tagGroupProjects: "Group Projects",
+    tagAttendanceMandatory: "Attendance Mandatory",
+    tagExtraCredit: "Extra Credit",
+    tagToughExams: "Tough Exams",
+    tagInspiring: "Inspiring",
+    tagAccessible: "Accessible",
+    tagHeavyHomework: "Heavy Homework",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -1000,8 +1085,110 @@ const T = {
     toolsSection: "أدوات الطالب",
     targetGrade: "الهدف",
     gradeNeeded: "الدرجة المطلوبة في الفاينال",
+    // Pomodoro Timer
+    pomodoroTimer: "مؤقت بومودورو",
+    pomodoroSub: "ابقَ مركزاً مع جلسات دراسة محددة بوقت",
+    pomodoroWork: "تركيز",
+    pomodoroBreak: "استراحة",
+    pomodoroLongBreak: "استراحة طويلة",
+    pomodoroStart: "ابدأ",
+    pomodoroPause: "إيقاف مؤقت",
+    pomodoroReset: "إعادة",
+    pomodoroSkip: "تخطي",
+    pomodoroSessions: "جلسات",
+    pomodoroCompleted: "مكتملة اليوم",
+    pomodoroStreak: "أيام متتالية",
+    pomodoroSettings: "الإعدادات",
+    pomodoroWorkDuration: "مدة التركيز (دقيقة)",
+    pomodoroBreakDuration: "مدة الاستراحة (دقيقة)",
+    pomodoroLongBreakDuration: "مدة الاستراحة الطويلة (دقيقة)",
+    pomodoroSaveSettings: "حفظ الإعدادات",
+    pomodoroTotalFocus: "إجمالي التركيز",
+    pomodoroMinutes: "دقيقة",
+    pomodoroMotivation1: "ابقَ مركزاً! يمكنك فعلها!",
+    pomodoroMotivation2: "عمل رائع! خذ استراحة.",
+    pomodoroMotivation3: "لقد استحققت استراحة طويلة!",
+    pomodoroSessionsBeforeLong: "جلسات قبل الاستراحة الطويلة",
+    // Exam Countdown Planner
+    examPlanner: "مخطط الامتحانات",
+    examPlannerSub: "العد التنازلي لامتحاناتك مع خطط دراسة ذكية",
+    addExam: "إضافة امتحان",
+    examNameLabel: "اسم الامتحان",
+    examDateLabel: "تاريخ الامتحان",
+    examSubjectLabel: "المادة",
+    saveExam: "حفظ الامتحان",
+    daysLeft: "يوم متبقي",
+    hoursLeft: "ساعة متبقية",
+    examToday: "اليوم!",
+    examPassed: "انتهى",
+    studyPlan: "خطة الدراسة",
+    studyBlocks: "فترات دراسة",
+    hoursPerDay: "ساعة/يوم",
+    noExamsPlanner: "لا توجد امتحانات مضافة بعد",
+    addFirstExam: "أضف امتحانك الأول",
+    editExamPlanner: "تعديل الامتحان",
+    deleteExamPlanner: "حذف",
+    examColor: "اللون",
+    urgencyHigh: "عاجل",
+    urgencyMedium: "قريب",
+    urgencyLow: "قادم",
+    urgencySafe: "وقت كافٍ",
+    // Professor Reviews
+    profReviews: "تقييمات الأساتذة",
+    profReviewsSub: "قيّم واكتب مراجعة عن أساتذتك",
+    searchProfessor: "ابحث عن اسم الأستاذ...",
+    writeProfReview: "اكتب تقييماً",
+    profName: "اسم الأستاذ",
+    courseNameLabel: "اسم المقرر",
+    overallRating: "التقييم العام",
+    difficultyRating: "الصعوبة",
+    wouldTakeAgain: "هل ستأخذه مرة أخرى؟",
+    wouldTakeAgainYes: "نعم",
+    wouldTakeAgainNo: "لا",
+    anonymousReview: "نشر بشكل مجهول",
+    submitProfReview: "إرسال التقييم",
+    profAvgRating: "متوسط التقييم",
+    profAvgDifficulty: "متوسط الصعوبة",
+    mostReviewed: "الأكثر تقييماً",
+    profTakeAgainPct: "سيأخذونه مرة أخرى",
+    profReviewCount: "تقييمات",
+    profNoReviews: "لا توجد تقييمات بعد. كن الأول!",
+    profReviewSuccess: "تم إرسال التقييم!",
+    profReviewUpdated: "تم تحديث التقييم!",
+    profReviewDeleted: "تم حذف التقييم!",
+    profFilterUniversity: "تصفية حسب الجامعة",
+    allUniversitiesFilter: "جميع الجامعات",
+    anonymousStudent: "طالب مجهول",
+    profTags: "الأوسمة",
+    tagClearLectures: "محاضرات واضحة",
+    tagHardGrader: "تصحيح صعب",
+    tagGivesNotes: "يعطي ملاحظات",
+    tagGroupProjects: "مشاريع جماعية",
+    tagAttendanceMandatory: "حضور إجباري",
+    tagExtraCredit: "درجات إضافية",
+    tagToughExams: "امتحانات صعبة",
+    tagInspiring: "ملهم",
+    tagAccessible: "سهل التواصل",
+    tagHeavyHomework: "واجبات كثيرة",
   },
 };
+
+// Professor Review Tag Constants
+const PROF_REVIEW_TAGS = [
+  { id: "clear_lectures", key: "tagClearLectures" },
+  { id: "hard_grader", key: "tagHardGrader" },
+  { id: "gives_notes", key: "tagGivesNotes" },
+  { id: "group_projects", key: "tagGroupProjects" },
+  { id: "attendance_mandatory", key: "tagAttendanceMandatory" },
+  { id: "extra_credit", key: "tagExtraCredit" },
+  { id: "tough_exams", key: "tagToughExams" },
+  { id: "inspiring", key: "tagInspiring" },
+  { id: "accessible", key: "tagAccessible" },
+  { id: "heavy_homework", key: "tagHeavyHomework" },
+];
+
+// Exam Planner Color Presets
+const PLANNER_COLORS = ["#DC2626","#EA580C","#EAB308","#16A34A","#0891B2","#2563EB","#7C3AED","#DB2777"];
 
 // Degree name/desc translation keys mapped by id
 const DEGREE_T_KEYS = {
@@ -1378,6 +1565,38 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [finalGradeForm, setFinalGradeForm] = useState({ currentGrade: "", finalWeight: "", desiredGrade: "" });
   const [finalGradeResult, setFinalGradeResult] = useState(null);
   const [gradeScenarios, setGradeScenarios] = useState([]);
+
+  // === POMODORO TIMER ===
+  const [pomodoroPhase, setPomodoroPhase] = useState("work"); // work, break, longBreak
+  const [pomodoroTimeLeft, setPomodoroTimeLeft] = useState(25 * 60);
+  const [pomodoroRunning, setPomodoroRunning] = useState(false);
+  const [pomodoroSessionCount, setPomodoroSessionCount] = useState(0);
+  const [pomodoroTotalToday, setPomodoroTotalToday] = useState(0);
+  const [pomodoroStreak, setPomodoroStreak] = useState(0);
+  const [pomodoroSettings, setPomodoroSettings] = useState({ workMin: 25, breakMin: 5, longBreakMin: 15, sessionsBeforeLong: 4 });
+  const [pomodoroShowSettings, setPomodoroShowSettings] = useState(false);
+  const pomodoroIntervalRef = useRef(null);
+  const pomodoroAudioCtxRef = useRef(null);
+  const pomodoroTargetRef = useRef(null);
+
+  // === EXAM COUNTDOWN PLANNER ===
+  const [plannerExams, setPlannerExams] = useState([]);
+  const [showPlannerModal, setShowPlannerModal] = useState(false);
+  const [plannerForm, setPlannerForm] = useState({ name: "", date: "", subject: "", color: "#0891B2" });
+  const [editingPlannerExam, setEditingPlannerExam] = useState(null);
+  const [plannerCountdowns, setPlannerCountdowns] = useState({});
+
+  // === PROFESSOR REVIEWS ===
+  const [profReviewsList, setProfReviewsList] = useState([]);
+  const [profReviewsTotal, setProfReviewsTotal] = useState(0);
+  const [profReviewsLoading, setProfReviewsLoading] = useState(false);
+  const [profSearchQuery, setProfSearchQuery] = useState("");
+  const [profFilterUniversity, setProfFilterUniversity] = useState("");
+  const [showProfReviewModal, setShowProfReviewModal] = useState(false);
+  const [profReviewForm, setProfReviewForm] = useState({ professorName: "", universityId: "", universityName: "", courseName: "", rating: 0, difficulty: 0, wouldTakeAgain: true, comment: "", tags: [], isAnonymous: false });
+  const [editingProfReview, setEditingProfReview] = useState(null);
+  const [profAggregates, setProfAggregates] = useState({ avgRating: 0, avgDifficulty: 0, wouldTakeAgainPct: 0, totalCount: 0, tagCounts: {} });
+  const [mostReviewedProfs, setMostReviewedProfs] = useState([]);
 
   // Sync with main app's theme system (next-themes)
   const { theme, setTheme } = useTheme();
@@ -2482,6 +2701,19 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       setFinalGradeResult(null);
       setGradeScenarios([]);
     }
+    if (newView === "pomodoro") {
+      // loadPomodoroData handled by useEffect
+    }
+    if (newView === "exam-planner") {
+      // loadPlannerExams handled by useEffect
+    }
+    if (newView === "reviews") {
+      setProfReviewsList([]);
+      setProfSearchQuery("");
+      setProfFilterUniversity("");
+      fetchProfReviews("", "");
+      fetchMostReviewedProfs();
+    }
   };
 
   // Final Grade Calculator functions
@@ -2521,6 +2753,294 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     const result = calculateFinalGrade(currentGrade, finalWeight, desiredGrade);
     setFinalGradeResult(result);
     setGradeScenarios(generateScenarios(currentGrade, finalWeight));
+  };
+
+  // ============================
+  // POMODORO TIMER FUNCTIONS
+  // ============================
+  const loadPomodoroData = useCallback(() => {
+    try {
+      const saved = localStorage.getItem("studyhub_pomodoro");
+      if (saved) {
+        const data = JSON.parse(saved);
+        const today = new Date().toDateString();
+        if (data.lastDate === today) {
+          setPomodoroSessionCount(data.sessionCount || 0);
+          setPomodoroTotalToday(data.totalToday || 0);
+        }
+        setPomodoroStreak(data.streak || 0);
+      }
+      const settings = localStorage.getItem("studyhub_pomodoro_settings");
+      if (settings) {
+        const s = JSON.parse(settings);
+        setPomodoroSettings(s);
+        setPomodoroTimeLeft(s.workMin * 60);
+      }
+    } catch (e) { /* ignore */ }
+  }, []);
+
+  const savePomodoroData = useCallback((sessions, total, streak) => {
+    try {
+      const today = new Date().toDateString();
+      const prev = JSON.parse(localStorage.getItem("studyhub_pomodoro") || "{}");
+      const isNewDay = prev.lastDate !== today;
+      const newStreak = isNewDay ? (prev.lastDate === new Date(Date.now() - 86400000).toDateString() ? (prev.streak || 0) + 1 : 1) : streak;
+      localStorage.setItem("studyhub_pomodoro", JSON.stringify({ sessionCount: sessions, totalToday: total, streak: newStreak, lastDate: today }));
+      setPomodoroStreak(newStreak);
+    } catch (e) { /* ignore */ }
+  }, []);
+
+  const pomodoroPlayBeep = useCallback(() => {
+    try {
+      if (!pomodoroAudioCtxRef.current) pomodoroAudioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = pomodoroAudioCtxRef.current;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 800;
+      osc.type = "sine";
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+      setTimeout(() => {
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.frequency.value = 1000;
+        osc2.type = "sine";
+        gain2.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 0.5);
+      }, 300);
+    } catch (e) { /* ignore */ }
+  }, []);
+
+  const pomodoroStartTimer = useCallback(() => {
+    setPomodoroRunning(true);
+    pomodoroTargetRef.current = Date.now() + pomodoroTimeLeft * 1000;
+  }, [pomodoroTimeLeft]);
+
+  const pomodoroPauseTimer = useCallback(() => {
+    setPomodoroRunning(false);
+    if (pomodoroIntervalRef.current) { clearInterval(pomodoroIntervalRef.current); pomodoroIntervalRef.current = null; }
+  }, []);
+
+  const pomodoroResetTimer = useCallback(() => {
+    setPomodoroRunning(false);
+    if (pomodoroIntervalRef.current) { clearInterval(pomodoroIntervalRef.current); pomodoroIntervalRef.current = null; }
+    const dur = pomodoroPhase === "work" ? pomodoroSettings.workMin : pomodoroPhase === "break" ? pomodoroSettings.breakMin : pomodoroSettings.longBreakMin;
+    setPomodoroTimeLeft(dur * 60);
+  }, [pomodoroPhase, pomodoroSettings]);
+
+  const pomodoroOnPhaseComplete = useCallback(() => {
+    pomodoroPlayBeep();
+    if (pomodoroPhase === "work") {
+      const newSessions = pomodoroSessionCount + 1;
+      const newTotal = pomodoroTotalToday + pomodoroSettings.workMin;
+      setPomodoroSessionCount(newSessions);
+      setPomodoroTotalToday(newTotal);
+      savePomodoroData(newSessions, newTotal, pomodoroStreak);
+      if (newSessions % pomodoroSettings.sessionsBeforeLong === 0) {
+        setPomodoroPhase("longBreak");
+        setPomodoroTimeLeft(pomodoroSettings.longBreakMin * 60);
+      } else {
+        setPomodoroPhase("break");
+        setPomodoroTimeLeft(pomodoroSettings.breakMin * 60);
+      }
+    } else {
+      setPomodoroPhase("work");
+      setPomodoroTimeLeft(pomodoroSettings.workMin * 60);
+    }
+    setPomodoroRunning(false);
+    if (pomodoroIntervalRef.current) { clearInterval(pomodoroIntervalRef.current); pomodoroIntervalRef.current = null; }
+  }, [pomodoroPhase, pomodoroSessionCount, pomodoroTotalToday, pomodoroStreak, pomodoroSettings, pomodoroPlayBeep, savePomodoroData]);
+
+  const pomodoroSkipPhase = useCallback(() => {
+    if (pomodoroIntervalRef.current) { clearInterval(pomodoroIntervalRef.current); pomodoroIntervalRef.current = null; }
+    setPomodoroRunning(false);
+    pomodoroOnPhaseComplete();
+  }, [pomodoroOnPhaseComplete]);
+
+  // Pomodoro timer tick effect
+  useEffect(() => {
+    if (pomodoroRunning) {
+      pomodoroIntervalRef.current = setInterval(() => {
+        const remaining = Math.round((pomodoroTargetRef.current - Date.now()) / 1000);
+        if (remaining <= 0) {
+          setPomodoroTimeLeft(0);
+          pomodoroOnPhaseComplete();
+        } else {
+          setPomodoroTimeLeft(remaining);
+        }
+      }, 250);
+    }
+    return () => { if (pomodoroIntervalRef.current) clearInterval(pomodoroIntervalRef.current); };
+  }, [pomodoroRunning, pomodoroOnPhaseComplete]);
+
+  // Load pomodoro data on mount
+  useEffect(() => { if (view === "pomodoro") loadPomodoroData(); }, [view, loadPomodoroData]);
+
+  // ============================
+  // EXAM COUNTDOWN PLANNER FUNCTIONS
+  // ============================
+  const loadPlannerExams = useCallback(() => {
+    try {
+      const saved = localStorage.getItem("studyhub_planner_exams");
+      if (saved) setPlannerExams(JSON.parse(saved));
+    } catch (e) { /* ignore */ }
+  }, []);
+
+  const savePlannerExams = useCallback((exams) => {
+    try { localStorage.setItem("studyhub_planner_exams", JSON.stringify(exams)); } catch (e) { /* ignore */ }
+  }, []);
+
+  const getCountdown = (dateStr) => {
+    const now = new Date();
+    const target = new Date(dateStr + "T23:59:59");
+    const diff = target - now;
+    if (diff < 0) return { days: 0, hours: 0, minutes: 0, isPassed: true, isToday: false };
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const isToday = days === 0 && hours < 24;
+    return { days, hours, minutes, isPassed: false, isToday };
+  };
+
+  const getUrgencyColor = (days) => {
+    if (days <= 0) return "#6B7280";
+    if (days <= 1) return "#DC2626";
+    if (days <= 3) return "#EA580C";
+    if (days <= 7) return "#EAB308";
+    return "#16A34A";
+  };
+
+  const getUrgencyLabel = (days) => {
+    if (days <= 0) return t.examPassed;
+    if (days <= 1) return t.urgencyHigh;
+    if (days <= 3) return t.urgencyMedium;
+    if (days <= 7) return t.urgencyLow;
+    return t.urgencySafe;
+  };
+
+  const generateStudyPlan = (exam) => {
+    const cd = getCountdown(exam.date);
+    if (cd.isPassed || cd.days === 0) return { blocks: 0, hoursPerDay: 0 };
+    const totalBlocks = Math.max(1, cd.days * 2);
+    const hrsPerDay = Math.min(8, Math.max(1, Math.round((totalBlocks * 2) / cd.days * 10) / 10));
+    return { blocks: totalBlocks, hoursPerDay: hrsPerDay };
+  };
+
+  const addPlannerExam = () => {
+    if (!plannerForm.name || !plannerForm.date) { showNotif(t.fillRequired, "error"); return; }
+    let updated;
+    if (editingPlannerExam) {
+      updated = plannerExams.map((e) => e.id === editingPlannerExam.id ? { ...e, ...plannerForm } : e);
+      setEditingPlannerExam(null);
+    } else {
+      const newExam = { id: Date.now().toString(), ...plannerForm };
+      updated = [...plannerExams, newExam];
+    }
+    setPlannerExams(updated);
+    savePlannerExams(updated);
+    setPlannerForm({ name: "", date: "", subject: "", color: "#0891B2" });
+    setShowPlannerModal(false);
+  };
+
+  const deletePlannerExam = (id) => {
+    const updated = plannerExams.filter((e) => e.id !== id);
+    setPlannerExams(updated);
+    savePlannerExams(updated);
+  };
+
+  // Update planner countdowns every 60s
+  useEffect(() => {
+    if (view !== "exam-planner") return;
+    loadPlannerExams();
+    const update = () => {
+      setPlannerCountdowns((prev) => {
+        const next = {};
+        plannerExams.forEach((e) => { next[e.id] = getCountdown(e.date); });
+        return next;
+      });
+    };
+    update();
+    const interval = setInterval(update, 60000);
+    return () => clearInterval(interval);
+  }, [view, plannerExams, loadPlannerExams]);
+
+  // ============================
+  // PROFESSOR REVIEWS FUNCTIONS
+  // ============================
+  const fetchProfReviews = useCallback(async (search, uniFilter) => {
+    setProfReviewsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (search) params.set("search", search);
+      if (uniFilter) params.set("universityId", uniFilter);
+      params.set("limit", "30");
+      const res = await fetch(`/api/study-hub/professor-reviews?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setProfReviewsList(data.reviews || []);
+        setProfReviewsTotal(data.total || 0);
+      }
+      // Fetch aggregates
+      const aggParams = new URLSearchParams(params);
+      aggParams.set("aggregatesOnly", "true");
+      const aggRes = await fetch(`/api/study-hub/professor-reviews?${aggParams}`);
+      if (aggRes.ok) {
+        const aggData = await aggRes.json();
+        setProfAggregates(aggData.aggregates || { avgRating: 0, avgDifficulty: 0, wouldTakeAgainPct: 0, totalCount: 0, tagCounts: {} });
+      }
+    } catch (err) { console.error("Failed to fetch prof reviews:", err); }
+    finally { setProfReviewsLoading(false); }
+  }, []);
+
+  const fetchMostReviewedProfs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/study-hub/professor-reviews?mostReviewed=true");
+      if (res.ok) {
+        const data = await res.json();
+        setMostReviewedProfs(data.mostReviewedProfs || []);
+      }
+    } catch (err) { console.error("Failed to fetch most reviewed:", err); }
+  }, []);
+
+  const handleSubmitProfReview = async () => {
+    if (!profReviewForm.professorName || !profReviewForm.courseName || profReviewForm.rating === 0 || profReviewForm.difficulty === 0) {
+      showNotif(t.fillRequired, "error"); return;
+    }
+    try {
+      const url = editingProfReview ? `/api/study-hub/professor-reviews/${editingProfReview.id}` : "/api/study-hub/professor-reviews";
+      const method = editingProfReview ? "PATCH" : "POST";
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(profReviewForm) });
+      if (res.ok) {
+        showNotif(editingProfReview ? t.profReviewUpdated : t.profReviewSuccess);
+        setShowProfReviewModal(false);
+        setEditingProfReview(null);
+        setProfReviewForm({ professorName: "", universityId: "", universityName: "", courseName: "", rating: 0, difficulty: 0, wouldTakeAgain: true, comment: "", tags: [], isAnonymous: false });
+        fetchProfReviews(profSearchQuery, profFilterUniversity);
+        fetchMostReviewedProfs();
+      } else {
+        const data = await res.json();
+        showNotif(data.error || "Error", "error");
+      }
+    } catch (err) { showNotif("Error", "error"); }
+  };
+
+  const handleDeleteProfReview = async (id) => {
+    try {
+      const res = await fetch(`/api/study-hub/professor-reviews/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        showNotif(t.profReviewDeleted);
+        fetchProfReviews(profSearchQuery, profFilterUniversity);
+        fetchMostReviewedProfs();
+      }
+    } catch (err) { showNotif("Error", "error"); }
   };
 
   const countMats = (cId, uId, dId, sem, facId) => {
@@ -3913,6 +4433,24 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             >
               {t.finalGradeCalc}
             </button>
+            <button
+              onClick={() => { navigate("pomodoro"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              🍅 {t.pomodoroTimer}
+            </button>
+            <button
+              onClick={() => { navigate("exam-planner"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              📅 {t.examPlanner}
+            </button>
+            <button
+              onClick={() => { navigate("reviews"); setIsMobileMenuOpen(false); }}
+              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 font-medium transition-colors py-2.5 px-2`}
+            >
+              ⭐ {t.profReviews}
+            </button>
             <a
               href={TELEGRAM_LINK}
               target="_blank"
@@ -4017,7 +4555,25 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>🎯 {t.finalGradeCalc}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && (
+          {view === "pomodoro" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>🍅 {t.pomodoroTimer}</span>
+            </>
+          )}
+          {view === "exam-planner" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📅 {t.examPlanner}</span>
+            </>
+          )}
+          {view === "reviews" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>⭐ {t.profReviews}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -4119,6 +4675,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
                 >🎯 {t.finalGradeCalc}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(234,88,12,0.4)", background: "rgba(234,88,12,0.15)" }} onClick={() => navigate("pomodoro")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(234,88,12,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(234,88,12,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >🍅 {t.pomodoroTimer}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(8,145,178,0.4)", background: "rgba(8,145,178,0.15)" }} onClick={() => navigate("exam-planner")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(8,145,178,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(8,145,178,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >📅 {t.examPlanner}</button>
+                <button style={{ ...S.heroQuickPill, borderColor: "rgba(200,149,108,0.4)", background: "rgba(200,149,108,0.15)" }} onClick={() => navigate("reviews")}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                >⭐ {t.profReviews}</button>
               </div>
 
               {/* Inline Platform Stats */}
@@ -6088,7 +6656,464 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             )}
           </div>
         )}
+        {/* === POMODORO TIMER VIEW === */}
+        {view === "pomodoro" && (() => {
+          const totalDur = pomodoroPhase === "work" ? pomodoroSettings.workMin * 60 : pomodoroPhase === "break" ? pomodoroSettings.breakMin * 60 : pomodoroSettings.longBreakMin * 60;
+          const progress = totalDur > 0 ? (totalDur - pomodoroTimeLeft) / totalDur : 0;
+          const mins = Math.floor(pomodoroTimeLeft / 60);
+          const secs = pomodoroTimeLeft % 60;
+          const phaseColor = pomodoroPhase === "work" ? "#EA580C" : pomodoroPhase === "break" ? "#16A34A" : "#2563EB";
+          const circumference = 2 * Math.PI * 90;
+          const strokeDashoffset = circumference * (1 - progress);
+          return (
+            <div>
+              <div className="my-mat-banner" style={{ ...S.myMatBanner, background: "linear-gradient(135deg, #EA580C 0%, #C2410C 100%)", marginBottom: 28 }}>
+                <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>🍅</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                  <span style={{ fontSize: 32 }}>🍅</span>
+                  <div>
+                    <h2 style={S.myMatBannerTitle}>{t.pomodoroTimer}</h2>
+                    <p style={S.myMatBannerSub}>{t.pomodoroSub}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ maxWidth: 480, margin: "0 auto" }}>
+                {/* Phase Tabs */}
+                <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 28 }}>
+                  {[
+                    { id: "work", label: t.pomodoroWork, color: "#EA580C" },
+                    { id: "break", label: t.pomodoroBreak, color: "#16A34A" },
+                    { id: "longBreak", label: t.pomodoroLongBreak, color: "#2563EB" },
+                  ].map((p) => (
+                    <button key={p.id} onClick={() => { if (!pomodoroRunning) { setPomodoroPhase(p.id); setPomodoroTimeLeft(p.id === "work" ? pomodoroSettings.workMin * 60 : p.id === "break" ? pomodoroSettings.breakMin * 60 : pomodoroSettings.longBreakMin * 60); } }}
+                      style={{ padding: "10px 20px", borderRadius: 50, border: `2px solid ${pomodoroPhase === p.id ? p.color : "#e8ddd0"}`, background: pomodoroPhase === p.id ? p.color + "18" : darkMode ? "#1e1e2e" : "white", color: pomodoroPhase === p.id ? p.color : darkMode ? "#ccc" : "#666", fontWeight: 700, fontSize: 13, cursor: pomodoroRunning ? "default" : "pointer", fontFamily: "inherit", transition: "all 0.2s" }}
+                    >{p.label}</button>
+                  ))}
+                </div>
+
+                {/* SVG Timer Ring */}
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 28 }}>
+                  <div style={{ position: "relative", width: 220, height: 220 }}>
+                    <svg width="220" height="220" style={{ transform: "rotate(-90deg)" }}>
+                      <circle cx="110" cy="110" r="90" fill="none" stroke={darkMode ? "#333" : "#f0ebe4"} strokeWidth="10" />
+                      <circle cx="110" cy="110" r="90" fill="none" stroke={phaseColor} strokeWidth="10"
+                        strokeDasharray={circumference} strokeDashoffset={strokeDashoffset}
+                        strokeLinecap="round" style={{ transition: "stroke-dashoffset 0.3s ease" }} />
+                    </svg>
+                    <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                      <span style={{ fontSize: 48, fontWeight: 900, color: darkMode ? "#fff" : "#1B3A4B", fontVariantNumeric: "tabular-nums", letterSpacing: "-2px" }}>
+                        {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
+                      </span>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: phaseColor, textTransform: "uppercase", letterSpacing: "1px" }}>
+                        {pomodoroPhase === "work" ? t.pomodoroWork : pomodoroPhase === "break" ? t.pomodoroBreak : t.pomodoroLongBreak}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Controls */}
+                <div style={{ display: "flex", justifyContent: "center", gap: 12, marginBottom: 28 }}>
+                  <button onClick={pomodoroRunning ? pomodoroPauseTimer : pomodoroStartTimer}
+                    style={{ padding: "14px 36px", borderRadius: 50, border: "none", background: pomodoroRunning ? "#EAB308" : phaseColor, color: "white", fontWeight: 800, fontSize: 15, cursor: "pointer", fontFamily: "inherit", boxShadow: `0 4px 15px ${pomodoroRunning ? "#EAB308" : phaseColor}40`, transition: "all 0.2s" }}
+                  >{pomodoroRunning ? t.pomodoroPause : t.pomodoroStart}</button>
+                  <button onClick={pomodoroResetTimer}
+                    style={{ padding: "14px 20px", borderRadius: 50, border: `2px solid ${darkMode ? "#444" : "#e8ddd0"}`, background: darkMode ? "#1e1e2e" : "white", color: darkMode ? "#ccc" : "#666", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit" }}
+                  >{t.pomodoroReset}</button>
+                  <button onClick={pomodoroSkipPhase}
+                    style={{ padding: "14px 20px", borderRadius: 50, border: `2px solid ${darkMode ? "#444" : "#e8ddd0"}`, background: darkMode ? "#1e1e2e" : "white", color: darkMode ? "#ccc" : "#666", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit" }}
+                  >{t.pomodoroSkip} →</button>
+                </div>
+
+                {/* Stats Row */}
+                <div style={{ display: "flex", justifyContent: "center", gap: 20, marginBottom: 28, flexWrap: "wrap" }}>
+                  {[
+                    { icon: "🍅", label: t.pomodoroSessions, value: pomodoroSessionCount },
+                    { icon: "⏱️", label: t.pomodoroTotalFocus, value: `${pomodoroTotalToday} ${t.pomodoroMinutes}` },
+                    { icon: "🔥", label: t.pomodoroStreak, value: pomodoroStreak },
+                  ].map((s, i) => (
+                    <div key={i} style={{ textAlign: "center", padding: "14px 20px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, minWidth: 100, boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}>
+                      <span style={{ display: "block", fontSize: 22, marginBottom: 4 }}>{s.icon}</span>
+                      <span style={{ display: "block", fontSize: 22, fontWeight: 900, color: "#EA580C" }}>{s.value}</span>
+                      <span style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" }}>{s.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Settings Toggle */}
+                <div style={{ textAlign: "center" }}>
+                  <button onClick={() => setPomodoroShowSettings(!pomodoroShowSettings)}
+                    style={{ padding: "10px 24px", borderRadius: 50, border: `2px solid ${darkMode ? "#444" : "#e8ddd0"}`, background: darkMode ? "#1e1e2e" : "white", color: darkMode ? "#ccc" : "#666", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}
+                  >⚙️ {t.pomodoroSettings}</button>
+                </div>
+                {pomodoroShowSettings && (
+                  <div style={{ marginTop: 20, padding: 24, borderRadius: 18, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
+                    {[
+                      { label: t.pomodoroWorkDuration, key: "workMin", min: 1, max: 60 },
+                      { label: t.pomodoroBreakDuration, key: "breakMin", min: 1, max: 30 },
+                      { label: t.pomodoroLongBreakDuration, key: "longBreakMin", min: 1, max: 60 },
+                      { label: t.pomodoroSessionsBeforeLong, key: "sessionsBeforeLong", min: 1, max: 10 },
+                    ].map((field) => (
+                      <div key={field.key} style={{ marginBottom: 16 }}>
+                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: darkMode ? "#ccc" : "#1B3A4B", marginBottom: 6 }}>{field.label}</label>
+                        <input type="number" min={field.min} max={field.max}
+                          value={pomodoroSettings[field.key]}
+                          onChange={(e) => setPomodoroSettings({ ...pomodoroSettings, [field.key]: Math.max(field.min, Math.min(field.max, parseInt(e.target.value) || field.min)) })}
+                          style={{ ...S.input, maxWidth: 120, background: darkMode ? "#2a2a3a" : "#FDFBF9", color: darkMode ? "#fff" : "#1B3A4B", borderColor: darkMode ? "#444" : "#e8ddd0" }}
+                        />
+                      </div>
+                    ))}
+                    <button onClick={() => {
+                      localStorage.setItem("studyhub_pomodoro_settings", JSON.stringify(pomodoroSettings));
+                      if (!pomodoroRunning) {
+                        const dur = pomodoroPhase === "work" ? pomodoroSettings.workMin : pomodoroPhase === "break" ? pomodoroSettings.breakMin : pomodoroSettings.longBreakMin;
+                        setPomodoroTimeLeft(dur * 60);
+                      }
+                      setPomodoroShowSettings(false);
+                      showNotif("Settings saved!");
+                    }} style={{ ...S.submitBtn, marginTop: 8, background: "linear-gradient(135deg, #EA580C, #C2410C)" }}>{t.pomodoroSaveSettings}</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* === EXAM COUNTDOWN PLANNER VIEW === */}
+        {view === "exam-planner" && (
+          <div>
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, background: "linear-gradient(135deg, #0891B2 0%, #0E7490 100%)", marginBottom: 28 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>📅</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>📅</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.examPlanner}</h2>
+                  <p style={S.myMatBannerSub}>{t.examPlannerSub}</p>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: isRTL ? "flex-start" : "flex-end", marginBottom: 20 }}>
+              <button onClick={() => { setEditingPlannerExam(null); setPlannerForm({ name: "", date: "", subject: "", color: "#0891B2" }); setShowPlannerModal(true); }}
+                style={{ ...S.viewAllBtn, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>+ {t.addExam}</button>
+            </div>
+
+            {plannerExams.length === 0 ? (
+              <div style={{ ...S.myEmptyCard, borderColor: "#0891B240" }}>
+                <span style={{ fontSize: 52, display: "block", marginBottom: 12, opacity: 0.5 }}>📅</span>
+                <h3 style={{ color: darkMode ? "#fff" : "#1B3A4B", margin: "0 0 8px", fontSize: 18, fontWeight: 800 }}>{t.noExamsPlanner}</h3>
+                <p style={{ color: "#888", fontSize: 14, margin: "0 0 16px" }}>{t.addFirstExam}</p>
+                <button onClick={() => setShowPlannerModal(true)} style={{ ...S.viewAllBtn, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>+ {t.addExam}</button>
+              </div>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+                {[...plannerExams].sort((a, b) => new Date(a.date) - new Date(b.date)).map((exam) => {
+                  const cd = plannerCountdowns[exam.id] || getCountdown(exam.date);
+                  const urgColor = getUrgencyColor(cd.days);
+                  const plan = generateStudyPlan(exam);
+                  const totalDays = Math.max(1, Math.ceil((new Date(exam.date) - new Date(exam.date.replace(/-\d{2}$/, "-01"))) / 86400000) + 30);
+                  const elapsed = totalDays - cd.days;
+                  const progressPct = cd.isPassed ? 100 : Math.min(100, Math.max(0, (elapsed / totalDays) * 100));
+                  return (
+                    <div key={exam.id} style={{ background: darkMode ? "#1e1e2e" : "white", borderRadius: 18, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, [isRTL ? "borderRight" : "borderLeft"]: `5px solid ${exam.color || urgColor}` }}>
+                      <div style={{ padding: "20px 22px" }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                          <h4 style={{ fontSize: 17, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", margin: 0 }}>{exam.name}</h4>
+                          <span style={{ padding: "3px 12px", borderRadius: 50, fontSize: 11, fontWeight: 700, background: urgColor + "18", color: urgColor }}>{getUrgencyLabel(cd.days)}</span>
+                        </div>
+                        {exam.subject && <p style={{ fontSize: 12, color: "#888", margin: "0 0 12px" }}>📖 {exam.subject}</p>}
+
+                        {/* Countdown */}
+                        <div style={{ textAlign: "center", marginBottom: 14 }}>
+                          {cd.isPassed ? (
+                            <span style={{ fontSize: 20, fontWeight: 900, color: "#6B7280" }}>{t.examPassed}</span>
+                          ) : cd.isToday ? (
+                            <span style={{ fontSize: 24, fontWeight: 900, color: "#DC2626" }}>🔴 {t.examToday}</span>
+                          ) : (
+                            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+                              <div><span style={{ display: "block", fontSize: 32, fontWeight: 900, color: urgColor }}>{cd.days}</span><span style={{ fontSize: 11, color: "#888", fontWeight: 700 }}>{t.daysLeft}</span></div>
+                              <div><span style={{ display: "block", fontSize: 32, fontWeight: 900, color: urgColor }}>{cd.hours}</span><span style={{ fontSize: 11, color: "#888", fontWeight: 700 }}>{t.hoursLeft}</span></div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Progress bar */}
+                        <div style={{ height: 6, borderRadius: 3, background: darkMode ? "#333" : "#f0ebe4", marginBottom: 14 }}>
+                          <div style={{ height: "100%", borderRadius: 3, background: urgColor, width: `${progressPct}%`, transition: "width 0.5s" }} />
+                        </div>
+
+                        {/* Study Plan */}
+                        {!cd.isPassed && cd.days > 0 && (
+                          <div style={{ display: "flex", gap: 12, justifyContent: "center", fontSize: 12, color: "#888", marginBottom: 14 }}>
+                            <span>📚 {plan.blocks} {t.studyBlocks}</span>
+                            <span>⏰ {plan.hoursPerDay} {t.hoursPerDay}</span>
+                          </div>
+                        )}
+
+                        {/* Actions */}
+                        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+                          <button onClick={() => { setEditingPlannerExam(exam); setPlannerForm({ name: exam.name, date: exam.date, subject: exam.subject || "", color: exam.color || "#0891B2" }); setShowPlannerModal(true); }}
+                            style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${darkMode ? "#444" : "#e8ddd0"}`, background: "transparent", color: darkMode ? "#ccc" : "#666", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                          >✏️ {t.editExamPlanner}</button>
+                          <button onClick={() => deletePlannerExam(exam.id)}
+                            style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid #fecaca", background: "transparent", color: "#DC2626", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                          >🗑️ {t.deleteExamPlanner}</button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* === PROFESSOR REVIEWS VIEW === */}
+        {view === "reviews" && (
+          <div>
+            <div className="my-mat-banner" style={{ ...S.myMatBanner, background: "linear-gradient(135deg, #92400E 0%, #C8956C 100%)", marginBottom: 28 }}>
+              <div style={{ position: "absolute", top: -30, [isRTL ? "left" : "right"]: -20, fontSize: 120, opacity: 0.06 }}>⭐</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ fontSize: 32 }}>⭐</span>
+                <div>
+                  <h2 style={S.myMatBannerTitle}>{t.profReviews}</h2>
+                  <p style={S.myMatBannerSub}>{t.profReviewsSub}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Search + Filter + Write Review */}
+            <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ flex: 1, minWidth: 220, position: "relative" }}>
+                <span style={{ position: "absolute", [isRTL ? "right" : "left"]: 14, top: "50%", transform: "translateY(-50%)", fontSize: 16, opacity: 0.5 }}>🔍</span>
+                <input type="text" placeholder={t.searchProfessor} value={profSearchQuery}
+                  onChange={(e) => setProfSearchQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") fetchProfReviews(profSearchQuery, profFilterUniversity); }}
+                  style={{ ...S.input, [isRTL ? "paddingRight" : "paddingLeft"]: 40, background: darkMode ? "#2a2a3a" : "#FDFBF9", color: darkMode ? "#fff" : "#1B3A4B", borderColor: darkMode ? "#444" : "#e8ddd0" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#C8956C"; }}
+                  onBlur={(e) => { e.target.style.borderColor = darkMode ? "#444" : "#e8ddd0"; }}
+                />
+              </div>
+              <button onClick={() => fetchProfReviews(profSearchQuery, profFilterUniversity)}
+                style={{ ...S.viewAllBtn, padding: "12px 24px", background: "#C8956C" }}>🔍</button>
+              {isLoggedIn && (
+                <button onClick={() => { setEditingProfReview(null); setProfReviewForm({ professorName: "", universityId: "", universityName: "", courseName: "", rating: 0, difficulty: 0, wouldTakeAgain: true, comment: "", tags: [], isAnonymous: false }); setShowProfReviewModal(true); }}
+                  style={{ ...S.viewAllBtn, padding: "12px 24px", background: "linear-gradient(135deg, #92400E, #C8956C)" }}>✍️ {t.writeProfReview}</button>
+              )}
+            </div>
+
+            {/* Aggregates */}
+            {profAggregates.totalCount > 0 && (
+              <div style={{ display: "flex", gap: 16, marginBottom: 24, flexWrap: "wrap", justifyContent: "center" }}>
+                {[
+                  { icon: "⭐", label: t.profAvgRating, value: profAggregates.avgRating, color: "#EAB308" },
+                  { icon: "📊", label: t.profAvgDifficulty, value: profAggregates.avgDifficulty, color: "#EA580C" },
+                  { icon: "👍", label: t.profTakeAgainPct, value: `${profAggregates.wouldTakeAgainPct}%`, color: "#16A34A" },
+                  { icon: "📝", label: t.profReviewCount, value: profAggregates.totalCount, color: "#2563EB" },
+                ].map((s, i) => (
+                  <div key={i} style={{ textAlign: "center", padding: "16px 22px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, minWidth: 110, boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}>
+                    <span style={{ display: "block", fontSize: 20, marginBottom: 4 }}>{s.icon}</span>
+                    <span style={{ display: "block", fontSize: 24, fontWeight: 900, color: s.color }}>{s.value}</span>
+                    <span style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" }}>{s.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Most Reviewed Section */}
+            {mostReviewedProfs.length > 0 && (
+              <div style={{ marginBottom: 28 }}>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", marginBottom: 14 }}>🏆 {t.mostReviewed}</h3>
+                <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8 }}>
+                  {mostReviewedProfs.map((prof, i) => (
+                    <div key={i} onClick={() => { setProfSearchQuery(prof.professorName); fetchProfReviews(prof.professorName, profFilterUniversity); }}
+                      style={{ minWidth: 180, padding: "16px 18px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, cursor: "pointer", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", flexShrink: 0 }}>
+                      <h4 style={{ fontSize: 14, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", margin: "0 0 4px" }}>👨‍🏫 {prof.professorName}</h4>
+                      <p style={{ fontSize: 11, color: "#888", margin: "0 0 8px" }}>🏛️ {prof.universityName}</p>
+                      <div style={{ display: "flex", gap: 8, fontSize: 12 }}>
+                        <span style={{ color: "#EAB308", fontWeight: 700 }}>⭐ {prof.avgRating}</span>
+                        <span style={{ color: "#888" }}>{prof.reviewCount} {t.profReviewCount}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Reviews List */}
+            {profReviewsLoading ? <LoadingSpinner text="..." /> : profReviewsList.length === 0 ? (
+              <div style={S.empty}>
+                <span style={{ fontSize: 48 }}>⭐</span>
+                <h3 style={{ color: darkMode ? "#fff" : "#1B3A4B", margin: "16px 0 8px" }}>{t.profNoReviews}</h3>
+              </div>
+            ) : (
+              <div style={S.matList}>
+                {profReviewsList.map((review) => {
+                  const borderSide = isRTL ? "borderRight" : "borderLeft";
+                  return (
+                    <div key={review.id} style={{ ...S.matCard, [borderSide]: "4px solid #C8956C", ...(isRTL ? { borderLeft: "none" } : { borderRight: "none" }), background: darkMode ? "#1e1e2e" : "white", borderColor: darkMode ? "#333" : undefined }}>
+                      <div style={{ width: 48, height: 48, borderRadius: "50%", background: review.isAnonymous ? "#94a3b830" : "#C8956C20", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>
+                        {review.isAnonymous ? "🎭" : (review.user?.image ? <img src={review.user.image} alt="" style={{ width: 48, height: 48, borderRadius: "50%", objectFit: "cover" }} /> : "👤")}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 180 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 6 }}>
+                          <h4 style={{ fontSize: 15, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", margin: 0 }}>👨‍🏫 {review.professorName}</h4>
+                          <span style={{ padding: "2px 10px", borderRadius: 50, fontSize: 11, fontWeight: 700, background: "#C8956C18", color: "#C8956C" }}>{review.courseName}</span>
+                        </div>
+                        <div style={{ display: "flex", gap: 12, marginBottom: 6, flexWrap: "wrap", alignItems: "center" }}>
+                          <span style={{ fontSize: 13 }}>{"⭐".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
+                          <span style={{ fontSize: 12, color: "#888" }}>{t.difficultyRating}: {"🔥".repeat(review.difficulty)}</span>
+                          <span style={{ fontSize: 12, color: review.wouldTakeAgain ? "#16A34A" : "#DC2626", fontWeight: 700 }}>{review.wouldTakeAgain ? "👍" : "👎"} {review.wouldTakeAgain ? t.wouldTakeAgainYes : t.wouldTakeAgainNo}</span>
+                        </div>
+                        {review.tags && review.tags.length > 0 && (
+                          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 6 }}>
+                            {review.tags.map((tag) => {
+                              const tagInfo = PROF_REVIEW_TAGS.find((t2) => t2.id === tag);
+                              return <span key={tag} style={{ padding: "2px 10px", borderRadius: 50, fontSize: 10, fontWeight: 700, background: darkMode ? "#333" : "#f3f4f6", color: darkMode ? "#ccc" : "#374151" }}>{tagInfo ? t[tagInfo.key] : tag}</span>;
+                            })}
+                          </div>
+                        )}
+                        {review.comment && <p style={{ fontSize: 13, color: darkMode ? "#bbb" : "#555", margin: "0 0 6px", lineHeight: 1.5 }}>{review.comment}</p>}
+                        <div style={{ display: "flex", gap: 12, fontSize: 11, color: "#888", alignItems: "center" }}>
+                          <span>{review.isAnonymous ? t.anonymousStudent : (review.user?.name || review.userName)}</span>
+                          <span>🏛️ {review.universityName}</span>
+                          <span>{new Date(review.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
+                        </div>
+                      </div>
+                      {isLoggedIn && currentUserId === review.userId && (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 6, flexShrink: 0 }}>
+                          <button onClick={() => { setEditingProfReview(review); setProfReviewForm({ professorName: review.professorName, universityId: review.universityId, universityName: review.universityName, courseName: review.courseName, rating: review.rating, difficulty: review.difficulty, wouldTakeAgain: review.wouldTakeAgain, comment: review.comment || "", tags: review.tags || [], isAnonymous: review.isAnonymous }); setShowProfReviewModal(true); }}
+                            style={S.editBtn}>✏️</button>
+                          <button onClick={() => handleDeleteProfReview(review.id)}
+                            style={S.delBtn}>🗑️</button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {profReviewsTotal > profReviewsList.length && (
+              <div style={{ textAlign: "center", marginTop: 24 }}>
+                <button onClick={() => {
+                  const params = new URLSearchParams();
+                  if (profSearchQuery) params.set("search", profSearchQuery);
+                  if (profFilterUniversity) params.set("universityId", profFilterUniversity);
+                  params.set("limit", "30");
+                  params.set("offset", String(profReviewsList.length));
+                  fetch(`/api/study-hub/professor-reviews?${params}`).then(r => r.json()).then(data => {
+                    setProfReviewsList((prev) => [...prev, ...(data.reviews || [])]);
+                  });
+                }} style={{ ...S.viewAllBtn, padding: "12px 32px", background: "#C8956C" }}>
+                  {t.loadMore} ({profReviewsTotal - profReviewsList.length})
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
       </main>
+
+      {/* EXAM PLANNER MODAL */}
+      {showPlannerModal && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowPlannerModal(false); setEditingPlannerExam(null); }}>
+          <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 420 }} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={{ ...S.modalHead, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>
+              <h3 style={S.modalTitle}>📅 {editingPlannerExam ? t.editExamPlanner : t.addExam}</h3>
+              <button onClick={() => { setShowPlannerModal(false); setEditingPlannerExam(null); }} style={S.modalX}>✕</button>
+            </div>
+            <div style={S.modalBody}>
+              <label style={{ ...S.label, marginTop: 0 }}>{t.examNameLabel} <span style={{ color: "#0891B2" }}>*</span></label>
+              <input type="text" value={plannerForm.name} onChange={(e) => setPlannerForm({ ...plannerForm, name: e.target.value })} style={S.input} placeholder={t.examNameLabel} />
+              <label style={S.label}>{t.examDateLabel} <span style={{ color: "#0891B2" }}>*</span></label>
+              <input type="date" value={plannerForm.date} onChange={(e) => setPlannerForm({ ...plannerForm, date: e.target.value })} style={S.input} />
+              <label style={S.label}>{t.examSubjectLabel}</label>
+              <input type="text" value={plannerForm.subject} onChange={(e) => setPlannerForm({ ...plannerForm, subject: e.target.value })} style={S.input} placeholder={t.examSubjectLabel} />
+              <label style={S.label}>{t.examColor}</label>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {PLANNER_COLORS.map((c) => (
+                  <button key={c} onClick={() => setPlannerForm({ ...plannerForm, color: c })}
+                    style={{ width: 36, height: 36, borderRadius: "50%", background: c, border: plannerForm.color === c ? "3px solid #1B3A4B" : "3px solid transparent", cursor: "pointer", transition: "all 0.2s" }} />
+                ))}
+              </div>
+              <button onClick={addPlannerExam} style={{ ...S.submitBtn, background: "linear-gradient(135deg, #0891B2, #0E7490)" }}>{t.saveExam}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PROFESSOR REVIEW MODAL */}
+      {showProfReviewModal && (
+        <div className="studyhub-overlay" style={S.overlay} onClick={() => { setShowProfReviewModal(false); setEditingProfReview(null); }}>
+          <div className="studyhub-modal" style={{ ...S.modal, maxWidth: 520 }} onClick={(e) => e.stopPropagation()}>
+            <div className="studyhub-modal-head" style={{ ...S.modalHead, background: "linear-gradient(135deg, #92400E, #C8956C)" }}>
+              <h3 style={S.modalTitle}>⭐ {editingProfReview ? t.editMaterial : t.writeProfReview}</h3>
+              <button onClick={() => { setShowProfReviewModal(false); setEditingProfReview(null); }} style={S.modalX}>✕</button>
+            </div>
+            <div style={S.modalBody}>
+              <label style={{ ...S.label, marginTop: 0 }}>{t.profName} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="text" value={profReviewForm.professorName} onChange={(e) => setProfReviewForm({ ...profReviewForm, professorName: e.target.value })} style={S.input} placeholder={t.professorNamePlaceholder} />
+
+              <label style={S.label}>{isRTL ? "الجامعة" : "University"} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="text" value={profReviewForm.universityName}
+                onChange={(e) => setProfReviewForm({ ...profReviewForm, universityName: e.target.value, universityId: e.target.value.toLowerCase().replace(/\s+/g, "_") })}
+                style={S.input} placeholder={isRTL ? "اسم الجامعة" : "University name"} />
+
+              <label style={S.label}>{t.courseNameLabel} <span style={{ color: "#C8956C" }}>*</span></label>
+              <input type="text" value={profReviewForm.courseName} onChange={(e) => setProfReviewForm({ ...profReviewForm, courseName: e.target.value })} style={S.input} placeholder={t.courseNameLabel} />
+
+              <label style={S.label}>{t.overallRating} <span style={{ color: "#C8956C" }}>*</span></label>
+              <div style={{ display: "flex", gap: 6, marginBottom: 4 }}>
+                {[1,2,3,4,5].map((n) => (
+                  <button key={n} onClick={() => setProfReviewForm({ ...profReviewForm, rating: n })}
+                    style={{ ...S.starBtn, ...(n <= profReviewForm.rating ? S.starActive : S.starInactive) }}>⭐</button>
+                ))}
+              </div>
+
+              <label style={S.label}>{t.difficultyRating} <span style={{ color: "#C8956C" }}>*</span></label>
+              <div style={{ display: "flex", gap: 6, marginBottom: 4 }}>
+                {[1,2,3,4,5].map((n) => (
+                  <button key={n} onClick={() => setProfReviewForm({ ...profReviewForm, difficulty: n })}
+                    style={{ ...S.starBtn, ...(n <= profReviewForm.difficulty ? { background: "#FEE2E2", borderColor: "#DC2626", transform: "scale(1.1)" } : S.starInactive) }}>🔥</button>
+                ))}
+              </div>
+
+              <label style={S.label}>{t.wouldTakeAgain}</label>
+              <div style={{ display: "flex", gap: 10, marginBottom: 4 }}>
+                <button onClick={() => setProfReviewForm({ ...profReviewForm, wouldTakeAgain: true })}
+                  style={{ padding: "10px 24px", borderRadius: 12, border: `2px solid ${profReviewForm.wouldTakeAgain ? "#16A34A" : "#e8ddd0"}`, background: profReviewForm.wouldTakeAgain ? "#16A34A18" : "transparent", color: profReviewForm.wouldTakeAgain ? "#16A34A" : "#666", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>👍 {t.wouldTakeAgainYes}</button>
+                <button onClick={() => setProfReviewForm({ ...profReviewForm, wouldTakeAgain: false })}
+                  style={{ padding: "10px 24px", borderRadius: 12, border: `2px solid ${!profReviewForm.wouldTakeAgain ? "#DC2626" : "#e8ddd0"}`, background: !profReviewForm.wouldTakeAgain ? "#DC262618" : "transparent", color: !profReviewForm.wouldTakeAgain ? "#DC2626" : "#666", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>👎 {t.wouldTakeAgainNo}</button>
+              </div>
+
+              <label style={S.label}>{t.profTags}</label>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
+                {PROF_REVIEW_TAGS.map((tag) => {
+                  const isSelected = profReviewForm.tags.includes(tag.id);
+                  return (
+                    <button key={tag.id} onClick={() => {
+                      setProfReviewForm({ ...profReviewForm, tags: isSelected ? profReviewForm.tags.filter((t2) => t2 !== tag.id) : [...profReviewForm.tags, tag.id] });
+                    }}
+                      style={{ padding: "6px 14px", borderRadius: 50, fontSize: 12, fontWeight: 700, border: `2px solid ${isSelected ? "#C8956C" : "#e8ddd0"}`, background: isSelected ? "#C8956C18" : "transparent", color: isSelected ? "#C8956C" : "#666", cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" }}
+                    >{t[tag.key]}</button>
+                  );
+                })}
+              </div>
+
+              <label style={S.label}>{t.addComment}</label>
+              <textarea value={profReviewForm.comment} onChange={(e) => setProfReviewForm({ ...profReviewForm, comment: e.target.value })} style={{ ...S.input, height: 80, resize: "vertical" }} placeholder={t.addComment} maxLength={2000} />
+
+              <label style={{ ...S.label, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                <input type="checkbox" checked={profReviewForm.isAnonymous} onChange={(e) => setProfReviewForm({ ...profReviewForm, isAnonymous: e.target.checked })} />
+                🎭 {t.anonymousReview}
+              </label>
+
+              <button onClick={handleSubmitProfReview} style={{ ...S.submitBtn, background: "linear-gradient(135deg, #92400E, #C8956C)" }}>{t.submitProfReview}</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* UPLOAD / EDIT MODAL */}
       {showUploadModal && (

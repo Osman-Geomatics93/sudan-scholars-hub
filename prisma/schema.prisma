@@ -62,6 +62,7 @@ model User {
   materialRequests  MaterialRequest[]
   studyGroups       StudyGroup[]
   collections       MaterialCollection[]
+  professorReviews  ProfessorReview[]
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -914,4 +915,29 @@ model CollectionItem {
 
   @@unique([collectionId, materialId])
   @@index([collectionId])
+}
+
+// ============ PROFESSOR REVIEWS ============
+model ProfessorReview {
+  id             String   @id @default(cuid())
+  professorName  String
+  universityId   String
+  universityName String
+  courseName     String
+  rating         Int      // 1-5
+  difficulty     Int      // 1-5
+  wouldTakeAgain Boolean
+  comment        String?  @db.Text
+  tags           String[]
+  isAnonymous    Boolean  @default(false)
+  userId         String
+  userName       String?
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([professorName])
+  @@index([universityId])
+  @@index([userId])
+  @@index([createdAt])
 }
