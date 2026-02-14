@@ -161,6 +161,9 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ['pdf-parse', 'pdfjs-dist'],
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
