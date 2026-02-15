@@ -128,5 +128,9 @@ export const RATE_LIMITS = {
   // General API: 60 per minute
   api: { limit: 60, windowMs: 60000 },
   // Search: 30 per minute
-  search: { limit: 30, windowMs: 60000 }
+  search: { limit: 30, windowMs: 60000 },
+  // Card token generation: 10 per minute
+  cardToken: { limit: 10, windowMs: 60000 },
+  // Card verification: 30 per minute
+  cardVerify: { limit: 30, windowMs: 60000 },
 } as const;

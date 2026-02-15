@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -15,6 +15,9 @@ import {
   Trash2,
   ExternalLink,
   Edit3,
+  Copy,
+  Download,
+  Loader2,
 } from 'lucide-react';
 import { Container } from '@/components/layout/container';
 import { Card } from '@/components/ui/card';
@@ -23,6 +26,8 @@ import { Badge } from '@/components/ui/badge';
 import { SimpleSelect as Select } from '@/components/ui/select';
 import { ProfileEditForm } from '@/components/features/profile-edit-form';
 import { SkeletonProfile } from '@/components/ui/skeleton';
+import { getBadgeForPoints } from '@/lib/points';
+import { generateStudentCardBlob, downloadStudentCard, StudentCardData } from '@/lib/student-card-generator';
 
 interface SavedScholarship {
   id: string;
@@ -66,6 +71,9 @@ interface UserProfile {
   profileImage: string | null;
   googleImage: string | null;
   createdAt: string;
+  studentNumber: string | null;
+  points: number;
+  badge: string | null;
 }
 
 interface Stats {
@@ -98,6 +106,13 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<string>('all');
   const [isEditing, setIsEditing] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [cardPreviewUrl, setCardPreviewUrl] = useState<string | null>(null);
+  const [cardGenerating, setCardGenerating] = useState(false);
+  const [cardDownloading, setCardDownloading] = useState(false);
+  const [cardToken, setCardToken] = useState<string | null>(null);
+  const [cardTokenError, setCardTokenError] = useState<string | null>(null);
+  const cardCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
@@ -199,6 +214,115 @@ export default function ProfilePage() {
     setUser(responseData.user);
   };
 
+  const handleCopyStudentNumber = useCallback(async () => {
+    if (!user?.studentNumber) return;
+    try {
+      await navigator.clipboard.writeText(user.studentNumber);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = user.studentNumber;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }, [user?.studentNumber]);
+
+  const fetchCardToken = useCallback(async (): Promise<string | null> => {
+    try {
+      setCardTokenError(null);
+      const res = await fetch('/api/card/token', { method: 'POST' });
+      if (!res.ok) {
+        setCardTokenError('Failed to get verification token');
+        return null;
+      }
+      const data = await res.json();
+      setCardToken(data.verifyUrl);
+      return data.verifyUrl as string;
+    } catch {
+      setCardTokenError('Failed to get verification token');
+      return null;
+    }
+  }, []);
+
+  const getCardData = useCallback((verifyUrl: string): StudentCardData | null => {
+    if (!user) return null;
+    return {
+      name: user.name || 'Student',
+      studentNumber: user.studentNumber || '',
+      educationLevel: user.educationLevel,
+      fieldOfStudy: user.fieldOfStudy,
+      image: user.image,
+      createdAt: user.createdAt,
+      badge: user.badge,
+      points: user.points || 0,
+      verifyUrl,
+      locale,
+    };
+  }, [user, locale]);
+
+  // Generate card preview when user data is available (fetch token first)
+  useEffect(() => {
+    if (!user?.studentNumber) return;
+
+    let cancelled = false;
+    setCardGenerating(true);
+
+    (async () => {
+      const verifyUrl = await fetchCardToken();
+      if (cancelled || !verifyUrl) {
+        if (!cancelled) setCardGenerating(false);
+        return;
+      }
+
+      const cardData = getCardData(verifyUrl);
+      if (!cardData) {
+        if (!cancelled) setCardGenerating(false);
+        return;
+      }
+
+      try {
+        const blob = await generateStudentCardBlob(cardData);
+        if (cancelled) return;
+        const url = URL.createObjectURL(blob);
+        setCardPreviewUrl((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return url;
+        });
+      } catch {
+        // Card generation failed
+      } finally {
+        if (!cancelled) setCardGenerating(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, locale, fetchCardToken, getCardData]);
+
+  const handleDownloadCard = async () => {
+    if (!user?.studentNumber) return;
+    setCardDownloading(true);
+    try {
+      // Fetch a fresh token before each download (ensures QR is current)
+      const verifyUrl = await fetchCardToken();
+      if (!verifyUrl) return;
+      const cardData = getCardData(verifyUrl);
+      if (!cardData) return;
+      await downloadStudentCard(cardData);
+    } catch (error) {
+      console.error('Failed to download card:', error);
+    } finally {
+      setCardDownloading(false);
+    }
+  };
+
   const filteredScholarships =
     activeTab === 'all'
       ? savedScholarships
@@ -254,10 +378,45 @@ export default function ProfilePage() {
                 </div>
               )}
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  {user?.name || (isRTL ? 'مستخدم' : 'User')}
-                </h1>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    {user?.name || (isRTL ? 'مستخدم' : 'User')}
+                  </h1>
+                  {user?.badge && (() => {
+                    const badgeInfo = getBadgeForPoints(user.points || 0);
+                    return (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                        <span>{badgeInfo.icon}</span>
+                        <span>{isRTL ? badgeInfo.labelAr : badgeInfo.labelEn}</span>
+                        <span className="text-amber-500">{user.points} pts</span>
+                      </span>
+                    );
+                  })()}
+                </div>
                 <p className="text-gray-600">{user?.email}</p>
+                {user?.studentNumber && (
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-mono font-semibold bg-gradient-to-r from-blue-50 to-teal-50 text-blue-700 border border-blue-200">
+                      {user.studentNumber}
+                    </span>
+                    <button
+                      onClick={handleCopyStudentNumber}
+                      className="p-1 rounded hover:bg-gray-100 transition-colors"
+                      title={isRTL ? 'نسخ الرقم' : 'Copy number'}
+                    >
+                      {copied ? (
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <Copy className="h-4 w-4 text-gray-400" />
+                      )}
+                    </button>
+                    {copied && (
+                      <span className="text-xs text-green-600 font-medium">
+                        {isRTL ? 'تم النسخ!' : 'Copied!'}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex gap-2">
@@ -308,6 +467,49 @@ export default function ProfilePage() {
               </Card>
             ))}
           </div>
+
+          {/* Student ID Card */}
+          {user?.studentNumber && (
+            <Card className="p-6 mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-gray-900">
+                  {isRTL ? 'بطاقة الطالب' : 'Student ID Card'}
+                </h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadCard}
+                  disabled={cardDownloading || cardGenerating}
+                >
+                  {cardDownloading ? (
+                    <Loader2 className="h-4 w-4 me-2 animate-spin" />
+                  ) : (
+                    <Download className="h-4 w-4 me-2" />
+                  )}
+                  {isRTL ? 'تحميل البطاقة' : 'Download Card'}
+                </Button>
+              </div>
+              <div className="flex justify-center">
+                {cardGenerating ? (
+                  <div className="flex items-center justify-center w-full max-w-[500px] h-[315px] bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                    <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+                  </div>
+                ) : cardPreviewUrl ? (
+                  <img
+                    src={cardPreviewUrl}
+                    alt={isRTL ? 'بطاقة الطالب' : 'Student ID Card'}
+                    className="w-full max-w-[500px] rounded-xl shadow-lg border border-gray-200"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full max-w-[500px] h-[315px] bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                    <p className="text-gray-400 text-sm">
+                      {isRTL ? 'لم يتم إنشاء البطاقة' : 'Card not generated'}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </Card>
+          )}
 
           {/* Saved Scholarships */}
           <h2 className="text-xl font-bold text-gray-900 mb-4">

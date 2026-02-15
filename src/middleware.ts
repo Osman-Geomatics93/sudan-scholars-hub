@@ -15,6 +15,7 @@ const adminProtectedPaths = ['/admin'];
 const publicAdminPaths = ['/admin/login'];
 
 // Paths that require user authentication
+// Note: /verify is intentionally NOT listed here — it's a public verification page for student card QR codes
 const userProtectedPaths = ['/profile', '/cv-builder', '/matcher', '/loi-builder'];
 
 export async function middleware(request: NextRequest) {
