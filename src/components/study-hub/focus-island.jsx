@@ -47,6 +47,12 @@ const T = {
     congrats: "Congratulations!",
     reachedLevel: "You reached level",
     close: "Close",
+    resetIsland: "Reset Island",
+    resetConfirm: "Are you sure? This will reset your island to Level 1 and erase all progress. This cannot be undone.",
+    resetBtn: "Reset Everything",
+    resetting: "Resetting...",
+    resetSuccess: "Island has been reset!",
+    cancel: "Cancel",
     buildingNames: {
       "Small Tree": "Small Tree",
       "Flower Patch": "Flower Patch",
@@ -105,6 +111,12 @@ const T = {
     congrats: "تهانينا!",
     reachedLevel: "وصلت للمستوى",
     close: "إغلاق",
+    resetIsland: "إعادة تعيين الجزيرة",
+    resetConfirm: "هل أنت متأكد؟ سيتم إعادة جزيرتك إلى المستوى 1 ومسح كل التقدم. لا يمكن التراجع عن هذا.",
+    resetBtn: "إعادة تعيين الكل",
+    resetting: "جاري إعادة التعيين...",
+    resetSuccess: "تمت إعادة تعيين الجزيرة!",
+    cancel: "إلغاء",
     buildingNames: {
       "Small Tree": "شجرة صغيرة",
       "Flower Patch": "حديقة زهور",
@@ -189,6 +201,10 @@ export default function FocusIsland({ locale = "en", userId }) {
 
   // Level-up celebration
   const [levelUpInfo, setLevelUpInfo] = useState(null);
+
+  // Reset state
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   const logResultTimer = useRef(null);
 
@@ -281,6 +297,21 @@ export default function FocusIsland({ locale = "en", userId }) {
       }
     } catch (err) {
       console.error("Theme change error:", err);
+    }
+  };
+
+  // ── Reset island ──
+  const handleResetIsland = async () => {
+    try {
+      setResetting(true);
+      const res = await fetch("/api/study-hub/focus-island", { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to reset");
+      await fetchIsland();
+      setShowResetConfirm(false);
+    } catch (err) {
+      console.error("Reset error:", err);
+    } finally {
+      setResetting(false);
     }
   };
 
@@ -681,6 +712,65 @@ export default function FocusIsland({ locale = "en", userId }) {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* ═══ RESET ISLAND ═══ */}
+      <div className="fi-card dark:bg-gray-800 dark:border-gray-700" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0, color: "#ef4444" }}>
+              {t.resetIsland}
+            </h3>
+            <p style={{ fontSize: 13, color: "#9ca3af", margin: "4px 0 0", lineHeight: 1.4 }}>
+              {isRTL ? "ابدأ من جديد من المستوى 1" : "Start fresh from Level 1"}
+            </p>
+          </div>
+          {!showResetConfirm ? (
+            <button
+              onClick={() => setShowResetConfirm(true)}
+              style={{
+                padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 600,
+                border: "1.5px solid rgba(239,68,68,0.3)", background: "transparent",
+                color: "#ef4444", cursor: "pointer", transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#fef2f2"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+            >
+              {t.resetIsland}
+            </button>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 320, width: "100%" }}>
+              <p style={{ fontSize: 13, color: "#ef4444", fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
+                {t.resetConfirm}
+              </p>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  onClick={handleResetIsland}
+                  disabled={resetting}
+                  style={{
+                    flex: 1, padding: "8px 16px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+                    border: "none", background: "#ef4444", color: "white", cursor: resetting ? "wait" : "pointer",
+                    opacity: resetting ? 0.7 : 1, transition: "all 0.2s",
+                  }}
+                >
+                  {resetting ? t.resetting : t.resetBtn}
+                </button>
+                <button
+                  onClick={() => setShowResetConfirm(false)}
+                  disabled={resetting}
+                  style={{
+                    flex: 1, padding: "8px 16px", borderRadius: 10, fontSize: 13, fontWeight: 600,
+                    border: "1.5px solid #e5e7eb", background: "transparent",
+                    color: "#6b7280", cursor: "pointer", transition: "all 0.2s",
+                  }}
+                  className="dark:border-gray-600 dark:text-gray-400"
+                >
+                  {t.cancel}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

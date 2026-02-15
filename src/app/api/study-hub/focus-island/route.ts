@@ -129,6 +129,39 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// DELETE — Reset island to level 1
+export async function DELETE() {
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
+  try {
+    const userId = (session!.user as { id: string }).id;
+
+    const island = await prisma.focusIsland.findUnique({ where: { userId } });
+    if (!island) {
+      return NextResponse.json({ error: 'Island not found' }, { status: 404 });
+    }
+
+    const buildings = getUnlockedBuildings(1);
+    const updated = await prisma.focusIsland.update({
+      where: { userId },
+      data: {
+        level: 1,
+        growthPoints: 0,
+        totalStudyMin: 0,
+        theme: 'forest',
+        buildings: JSON.parse(JSON.stringify(buildings)),
+        weather: 'sunny',
+      },
+    });
+
+    return NextResponse.json({ island: updated });
+  } catch (err) {
+    console.error('Error resetting focus island:', err);
+    return NextResponse.json({ error: 'Failed to reset island' }, { status: 500 });
+  }
+}
+
 // PATCH — Change island theme
 export async function PATCH(request: NextRequest) {
   const { session, error } = await requireAuth();
