@@ -8,6 +8,7 @@ import StudyPlanner from "@/components/study-hub/study-planner";
 import SmartStudyPath from "@/components/study-hub/smart-study-path";
 import FocusIsland from "@/components/study-hub/focus-island";
 import BattleArena from "@/components/study-hub/battle-arena";
+import AcademicTranslator from "@/components/study-hub/academic-translator";
 
 
 const TELEGRAM_LINK = "https://t.me/+uNRCkz0PUfQzOGZk";
@@ -17,6 +18,33 @@ const DEGREE_LEVELS = [
   { id: "msc", name: "MSc — Master", icon: "📜", color: "#27AE60", arabic: "ماجستير", desc: "Postgraduate programs" },
   { id: "phd", name: "PhD — Doctorate", icon: "🏅", color: "#8E44AD", arabic: "دكتوراه", desc: "Doctoral research programs" },
   { id: "other", name: "Other Programs", icon: "📋", color: "#E67E22", arabic: "أخرى", desc: "Diploma, Certificate & more" },
+];
+
+const QUICK_ACCESS_CATEGORIES = [
+  { titleKey: "studyMaterialsCat", icon: "📚", items: [
+    { key: "browse-all", icon: "📚", labelKey: "viewAllMaterials" },
+    { key: "my-materials", icon: "📂", labelKey: "myMaterials" },
+    { key: "exams", icon: "📝", labelKey: "pastExams" },
+    { key: "upload", icon: "📤", labelKey: "upload", action: "modal" },
+  ]},
+  { titleKey: "studyToolsCat", icon: "🛠️", items: [
+    { key: "ai-assistant", icon: "🤖", labelKey: "aiAssistant" },
+    { key: "flashcards", icon: "🧠", labelKey: "flashcards" },
+    { key: "pomodoro", icon: "⏱️", labelKey: "pomodoroTimer" },
+    { key: "study-planner", icon: "📊", labelKey: "studyPlanner" },
+    { key: "smart-path", icon: "🗺️", labelKey: "smartStudyPath" },
+    { key: "grade-calc", icon: "🧮", labelKey: "finalGradeCalc" },
+    { key: "exam-planner", icon: "📅", labelKey: "examPlanner" },
+    { key: "focus-island", icon: "🏝️", labelKey: "focusIsland" },
+    { key: "translator", icon: "🌐", labelKey: "translator" },
+  ]},
+  { titleKey: "communityCat", icon: "👥", items: [
+    { key: "groups", icon: "👥", labelKey: "studyGroups" },
+    { key: "requests", icon: "📋", labelKey: "requests" },
+    { key: "reviews", icon: "⭐", labelKey: "profReviews" },
+    { key: "leaderboard", icon: "🏆", labelKey: "leaderboard" },
+    { key: "battle-arena", icon: "⚔️", labelKey: "battleArena" },
+  ]},
 ];
 
 const SEMESTERS_MAP = {
@@ -815,6 +843,31 @@ const T = {
     focusIslandSub: "Your study world grows with you",
     battleArena: "Battle Arena",
     battleArenaSub: "Challenge friends in quiz duels",
+    translator: "Academic Translator",
+    translatorSub: "Translate academic materials between languages",
+    // Hero Redesign & Quick Access
+    heroHeadline: "Find Your Study Materials",
+    heroSubNew: "Upload and discover study resources organized by country, university, and degree level.",
+    navTools: "Tools",
+    navCommunity: "Community",
+    searchShortcutHint: "⌘K",
+    searchMaterialsUnis: "Search materials, universities...",
+    mobileMenuMaterials: "Materials",
+    mobileMenuTools: "Study Tools",
+    mobileMenuCommunity: "Community & Social",
+    mobileMenuAccount: "Account",
+    exploreTools: "Explore All Tools",
+    studyMaterialsCat: "Study Materials",
+    studyToolsCat: "Study Tools",
+    communityCat: "Community",
+    moreFilters: "More Filters",
+    watchTutorial: "Watch Tutorial",
+    communitySection: "Community",
+    browseMaterialsShort: "Browse Materials",
+    uploadMaterialShort: "Upload Material",
+    trustCountries: "Countries",
+    trustUniversities: "Universities",
+    trustMaterials: "Materials Shared",
   },
   ar: {
     siteTitle: "مركز الطالب السوداني",
@@ -1262,6 +1315,31 @@ const T = {
     focusIslandSub: "عالمك الدراسي ينمو معك",
     battleArena: "ساحة المعركة",
     battleArenaSub: "تحدّى أصدقاءك في مبارزات الأسئلة",
+    translator: "المترجم الأكاديمي",
+    translatorSub: "ترجمة المواد الأكاديمية بين اللغات",
+    // Hero Redesign & Quick Access
+    heroHeadline: "اعثر على موادك الدراسية",
+    heroSubNew: "ارفع واكتشف المواد الدراسية مرتبة حسب الدولة والجامعة والمرحلة الدراسية",
+    navTools: "أدوات",
+    navCommunity: "مجتمع",
+    searchShortcutHint: "⌘K",
+    searchMaterialsUnis: "ابحث عن مواد، جامعات...",
+    mobileMenuMaterials: "المواد",
+    mobileMenuTools: "أدوات الدراسة",
+    mobileMenuCommunity: "المجتمع والتواصل",
+    mobileMenuAccount: "الحساب",
+    exploreTools: "استكشف جميع الأدوات",
+    studyMaterialsCat: "المواد الدراسية",
+    studyToolsCat: "أدوات الدراسة",
+    communityCat: "المجتمع",
+    moreFilters: "المزيد من الفلاتر",
+    watchTutorial: "شاهد الشرح",
+    communitySection: "المجتمع",
+    browseMaterialsShort: "تصفح المواد",
+    uploadMaterialShort: "رفع مادة",
+    trustCountries: "دولة",
+    trustUniversities: "جامعة",
+    trustMaterials: "مادة تم مشاركتها",
   },
 };
 
@@ -1565,6 +1643,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [subjectGroupsExpanded, setSubjectGroupsExpanded] = useState({});
   const [showAllCountries, setShowAllCountries] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isToolsDropdownOpen, setIsToolsDropdownOpen] = useState(false);
+  const [isCommunityDropdownOpen, setIsCommunityDropdownOpen] = useState(false);
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+  const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
   const [myMaterials, setMyMaterials] = useState([]);
   const [loadingMyMaterials, setLoadingMyMaterials] = useState(false);
   const [allMaterials, setAllMaterials] = useState([]);
@@ -1576,6 +1658,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [browseMatLoading, setBrowseMatLoading] = useState(false);
   const [materialCountData, setMaterialCountData] = useState([]);
   const userMenuRef = useRef(null);
+  const toolsMenuRef = useRef(null);
+  const communityMenuRef = useRef(null);
+  const navSearchInputRef = useRef(null);
 
   // === NEW FEATURE STATE ===
   // Bookmarks
@@ -1635,6 +1720,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [recentFilteredTotal, setRecentFilteredTotal] = useState(0);
   const [recentFilterLoading, setRecentFilterLoading] = useState(false);
   const [recentFilterOpen, setRecentFilterOpen] = useState(null);
+  // Hero Redesign
+  const [heroSearchQuery, setHeroSearchQuery] = useState("");
+  const [showQuickAccess, setShowQuickAccess] = useState(false);
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [recentFilterUniversities, setRecentFilterUniversities] = useState([]);
   const [recentCountrySearch, setRecentCountrySearch] = useState("");
   const recentFilterRef = useRef(null);
@@ -1915,6 +2004,21 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Ctrl+K / Cmd+K keyboard shortcut to focus search
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (navSearchInputRef.current) {
+          navSearchInputRef.current.focus();
+          setNavSearchOpen(true);
+        }
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
   // Close user dropdown on outside click
   useEffect(() => {
     if (!isUserDropdownOpen) return;
@@ -1924,6 +2028,26 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [isUserDropdownOpen]);
+
+  // Close tools dropdown on outside click
+  useEffect(() => {
+    if (!isToolsDropdownOpen) return;
+    const handler = (e) => {
+      if (toolsMenuRef.current && !toolsMenuRef.current.contains(e.target)) setIsToolsDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [isToolsDropdownOpen]);
+
+  // Close community dropdown on outside click
+  useEffect(() => {
+    if (!isCommunityDropdownOpen) return;
+    const handler = (e) => {
+      if (communityMenuRef.current && !communityMenuRef.current.contains(e.target)) setIsCommunityDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [isCommunityDropdownOpen]);
 
   // Close share popup on outside click
   useEffect(() => {
@@ -3489,6 +3613,34 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           box-shadow: 0 8px 30px rgba(0,0,0,0.1) !important;
           border-color: #C8956C !important;
         }
+        .studyhub-country-card {
+          transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .studyhub-country-card:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+        .studyhub-show-all-btn {
+          transition: background 0.2s, color 0.2s;
+        }
+        .studyhub-show-all-btn:hover {
+          background: #C8956C !important;
+          color: white !important;
+        }
+        .studyhub-clear-filters-btn {
+          transition: background 0.2s, color 0.2s;
+        }
+        .studyhub-clear-filters-btn:hover {
+          background: #e74c3c !important;
+          color: white !important;
+        }
+        .studyhub-view-all-btn {
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .studyhub-view-all-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 15px rgba(27,58,75,0.3);
+        }
         .my-group-chevron {
           transition: transform 0.3s ease;
           display: inline-block;
@@ -4064,6 +4216,232 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         .studyhub-grade-calc-btn:not(:disabled):hover {
           filter: brightness(1.08);
         }
+
+        /* === REDESIGN: Card interactive hover (replaces inline handlers) === */
+        .studyhub-card-interactive {
+          transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .studyhub-card-interactive:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        @media (hover: none) {
+          .studyhub-card-interactive:hover {
+            transform: none;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+          }
+        }
+
+        /* === REDESIGN: Quick Access panel === */
+        .studyhub-quick-access {
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease;
+        }
+        .studyhub-quick-access.open {
+          max-height: 600px;
+          opacity: 1;
+        }
+
+        /* === REDESIGN: Trust Bar === */
+        .studyhub-trust-bar {
+          display: flex;
+          justify-content: center;
+          gap: 0;
+          padding: 28px 20px;
+          background: linear-gradient(135deg, rgba(27,58,75,0.04), rgba(200,149,108,0.06));
+          border-radius: 20px;
+          margin-bottom: 44px;
+          animation: fadeUp 0.5s ease-out both;
+        }
+        .studyhub-trust-bar-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          flex: 1;
+          padding: 0 clamp(12px, 2vw, 28px);
+          text-align: center;
+        }
+        .studyhub-trust-bar-item:not(:last-child) {
+          border-right: 1px solid rgba(200,149,108,0.2);
+        }
+        [dir=rtl] .studyhub-trust-bar-item:not(:last-child) {
+          border-right: none;
+          border-left: 1px solid rgba(200,149,108,0.2);
+        }
+        .studyhub-trust-bar-num {
+          font-size: clamp(24px, 4vw, 34px);
+          font-weight: 900;
+          color: #C8956C;
+          line-height: 1.1;
+        }
+        .studyhub-trust-bar-label {
+          font-size: 12px;
+          font-weight: 700;
+          color: #888;
+          text-transform: uppercase;
+          letter-spacing: 0.6px;
+        }
+
+        /* === REDESIGN: Hero search glow === */
+        .studyhub-hero-search:focus-within {
+          border-color: #C8956C !important;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.15), 0 0 0 3px rgba(200,149,108,0.25) !important;
+        }
+
+        /* === REDESIGN: Community section 2-col === */
+        .studyhub-community-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+
+        /* === REDESIGN: Degree strip horizontal scroll === */
+        .studyhub-degree-strip {
+          display: flex;
+          gap: 14px;
+          overflow-x: auto;
+          padding-bottom: 8px;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          -webkit-overflow-scrolling: touch;
+          margin: 24px 0 40px;
+        }
+        .studyhub-degree-strip::-webkit-scrollbar { display: none; }
+        .studyhub-degree-strip-card {
+          flex-shrink: 0;
+          background: white;
+          border-radius: 16px;
+          padding: 18px 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          border-top: 4px solid;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+          min-width: 135px;
+          cursor: default;
+        }
+
+        /* === REDESIGN: Filter chip activate animation === */
+        .studyhub-recent-filter-chip:active {
+          transform: scale(0.96);
+        }
+
+        /* === REDESIGN: CTA button hover === */
+        .studyhub-cta-primary:hover {
+          filter: brightness(1.08);
+          box-shadow: 0 6px 20px rgba(200,149,108,0.35);
+        }
+        .studyhub-cta-secondary:hover {
+          filter: brightness(1.08);
+          box-shadow: 0 6px 20px rgba(27,58,75,0.35);
+        }
+
+        /* === REDESIGN: Explore Tools toggle button === */
+        .studyhub-explore-toggle {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 24px;
+          border-radius: 50px;
+          border: 2px solid rgba(255,255,255,0.2);
+          background: rgba(255,255,255,0.08);
+          color: #F5E6D3;
+          font-weight: 700;
+          font-size: 13px;
+          cursor: pointer;
+          font-family: inherit;
+          transition: all 0.25s;
+          backdrop-filter: blur(4px);
+        }
+        .studyhub-explore-toggle:hover {
+          background: rgba(255,255,255,0.15);
+          border-color: rgba(255,255,255,0.3);
+        }
+        .studyhub-explore-toggle .chevron {
+          transition: transform 0.3s ease;
+          font-size: 12px;
+        }
+        .studyhub-explore-toggle.open .chevron {
+          transform: rotate(180deg);
+        }
+
+        /* === REDESIGN: Quick Access grid items === */
+        .studyhub-qa-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 14px;
+          border-radius: 12px;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.08);
+          color: #F5E6D3;
+          cursor: pointer;
+          font-family: inherit;
+          font-size: 13px;
+          font-weight: 600;
+          transition: all 0.2s;
+          width: 100%;
+          text-align: start;
+        }
+        .studyhub-qa-item:hover {
+          background: rgba(255,255,255,0.14);
+          border-color: rgba(255,255,255,0.18);
+          transform: translateX(2px);
+        }
+        [dir=rtl] .studyhub-qa-item:hover {
+          transform: translateX(-2px);
+        }
+
+        /* === Keyframes === */
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === REDESIGN: Responsive overrides === */
+        @media (max-width: 767px) {
+          .studyhub-trust-bar {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 16px 8px !important;
+            padding: 20px 16px !important;
+          }
+          .studyhub-trust-bar-item {
+            border-right: none !important;
+            border-left: none !important;
+            padding: 0 !important;
+          }
+          .studyhub-community-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .studyhub-hero-ctas {
+            flex-direction: column !important;
+          }
+          .studyhub-hero-ctas a,
+          .studyhub-hero-ctas button {
+            width: 100% !important;
+            min-height: 48px !important;
+            justify-content: center !important;
+          }
+          .studyhub-qa-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 479px) {
+          .studyhub-trust-bar { margin-bottom: 28px !important; border-radius: 16px !important; }
+          .studyhub-trust-bar-num { font-size: 20px !important; }
+          .studyhub-degree-strip-card { padding: 14px 18px !important; min-width: 115px !important; }
+        }
+        @media (max-width: 380px) {
+          .studyhub-trust-bar {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+        }
       ` }} />
 
       {notification && (
@@ -4106,89 +4484,132 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             </div>
           </div>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-0 lg:gap-1 whitespace-nowrap">
+          {/* Desktop Nav Links — Redesigned: 4 items max with dropdowns */}
+          <nav className="hidden md:flex items-center gap-0.5 lg:gap-1 whitespace-nowrap" role="navigation" aria-label="Main navigation">
+            {/* Browse */}
             <button
               onClick={() => { navigate("home"); setSearchQuery(""); }}
-              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+              className={`relative px-3 lg:px-4 py-2 text-[13px] lg:text-sm font-semibold transition-colors duration-200 rounded-lg ${view === "home" ? "text-[#1B3A4B] dark:text-white bg-[#1B3A4B]/5 dark:bg-white/10" : "text-gray-600 dark:text-gray-300 hover:text-[#1B3A4B] dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-gray-800/50"}`}
             >
-              <span className="relative z-10">{t.home}</span>
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
-              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+              {t.browseCountries}
             </button>
-            <a
-              href={`/${locale}`}
-              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group no-underline"
-            >
-              <span className="relative z-10">{t.backToMain}</span>
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
-              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
-            </a>
-            <button
-              onClick={() => { navigate("home"); setSearchQuery(""); }}
-              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
-            >
-              <span className="relative z-10">{t.browseCountries}</span>
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
-              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
-            </button>
+            {/* My Materials */}
             <button
               onClick={() => navigate("my-materials")}
-              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+              className={`relative px-3 lg:px-4 py-2 text-[13px] lg:text-sm font-semibold transition-colors duration-200 rounded-lg ${view === "my-materials" ? "text-[#1B3A4B] dark:text-white bg-[#1B3A4B]/5 dark:bg-white/10" : "text-gray-600 dark:text-gray-300 hover:text-[#1B3A4B] dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-gray-800/50"}`}
             >
-              <span className="relative z-10">{t.myMaterials}</span>
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
-              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+              {t.myMaterials}
             </button>
-            <button
-              onClick={() => {
-                if (requireLogin()) return;
-                if (selectedSemester) setShowUploadModal(true);
-                else { navigate("home"); showNotif(t.selectSemesterFirst, "error"); }
-              }}
-              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
-            >
-              <span className="relative z-10">{t.upload}</span>
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
-              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
-            </button>
-            <a
-              href={TELEGRAM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative px-2 lg:px-4 py-2 text-xs lg:text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group no-underline"
-            >
-              <span className="relative z-10">{t.telegram}</span>
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 group-hover:w-3/4 transition-all duration-300 rounded-full" />
-              <span className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
-            </a>
+            {/* Tools Dropdown */}
+            <div ref={toolsMenuRef} className="relative">
+              <button
+                onClick={() => { setIsToolsDropdownOpen(!isToolsDropdownOpen); setIsCommunityDropdownOpen(false); }}
+                aria-expanded={isToolsDropdownOpen}
+                aria-haspopup="true"
+                className={`flex items-center gap-1 px-3 lg:px-4 py-2 text-[13px] lg:text-sm font-semibold transition-colors duration-200 rounded-lg ${isToolsDropdownOpen ? "text-[#1B3A4B] dark:text-white bg-[#1B3A4B]/5 dark:bg-white/10" : "text-gray-600 dark:text-gray-300 hover:text-[#1B3A4B] dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-gray-800/50"}`}
+              >
+                {t.navTools}
+                <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${isToolsDropdownOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              {isToolsDropdownOpen && (
+                <div className={`absolute top-full mt-2 ${isRTL ? "left-0" : "right-0 lg:left-0"} w-60 bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-700 rounded-xl shadow-xl shadow-black/8 dark:shadow-black/30 z-50 py-1.5 overflow-hidden`} role="menu">
+                  {[
+                    { icon: "🤖", label: t.aiAssistant, action: () => navigate("ai-assistant") },
+                    { icon: "🧠", label: t.flashcards, action: () => navigate("flashcards") },
+                    { icon: "⏱️", label: t.pomodoroTimer, action: () => window.open(`/${locale}/study-hub/pomodoro`, '_blank') },
+                    { icon: "📊", label: t.studyPlanner, action: () => navigate("study-planner") },
+                    { icon: "🗺️", label: t.smartStudyPath, action: () => navigate("smart-path") },
+                    { icon: "🧮", label: t.finalGradeCalc, action: () => navigate("grade-calc") },
+                    { icon: "📅", label: t.examPlanner, action: () => navigate("exam-planner") },
+                    { icon: "🏝️", label: t.focusIsland, action: () => navigate("focus-island") },
+                    { icon: "🌐", label: t.translator, action: () => navigate("translator") },
+                  ].map((item, i) => (
+                    <button
+                      key={i}
+                      role="menuitem"
+                      onClick={() => { item.action(); setIsToolsDropdownOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
+                    >
+                      <span className="text-base shrink-0">{item.icon}</span>
+                      <span className="font-medium">{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            {/* Community Dropdown */}
+            <div ref={communityMenuRef} className="relative">
+              <button
+                onClick={() => { setIsCommunityDropdownOpen(!isCommunityDropdownOpen); setIsToolsDropdownOpen(false); }}
+                aria-expanded={isCommunityDropdownOpen}
+                aria-haspopup="true"
+                className={`flex items-center gap-1 px-3 lg:px-4 py-2 text-[13px] lg:text-sm font-semibold transition-colors duration-200 rounded-lg ${isCommunityDropdownOpen ? "text-[#1B3A4B] dark:text-white bg-[#1B3A4B]/5 dark:bg-white/10" : "text-gray-600 dark:text-gray-300 hover:text-[#1B3A4B] dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-gray-800/50"}`}
+              >
+                {t.navCommunity}
+                <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${isCommunityDropdownOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              {isCommunityDropdownOpen && (
+                <div className={`absolute top-full mt-2 ${isRTL ? "left-0" : "right-0 lg:left-0"} w-56 bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-700 rounded-xl shadow-xl shadow-black/8 dark:shadow-black/30 z-50 py-1.5 overflow-hidden`} role="menu">
+                  {[
+                    { icon: "👥", label: t.studyGroups, action: () => navigate("groups") },
+                    { icon: "📋", label: t.requests, action: () => navigate("requests") },
+                    { icon: "⭐", label: t.profReviews, action: () => navigate("reviews") },
+                    { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
+                    { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
+                  ].map((item, i) => (
+                    <button
+                      key={i}
+                      role="menuitem"
+                      onClick={() => { item.action(); setIsCommunityDropdownOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
+                    >
+                      <span className="text-base shrink-0">{item.icon}</span>
+                      <span className="font-medium">{item.label}</span>
+                    </button>
+                  ))}
+                  <div className="border-t border-gray-100 dark:border-gray-800 mt-1 pt-1">
+                    <a
+                      href={TELEGRAM_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors no-underline ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
+                    >
+                      <span className="text-base shrink-0">💬</span>
+                      <span className="font-medium">{t.telegram}</span>
+                      <svg className={`w-3 h-3 text-gray-400 ${isRTL ? "mr-auto rotate-180" : "ml-auto"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
-          {/* Right Side Actions */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-3 shrink-0">
-            {/* Search — Modern Expandable with Dropdown */}
+          {/* Right Side Actions — Redesigned */}
+          <div className="hidden md:flex items-center gap-2 lg:gap-3 shrink-0">
+            {/* Premium Search with Keyboard Shortcut Hint */}
             <div ref={navSearchRef} className="relative">
-              <div className={`flex items-center rounded-full transition-all duration-300 ${navSearchOpen ? "bg-white dark:bg-gray-800 shadow-lg ring-2 ring-blue-500/40 w-[340px]" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200/70 dark:hover:bg-gray-700 w-[200px]"} px-3.5 py-1.5`}>
+              <div className={`flex items-center rounded-full transition-all duration-300 ease-out ${navSearchOpen ? "bg-white dark:bg-gray-800 shadow-lg ring-2 ring-[#C8956C]/40 w-[340px]" : "bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700/80 w-[220px] cursor-text"} px-3.5 py-1.5`} onClick={() => { if (!navSearchOpen && navSearchInputRef.current) navSearchInputRef.current.focus(); }}>
                 {navSearchLoading ? (
-                  <svg className="w-4 h-4 text-blue-500 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-[#C8956C] shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
                 ) : (
-                  <svg className={`w-4 h-4 shrink-0 transition-colors duration-200 ${navSearchOpen ? "text-blue-500" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className={`w-4 h-4 shrink-0 transition-colors duration-200 ${navSearchOpen ? "text-[#C8956C]" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 )}
                 <input
+                  ref={navSearchInputRef}
                   type="text"
-                  placeholder={navSearchOpen ? t.search : t.searchPlaceholderShort}
+                  placeholder={navSearchOpen ? t.search : t.searchMaterialsUnis}
                   value={searchQuery}
                   onChange={(e) => { setSearchQuery(e.target.value); setNavSearchOpen(true); }}
-                  onFocus={() => { setNavSearchOpen(true); }}
+                  onFocus={() => { setNavSearchOpen(true); setIsToolsDropdownOpen(false); setIsCommunityDropdownOpen(false); }}
                   onKeyDown={handleNavSearchKeyDown}
                   className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
                 />
-                {searchQuery && (
+                {searchQuery ? (
                   <button
                     onClick={() => { setSearchQuery(""); setNavSearchResults([]); setNavSearchOpen(false); }}
                     className="shrink-0 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 text-xs transition-colors"
@@ -4197,6 +4618,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
+                ) : !navSearchOpen && (
+                  <kbd className="hidden lg:inline-flex items-center gap-0.5 shrink-0 px-1.5 py-0.5 text-[10px] font-semibold text-gray-400 dark:text-gray-500 bg-white/80 dark:bg-gray-700/60 border border-gray-200/80 dark:border-gray-600/50 rounded-md shadow-sm">
+                    {t.searchShortcutHint}
+                  </kbd>
                 )}
               </div>
 
@@ -4346,6 +4771,20 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 </div>
               )}
             </div>
+
+            {/* Upload — Primary CTA */}
+            <button
+              onClick={() => {
+                if (requireLogin()) return;
+                if (selectedSemester) setShowUploadModal(true);
+                else { navigate("home"); showNotif(t.selectSemesterFirst, "error"); }
+              }}
+              className="flex items-center gap-1.5 px-4 py-1.5 text-white text-sm font-semibold rounded-full transition-all duration-200 hover:opacity-90"
+              style={{ background: "linear-gradient(to right, #C8956C, #B07D55)", boxShadow: "0 2px 8px rgba(200,149,108,0.35)" }}
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+              <span className="hidden lg:inline">{t.upload}</span>
+            </button>
 
             {/* Notification Bell */}
             {isLoggedIn && (
@@ -4528,7 +4967,22 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       <span className="w-4 h-4 text-gray-400 text-center">📁</span>
                       {t.collections}
                     </button>
+                    <button
+                      onClick={() => { navigate("exams"); setIsUserDropdownOpen(false); }}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 w-full transition-colors"
+                    >
+                      <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                      {t.pastExams}
+                    </button>
                     <div className="border-t border-gray-100 dark:border-gray-800" />
+                    <a
+                      href={`/${locale}`}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 no-underline transition-colors"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" /></svg>
+                      {t.backToMain}
+                    </a>
                     <button
                       onClick={() => { setIsUserDropdownOpen(false); signOut({ callbackUrl: `/${locale}/study-hub` }); }}
                       className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors"
@@ -4563,17 +5017,17 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu — Redesigned with grouped sections */}
         <div
           className={`md:hidden overflow-y-auto transition-all duration-300 overscroll-contain ${isMobileMenuOpen ? "max-h-[calc(100vh-4rem)] pb-24" : "max-h-0 overflow-hidden"}`}
         >
-          <div className="flex flex-col gap-1 pt-4 px-4 border-t border-gray-100 dark:border-gray-800">
+          <div className="flex flex-col gap-1 pt-3 px-4 border-t border-gray-100 dark:border-gray-800">
 
             {/* Mobile Search */}
             <div className="relative mb-3">
-              <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2">
+              <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2.5">
                 {navSearchLoading ? (
-                  <svg className="w-4 h-4 text-blue-500 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-[#C8956C] shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
@@ -4584,7 +5038,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 )}
                 <input
                   type="text"
-                  placeholder={t.search}
+                  placeholder={t.searchMaterialsUnis}
                   value={searchQuery}
                   onChange={(e) => { setSearchQuery(e.target.value); setNavSearchOpen(true); }}
                   onFocus={() => setNavSearchOpen(true)}
@@ -4640,142 +5094,144 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               )}
             </div>
 
-            <button
-              onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              {t.home}
-            </button>
-            <a
-              href={`/${locale}`}
-              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2 no-underline"
-            >
-              {t.backToMain}
-            </a>
-            <button
-              onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              {t.browseCountries}
-            </button>
-            <button
-              onClick={() => { navigate("my-materials"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              {t.myMaterials}
-            </button>
+            {/* Mobile Upload CTA */}
             <button
               onClick={() => {
                 if (requireLogin()) return;
                 if (selectedSemester) { setShowUploadModal(true); setIsMobileMenuOpen(false); }
                 else { navigate("home"); setIsMobileMenuOpen(false); showNotif(t.selectSemesterFirst, "error"); }
               }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
+              className="flex items-center justify-center gap-2 w-full py-2.5 text-white text-sm font-semibold rounded-xl shadow-sm mb-2"
+              style={{ background: "linear-gradient(to right, #C8956C, #B07D55)" }}
             >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
               {t.upload}
             </button>
-            <button
-              onClick={() => { navigate("exams"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              {t.pastExams}
-            </button>
-            <button
-              onClick={() => { navigate("grade-calc"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              {t.finalGradeCalc}
-            </button>
-            <button
-              onClick={() => { window.open(`/${locale}/study-hub/pomodoro`, '_blank'); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              🍅 {t.pomodoroTimer}
-            </button>
-            <button
-              onClick={() => { navigate("exam-planner"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              📅 {t.examPlanner}
-            </button>
-            <button
-              onClick={() => { navigate("reviews"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              ⭐ {t.profReviews}
-            </button>
-            <button
-              onClick={() => { navigate("ai-assistant"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              🤖 {t.aiAssistant}
-            </button>
-            <button
-              onClick={() => { navigate("flashcards"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              🧠 {t.flashcards}
-            </button>
-            <button
-              onClick={() => { navigate("study-planner"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              📊 {t.studyPlanner}
-            </button>
-            <button
-              onClick={() => { navigate("smart-path"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              🎯 {t.smartStudyPath}
-            </button>
-            <button
-              onClick={() => { navigate("focus-island"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              🏝️ {t.focusIsland}
-            </button>
-            <button
-              onClick={() => { navigate("battle-arena"); setIsMobileMenuOpen(false); }}
-              className={`${isRTL ? "text-right" : "text-left"} text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 font-medium transition-colors py-2.5 px-2`}
-            >
-              ⚔️ {t.battleArena}
-            </button>
-            <a
-              href={TELEGRAM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors py-2.5 px-2 no-underline"
-            >
-              {t.telegram}
-            </a>
+
+            {/* Section: Materials */}
+            <div className="mb-1">
+              <p className={`text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-2 pt-3 pb-1.5 ${isRTL ? "text-right" : "text-left"}`}>{t.mobileMenuMaterials}</p>
+              {[
+                { icon: "🌍", label: t.browseCountries, action: () => { navigate("home"); setSearchQuery(""); } },
+                { icon: "📂", label: t.myMaterials, action: () => navigate("my-materials") },
+                { icon: "📝", label: t.pastExams, action: () => navigate("exams") },
+              ].map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() => { item.action(); setIsMobileMenuOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-lg transition-colors ${isRTL ? "flex-row-reverse text-right" : "text-left"}`}
+                >
+                  <span className="text-base">{item.icon}</span>
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Section: Tools (collapsible) */}
+            <div className="mb-1">
+              <button
+                onClick={() => setMobileToolsOpen(!mobileToolsOpen)}
+                className={`w-full flex items-center justify-between px-2 pt-3 pb-1.5 ${isRTL ? "flex-row-reverse" : ""}`}
+              >
+                <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 m-0">{t.mobileMenuTools}</p>
+                <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${mobileToolsOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-200 ${mobileToolsOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}>
+                {[
+                  { icon: "🤖", label: t.aiAssistant, action: () => navigate("ai-assistant") },
+                  { icon: "🧠", label: t.flashcards, action: () => navigate("flashcards") },
+                  { icon: "⏱️", label: t.pomodoroTimer, action: () => window.open(`/${locale}/study-hub/pomodoro`, '_blank') },
+                  { icon: "📊", label: t.studyPlanner, action: () => navigate("study-planner") },
+                  { icon: "🗺️", label: t.smartStudyPath, action: () => navigate("smart-path") },
+                  { icon: "🧮", label: t.finalGradeCalc, action: () => navigate("grade-calc") },
+                  { icon: "📅", label: t.examPlanner, action: () => navigate("exam-planner") },
+                  { icon: "🏝️", label: t.focusIsland, action: () => navigate("focus-island") },
+                  { icon: "🌐", label: t.translator, action: () => navigate("translator") },
+                ].map((item, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { item.action(); setIsMobileMenuOpen(false); }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-lg transition-colors ${isRTL ? "flex-row-reverse text-right" : "text-left"}`}
+                  >
+                    <span className="text-base">{item.icon}</span>
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Section: Community (collapsible) */}
+            <div className="mb-1">
+              <button
+                onClick={() => setMobileCommunityOpen(!mobileCommunityOpen)}
+                className={`w-full flex items-center justify-between px-2 pt-3 pb-1.5 ${isRTL ? "flex-row-reverse" : ""}`}
+              >
+                <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 m-0">{t.mobileMenuCommunity}</p>
+                <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${mobileCommunityOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-200 ${mobileCommunityOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"}`}>
+                {[
+                  { icon: "👥", label: t.studyGroups, action: () => navigate("groups") },
+                  { icon: "📋", label: t.requests, action: () => navigate("requests") },
+                  { icon: "⭐", label: t.profReviews, action: () => navigate("reviews") },
+                  { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
+                  { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
+                ].map((item, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { item.action(); setIsMobileMenuOpen(false); }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-lg transition-colors ${isRTL ? "flex-row-reverse text-right" : "text-left"}`}
+                  >
+                    <span className="text-base">{item.icon}</span>
+                    {item.label}
+                  </button>
+                ))}
+                <a
+                  href={TELEGRAM_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-lg transition-colors no-underline ${isRTL ? "flex-row-reverse text-right" : "text-left"}`}
+                >
+                  <span className="text-base">💬</span>
+                  {t.telegram}
+                  <svg className={`w-3 h-3 text-gray-400 ${isRTL ? "mr-auto" : "ml-auto"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </a>
+              </div>
+            </div>
 
             {/* Mobile bottom actions */}
-            <div className="flex items-center gap-3 pt-4 pb-8 border-t border-gray-100 dark:border-gray-800 mt-2">
-              <button
-                onClick={() => toggleDarkMode()}
-                className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400"
-              >
-                {darkMode ? (
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                  </svg>
-                )}
-              </button>
+            <div className="flex flex-col gap-3 pt-3 pb-8 border-t border-gray-100 dark:border-gray-800 mt-2">
+              {/* Theme + Back to Main row */}
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => toggleDarkMode()}
+                  className="flex items-center gap-2 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400 text-sm"
+                >
+                  {darkMode ? (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                  )}
+                </button>
+                <a
+                  href={`/${locale}`}
+                  className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 no-underline transition-colors"
+                >
+                  ← {t.backToMain}
+                </a>
+              </div>
+              {/* User info */}
               {isLoggedIn ? (
-                <div className="flex-1 flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-3 px-2">
                     {session.user.image ? (
                       <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600" referrerPolicy="no-referrer" />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                      <div className="w-8 h-8 rounded-full bg-[#1B3A4B] text-white flex items-center justify-center text-sm font-bold">
                         {(session.user.name || session.user.email || "U").charAt(0).toUpperCase()}
                       </div>
                     )}
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-gray-900 dark:text-white truncate m-0">{session.user.name}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 truncate m-0">{session.user.email}</p>
                     </div>
@@ -4791,11 +5247,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               ) : (
                 <a
                   href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline"
+                  className="flex items-center justify-center gap-2 bg-[#1B3A4B] hover:bg-[#274555] text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors no-underline"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                   {t.signIn}
                 </a>
               )}
@@ -4904,7 +5358,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>⚔️ {t.battleArena}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && view !== "focus-island" && view !== "battle-arena" && (
+          {view === "translator" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>🌐 {t.translator}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && view !== "focus-island" && view !== "battle-arena" && view !== "translator" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -4951,345 +5411,113 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {/* === HOME === */}
         {view === "home" && (
           <div>
-            {/* ══════ 1. HERO — with integrated stats & quick nav ══════ */}
+            {/* ══════ 1. HERO — Redesigned: clean value prop + search + categorized tools ══════ */}
             <div className="studyhub-hero" style={S.hero}>
               <div className="studyhub-hero-badge" style={S.heroBadge}>🇸🇩 {t.heroBadge}</div>
-              <h2 className="studyhub-hero-title" style={S.heroTitle}>{t.heroTitle}</h2>
-              <p className="studyhub-hero-sub" style={S.heroSub}>{t.heroSub}</p>
-              <p className="studyhub-hero-arabic" style={{ ...S.heroArabic, direction: isRTL ? "ltr" : "rtl" }}>{t.heroArabic}</p>
+              <h2 className="studyhub-hero-title" style={{ ...S.heroTitle, fontSize: "clamp(28px, 5vw, 42px)" }}>{t.heroHeadline}</h2>
+              <p className="studyhub-hero-sub" style={S.heroSub}>{t.heroSubNew}</p>
 
-              <div className="studyhub-search-box" style={S.searchBox}>
+              {/* Premium Search */}
+              <div className="studyhub-search-box studyhub-hero-search" style={{ ...S.searchBox, border: "2px solid transparent", transition: "border-color 0.2s, box-shadow 0.2s" }}>
                 <span style={{ ...S.searchIcon, ...(isRTL ? { marginRight: 0, marginLeft: 8 } : {}) }}>🔍</span>
                 <input
                   type="text"
-                  placeholder={t.searchFull}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={isRTL ? "ابحث عن مواد، جامعات، دول..." : "Search materials, universities, countries..."}
+                  value={heroSearchQuery}
+                  onChange={(e) => setHeroSearchQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter" && heroSearchQuery.trim()) { setSearchQuery(heroSearchQuery.trim()); navigate("browse-all"); } }}
                   style={S.searchInput}
                 />
-                {searchQuery && <button onClick={() => setSearchQuery("")} style={S.clearBtn}>✕</button>}
+                {heroSearchQuery && <button onClick={() => setHeroSearchQuery("")} style={S.clearBtn}>✕</button>}
+                <button
+                  onClick={() => { if (heroSearchQuery.trim()) { setSearchQuery(heroSearchQuery.trim()); navigate("browse-all"); } }}
+                  style={{ background: "linear-gradient(135deg, #C8956C, #B07D55)", border: "none", borderRadius: 50, padding: "8px 20px", color: "white", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap", marginLeft: isRTL ? 0 : 4, marginRight: isRTL ? 4 : 0 }}
+                >
+                  {isRTL ? "بحث" : "Search"}
+                </button>
               </div>
 
-              {/* Quick Navigation Pills */}
-              <div className="studyhub-hero-nav" style={S.heroQuickNav}>
-                <button style={S.heroQuickPill} onClick={() => navigate("browse-all")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >📚 {t.viewAllMaterials}</button>
-                <button style={S.heroQuickPill} onClick={() => navigate("my-materials")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >📂 {t.myMaterials}</button>
-                <button style={S.heroQuickPill} onClick={() => {
-                  if (!requireLogin()) { if (selectedSemester) setShowUploadModal(true); else showNotif(t.selectSemesterFirst, "error"); }
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >⬆️ {t.upload}</button>
-                <button style={S.heroQuickPill} onClick={() => navigate("requests")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >📋 {t.requests}</button>
-                <button style={S.heroQuickPill} onClick={() => navigate("groups")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >👥 {t.studyGroups}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(220,38,38,0.4)", background: "rgba(220,38,38,0.15)" }} onClick={() => navigate("exams")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(220,38,38,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(220,38,38,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >📝 {t.pastExams}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(22,163,74,0.4)", background: "rgba(22,163,74,0.15)" }} onClick={() => window.open(`/${locale}/gpa-calculator`, '_blank')}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(22,163,74,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(22,163,74,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >📊 {t.gpaCalculator}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(124,58,237,0.4)", background: "rgba(124,58,237,0.15)" }} onClick={() => navigate("grade-calc")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >🎯 {t.finalGradeCalc}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(234,88,12,0.4)", background: "rgba(234,88,12,0.15)" }} onClick={() => window.open(`/${locale}/study-hub/pomodoro`, '_blank')}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(234,88,12,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(234,88,12,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >🍅 {t.pomodoroTimer}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(8,145,178,0.4)", background: "rgba(8,145,178,0.15)" }} onClick={() => navigate("exam-planner")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(8,145,178,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(8,145,178,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >📅 {t.examPlanner}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(200,149,108,0.4)", background: "rgba(200,149,108,0.15)" }} onClick={() => navigate("reviews")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(200,149,108,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >⭐ {t.profReviews}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(16,185,129,0.4)", background: "rgba(16,185,129,0.15)" }} onClick={() => navigate("ai-assistant")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >🤖 {t.aiAssistant}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.15)" }} onClick={() => navigate("flashcards")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(139,92,246,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(139,92,246,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >🧠 {t.flashcards}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(59,130,246,0.4)", background: "rgba(59,130,246,0.15)" }} onClick={() => navigate("study-planner")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(59,130,246,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(59,130,246,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >📊 {t.studyPlanner}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(245,158,11,0.4)", background: "rgba(245,158,11,0.15)" }} onClick={() => navigate("smart-path")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(245,158,11,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(245,158,11,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >🎯 {t.smartStudyPath}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(16,185,129,0.4)", background: "rgba(16,185,129,0.15)" }} onClick={() => navigate("focus-island")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >🏝️ {t.focusIsland}</button>
-                <button style={{ ...S.heroQuickPill, borderColor: "rgba(124,58,237,0.4)", background: "rgba(124,58,237,0.15)" }} onClick={() => navigate("battle-arena")}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.3)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.15)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                >⚔️ {t.battleArena}</button>
+              {/* Primary + Secondary CTAs */}
+              <div className="studyhub-hero-ctas" style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
+                <button
+                  className="studyhub-cta-primary"
+                  onClick={() => navigate("browse-all")}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 50, background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 15px rgba(200,149,108,0.3)", transition: "all 0.2s" }}
+                >
+                  📚 {t.browseMaterialsShort}
+                </button>
+                <button
+                  className="studyhub-cta-secondary"
+                  onClick={() => {
+                    if (!requireLogin()) { if (selectedSemester) setShowUploadModal(true); else showNotif(t.selectSemesterFirst, "error"); }
+                  }}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 50, background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 15px rgba(27,58,75,0.3)", transition: "all 0.2s" }}
+                >
+                  📤 {t.uploadMaterialShort}
+                </button>
               </div>
 
-              {/* Inline Platform Stats */}
-              <div className="studyhub-hero-stats" style={S.heroInlineStats}>
-                {[
-                  { n: ALL_COUNTRIES.length, l: t.countries, icon: "🌍" },
-                  { n: "10,000+", l: t.universities, icon: "🏛️" },
-                  { n: allMaterialsTotal, l: t.materials, icon: "📚" },
-                  { n: DEGREE_LEVELS.length, l: t.degreeLevels, icon: "🎓" },
-                ].map((s, i, arr) => (
-                  <div key={i} style={{
-                    ...S.heroInlineStat,
-                    ...(i < arr.length - 1 ? (isRTL
-                      ? { borderLeft: "1px solid rgba(255,255,255,0.12)", paddingLeft: "clamp(14px, 3vw, 28px)" }
-                      : { borderRight: "1px solid rgba(255,255,255,0.12)", paddingRight: "clamp(14px, 3vw, 28px)" }
-                    ) : {}),
-                  }}>
-                    <span style={{ fontSize: 18, marginBottom: 4, opacity: 0.7 }}>{s.icon}</span>
-                    <span style={S.heroInlineStatNum}>{s.n}</span>
-                    <span style={S.heroInlineStatLabel}>{s.l}</span>
-                  </div>
-                ))}
+              {/* Explore All Tools Toggle */}
+              <div style={{ marginTop: 24, textAlign: "center" }}>
+                <button
+                  className={`studyhub-explore-toggle ${showQuickAccess ? "open" : ""}`}
+                  onClick={() => setShowQuickAccess(!showQuickAccess)}
+                >
+                  🧭 {t.exploreTools} <span className="chevron">▼</span>
+                </button>
               </div>
-            </div>
 
-            {/* ══════ 2. HOW IT WORKS — modern connected steps ══════ */}
-            <div className="studyhub-section studyhub-card-section" style={S.howSectionRedesign}>
-              <div style={S.sectionHead}>
-                <h3 style={S.sectionHeadTitle}>📖 {t.howItWorks}</h3>
-                <p style={S.sectionHeadSub}>
-                  {isRTL ? "ابدأ في أربع خطوات بسيطة" : "Get started in four simple steps"}
-                </p>
-                <div style={S.sectionDivider} />
-              </div>
-              <div className="studyhub-how-grid" style={S.howGrid}>
-                {[
-                  { step: "1", icon: "🌍", title: t.step1Title, desc: t.step1Desc, color: "#3B82F6" },
-                  { step: "2", icon: "🏛️", title: t.step2Title, desc: t.step2Desc, color: "#8B5CF6" },
-                  { step: "3", icon: "🎓", title: t.step3Title, desc: t.step3Desc, color: "#F59E0B" },
-                  { step: "4", icon: "📚", title: t.step4Title, desc: t.step4Desc, color: "#10B981" },
-                ].map((h, idx) => (
-                  <div key={h.step} className="studyhub-how-card" style={S.howCardRedesign}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.1)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.04)"; }}
-                  >
-                    {/* Connector line between cards */}
-                    {idx < 3 && <div className="studyhub-how-connector" style={{ position: "absolute", top: 40, [isRTL ? "left" : "right"]: -24, width: 32, height: 2, background: "linear-gradient(90deg, #C8956C 40%, transparent)", zIndex: 1, display: "none" }} />}
-                    {/* Step number badge */}
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                      <div style={{ width: 48, height: 48, borderRadius: 16, background: `linear-gradient(135deg, ${h.color}15, ${h.color}25)`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                        <span style={{ fontSize: 28, lineHeight: 1 }}>{h.icon}</span>
-                        <div style={{ position: "absolute", top: -6, [isRTL ? "left" : "right"]: -6, width: 22, height: 22, borderRadius: "50%", background: `linear-gradient(135deg, ${h.color}, ${h.color}CC)`, color: "white", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 2px 8px ${h.color}40` }}>{h.step}</div>
+              {/* Quick Access Categorized Grid */}
+              <div className={`studyhub-quick-access ${showQuickAccess ? "open" : ""}`}>
+                <div className="studyhub-qa-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, marginTop: 20, padding: "20px 0 0" }}>
+                  {QUICK_ACCESS_CATEGORIES.map((cat) => (
+                    <div key={cat.titleKey}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                        <span style={{ fontSize: 18 }}>{cat.icon}</span>
+                        <span style={{ fontSize: 13, fontWeight: 800, color: "#C8956C", textTransform: "uppercase", letterSpacing: "0.6px" }}>{t[cat.titleKey]}</span>
                       </div>
-                    </div>
-                    <h4 style={{ margin: "0 0 8px", color: "#1B3A4B", fontWeight: 800, fontSize: 15, lineHeight: 1.4 }}>{h.title}</h4>
-                    <p style={{ margin: 0, fontSize: 13, color: "#8896A6", lineHeight: 1.6, maxWidth: 200, marginInline: "auto" }}>{h.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* ══════ 2.5. VIDEO TUTORIAL — How to use Study Hub ══════ */}
-            <div className="studyhub-section studyhub-video-section" style={{
-              background: "linear-gradient(135deg, #1B3A4B 0%, #0f2a38 50%, #1a4a5e 100%)",
-              borderRadius: 24,
-              padding: "clamp(32px, 5vw, 48px) clamp(20px, 4vw, 40px)",
-              marginBottom: 48,
-              position: "relative",
-              overflow: "hidden",
-              border: "1px solid rgba(200,149,108,0.15)",
-            }}>
-              {/* Decorative background elements */}
-              <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,149,108,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
-              <div style={{ position: "absolute", bottom: -40, left: -40, width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
-
-              <div style={{ position: "relative", zIndex: 1 }}>
-                {/* Section header */}
-                <div style={{ textAlign: "center", marginBottom: "clamp(24px, 4vw, 36px)" }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(200,149,108,0.15)", padding: "6px 18px", borderRadius: 50, marginBottom: 16, border: "1px solid rgba(200,149,108,0.2)" }}>
-                    <span style={{ fontSize: 16 }}>🎬</span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: "#C8956C", textTransform: "uppercase", letterSpacing: "1px" }}>
-                      {isRTL ? "فيديو تعليمي" : "Video Tutorial"}
-                    </span>
-                  </div>
-                  <h3 style={{ fontSize: "clamp(20px, 4vw, 28px)", fontWeight: 900, color: "#fff", margin: "0 0 10px", letterSpacing: "-0.5px", lineHeight: 1.2 }}>
-                    {t.videoTutorialTitle}
-                  </h3>
-                  <p style={{ fontSize: "clamp(13px, 2vw, 15px)", color: "rgba(255,255,255,0.6)", maxWidth: 500, margin: "0 auto", lineHeight: 1.6 }}>
-                    {t.videoTutorialSub}
-                  </p>
-                </div>
-
-                {/* Clickable video thumbnail card */}
-                <div style={{ maxWidth: 720, margin: "0 auto", position: "relative" }}>
-                  <a
-                    href="https://drive.google.com/file/d/1TpORHo-UO2zeuRz4ixxhmrk6nLGfEvq3/view?usp=sharing"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="studyhub-video-card"
-                    style={{
-                      display: "block",
-                      position: "relative",
-                      paddingBottom: "56.25%",
-                      borderRadius: 16,
-                      overflow: "hidden",
-                      boxShadow: "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
-                      background: "linear-gradient(145deg, #0d1f2d 0%, #162d3e 30%, #1a3a50 60%, #0f2535 100%)",
-                      cursor: "pointer",
-                      textDecoration: "none",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.02)"; e.currentTarget.style.boxShadow = "0 24px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,149,108,0.2)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)"; }}
-                  >
-                    {/* Animated background pattern */}
-                    <div style={{ position: "absolute", inset: 0, opacity: 0.06, backgroundImage: "radial-gradient(circle at 20% 50%, #C8956C 1px, transparent 1px), radial-gradient(circle at 80% 20%, #C8956C 1px, transparent 1px), radial-gradient(circle at 60% 80%, #C8956C 1px, transparent 1px)", backgroundSize: "60px 60px, 80px 80px, 50px 50px" }} />
-
-                    {/* Center play button */}
-                    <div style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: 16,
-                      zIndex: 2,
-                    }}>
-                      {/* Play circle */}
-                      <div style={{
-                        width: "clamp(64px, 12vw, 88px)",
-                        height: "clamp(64px, 12vw, 88px)",
-                        borderRadius: "50%",
-                        background: "linear-gradient(135deg, #C8956C, #B07D55)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 8px 32px rgba(200,149,108,0.4), 0 0 0 8px rgba(200,149,108,0.1), 0 0 0 16px rgba(200,149,108,0.05)",
-                        transition: "transform 0.3s ease",
-                      }}>
-                        {/* Triangle play icon */}
-                        <div style={{
-                          width: 0,
-                          height: 0,
-                          borderStyle: "solid",
-                          borderWidth: "clamp(12px, 2vw, 18px) 0 clamp(12px, 2vw, 18px) clamp(20px, 3.5vw, 30px)",
-                          borderColor: "transparent transparent transparent white",
-                          marginLeft: "clamp(4px, 0.8vw, 6px)",
-                        }} />
+                      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        {cat.items.map((item) => (
+                          <button
+                            key={item.key}
+                            className="studyhub-qa-item"
+                            onClick={() => {
+                              if (item.action === "modal") {
+                                if (!requireLogin()) { if (selectedSemester) setShowUploadModal(true); else showNotif(t.selectSemesterFirst, "error"); }
+                              } else if (item.key === "pomodoro") {
+                                window.open(`/${locale}/study-hub/pomodoro`, '_blank');
+                              } else {
+                                navigate(item.key);
+                              }
+                            }}
+                          >
+                            <span style={{ fontSize: 16 }}>{item.icon}</span>
+                            <span>{t[item.labelKey] || item.labelKey}</span>
+                          </button>
+                        ))}
                       </div>
-                      {/* Label text */}
-                      <div style={{
-                        background: "rgba(0,0,0,0.5)",
-                        backdropFilter: "blur(8px)",
-                        padding: "8px 20px",
-                        borderRadius: 50,
-                        border: "1px solid rgba(255,255,255,0.1)",
-                      }}>
-                        <span style={{ color: "#F5E6D3", fontSize: "clamp(12px, 2vw, 14px)", fontWeight: 700, letterSpacing: "0.5px" }}>
-                          {t.videoTutorialBtn}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Corner decorative icons */}
-                    <div style={{ position: "absolute", top: 20, left: 20, fontSize: 28, opacity: 0.15 }}>📚</div>
-                    <div style={{ position: "absolute", top: 20, right: 20, fontSize: 28, opacity: 0.15 }}>🎓</div>
-                    <div style={{ position: "absolute", bottom: 20, left: 20, fontSize: 28, opacity: 0.15 }}>⬆️</div>
-                    <div style={{ position: "absolute", bottom: 20, right: 20, fontSize: 28, opacity: 0.15 }}>🌍</div>
-
-                    {/* Bottom bar */}
-                    <div style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      padding: "16px 24px",
-                      background: "linear-gradient(transparent, rgba(0,0,0,0.6))",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#C8956C", boxShadow: "0 0 8px rgba(200,149,108,0.5)" }} />
-                        <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, fontWeight: 600 }}>
-                          {isRTL ? "مركز الطالب السوداني" : "Sudanese Study Hub"}
-                        </span>
-                      </div>
-                      <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontWeight: 600 }}>
-                        {isRTL ? "اضغط للمشاهدة" : "Click to watch"}
-                      </span>
-                    </div>
-                  </a>
-
-                  {/* Decorative glow ring around video card */}
-                  <div style={{
-                    position: "absolute",
-                    inset: -2,
-                    borderRadius: 18,
-                    background: "linear-gradient(135deg, rgba(200,149,108,0.3), transparent 40%, transparent 60%, rgba(59,130,246,0.2))",
-                    zIndex: -1,
-                    pointerEvents: "none",
-                  }} />
-                </div>
-
-                {/* Features row below video */}
-                <div style={{ display: "flex", justifyContent: "center", gap: "clamp(16px, 4vw, 32px)", marginTop: 28, flexWrap: "wrap" }}>
-                  {[
-                    { icon: "📤", label: isRTL ? "كيفية رفع المواد" : "How to upload" },
-                    { icon: "🔍", label: isRTL ? "البحث والتصفح" : "Search & browse" },
-                    { icon: "📂", label: isRTL ? "تنظيم موادك" : "Organize materials" },
-                  ].map((feat, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, opacity: 0.7 }}>
-                      <span style={{ fontSize: 16 }}>{feat.icon}</span>
-                      <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, fontWeight: 600 }}>{feat.label}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* ══════ 3. EXPLORE PROGRAMS — Degree Levels ══════ */}
-            <div className="studyhub-section" style={S.sectionBlock}>
-              <div style={S.sectionHead}>
-                <h3 style={S.sectionHeadTitle}>🎓 {t.degreeLevelsTitle}</h3>
-                <p style={S.sectionHeadSub}>
-                  {isRTL ? "اختر المرحلة الدراسية المناسبة لك" : "Choose your academic level to get started"}
-                </p>
-                <div style={S.sectionDivider} />
-              </div>
-              <div className="studyhub-degree-grid" style={S.degreePreview}>
-                {DEGREE_LEVELS.map((d) => (
-                  <div
-                    key={d.id}
-                    style={{ ...S.degreePreviewCard, borderTopColor: d.color }}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.1)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; }}
-                  >
-                    <span style={{ fontSize: 32 }}>{d.icon}</span>
-                    <span style={{ fontWeight: 800, fontSize: 15, color: "#1B3A4B" }}>{degreeName(d)}</span>
-                    <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
-                  </div>
-                ))}
-              </div>
+            {/* ══════ 2. TRUST BAR — Social proof stats ══════ */}
+            <div className="studyhub-trust-bar">
+              {[
+                { n: `${ALL_COUNTRIES.length}+`, l: t.trustCountries, icon: "🌍" },
+                { n: "10,000+", l: t.trustUniversities, icon: "🏛️" },
+                { n: allMaterialsTotal || "0", l: t.trustMaterials, icon: "📚" },
+              ].map((s, i) => (
+                <div key={i} className="studyhub-trust-bar-item">
+                  <span style={{ fontSize: 20, opacity: 0.7 }}>{s.icon}</span>
+                  <span className="studyhub-trust-bar-num">{s.n}</span>
+                  <span className="studyhub-trust-bar-label">{s.l}</span>
+                </div>
+              ))}
             </div>
 
-            {/* ══════ 4. BROWSE BY COUNTRY — Main navigation ══════ */}
+            {/* ══════ 3. BROWSE BY COUNTRY — Primary navigation (moved UP) ══════ */}
             <div className="studyhub-section" style={S.countrySectionWrap}>
               <div style={S.sectionHead}>
                 <h3 style={S.sectionHeadTitle}>🌍 {t.browseByCountry}</h3>
@@ -5320,8 +5548,6 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     key={c.id}
                     className="studyhub-country-card" style={S.countryCard}
                     onClick={() => navigate("universities", c)}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.12)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.05)"; }}
                   >
                     <span style={S.countryFlag}>{c.flag}</span>
                     <h4 style={S.countryName}>{countryName(c)}</h4>
@@ -5331,10 +5557,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
               {!showAllCountries && filteredCountries.length > 24 && !searchQuery && (
                 <button
+                  className="studyhub-show-all-btn"
                   style={S.showAllBtn}
                   onClick={() => setShowAllCountries(true)}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "#C8956C"; e.currentTarget.style.color = "white"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#C8956C"; }}
                 >
                   {t.showAllCountries} ({filteredCountries.length})
                 </button>
@@ -5342,6 +5567,30 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               {filteredCountries.length === 0 && (
                 <div style={S.empty}><span style={{ fontSize: 48 }}>🔍</span><p>{t.noResultsFor} &quot;{searchQuery}&quot;</p></div>
               )}
+            </div>
+
+            {/* ══════ 4. DEGREE LEVELS — Horizontal scrollable strip ══════ */}
+            <div className="studyhub-section" style={S.sectionBlock}>
+              <div style={S.sectionHead}>
+                <h3 style={S.sectionHeadTitle}>🎓 {t.degreeLevelsTitle}</h3>
+                <p style={S.sectionHeadSub}>
+                  {isRTL ? "اختر المرحلة الدراسية المناسبة لك" : "Choose your academic level to get started"}
+                </p>
+                <div style={S.sectionDivider} />
+              </div>
+              <div className="studyhub-degree-strip">
+                {DEGREE_LEVELS.map((d) => (
+                  <div
+                    key={d.id}
+                    className="studyhub-degree-strip-card studyhub-card-interactive"
+                    style={{ borderTopColor: d.color }}
+                  >
+                    <span style={{ fontSize: 32 }}>{d.icon}</span>
+                    <span style={{ fontWeight: 800, fontSize: 15, color: "#1B3A4B" }}>{degreeName(d)}</span>
+                    <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* ══════ 5. RECENT MATERIALS — Social proof + Filter Bar ══════ */}
@@ -5462,6 +5711,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       </div>
                     )}
                   </div>
+
+                  {/* More Filters toggle */}
+                  <button
+                    className="studyhub-recent-filter-chip"
+                    style={{ ...S.recentFilterChip, ...(showMoreFilters ? { background: "#C8956C", color: "white", borderColor: "#C8956C" } : {}) }}
+                    onClick={() => setShowMoreFilters(!showMoreFilters)}
+                  >
+                    🔽 {t.moreFilters} <span style={{ fontSize: 10 }}>{showMoreFilters ? "▲" : "▼"}</span>
+                  </button>
+
+                  {/* Secondary filters — hidden behind More Filters toggle */}
+                  {showMoreFilters && <>
 
                   {/* Faculty/College chip */}
                   <div style={{ position: "relative" }}>
@@ -5620,13 +5881,15 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     )}
                   </div>
 
+                  </>}
+                  {/* End secondary filters */}
+
                   {/* Clear All button */}
                   {activeRecentFilterCount > 0 && (
                     <button
+                      className="studyhub-clear-filters-btn"
                       style={S.recentFilterClearAll}
                       onClick={clearAllRecentFilters}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = "#e74c3c"; e.currentTarget.style.color = "white"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = "white"; e.currentTarget.style.color = "#e74c3c"; }}
                     >
                       ✕ {t.clearAllFilters}
                       <span style={S.recentFilterBadge}>{activeRecentFilterCount}</span>
@@ -5763,10 +6026,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 {recentDisplayTotal > (isRecentFiltered ? 12 : 6) && (
                   <div style={{ textAlign: "center", marginTop: 24 }}>
                     <button
+                      className="studyhub-view-all-btn"
                       style={S.viewAllBtn}
                       onClick={() => navigate("browse-all")}
-                      onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 15px rgba(27,58,75,0.3)"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(27,58,75,0.2)"; }}
                     >
                       {t.viewAllMaterials} ({recentDisplayTotal}) →
                     </button>
@@ -5775,74 +6037,116 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             )}
 
-            {/* ══════ 6. TOP CONTRIBUTORS — Leaderboard teaser (top 3 podium) ══════ */}
-            {leaderboardData.length > 0 && (
-              <div className="studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
-                <div style={S.sectionHead}>
-                  <h3 style={S.sectionHeadTitle}>🏆 {t.topContributors}</h3>
-                  <div style={S.sectionDivider} />
-                </div>
-                {/* Podium — top 3 */}
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 12, marginBottom: 16, padding: "10px 0" }}>
-                  {[1, 0, 2].map((idx) => {
-                    const user = leaderboardData[idx];
-                    if (!user) return null;
-                    const isFirst = idx === 0;
-                    const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉";
-                    const podiumHeight = idx === 0 ? 100 : idx === 1 ? 76 : 60;
-                    const avatarSize = isFirst ? 56 : 44;
-                    const podiumBg = idx === 0 ? "linear-gradient(135deg, #FEF3C7, #FDE68A)" : idx === 1 ? "linear-gradient(135deg, #E5E7EB, #D1D5DB)" : "linear-gradient(135deg, #FED7AA, #FDBA74)";
-                    return (
-                      <div key={user.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: isFirst ? 120 : 100 }}>
-                        <div style={{ position: "relative", marginBottom: 8 }}>
-                          {user.image ? (
-                            <img src={user.image} alt="" style={{ width: avatarSize, height: avatarSize, borderRadius: "50%", objectFit: "cover", border: `3px solid ${idx === 0 ? "#F59E0B" : idx === 1 ? "#9CA3AF" : "#F97316"}` }} referrerPolicy="no-referrer" />
-                          ) : (
-                            <div style={{ width: avatarSize, height: avatarSize, borderRadius: "50%", background: "#C8956C", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: isFirst ? 20 : 16, fontWeight: 800, border: `3px solid ${idx === 0 ? "#F59E0B" : idx === 1 ? "#9CA3AF" : "#F97316"}` }}>
-                              {(user.name || "U").charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                          <span style={{ position: "absolute", bottom: -4, left: "50%", transform: "translateX(-50%)", fontSize: isFirst ? 20 : 16 }}>{medal}</span>
-                        </div>
-                        <span style={{ fontSize: isFirst ? 13 : 12, fontWeight: 700, color: darkMode ? "#fff" : "#1B3A4B", textAlign: "center", lineHeight: 1.3, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block" }}>{user.name || "Anonymous"}</span>
-                        <span style={{ fontSize: 12, fontWeight: 800, color: "#C8956C", marginTop: 2 }}>{user.points} {t.points}</span>
-                        <div style={{ width: "100%", height: podiumHeight, borderRadius: "12px 12px 0 0", background: podiumBg, marginTop: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <span style={{ fontSize: isFirst ? 28 : 22, fontWeight: 900, color: darkMode ? "#1B3A4B" : "#1B3A4B", opacity: 0.3 }}>#{idx + 1}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                {/* View full leaderboard */}
-                {leaderboardTotal > 3 && (
-                  <div style={{ textAlign: "center", marginTop: 8 }}>
-                    <button style={S.viewAllBtn} onClick={() => navigate("leaderboard")}>
-                      🏆 {t.viewFullLeaderboard} ({leaderboardTotal}) →
-                    </button>
-                  </div>
-                )}
+            {/* ══════ 6. HOW IT WORKS — moved down, with Watch Tutorial link ══════ */}
+            <div className="studyhub-section studyhub-card-section" style={S.howSectionRedesign}>
+              <div style={S.sectionHead}>
+                <h3 style={S.sectionHeadTitle}>📖 {t.howItWorks}</h3>
+                <p style={S.sectionHeadSub}>
+                  {isRTL ? "ابدأ في أربع خطوات بسيطة" : "Get started in four simple steps"}
+                </p>
+                <div style={S.sectionDivider} />
               </div>
-            )}
-
-            {/* ══════ 7. OPEN REQUESTS — teaser ══════ */}
-            {requestsList.length > 0 && (
-              <div className="studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
-                <div style={{ ...S.sectionHead, marginBottom: 16 }}>
-                  <h3 style={S.sectionHeadTitle}>📋 {t.openRequests}</h3>
-                  <div style={S.sectionDivider} />
-                </div>
-                {requestsList.slice(0, 3).map((req) => (
-                  <div key={req.id} style={{ padding: "12px 16px", borderBottom: "1px solid #ede5da", display: "flex", alignItems: "center", gap: 12 }}>
-                    <span style={{ fontSize: 20 }}>📌</span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 700, fontSize: 14, color: "#1B3A4B" }}>{req.title}</div>
-                      {req.subject && <div style={{ fontSize: 12, color: "#888" }}>📖 {req.subject}</div>}
+              <div className="studyhub-how-grid" style={S.howGrid}>
+                {[
+                  { step: "1", icon: "🌍", title: t.step1Title, desc: t.step1Desc, color: "#3B82F6" },
+                  { step: "2", icon: "🏛️", title: t.step2Title, desc: t.step2Desc, color: "#8B5CF6" },
+                  { step: "3", icon: "🎓", title: t.step3Title, desc: t.step3Desc, color: "#F59E0B" },
+                  { step: "4", icon: "📚", title: t.step4Title, desc: t.step4Desc, color: "#10B981" },
+                ].map((h, idx) => (
+                  <div key={h.step} className="studyhub-how-card studyhub-card-interactive" style={S.howCardRedesign}>
+                    {idx < 3 && <div className="studyhub-how-connector" style={{ position: "absolute", top: 40, [isRTL ? "left" : "right"]: -24, width: 32, height: 2, background: "linear-gradient(90deg, #C8956C 40%, transparent)", zIndex: 1, display: "none" }} />}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                      <div style={{ width: 48, height: 48, borderRadius: 16, background: `linear-gradient(135deg, ${h.color}15, ${h.color}25)`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                        <span style={{ fontSize: 28, lineHeight: 1 }}>{h.icon}</span>
+                        <div style={{ position: "absolute", top: -6, [isRTL ? "left" : "right"]: -6, width: 22, height: 22, borderRadius: "50%", background: `linear-gradient(135deg, ${h.color}, ${h.color}CC)`, color: "white", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 2px 8px ${h.color}40` }}>{h.step}</div>
+                      </div>
                     </div>
-                    <span style={{ fontSize: 11, color: "#aaa" }}>{new Date(req.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
+                    <h4 style={{ margin: "0 0 8px", color: "#1B3A4B", fontWeight: 800, fontSize: 15, lineHeight: 1.4 }}>{h.title}</h4>
+                    <p style={{ margin: 0, fontSize: 13, color: "#8896A6", lineHeight: 1.6, maxWidth: 200, marginInline: "auto" }}>{h.desc}</p>
                   </div>
                 ))}
-                <div style={{ textAlign: "center", marginTop: 16 }}>
-                  <button style={S.viewAllBtn} onClick={() => navigate("requests")}>{t.requests} →</button>
+              </div>
+              {/* Watch Tutorial link — replaces removed Video Tutorial section */}
+              <div style={{ textAlign: "center", marginTop: 24 }}>
+                <a
+                  href="https://drive.google.com/file/d/1TpORHo-UO2zeuRz4ixxhmrk6nLGfEvq3/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 50, background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: 13, fontFamily: "inherit", boxShadow: "0 2px 8px rgba(27,58,75,0.2)", transition: "all 0.2s" }}
+                >
+                  🎬 {t.watchTutorial}
+                </a>
+              </div>
+            </div>
+
+            {/* ══════ 7. COMMUNITY — Merged Contributors + Open Requests ══════ */}
+            {(leaderboardData.length > 0 || requestsList.length > 0) && (
+              <div className="studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
+                <div style={S.sectionHead}>
+                  <h3 style={S.sectionHeadTitle}>👥 {t.communitySection}</h3>
+                  <div style={S.sectionDivider} />
+                </div>
+                <div className="studyhub-community-grid">
+                  {/* Left column: Top Contributors */}
+                  {leaderboardData.length > 0 && (
+                    <div>
+                      <h4 style={{ fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: "0 0 16px", display: "flex", alignItems: "center", gap: 8 }}>
+                        🏆 {t.topContributors}
+                      </h4>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {leaderboardData.slice(0, 5).map((user, idx) => {
+                          const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
+                          return (
+                            <div key={user.id} className="studyhub-card-interactive" style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderRadius: 12, background: idx < 3 ? "#FAF6F1" : "transparent", border: "1px solid #ede5da" }}>
+                              <span style={{ fontSize: idx < 3 ? 18 : 14, width: 28, textAlign: "center", fontWeight: 900 }}>{medal}</span>
+                              {user.image ? (
+                                <img src={user.image} alt="" style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }} referrerPolicy="no-referrer" />
+                              ) : (
+                                <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#C8956C", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800 }}>
+                                  {(user.name || "U").charAt(0).toUpperCase()}
+                                </div>
+                              )}
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: 13, fontWeight: 700, color: "#1B3A4B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.name || "Anonymous"}</div>
+                              </div>
+                              <span style={{ fontSize: 12, fontWeight: 800, color: "#C8956C" }}>{user.points} {t.points}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {leaderboardTotal > 5 && (
+                        <div style={{ textAlign: "center", marginTop: 12 }}>
+                          <button style={{ ...S.viewAllBtn, fontSize: 12, padding: "7px 18px" }} onClick={() => navigate("leaderboard")}>
+                            {t.viewFullLeaderboard} ({leaderboardTotal}) →
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Right column: Open Requests */}
+                  {requestsList.length > 0 && (
+                    <div>
+                      <h4 style={{ fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: "0 0 16px", display: "flex", alignItems: "center", gap: 8 }}>
+                        📋 {t.openRequests}
+                      </h4>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {requestsList.slice(0, 5).map((req) => (
+                          <div key={req.id} className="studyhub-card-interactive" style={{ padding: "10px 14px", borderRadius: 12, border: "1px solid #ede5da", display: "flex", alignItems: "center", gap: 12 }}>
+                            <span style={{ fontSize: 18 }}>📌</span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontWeight: 700, fontSize: 13, color: "#1B3A4B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{req.title}</div>
+                              {req.subject && <div style={{ fontSize: 11, color: "#888" }}>📖 {req.subject}</div>}
+                            </div>
+                            <span style={{ fontSize: 10, color: "#aaa", whiteSpace: "nowrap" }}>{new Date(req.createdAt).toLocaleDateString(isRTL ? "ar" : "en")}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ textAlign: "center", marginTop: 12 }}>
+                        <button style={{ ...S.viewAllBtn, fontSize: 12, padding: "7px 18px" }} onClick={() => navigate("requests")}>{t.requests} →</button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -7789,6 +8093,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {view === "battle-arena" && (
           <div>
             <BattleArena locale={locale} userId={currentUserId} />
+          </div>
+        )}
+
+        {/* === ACADEMIC TRANSLATOR VIEW === */}
+        {view === "translator" && (
+          <div>
+            <AcademicTranslator locale={locale} userId={currentUserId} />
           </div>
         )}
 
