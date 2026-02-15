@@ -7,12 +7,12 @@ export const createTestSchema = z.object({
   description: z.string().max(2000).optional().nullable(),
   difficulty: z.enum(['easy', 'medium', 'hard']).optional().default('medium'),
   timeMinutes: z.number().int().min(1).max(240),
-  content: z.record(z.unknown()),
+  content: z.record(z.string(), z.unknown()),
 });
 
 export const submitAttemptSchema = z.object({
   testId: z.string().min(1, 'Test ID is required'),
-  answers: z.record(z.unknown()),
+  answers: z.record(z.string(), z.unknown()),
   timeSpentSec: z.number().int().min(0).optional(),
 });
 
