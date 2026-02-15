@@ -1505,7 +1505,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
             <>
               <div style={{ ...S.vocabWord, fontSize: 22 }}>{card.word}</div>
               <div style={S.vocabDef}>{card.definition}</div>
-              {card.example && <div style={S.vocabExample}>"{card.example}"</div>}
+              {card.example && <div style={S.vocabExample}>&ldquo;{card.example}&rdquo;</div>}
               {card.arabicMeaning && <div style={S.vocabArabic}>{card.arabicMeaning}</div>}
             </>
           )}
