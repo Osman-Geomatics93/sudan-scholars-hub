@@ -112,6 +112,12 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       icon: BookOpen,
     },
     {
+      href: `/${locale}/admin/ielts-toefl-materials`,
+      label: 'IELTS/TOEFL Materials',
+      labelAr: 'مواد IELTS/TOEFL',
+      icon: FileText,
+    },
+    {
       href: `/${locale}/admin/past-exams`,
       label: 'Past Exams',
       labelAr: 'الامتحانات السابقة',
