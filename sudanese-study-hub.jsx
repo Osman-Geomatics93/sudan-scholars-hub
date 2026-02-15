@@ -856,6 +856,10 @@ const T = {
     mobileMenuTools: "Study Tools",
     mobileMenuCommunity: "Community & Social",
     mobileMenuAccount: "Account",
+    navMenu: "Menu",
+    searchQuickActions: "Quick Actions",
+    searchRecentLabel: "Recent",
+    navBrowse: "Browse",
     exploreTools: "Explore All Tools",
     studyMaterialsCat: "Study Materials",
     studyToolsCat: "Study Tools",
@@ -1328,6 +1332,10 @@ const T = {
     mobileMenuTools: "أدوات الدراسة",
     mobileMenuCommunity: "المجتمع والتواصل",
     mobileMenuAccount: "الحساب",
+    navMenu: "القائمة",
+    searchQuickActions: "إجراءات سريعة",
+    searchRecentLabel: "الأخيرة",
+    navBrowse: "تصفح",
     exploreTools: "استكشف جميع الأدوات",
     studyMaterialsCat: "المواد الدراسية",
     studyToolsCat: "أدوات الدراسة",
@@ -1647,6 +1655,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [isCommunityDropdownOpen, setIsCommunityDropdownOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
+  const [isTabletMenuOpen, setIsTabletMenuOpen] = useState(false);
   const [myMaterials, setMyMaterials] = useState([]);
   const [loadingMyMaterials, setLoadingMyMaterials] = useState(false);
   const [allMaterials, setAllMaterials] = useState([]);
@@ -1661,6 +1670,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const toolsMenuRef = useRef(null);
   const communityMenuRef = useRef(null);
   const navSearchInputRef = useRef(null);
+  const tabletMenuRef = useRef(null);
 
   // === NEW FEATURE STATE ===
   // Bookmarks
@@ -2048,6 +2058,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [isCommunityDropdownOpen]);
+
+  // Close tablet menu on outside click
+  useEffect(() => {
+    if (!isTabletMenuOpen) return;
+    const handler = (e) => {
+      if (tabletMenuRef.current && !tabletMenuRef.current.contains(e.target)) setIsTabletMenuOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [isTabletMenuOpen]);
 
   // Close share popup on outside click
   useEffect(() => {
@@ -3641,6 +3661,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           transform: translateY(-1px);
           box-shadow: 0 4px 15px rgba(27,58,75,0.3);
         }
+
+        /* === Header nav dropdown animation === */
+        [role="menu"] {
+          animation: studyhub-dropdown-in 0.18s ease-out;
+        }
+        @keyframes studyhub-dropdown-in {
+          from { opacity: 0; transform: translateY(-6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
         .my-group-chevron {
           transition: transform 0.3s ease;
           display: inline-block;
@@ -4466,26 +4496,27 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           "border-b border-gray-200/50 dark:border-gray-700/30",
         ].join(" ")}
       >
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-14" : "h-16"}`}>
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 transition-all duration-500 ${scrolled ? "h-14" : "h-16"}`} style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", alignItems: "center", gap: 0 }}>
 
-          {/* Logo */}
+          {/* LEFT — Logo */}
           <div
             className="flex items-center gap-2.5 cursor-pointer shrink-0 group"
-            onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); }}
+            onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); setIsTabletMenuOpen(false); }}
           >
-            <span className="text-2xl sm:text-3xl group-hover:scale-105 transition-transform duration-300">🎓</span>
-            <div>
-              <h1 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white m-0 tracking-tight leading-tight">
+            <span className="text-2xl group-hover:scale-105 transition-transform duration-300">🎓</span>
+            <div className="hidden sm:block">
+              <h1 className="text-sm lg:text-base font-bold text-gray-900 dark:text-white m-0 tracking-tight leading-tight">
                 {t.siteTitle}
               </h1>
-              <p className="text-[10px] text-gray-500 dark:text-gray-400 m-0 font-medium">
+              <p className="text-[9px] lg:text-[10px] text-gray-500 dark:text-gray-400 m-0 font-medium">
                 {t.siteSubtitle}
               </p>
             </div>
           </div>
 
-          {/* Desktop Nav Links — Redesigned: 4 items max with dropdowns */}
-          <nav className="hidden md:flex items-center gap-0.5 lg:gap-1 whitespace-nowrap" role="navigation" aria-label="Main navigation">
+          {/* CENTER — Primary Nav (lg+) / Tablet Menu (md only) */}
+          {/* Full nav visible on lg screens */}
+          <nav className="hidden lg:flex items-center justify-center gap-1 whitespace-nowrap" role="navigation" aria-label="Main navigation">
             {/* Browse */}
             <button
               onClick={() => { navigate("home"); setSearchQuery(""); }}
@@ -4583,12 +4614,69 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               )}
             </div>
           </nav>
+          {/* Tablet-only Menu dropdown (md screens, hidden on lg+) */}
+          <div ref={tabletMenuRef} className="hidden md:flex lg:hidden items-center justify-center">
+            <button
+              onClick={() => { setIsTabletMenuOpen(!isTabletMenuOpen); setIsToolsDropdownOpen(false); setIsCommunityDropdownOpen(false); }}
+              aria-expanded={isTabletMenuOpen}
+              aria-haspopup="true"
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors duration-200 ${isTabletMenuOpen ? "text-[#1B3A4B] dark:text-white bg-[#1B3A4B]/5 dark:bg-white/10" : "text-gray-600 dark:text-gray-300 hover:text-[#1B3A4B] dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-gray-800/50"}`}
+            >
+              {t.navMenu}
+              <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${isTabletMenuOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {isTabletMenuOpen && (
+              <div className={`absolute top-full mt-1 ${isRTL ? "right-auto left-1/2 -translate-x-1/2" : "left-1/2 -translate-x-1/2"} w-64 bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-700 rounded-xl shadow-xl shadow-black/8 dark:shadow-black/30 z-50 py-1.5 overflow-hidden`} role="menu">
+                <button role="menuitem" onClick={() => { navigate("home"); setSearchQuery(""); setIsTabletMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}>
+                  <span className="text-base shrink-0">🌍</span><span className="font-medium">{t.browseCountries}</span>
+                </button>
+                <button role="menuitem" onClick={() => { navigate("my-materials"); setIsTabletMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}>
+                  <span className="text-base shrink-0">📂</span><span className="font-medium">{t.myMaterials}</span>
+                </button>
+                <div className="border-t border-gray-100 dark:border-gray-800 my-1" />
+                <p className={`px-4 pt-1.5 pb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 m-0 ${isRTL ? "text-right" : "text-left"}`}>{t.navTools}</p>
+                {[
+                  { icon: "🤖", label: t.aiAssistant, action: () => navigate("ai-assistant") },
+                  { icon: "🧠", label: t.flashcards, action: () => navigate("flashcards") },
+                  { icon: "⏱️", label: t.pomodoroTimer, action: () => window.open(`/${locale}/study-hub/pomodoro`, '_blank') },
+                  { icon: "📊", label: t.studyPlanner, action: () => navigate("study-planner") },
+                  { icon: "🗺️", label: t.smartStudyPath, action: () => navigate("smart-path") },
+                  { icon: "🧮", label: t.finalGradeCalc, action: () => navigate("grade-calc") },
+                  { icon: "📅", label: t.examPlanner, action: () => navigate("exam-planner") },
+                  { icon: "🏝️", label: t.focusIsland, action: () => navigate("focus-island") },
+                  { icon: "🌐", label: t.translator, action: () => navigate("translator") },
+                ].map((item, i) => (
+                  <button key={i} role="menuitem" onClick={() => { item.action(); setIsTabletMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}>
+                    <span className="text-sm shrink-0">{item.icon}</span><span className="font-medium">{item.label}</span>
+                  </button>
+                ))}
+                <div className="border-t border-gray-100 dark:border-gray-800 my-1" />
+                <p className={`px-4 pt-1.5 pb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 m-0 ${isRTL ? "text-right" : "text-left"}`}>{t.navCommunity}</p>
+                {[
+                  { icon: "👥", label: t.studyGroups, action: () => navigate("groups") },
+                  { icon: "📋", label: t.requests, action: () => navigate("requests") },
+                  { icon: "⭐", label: t.profReviews, action: () => navigate("reviews") },
+                  { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
+                  { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
+                ].map((item, i) => (
+                  <button key={i} role="menuitem" onClick={() => { item.action(); setIsTabletMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}>
+                    <span className="text-sm shrink-0">{item.icon}</span><span className="font-medium">{item.label}</span>
+                  </button>
+                ))}
+                <div className="border-t border-gray-100 dark:border-gray-800 my-1" />
+                <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" className={`w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors no-underline ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}>
+                  <span className="text-sm shrink-0">💬</span><span className="font-medium">{t.telegram}</span>
+                  <svg className={`w-3 h-3 text-gray-400 ${isRTL ? "mr-auto rotate-180" : "ml-auto"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </a>
+              </div>
+            )}
+          </div>
 
-          {/* Right Side Actions — Redesigned */}
-          <div className="hidden md:flex items-center gap-2 lg:gap-3 shrink-0">
+          {/* RIGHT — Utilities */}
+          <div className="hidden md:flex items-center justify-end gap-1.5 lg:gap-2.5 shrink-0">
             {/* Premium Search with Keyboard Shortcut Hint */}
             <div ref={navSearchRef} className="relative">
-              <div className={`flex items-center rounded-full transition-all duration-300 ease-out ${navSearchOpen ? "bg-white dark:bg-gray-800 shadow-lg ring-2 ring-[#C8956C]/40 w-[340px]" : "bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700/80 w-[220px] cursor-text"} px-3.5 py-1.5`} onClick={() => { if (!navSearchOpen && navSearchInputRef.current) navSearchInputRef.current.focus(); }}>
+              <div className={`flex items-center rounded-full transition-all duration-300 ease-out ${navSearchOpen ? "bg-white dark:bg-gray-800 shadow-lg ring-2 ring-[#C8956C]/40 w-[280px] lg:w-[340px]" : "bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700/80 w-[160px] lg:w-[220px] cursor-text"} px-3 py-1.5`} onClick={() => { if (!navSearchOpen && navSearchInputRef.current) navSearchInputRef.current.focus(); }}>
                 {navSearchLoading ? (
                   <svg className="w-4 h-4 text-[#C8956C] shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -4625,11 +4713,33 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 )}
               </div>
 
-              {/* Search Dropdown */}
-              {navSearchOpen && searchQuery.trim() && (
-                <div className={`absolute top-[calc(100%+8px)] ${isRTL ? "left-0" : "right-0"} w-[380px] max-w-[calc(100vw-32px)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[100] overflow-hidden`}>
-                  {/* Results */}
-                  <div className="max-h-[400px] overflow-y-auto overscroll-contain">
+              {/* Search Dropdown — results OR quick actions */}
+              {navSearchOpen && (
+                <div className={`absolute top-[calc(100%+8px)] ${isRTL ? "left-0" : "right-0"} w-[340px] lg:w-[380px] max-w-[calc(100vw-32px)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[100] overflow-hidden`}>
+                  {/* Quick Actions — shown when search is empty */}
+                  {!searchQuery.trim() && (
+                    <div className="py-2">
+                      <p className={`px-4 pt-1.5 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 m-0 ${isRTL ? "text-right" : "text-left"}`}>{t.searchQuickActions}</p>
+                      {[
+                        { icon: "🌍", label: t.browseCountries, action: () => { navigate("home"); setSearchQuery(""); setNavSearchOpen(false); } },
+                        { icon: "📚", label: t.viewAllMaterials, action: () => { navigate("browse-all"); setNavSearchOpen(false); } },
+                        { icon: "📝", label: t.pastExams, action: () => { navigate("exams"); setNavSearchOpen(false); } },
+                        { icon: "🤖", label: t.aiAssistant, action: () => { navigate("ai-assistant"); setNavSearchOpen(false); } },
+                        { icon: "🧠", label: t.flashcards, action: () => { navigate("flashcards"); setNavSearchOpen(false); } },
+                      ].map((item, i) => (
+                        <button
+                          key={i}
+                          onClick={item.action}
+                          className={`w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
+                        >
+                          <span className="text-base shrink-0">{item.icon}</span>
+                          <span className="font-medium">{item.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {/* Results — shown when searching */}
+                  {searchQuery.trim() && <><div className="max-h-[400px] overflow-y-auto overscroll-contain">
                     {navSearchLoading && navSearchResults.length === 0 ? (
                       <div className="flex items-center justify-center gap-2 py-8">
                         <svg className="w-5 h-5 text-blue-500 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -4746,28 +4856,27 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   </div>
 
                   {/* Footer — View All */}
-                  {searchQuery.trim() && (
-                    <div className="border-t border-gray-100 dark:border-gray-800">
-                      <button
-                        onClick={() => {
-                          setNavSearchOpen(false);
-                          navigate("browse-all");
-                          setTimeout(() => {
-                            setBrowseMatSearch(searchQuery);
-                            setBrowseMatList([]);
-                            fetchBrowseMaterials(searchQuery, "all");
-                            setSearchQuery("");
-                          }, 100);
-                        }}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        {t.searchViewAll} &ldquo;{searchQuery.trim()}&rdquo;
-                      </button>
-                    </div>
-                  )}
+                  <div className="border-t border-gray-100 dark:border-gray-800">
+                    <button
+                      onClick={() => {
+                        setNavSearchOpen(false);
+                        navigate("browse-all");
+                        setTimeout(() => {
+                          setBrowseMatSearch(searchQuery);
+                          setBrowseMatList([]);
+                          fetchBrowseMaterials(searchQuery, "all");
+                          setSearchQuery("");
+                        }, 100);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      {t.searchViewAll} &ldquo;{searchQuery.trim()}&rdquo;
+                    </button>
+                  </div>
+                  </>}
                 </div>
               )}
             </div>
