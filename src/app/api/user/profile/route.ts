@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { profileSchema } from '@/lib/validations/profile';
+import { generateStudentNumber } from '@/lib/student-number';
 
 // Get user profile
 export async function GET(request: NextRequest) {
@@ -35,6 +36,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Auto-generate student number if missing
+    let studentNumber = user.studentNumber;
+    if (!studentNumber) {
+      studentNumber = await generateStudentNumber(user.id);
+    }
+
     // Calculate stats
     const stats = {
       total: user._count.savedScholarships,
@@ -50,7 +57,7 @@ export async function GET(request: NextRequest) {
         id: user.id,
         email: user.email,
         name: user.name,
-        image: user.profileImage || user.image, // Prefer custom profile image
+        image: user.profileImage || user.image,
         phone: user.phone,
         location: user.location,
         bio: user.bio,
@@ -58,8 +65,11 @@ export async function GET(request: NextRequest) {
         fieldOfStudy: user.fieldOfStudy,
         socialLinks: user.socialLinks,
         profileImage: user.profileImage,
-        googleImage: user.image, // Keep original Google image separately
+        googleImage: user.image,
         createdAt: user.createdAt,
+        studentNumber,
+        points: user.points,
+        badge: user.badge,
       },
       stats,
     });
