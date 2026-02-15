@@ -4510,11 +4510,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             onClick={() => { navigate("home"); setSearchQuery(""); setIsMobileMenuOpen(false); setIsTabletMenuOpen(false); }}
           >
             <span className="text-2xl group-hover:scale-105 transition-transform duration-300">🎓</span>
-            <div className="hidden sm:block">
-              <h1 className="text-sm lg:text-base font-bold text-gray-900 dark:text-white m-0 tracking-tight leading-tight">
+            <div className="hidden lg:block">
+              <h1 className="text-base font-bold text-gray-900 dark:text-white m-0 tracking-tight leading-tight">
                 {t.siteTitle}
               </h1>
-              <p className="text-[9px] lg:text-[10px] text-gray-500 dark:text-gray-400 m-0 font-medium">
+              <p className="text-[10px] text-gray-500 dark:text-gray-400 m-0 font-medium">
                 {t.siteSubtitle}
               </p>
             </div>
@@ -4684,9 +4684,20 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
           {/* RIGHT — Utilities */}
           <div className="hidden md:flex items-center justify-end gap-1.5 lg:gap-2.5 shrink-0">
-            {/* Premium Search with Keyboard Shortcut Hint */}
+            {/* Search — icon only on md, full bar on lg+ */}
             <div ref={navSearchRef} className="relative">
-              <div className={`flex items-center rounded-full transition-all duration-300 ease-out ${navSearchOpen ? "bg-white dark:bg-gray-800 shadow-lg ring-2 ring-[#C8956C]/40 w-[280px] lg:w-[340px]" : "bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700/80 w-[160px] lg:w-[220px] cursor-text"} px-3 py-1.5`} onClick={() => { if (!navSearchOpen && navSearchInputRef.current) navSearchInputRef.current.focus(); }}>
+              {/* Tablet: compact search icon button */}
+              <button
+                className="flex lg:hidden items-center justify-center w-9 h-9 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-[#C8956C] transition-colors duration-200"
+                onClick={() => { setNavSearchOpen(!navSearchOpen); if (!navSearchOpen && navSearchInputRef.current) setTimeout(() => navSearchInputRef.current?.focus(), 100); }}
+                title={t.search}
+              >
+                <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+              {/* Desktop: full inline search bar */}
+              <div className={`hidden lg:flex items-center rounded-full transition-all duration-300 ease-out ${navSearchOpen ? "bg-white dark:bg-gray-800 shadow-lg ring-2 ring-[#C8956C]/40 w-[340px]" : "bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700/80 w-[220px] cursor-text"} px-3 py-1.5`} onClick={() => { if (!navSearchOpen && navSearchInputRef.current) navSearchInputRef.current.focus(); }}>
                 {navSearchLoading ? (
                   <svg className="w-4 h-4 text-[#C8956C] shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -4717,7 +4728,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     </svg>
                   </button>
                 ) : !navSearchOpen && (
-                  <kbd className="hidden lg:inline-flex items-center gap-0.5 shrink-0 px-1.5 py-0.5 text-[10px] font-semibold text-gray-400 dark:text-gray-500 bg-white/80 dark:bg-gray-700/60 border border-gray-200/80 dark:border-gray-600/50 rounded-md shadow-sm">
+                  <kbd className="inline-flex items-center gap-0.5 shrink-0 px-1.5 py-0.5 text-[10px] font-semibold text-gray-400 dark:text-gray-500 bg-white/80 dark:bg-gray-700/60 border border-gray-200/80 dark:border-gray-600/50 rounded-md shadow-sm">
                     {t.searchShortcutHint}
                   </kbd>
                 )}
@@ -4725,7 +4736,37 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
               {/* Search Dropdown — results OR quick actions */}
               {navSearchOpen && (
-                <div className={`absolute top-[calc(100%+8px)] ${isRTL ? "left-0" : "right-0"} w-[340px] lg:w-[380px] max-w-[calc(100vw-32px)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[100] overflow-hidden`}>
+                <div className={`absolute top-[calc(100%+8px)] ${isRTL ? "left-0 lg:left-auto" : "right-0"} w-[340px] lg:w-[380px] max-w-[calc(100vw-32px)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[100] overflow-hidden`}>
+                  {/* Tablet: inline search input inside dropdown */}
+                  <div className="lg:hidden px-3 pt-3 pb-1">
+                    <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2">
+                      {navSearchLoading ? (
+                        <svg className="w-4 h-4 text-[#C8956C] shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4 text-[#C8956C] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      )}
+                      <input
+                        ref={navSearchInputRef}
+                        type="text"
+                        placeholder={t.searchMaterialsUnis}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={handleNavSearchKeyDown}
+                        className={`bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 w-full ${isRTL ? "mr-2" : "ml-2"}`}
+                        autoFocus
+                      />
+                      {searchQuery && (
+                        <button onClick={() => { setSearchQuery(""); setNavSearchResults([]); }} className="shrink-0 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-500 dark:text-gray-300 text-xs transition-colors">
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                      )}
+                    </div>
+                  </div>
                   {/* Quick Actions — shown when search is empty */}
                   {!searchQuery.trim() && (
                     <div className="py-2">
