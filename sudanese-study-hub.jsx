@@ -9,6 +9,7 @@ import SmartStudyPath from "@/components/study-hub/smart-study-path";
 import FocusIsland from "@/components/study-hub/focus-island";
 import BattleArena from "@/components/study-hub/battle-arena";
 import AcademicTranslator from "@/components/study-hub/academic-translator";
+import IeltsToeflPractice from "@/components/study-hub/ielts-toefl-practice";
 
 
 const TELEGRAM_LINK = "https://t.me/+uNRCkz0PUfQzOGZk";
@@ -37,6 +38,7 @@ const QUICK_ACCESS_CATEGORIES = [
     { key: "exam-planner", icon: "📅", labelKey: "examPlanner" },
     { key: "focus-island", icon: "🏝️", labelKey: "focusIsland" },
     { key: "translator", icon: "🌐", labelKey: "translator" },
+    { key: "ielts-practice", icon: "📝", labelKey: "ieltsPractice" },
   ]},
   { titleKey: "communityCat", icon: "👥", items: [
     { key: "groups", icon: "👥", labelKey: "studyGroups" },
@@ -845,6 +847,8 @@ const T = {
     battleArenaSub: "Challenge friends in quiz duels",
     translator: "Academic Translator",
     translatorSub: "Translate academic materials between languages",
+    ieltsPractice: "IELTS/TOEFL Practice",
+    ieltsPracticeSub: "Prepare for English proficiency exams",
     // Hero Redesign & Quick Access
     heroHeadline: "Find Your Study Materials",
     heroSubNew: "Upload and discover study resources organized by country, university, and degree level.",
@@ -1321,6 +1325,8 @@ const T = {
     battleArenaSub: "تحدّى أصدقاءك في مبارزات الأسئلة",
     translator: "المترجم الأكاديمي",
     translatorSub: "ترجمة المواد الأكاديمية بين اللغات",
+    ieltsPractice: "تدريب IELTS/TOEFL",
+    ieltsPracticeSub: "استعد لامتحانات إتقان اللغة الإنجليزية",
     // Hero Redesign & Quick Access
     heroHeadline: "اعثر على موادك الدراسية",
     heroSubNew: "ارفع واكتشف المواد الدراسية مرتبة حسب الدولة والجامعة والمرحلة الدراسية",
@@ -4588,6 +4594,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     { icon: "⭐", label: t.profReviews, action: () => navigate("reviews") },
                     { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
                     { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
+                    { icon: "📝", label: t.ieltsPractice, action: () => navigate("ielts-practice") },
                   ].map((item, i) => (
                     <button
                       key={i}
@@ -4659,6 +4666,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   { icon: "⭐", label: t.profReviews, action: () => navigate("reviews") },
                   { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
                   { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
+                  { icon: "📝", label: t.ieltsPractice, action: () => navigate("ielts-practice") },
                 ].map((item, i) => (
                   <button key={i} role="menuitem" onClick={() => { item.action(); setIsTabletMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}>
                     <span className="text-sm shrink-0">{item.icon}</span><span className="font-medium">{item.label}</span>
@@ -5287,6 +5295,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   { icon: "⭐", label: t.profReviews, action: () => navigate("reviews") },
                   { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
                   { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
+                  { icon: "📝", label: t.ieltsPractice, action: () => navigate("ielts-practice") },
                 ].map((item, i) => (
                   <button
                     key={i}
@@ -5473,6 +5482,12 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbActive}>🌐 {t.translator}</span>
+            </>
+          )}
+          {view === "ielts-practice" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📝 {t.ieltsPractice}</span>
             </>
           )}
           {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && view !== "focus-island" && view !== "battle-arena" && view !== "translator" && (
@@ -8211,6 +8226,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {view === "translator" && (
           <div>
             <AcademicTranslator locale={locale} userId={currentUserId} />
+          </div>
+        )}
+
+        {/* === IELTS/TOEFL PRACTICE VIEW === */}
+        {view === "ielts-practice" && (
+          <div>
+            <IeltsToeflPractice locale={locale} userId={currentUserId} />
           </div>
         )}
 

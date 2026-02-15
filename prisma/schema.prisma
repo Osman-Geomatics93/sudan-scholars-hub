@@ -77,6 +77,10 @@ model User {
   battleQuestions       BattleQuestion[]
   battlesAsChallenger   Battle[]  @relation("challenger")
   battlesAsOpponent     Battle[]  @relation("opponent")
+  ieltsToeflTests       IeltsToeflTest[]
+  ieltsToeflAttempts    IeltsToeflAttempt[]
+  ieltsToeflVocabProgress IeltsToeflVocabProgress[]
+  ieltsToeflMaterials     IeltsToeflMaterial[]
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -1251,5 +1255,118 @@ model Battle {
   @@index([challengerId])
   @@index([opponentId])
   @@index([status])
+  @@index([createdAt])
+}
+
+// ============ IELTS/TOEFL PRACTICE ============
+model IeltsToeflTest {
+  id            String   @id @default(cuid())
+  userId        String?
+  examType      String   // "ielts" | "toefl"
+  section       String   // "reading" | "writing" | "listening" | "speaking"
+  title         String
+  description   String?  @db.Text
+  difficulty    String   @default("medium")
+  timeMinutes   Int
+  content       Json
+  isOfficial    Boolean  @default(false)
+  isPublic      Boolean  @default(true)
+  usageCount    Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user     User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  attempts IeltsToeflAttempt[]
+
+  @@index([examType, section])
+  @@index([userId])
+  @@index([isPublic, examType])
+  @@index([createdAt])
+}
+
+model IeltsToeflAttempt {
+  id            String    @id @default(cuid())
+  userId        String
+  testId        String
+  examType      String
+  section       String
+  answers       Json
+  score         Float?
+  maxScore      Float?
+  aiGrading     Json?
+  timeSpentSec  Int?
+  status        String    @default("in_progress")
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+
+  user User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test IeltsToeflTest  @relation(fields: [testId], references: [id], onDelete: Cascade)
+
+  @@index([userId, examType])
+  @@index([testId])
+  @@index([createdAt])
+}
+
+model IeltsToeflVocab {
+  id            String   @id @default(cuid())
+  word          String
+  definition    String   @db.Text
+  example       String?  @db.Text
+  arabicMeaning String?  @db.Text
+  category      String
+  difficulty    String   @default("medium")
+  createdAt     DateTime @default(now())
+
+  progress IeltsToeflVocabProgress[]
+
+  @@index([category])
+  @@unique([word, category])
+}
+
+model IeltsToeflVocabProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  vocabId     String
+  easeFactor  Float    @default(2.5)
+  interval    Int      @default(0)
+  repetitions Int      @default(0)
+  nextReview  DateTime @default(now())
+  lastReview  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vocab IeltsToeflVocab   @relation(fields: [vocabId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, vocabId])
+  @@index([userId, nextReview])
+}
+
+// ============ IELTS/TOEFL SHARED MATERIALS ============
+model IeltsToeflMaterial {
+  id            String   @id @default(cuid())
+  userId        String
+  examType      String   // ielts, toefl, both
+  section       String   // reading, writing, listening, speaking, general
+  materialType  String   // pdf, video, audio, document, link, folder
+  title         String
+  description   String?  @db.Text
+  url           String
+  tags          Json?    // e.g. ["cambridge","ielts-15"]
+  difficulty    String   @default("medium") // easy, medium, hard
+  language      String   @default("en")     // en, ar, both
+  status        String   @default("pending") // pending, approved, rejected
+  viewCount     Int      @default(0)
+  downloadCount Int      @default(0)
+  userName      String?
+  userEmail     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, examType])
+  @@index([examType, section])
+  @@index([userId])
   @@index([createdAt])
 }
