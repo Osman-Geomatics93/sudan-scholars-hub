@@ -4515,6 +4515,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           </div>
 
           {/* CENTER — Primary Nav (lg+) / Tablet Menu (md only) */}
+          <div className="hidden md:flex items-center justify-center">
           {/* Full nav visible on lg screens */}
           <nav className="hidden lg:flex items-center justify-center gap-1 whitespace-nowrap" role="navigation" aria-label="Main navigation">
             {/* Browse */}
@@ -4671,6 +4672,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               </div>
             )}
           </div>
+          </div>{/* end CENTER wrapper */}
 
           {/* RIGHT — Utilities */}
           <div className="hidden md:flex items-center justify-end gap-1.5 lg:gap-2.5 shrink-0">
