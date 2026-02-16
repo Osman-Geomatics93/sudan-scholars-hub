@@ -10,6 +10,7 @@ import FocusIsland from "@/components/study-hub/focus-island";
 import BattleArena from "@/components/study-hub/battle-arena";
 import AcademicTranslator from "@/components/study-hub/academic-translator";
 import IeltsToeflPractice from "@/components/study-hub/ielts-toefl-practice";
+import TelegramAssistant from "@/components/study-hub/telegram-assistant";
 
 
 const TELEGRAM_LINK = "https://t.me/+uNRCkz0PUfQzOGZk";
@@ -39,6 +40,7 @@ const QUICK_ACCESS_CATEGORIES = [
     { key: "focus-island", icon: "🏝️", labelKey: "focusIsland" },
     { key: "translator", icon: "🌐", labelKey: "translator" },
     { key: "ielts-practice", icon: "📝", labelKey: "ieltsPractice" },
+    { key: "bot-assistant", icon: "💬", labelKey: "botAssistant" },
   ]},
   { titleKey: "communityCat", icon: "👥", items: [
     { key: "groups", icon: "👥", labelKey: "studyGroups" },
@@ -849,6 +851,8 @@ const T = {
     translatorSub: "Translate academic materials between languages",
     ieltsPractice: "IELTS/TOEFL Practice",
     ieltsPracticeSub: "Prepare for English proficiency exams",
+    botAssistant: "Bot Assistant",
+    botAssistantSub: "Chat with our AI assistant",
     // Hero Redesign & Quick Access
     heroHeadline: "Find Your Study Materials",
     heroSubNew: "Upload and discover study resources organized by country, university, and degree level.",
@@ -1327,6 +1331,8 @@ const T = {
     translatorSub: "ترجمة المواد الأكاديمية بين اللغات",
     ieltsPractice: "تدريب IELTS/TOEFL",
     ieltsPracticeSub: "استعد لامتحانات إتقان اللغة الإنجليزية",
+    botAssistant: "مساعد البوت",
+    botAssistantSub: "تحدث مع مساعدنا الذكي",
     // Hero Redesign & Quick Access
     heroHeadline: "اعثر على موادك الدراسية",
     heroSubNew: "ارفع واكتشف المواد الدراسية مرتبة حسب الدولة والجامعة والمرحلة الدراسية",
@@ -4276,7 +4282,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease;
         }
         .studyhub-quick-access.open {
-          max-height: 600px;
+          max-height: 700px;
           opacity: 1;
         }
 
@@ -4595,6 +4601,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
                     { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
                     { icon: "📝", label: t.ieltsPractice, action: () => navigate("ielts-practice") },
+                    { icon: "💬", label: t.botAssistant, action: () => navigate("bot-assistant") },
                   ].map((item, i) => (
                     <button
                       key={i}
@@ -4667,6 +4674,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
                   { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
                   { icon: "📝", label: t.ieltsPractice, action: () => navigate("ielts-practice") },
+                  { icon: "💬", label: t.botAssistant, action: () => navigate("bot-assistant") },
                 ].map((item, i) => (
                   <button key={i} role="menuitem" onClick={() => { item.action(); setIsTabletMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}>
                     <span className="text-sm shrink-0">{item.icon}</span><span className="font-medium">{item.label}</span>
@@ -5337,6 +5345,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   { icon: "🏆", label: t.leaderboard, action: () => navigate("leaderboard") },
                   { icon: "⚔️", label: t.battleArena, action: () => navigate("battle-arena") },
                   { icon: "📝", label: t.ieltsPractice, action: () => navigate("ielts-practice") },
+                  { icon: "💬", label: t.botAssistant, action: () => navigate("bot-assistant") },
                 ].map((item, i) => (
                   <button
                     key={i}
@@ -5531,7 +5540,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>📝 {t.ieltsPractice}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && view !== "focus-island" && view !== "battle-arena" && view !== "translator" && (
+          {view === "bot-assistant" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>💬 {t.botAssistant}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && view !== "focus-island" && view !== "battle-arena" && view !== "translator" && view !== "bot-assistant" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -8274,6 +8289,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {view === "ielts-practice" && (
           <div>
             <IeltsToeflPractice locale={locale} userId={currentUserId} />
+          </div>
+        )}
+
+        {/* === BOT ASSISTANT VIEW === */}
+        {view === "bot-assistant" && (
+          <div>
+            <TelegramAssistant locale={locale} userId={currentUserId} />
           </div>
         )}
 
