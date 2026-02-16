@@ -134,9 +134,7 @@ export async function POST(request: NextRequest) {
     } catch (fetchError: any) {
       console.error(`[chat] Fetch failed:`, fetchError.message, fetchError.cause);
       return NextResponse.json({
-        response: detectedLang === 'ar'
-          ? 'عذراً، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.'
-          : 'Sorry, an error occurred while processing your request. Please try again.',
+        response: `Fetch error: ${fetchError.message} | URL: ${url.toString()} | VERCEL_URL: ${process.env.VERCEL_URL}`,
         intent: intent.endpoint,
         count: 0,
       });
