@@ -104,9 +104,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Call the appropriate bot API endpoint server-side
-    const baseUrl = process.env.NEXTAUTH_URL
-      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
-      || 'http://localhost:3000';
+    // Use the incoming request's origin so it works on localhost AND Vercel
+    const baseUrl = request.nextUrl.origin;
 
     const url = new URL(`${baseUrl}/api/bot/${intent.endpoint}`);
 
