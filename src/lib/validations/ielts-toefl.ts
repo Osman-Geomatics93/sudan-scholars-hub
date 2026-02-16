@@ -50,5 +50,5 @@ export const createMaterialSchema = z.object({
   url: z.string().trim().url('Please enter a valid URL').max(2000),
   difficulty: z.enum(['easy', 'medium', 'hard']).optional().default('medium'),
   language: z.enum(['en', 'ar', 'both']).optional().default('en'),
-  tags: z.array(z.string().trim().max(50)).max(20).optional(),
+  tags: z.array(z.string().trim().max(50)).max(50).optional(),
 });
