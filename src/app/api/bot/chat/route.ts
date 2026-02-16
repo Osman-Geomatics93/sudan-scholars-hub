@@ -161,10 +161,10 @@ export async function POST(request: NextRequest) {
       intent: intent.endpoint,
       count: data.count ?? 0,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Chat API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', debug: error?.message, stack: error?.stack?.split('\n').slice(0, 3) },
       { status: 500 }
     );
   }
