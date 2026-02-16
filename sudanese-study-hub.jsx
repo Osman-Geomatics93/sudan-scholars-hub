@@ -86,7 +86,7 @@ const getExamTypeInfo = (examType) => EXAM_TYPES.find((e) => e.id === examType) 
 const ACADEMIC_YEARS = (() => {
   const currentYear = new Date().getFullYear();
   const years = [];
-  for (let y = 2070; y >= currentYear - 10; y--) {
+  for (let y = currentYear + 5; y >= currentYear - 10; y--) {
     years.push(`${y}`);
     years.push(`${y - 1}-${y}`);
   }
@@ -1700,6 +1700,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   const [notificationsList, setNotificationsList] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const notifRef = useRef(null);
+  const notifTimeoutRef = useRef(null);
   // Requests
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [requestForm, setRequestForm] = useState({ title: "", description: "", subject: "" });
@@ -1844,7 +1845,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
       const res = await fetch(`/api/study-hub/universities?country=${countryCode}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      setUniversityCache((prev) => ({ ...prev, [countryCode]: data.universities }));
+      setUniversityCache((prev) => ({ ...prev, [countryCode]: data.universities || [] }));
     } catch (err) {
       console.error("Failed to fetch universities:", err);
       setUniversityError(t.fetchError);
@@ -1974,7 +1975,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   useEffect(() => {
     fetchAllMaterials();
     // Also fetch requests for home page teaser
-    fetch("/api/study-hub/requests?status=OPEN").then(r => r.ok ? r.json() : { requests: [] }).then(d => setRequestsList(d.requests || [])).catch(() => {});
+    fetch("/api/study-hub/requests?status=OPEN")
+      .then(r => r.ok ? r.json() : Promise.resolve({ requests: [] }))
+      .then(d => setRequestsList(d.requests || []))
+      .catch(err => console.error("Failed to fetch requests:", err));
   }, [fetchAllMaterials]);
 
   // Close recent filter dropdown on outside click
@@ -2017,7 +2021,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
     } finally {
       setBrowseMatLoading(false);
     }
-  }, [browseMatSearch, browseMatType]);
+  }, [browseMatSearch, browseMatType, sortOrder, advancedFilters]);
 
   // Scroll listener for header transformation
   useEffect(() => {
@@ -2237,8 +2241,9 @@ export default function SudaneseStudyHub({ locale = "en" }) {
   }, [currentUserId]);
 
   const showNotif = (msg, type = "success") => {
+    if (notifTimeoutRef.current) clearTimeout(notifTimeoutRef.current);
     setNotification({ msg, type });
-    setTimeout(() => setNotification(null), 4500);
+    notifTimeoutRef.current = setTimeout(() => setNotification(null), 4500);
   };
 
   const requireLogin = () => {
