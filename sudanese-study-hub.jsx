@@ -5169,10 +5169,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             ) : (
               <a
                 href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
-                className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 px-3 lg:px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 no-underline"
+                className="group flex items-center gap-2 px-4 lg:px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 no-underline text-white shadow-md hover:shadow-lg hover:scale-[1.03] active:scale-[0.98]"
+                style={{ background: "linear-gradient(135deg, #1B3A4B, #2D5F73)", boxShadow: "0 2px 10px rgba(27,58,75,0.3)" }}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <svg className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                 </svg>
                 <span className="hidden lg:inline">{t.signIn}</span>
               </a>
@@ -5422,9 +5423,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               ) : (
                 <a
                   href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
-                  className="flex items-center justify-center gap-2 bg-[#1B3A4B] hover:bg-[#274555] text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors no-underline"
+                  className="flex items-center justify-center gap-2 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 no-underline hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                  style={{ background: "linear-gradient(135deg, #1B3A4B, #2D5F73)", boxShadow: "0 2px 10px rgba(27,58,75,0.3)" }}
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
                   {t.signIn}
                 </a>
               )}
@@ -7273,11 +7275,22 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {!isLoggedIn ? (
               <div style={S.empty}>
                 <span style={{ fontSize: 64 }}>🔒</span>
-                <h3 style={{ color: "#1B3A4B", margin: "16px 0 8px" }}>{t.loginToUpload}</h3>
+                <h3 style={{ color: darkMode ? "#e2e8f0" : "#1B3A4B", margin: "16px 0 8px" }}>{t.loginToUpload}</h3>
                 <a
                   href={`/${locale}/login?callbackUrl=/${locale}/study-hub`}
-                  style={{ ...S.uploadBtn, textDecoration: "none", display: "inline-block", marginTop: 8 }}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px",
+                    borderRadius: 12, background: "linear-gradient(135deg, #1B3A4B, #2D5F73)",
+                    color: "white", fontSize: 14, fontWeight: 700, textDecoration: "none",
+                    boxShadow: "0 3px 12px rgba(27,58,75,0.3)", transition: "all 0.2s",
+                    marginTop: 8,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 5px 20px rgba(27,58,75,0.4)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 3px 12px rgba(27,58,75,0.3)"; }}
                 >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
                   {t.signIn}
                 </a>
               </div>
