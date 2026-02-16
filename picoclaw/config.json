@@ -1,0 +1,41 @@
+{
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "token": "${TELEGRAM_BOT_TOKEN}",
+      "group_mode": true
+    }
+  },
+  "llm": {
+    "provider": "groq",
+    "api_key": "${GROQ_API_KEY}",
+    "model": "llama-3.3-70b-versatile",
+    "max_tokens": 1024,
+    "temperature": 0.3
+  },
+  "tools": {
+    "web_fetch": {
+      "enabled": true,
+      "default_headers": {
+        "X-Bot-API-Key": "${BOT_API_KEY}"
+      }
+    },
+    "cron": {
+      "enabled": true
+    },
+    "filesystem": {
+      "enabled": false
+    },
+    "shell": {
+      "enabled": false
+    },
+    "web_search": {
+      "enabled": false
+    }
+  },
+  "workspace": {
+    "identity": "workspace/IDENTITY.md",
+    "tools": "workspace/TOOLS.md",
+    "memory": "workspace/MEMORY.md"
+  }
+}

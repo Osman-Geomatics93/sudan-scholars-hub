@@ -752,7 +752,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
     setShareLoading(true);
     setShareMsg("");
     try {
-      const tagsArr = shareForm.tags ? shareForm.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
+      const tagsArr = shareForm.tags ? shareForm.tags.split(",").map((tag) => tag.trim()).filter(Boolean) : [];
       const res = await fetch("/api/study-hub/ielts-toefl/materials", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -760,9 +760,9 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
           examType: shareForm.examType,
           section: shareForm.section,
           materialType: shareForm.materialType,
-          title: shareForm.title,
-          description: shareForm.description || null,
-          url: shareForm.url,
+          title: shareForm.title.trim(),
+          description: shareForm.description?.trim() || null,
+          url: shareForm.url.trim(),
           difficulty: shareForm.difficulty,
           language: shareForm.language,
           tags: tagsArr,
@@ -773,7 +773,12 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         setShareForm({ examType: "", section: "", materialType: "", title: "", description: "", url: "", difficulty: "medium", language: "en", tags: "" });
       } else {
         const data = await res.json();
-        setShareMsg(data.error || t.materialShareError);
+        if (data.details) {
+          const fieldErrors = Object.entries(data.details).map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(", ") : msgs}`).join(" | ");
+          setShareMsg(`${data.error}: ${fieldErrors}`);
+        } else {
+          setShareMsg(data.error || t.materialShareError);
+        }
       }
     } catch { setShareMsg(t.materialShareError); }
     setShareLoading(false);

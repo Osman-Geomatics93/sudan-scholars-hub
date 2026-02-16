@@ -30,3 +30,6 @@ export function getResendApiKey() { return requireEnv('RESEND_API_KEY'); }
 
 // Database
 export function getDatabaseUrl() { return requireEnv('DATABASE_URL'); }
+
+// Bot
+export function getBotApiKey() { return requireEnv('BOT_API_KEY'); }

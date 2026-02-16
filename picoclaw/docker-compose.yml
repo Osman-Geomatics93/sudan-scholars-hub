@@ -1,0 +1,15 @@
+services:
+  picoclaw:
+    image: ghcr.io/sipeed/picoclaw:latest
+    container_name: scholars-bot
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./workspace:/app/workspace
+    mem_limit: 64m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

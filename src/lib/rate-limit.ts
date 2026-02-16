@@ -133,4 +133,6 @@ export const RATE_LIMITS = {
   cardToken: { limit: 10, windowMs: 60000 },
   // Card verification: 30 per minute
   cardVerify: { limit: 30, windowMs: 60000 },
+  // Telegram bot: 30 per minute
+  bot: { limit: 30, windowMs: 60000 },
 } as const;
