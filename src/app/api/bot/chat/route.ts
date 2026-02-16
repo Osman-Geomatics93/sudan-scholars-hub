@@ -144,9 +144,7 @@ export async function POST(request: NextRequest) {
       const errorText = await apiResponse.text();
       console.error(`[chat] Bot API error (${intent.endpoint}):`, apiResponse.status, errorText);
       return NextResponse.json({
-        response: detectedLang === 'ar'
-          ? 'عذراً، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.'
-          : 'Sorry, an error occurred while processing your request. Please try again.',
+        response: `API ${apiResponse.status}: ${errorText.slice(0, 200)} | URL: ${url.toString()} | VERCEL_URL: ${process.env.VERCEL_URL}`,
         intent: intent.endpoint,
         count: 0,
       });
