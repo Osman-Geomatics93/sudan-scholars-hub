@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getGroqApiKey, getBotApiKey } from '@/lib/env';
+import { getGroqApiKey } from '@/lib/env';
 import { checkRateLimit, getClientIP, rateLimitedResponse, RATE_LIMITS } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
@@ -127,14 +127,16 @@ export async function POST(request: NextRequest) {
       apiResponse = await fetch(url.toString(), {
         method: 'GET',
         headers: {
-          'X-Bot-API-Key': getBotApiKey(),
+          'X-Bot-API-Key': process.env.BOT_API_KEY || '',
           'Content-Type': 'application/json',
         },
       });
     } catch (fetchError: any) {
       console.error(`[chat] Fetch failed:`, fetchError.message, fetchError.cause);
       return NextResponse.json({
-        response: `Fetch error: ${fetchError.message} | URL: ${url.toString()} | VERCEL_URL: ${process.env.VERCEL_URL}`,
+        response: detectedLang === 'ar'
+          ? 'عذراً، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.'
+          : 'Sorry, an error occurred while processing your request. Please try again.',
         intent: intent.endpoint,
         count: 0,
       });
@@ -144,7 +146,9 @@ export async function POST(request: NextRequest) {
       const errorText = await apiResponse.text();
       console.error(`[chat] Bot API error (${intent.endpoint}):`, apiResponse.status, errorText);
       return NextResponse.json({
-        response: `API ${apiResponse.status}: ${errorText.slice(0, 200)} | URL: ${url.toString()} | VERCEL_URL: ${process.env.VERCEL_URL}`,
+        response: detectedLang === 'ar'
+          ? 'عذراً، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.'
+          : 'Sorry, an error occurred while processing your request. Please try again.',
         intent: intent.endpoint,
         count: 0,
       });
@@ -157,10 +161,10 @@ export async function POST(request: NextRequest) {
       intent: intent.endpoint,
       count: data.count ?? 0,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Chat API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', debug: error?.message, stack: error?.stack?.split('\n').slice(0, 3) },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
