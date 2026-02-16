@@ -104,10 +104,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Call the appropriate bot API endpoint server-side
-    // Derive base URL from the host header (works on localhost AND Vercel)
-    const host = request.headers.get('host') || 'localhost:3000';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
+    // Use VERCEL_URL (auto-set, direct Vercel domain — bypasses Cloudflare/custom domain)
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000';
 
     const url = new URL(`${baseUrl}/api/bot/${intent.endpoint}`);
 
