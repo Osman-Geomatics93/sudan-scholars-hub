@@ -120,17 +120,31 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    const apiResponse = await fetch(url.toString(), {
-      method: 'GET',
-      headers: {
-        'X-Bot-API-Key': getBotApiKey(),
-        'Content-Type': 'application/json',
-      },
-    });
+    console.log(`[chat] Fetching: ${url.toString()} (VERCEL_URL=${process.env.VERCEL_URL})`);
+
+    let apiResponse: Response;
+    try {
+      apiResponse = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'X-Bot-API-Key': getBotApiKey(),
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (fetchError: any) {
+      console.error(`[chat] Fetch failed:`, fetchError.message, fetchError.cause);
+      return NextResponse.json({
+        response: detectedLang === 'ar'
+          ? 'عذراً، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.'
+          : 'Sorry, an error occurred while processing your request. Please try again.',
+        intent: intent.endpoint,
+        count: 0,
+      });
+    }
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      console.error(`Bot API error (${intent.endpoint}):`, apiResponse.status, errorText);
+      console.error(`[chat] Bot API error (${intent.endpoint}):`, apiResponse.status, errorText);
       return NextResponse.json({
         response: detectedLang === 'ar'
           ? 'عذراً، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.'
