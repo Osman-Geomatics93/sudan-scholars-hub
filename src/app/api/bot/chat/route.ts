@@ -104,8 +104,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Call the appropriate bot API endpoint server-side
-    // Use the incoming request's origin so it works on localhost AND Vercel
-    const baseUrl = request.nextUrl.origin;
+    // Derive base URL from the host header (works on localhost AND Vercel)
+    const host = request.headers.get('host') || 'localhost:3000';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
 
     const url = new URL(`${baseUrl}/api/bot/${intent.endpoint}`);
 
