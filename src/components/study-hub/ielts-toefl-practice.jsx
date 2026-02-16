@@ -817,7 +817,16 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
     const ytId = getYouTubeId(url);
     if (ytId) return { type: "youtube", embedUrl: `https://www.youtube.com/embed/${ytId}` };
     const gdId = getGDriveId(url);
-    if (gdId) return { type: "gdrive", embedUrl: `https://drive.google.com/file/d/${gdId}/preview` };
+    if (gdId) {
+      // Use Google Docs viewer for PDFs (more reliable than /preview)
+      if (type === "pdf") return { type: "gdrive-pdf", embedUrl: `https://drive.google.com/file/d/${gdId}/preview`, openUrl: `https://drive.google.com/file/d/${gdId}/view`, gdId };
+      // Videos on Google Drive get a styled player card
+      if (type === "video") return { type: "gdrive-video", openUrl: `https://drive.google.com/file/d/${gdId}/view`, gdId };
+      // Folders
+      if (type === "folder") return { type: "gdrive-folder", openUrl: url, gdId };
+      // Default Google Drive file
+      return { type: "gdrive", embedUrl: `https://drive.google.com/file/d/${gdId}/preview`, openUrl: `https://drive.google.com/file/d/${gdId}/view`, gdId };
+    }
     if (type === "audio") return { type: "audio", embedUrl: url };
     return { type: "link", embedUrl: url };
   };
@@ -1619,8 +1628,64 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                       {preview.type === "youtube" && (
                         <iframe src={preview.embedUrl} width="100%" height="200" style={{ border: "none" }} allowFullScreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
                       )}
-                      {preview.type === "gdrive" && (
-                        <iframe src={preview.embedUrl} width="100%" height="250" style={{ border: "none" }} />
+                      {(preview.type === "gdrive" || preview.type === "gdrive-pdf") && (
+                        <div style={{ position: "relative" }}>
+                          <iframe
+                            src={preview.embedUrl}
+                            width="100%"
+                            height="250"
+                            style={{ border: "none" }}
+                            sandbox="allow-scripts allow-same-origin allow-popups"
+                            loading="lazy"
+                          />
+                          {/* Fallback overlay — always accessible if embed is blocked */}
+                          <div style={{
+                            position: "absolute", bottom: 0, left: 0, right: 0,
+                            background: "linear-gradient(transparent, rgba(0,0,0,0.7))",
+                            padding: "20px 16px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                          }}>
+                            <a href={preview.openUrl || mat.url} target="_blank" rel="noopener noreferrer" style={{
+                              padding: "6px 16px", borderRadius: 20, background: "#fff", color: "#1B3A4B",
+                              fontSize: 12, fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4,
+                            }}>
+                              {"\uD83D\uDD17"} {isRTL ? "فتح في Google Drive" : "Open in Google Drive"}
+                            </a>
+                          </div>
+                        </div>
+                      )}
+                      {preview.type === "gdrive-video" && (
+                        <div style={{
+                          background: "linear-gradient(135deg, #1B3A4B, #2C5364)", padding: "32px 20px",
+                          display: "flex", flexDirection: "column", alignItems: "center", gap: 12, textAlign: "center",
+                        }}>
+                          <div style={{ fontSize: 40 }}>{"\uD83C\uDFAC"}</div>
+                          <p style={{ color: "#fff", fontSize: 13, margin: 0, opacity: 0.9 }}>
+                            {isRTL ? "الفيديو مستضاف على Google Drive" : "Video hosted on Google Drive"}
+                          </p>
+                          <a href={preview.openUrl || mat.url} target="_blank" rel="noopener noreferrer" style={{
+                            padding: "8px 20px", borderRadius: 20, background: "#C8956C", color: "#fff",
+                            fontSize: 13, fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6,
+                          }}>
+                            {"\u25B6"} {isRTL ? "شاهد الفيديو" : "Watch Video"}
+                          </a>
+                        </div>
+                      )}
+                      {preview.type === "gdrive-folder" && (
+                        <div style={{
+                          background: "#F9FAFB", padding: "28px 20px",
+                          display: "flex", flexDirection: "column", alignItems: "center", gap: 10, textAlign: "center",
+                        }}>
+                          <div style={{ fontSize: 36 }}>{"\uD83D\uDCC1"}</div>
+                          <p style={{ color: "#444", fontSize: 13, margin: 0 }}>
+                            {isRTL ? "مجلد على Google Drive" : "Google Drive Folder"}
+                          </p>
+                          <a href={mat.url} target="_blank" rel="noopener noreferrer" style={{
+                            padding: "8px 20px", borderRadius: 20, background: "#1B3A4B", color: "#fff",
+                            fontSize: 13, fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6,
+                          }}>
+                            {"\uD83D\uDCC2"} {isRTL ? "فتح المجلد" : "Open Folder"}
+                          </a>
+                        </div>
                       )}
                       {preview.type === "audio" && (
                         <div style={{ padding: 16, textAlign: "center" }}>
@@ -1644,7 +1709,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
                   {/* Action buttons */}
                   <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
-                    {(preview.type === "youtube" || preview.type === "gdrive" || preview.type === "audio") && (
+                    {preview.type !== "link" && (
                       <button style={S.btnSm(matPreview === mat.id ? "ghost" : "primary")} onClick={() => setMatPreview(matPreview === mat.id ? null : mat.id)}>
                         {matPreview === mat.id ? "\u2716 Close" : "\u25B6 Preview"}
                       </button>
