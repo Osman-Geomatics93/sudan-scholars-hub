@@ -52,7 +52,10 @@ const T = {
     // Error
     errorTitle: "Something went wrong",
     retry: "Try Again",
-    tryBasic: "Try Basic Extraction",
+    tryBasic: "Try Basic Extraction (PDF only)",
+    tryingBasic: "Trying basic extraction...",
+    // Fallback notice
+    fallbackNotice: "Processed with basic extraction. Tables and advanced formatting may not be available.",
     // General
     uploadAnother: "Upload Another",
     fileInfo: "File Info",
@@ -105,7 +108,9 @@ const T = {
     back: "ج",
     errorTitle: "حدث خطأ",
     retry: "حاول مرة أخرى",
-    tryBasic: "جرب الاستخراج الأساسي",
+    tryBasic: "جرب الاستخراج الأساسي (PDF فقط)",
+    tryingBasic: "جاري الاستخراج الأساسي...",
+    fallbackNotice: "تمت المعالجة بالاستخراج الأساسي. قد لا تتوفر الجداول والتنسيق المتقدم.",
     uploadAnother: "رفع مستند آخر",
     fileInfo: "معلومات الملف",
     processedIn: "تمت المعالجة في",
@@ -162,7 +167,7 @@ export default function SmartDocumentStudio({ locale = "en", userId, onNavigateT
     } catch { /* ignore */ }
   }, []);
 
-  const processFile = useCallback(async (selectedFile) => {
+  const processFile = useCallback(async (selectedFile, { fallback = false } = {}) => {
     setFile(selectedFile);
     setState("processing");
     setErrorMsg("");
@@ -177,7 +182,9 @@ export default function SmartDocumentStudio({ locale = "en", userId, onNavigateT
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const endpoint = ocrMode ? "/api/study-hub/docling/ocr" : "/api/study-hub/docling/convert";
+      let endpoint = ocrMode ? "/api/study-hub/docling/ocr" : "/api/study-hub/docling/convert";
+      if (fallback) endpoint += "?fallback=true";
+
       const res = await fetch(endpoint, {
         method: "POST",
         body: formData,
@@ -197,6 +204,7 @@ export default function SmartDocumentStudio({ locale = "en", userId, onNavigateT
           metadata: {},
           tables: [],
           processingTimeMs: data.processingTimeMs || 0,
+          source: "ocr",
         });
       } else {
         setResult(data);
@@ -213,6 +221,10 @@ export default function SmartDocumentStudio({ locale = "en", userId, onNavigateT
       setState("error");
     }
   }, [ocrMode]);
+
+  const handleBasicExtraction = useCallback(() => {
+    if (file) processFile(file, { fallback: true });
+  }, [file, processFile]);
 
   const handleDrop = useCallback((e) => {
     e.preventDefault();
@@ -432,18 +444,27 @@ export default function SmartDocumentStudio({ locale = "en", userId, onNavigateT
 
   // === ERROR STATE ===
   if (state === "error") {
+    const canFallback = file && (file.type === "application/pdf" || file.name?.toLowerCase().endsWith(".pdf"));
     return (
       <div style={{ padding: "60px 20px", textAlign: "center", direction: isRTL ? "rtl" : "ltr" }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
         <h3 style={{ margin: "0 0 8px", fontSize: 18, color: "#EF4444" }}>{t.errorTitle}</h3>
         <p style={{ margin: "0 0 20px", fontSize: 14, color: "var(--text-secondary, #888)", maxWidth: 400, marginInline: "auto" }}>{errorMsg}</p>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
           <button onClick={() => file && processFile(file)} style={{
             padding: "10px 24px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #3B82F6, #2563EB)",
             color: "#fff", fontWeight: 600, cursor: "pointer", fontSize: 14,
           }}>
             {t.retry}
           </button>
+          {canFallback && (
+            <button onClick={handleBasicExtraction} style={{
+              padding: "10px 24px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #8B5CF6, #7C3AED)",
+              color: "#fff", fontWeight: 600, cursor: "pointer", fontSize: 14,
+            }}>
+              {t.tryBasic}
+            </button>
+          )}
           <button onClick={resetToUpload} style={{
             padding: "10px 24px", borderRadius: 10, border: "1px solid var(--border, #ddd)",
             background: "var(--bg-primary, #fff)", color: "var(--text-primary, #333)", cursor: "pointer", fontSize: 14,
@@ -482,6 +503,13 @@ export default function SmartDocumentStudio({ locale = "en", userId, onNavigateT
           {t.uploadAnother}
         </button>
       </div>
+
+      {/* Fallback notice */}
+      {result?.source === "pdf-parse" && (
+        <div style={{ padding: "10px 16px", borderRadius: 10, background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.3)", color: "#B45309", fontSize: 13, marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
+          <span>⚠️</span> {t.fallbackNotice}
+        </div>
+      )}
 
       {/* Tabs */}
       <div style={{ display: "flex", gap: 4, marginBottom: 16, background: "var(--bg-secondary, #f0f0f0)", borderRadius: 12, padding: 4 }}>
