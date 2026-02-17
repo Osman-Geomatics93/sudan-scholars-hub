@@ -193,7 +193,7 @@ export default function SmartDocumentStudio({ locale = "en", userId, onNavigateT
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `Server error: ${res.status}`);
+        throw new Error(errData.detail || errData.error || `Server error: ${res.status}`);
       }
 
       const data = await res.json();

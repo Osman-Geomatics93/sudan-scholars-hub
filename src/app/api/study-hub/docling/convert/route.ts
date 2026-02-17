@@ -197,9 +197,10 @@ export async function POST(request: NextRequest) {
       { status: 502 },
     );
   } catch (err) {
-    console.error('Docling convert error:', err);
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Docling convert error:', message, err);
     return NextResponse.json(
-      { error: 'Failed to process document' },
+      { error: 'Failed to process document', detail: message },
       { status: 500 },
     );
   }
