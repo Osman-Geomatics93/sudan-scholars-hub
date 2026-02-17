@@ -84,6 +84,7 @@ model User {
   ieltsToeflAttempts    IeltsToeflAttempt[]
   ieltsToeflVocabProgress IeltsToeflVocabProgress[]
   ieltsToeflMaterials     IeltsToeflMaterial[]
+  processedDocuments      ProcessedDocument[]
 }
 
 // OAuth Account linking (required by NextAuth)
@@ -1372,4 +1373,25 @@ model IeltsToeflMaterial {
   @@index([examType, section])
   @@index([userId])
   @@index([createdAt])
+}
+
+// ============ PROCESSED DOCUMENTS (Docling) ============
+model ProcessedDocument {
+  id               String   @id @default(cuid())
+  userId           String
+  fileName         String
+  fileType         String
+  fileSizeBytes    Int
+  markdown         String   @db.Text
+  metadata         Json?
+  tableCount       Int      @default(0)
+  tables           Json?
+  processingTimeMs Int
+  processingStatus String   @default("completed")
+  errorMessage     String?
+  createdAt        DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

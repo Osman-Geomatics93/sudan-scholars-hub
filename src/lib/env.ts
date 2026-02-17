@@ -33,3 +33,7 @@ export function getDatabaseUrl() { return requireEnv('DATABASE_URL'); }
 
 // Bot
 export function getBotApiKey() { return requireEnv('BOT_API_KEY'); }
+
+// Docling service
+export function getDoclingServiceUrl() { return requireEnv('DOCLING_SERVICE_URL'); }
+export function getDoclingApiKey() { return requireEnv('DOCLING_API_KEY'); }

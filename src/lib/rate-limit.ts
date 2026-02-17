@@ -135,4 +135,6 @@ export const RATE_LIMITS = {
   cardVerify: { limit: 30, windowMs: 60000 },
   // Telegram bot: 30 per minute
   bot: { limit: 30, windowMs: 60000 },
+  // Docling document conversion: 10 per minute
+  docling: { limit: 10, windowMs: 60000 },
 } as const;

@@ -11,6 +11,7 @@ import BattleArena from "@/components/study-hub/battle-arena";
 import AcademicTranslator from "@/components/study-hub/academic-translator";
 import IeltsToeflPractice from "@/components/study-hub/ielts-toefl-practice";
 import TelegramAssistant from "@/components/study-hub/telegram-assistant";
+import SmartDocumentStudio from "@/components/study-hub/smart-document-studio";
 
 
 const TELEGRAM_LINK = "https://t.me/+uNRCkz0PUfQzOGZk";
@@ -41,6 +42,7 @@ const QUICK_ACCESS_CATEGORIES = [
     { key: "translator", icon: "🌐", labelKey: "translator" },
     { key: "ielts-practice", icon: "📝", labelKey: "ieltsPractice" },
     { key: "bot-assistant", icon: "💬", labelKey: "botAssistant" },
+    { key: "document-studio", icon: "📄", labelKey: "documentStudio" },
   ]},
   { titleKey: "communityCat", icon: "👥", items: [
     { key: "groups", icon: "👥", labelKey: "studyGroups" },
@@ -853,6 +855,8 @@ const T = {
     ieltsPracticeSub: "Prepare for English proficiency exams",
     botAssistant: "Bot Assistant",
     botAssistantSub: "Chat with our AI assistant",
+    documentStudio: "Smart Document Studio",
+    documentStudioSub: "Upload documents for structured text, tables & AI insights",
     // Hero Redesign & Quick Access
     heroHeadline: "Find Your Study Materials",
     heroSubNew: "Upload and discover study resources organized by country, university, and degree level.",
@@ -1333,6 +1337,8 @@ const T = {
     ieltsPracticeSub: "استعد لامتحانات إتقان اللغة الإنجليزية",
     botAssistant: "مساعد البوت",
     botAssistantSub: "تحدث مع مساعدنا الذكي",
+    documentStudio: "استوديو المستندات الذكي",
+    documentStudioSub: "ارفع مستندات للحصول على نص منظم وجداول ورؤى ذكية",
     // Hero Redesign & Quick Access
     heroHeadline: "اعثر على موادك الدراسية",
     heroSubNew: "ارفع واكتشف المواد الدراسية مرتبة حسب الدولة والجامعة والمرحلة الدراسية",
@@ -5553,7 +5559,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
               <span style={S.crumbActive}>💬 {t.botAssistant}</span>
             </>
           )}
-          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && view !== "focus-island" && view !== "battle-arena" && view !== "translator" && view !== "bot-assistant" && (
+          {view === "document-studio" && (
+            <>
+              <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
+              <span style={S.crumbActive}>📄 {t.documentStudio}</span>
+            </>
+          )}
+          {selectedCountry && view !== "countries" && view !== "my-materials" && view !== "requests" && view !== "groups" && view !== "collections" && view !== "exams" && view !== "grade-calc" && view !== "pomodoro" && view !== "exam-planner" && view !== "reviews" && view !== "leaderboard" && view !== "ai-assistant" && view !== "flashcards" && view !== "study-planner" && view !== "smart-path" && view !== "focus-island" && view !== "battle-arena" && view !== "translator" && view !== "bot-assistant" && view !== "document-studio" && (
             <>
               <span style={S.crumbSep}>{isRTL ? "‹" : "›"}</span>
               <span style={S.crumbItem} onClick={() => navigate("universities", selectedCountry)}>
@@ -8314,6 +8326,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         {view === "bot-assistant" && (
           <div>
             <TelegramAssistant locale={locale} userId={currentUserId} />
+          </div>
+        )}
+
+        {/* === SMART DOCUMENT STUDIO VIEW === */}
+        {view === "document-studio" && (
+          <div>
+            <SmartDocumentStudio locale={locale} userId={currentUserId} onNavigateToChat={() => navigate("ai-assistant")} onNavigateToFlashcards={() => navigate("flashcards")} />
           </div>
         )}
 
