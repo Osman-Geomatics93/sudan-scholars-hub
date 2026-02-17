@@ -163,7 +163,7 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ['pdf-parse', 'pdfjs-dist'],
+    serverComponentsExternalPackages: ['pdf-parse', 'pdfjs-dist', 'tesseract.js'],
   },
   images: {
     formats: ['image/avif', 'image/webp'],

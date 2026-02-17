@@ -45,7 +45,7 @@ Remember: You're helping students achieve their dreams of studying abroad!`;
 
 export async function generateChatResponse(message: string, locale: string = 'en'): Promise<string> {
   try {
-    const model = getGenAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = getGenAI().getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const languageInstruction = locale === 'ar'
       ? 'The user is writing in Arabic. Please respond in Arabic.'

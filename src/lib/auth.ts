@@ -121,8 +121,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.isAdmin = false;
         }
       }
-      // Store Google profile data
-      if (account?.provider === 'google' && profile) {
+      // For Google OAuth, ensure token.id is the DB User ID (not the Google sub)
+      if (account?.provider === 'google' && profile?.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: profile.email },
+          select: { id: true },
+        });
+        if (dbUser) {
+          token.id = dbUser.id;
+        }
         token.picture = (profile as typeof profile & { picture?: string }).picture;
       }
       return token;
