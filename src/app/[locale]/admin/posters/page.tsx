@@ -285,16 +285,16 @@ export default function PostersPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
             {isRTL ? 'الملصقات' : 'Posters'}
           </h1>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 dark:text-gray-400">
             {isRTL ? `${posters.length} ملصق` : `${posters.length} posters`}
           </p>
         </div>
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-4 py-2 text-white transition-colors hover:bg-primary-700 dark:hover:bg-primary-600"
         >
           <Plus className="h-5 w-5" />
           {isRTL ? 'إضافة ملصق' : 'Add Poster'}
@@ -305,7 +305,7 @@ export default function PostersPage() {
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search
-            className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${
+            className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500 ${
               isRTL ? 'right-3' : 'left-3'
             }`}
           />
@@ -314,7 +314,7 @@ export default function PostersPage() {
             placeholder={isRTL ? 'البحث عن ملصق...' : 'Search posters...'}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className={`w-full rounded-lg border border-gray-300 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+            className={`w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
               isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
             }`}
           />
@@ -322,7 +322,7 @@ export default function PostersPage() {
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value as PosterCategory | '')}
-          className="rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+          className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
         >
           <option value="">{isRTL ? 'جميع الفئات' : 'All Categories'}</option>
           {categories.map((cat) => (
@@ -338,10 +338,10 @@ export default function PostersPage() {
         {filteredPosters.map((poster) => (
           <div
             key={poster.id}
-            className="group rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md overflow-hidden"
+            className="group rounded-xl bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-900/50 transition-shadow hover:shadow-md overflow-hidden"
           >
             {/* Image - Portrait aspect ratio */}
-            <div className="relative aspect-[3/4] bg-gray-100">
+            <div className="relative aspect-[3/4] bg-gray-100 dark:bg-gray-800">
               <Image
                 src={poster.imageUrl}
                 alt={isRTL ? poster.titleAr : poster.title}
@@ -352,7 +352,7 @@ export default function PostersPage() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
 
               {/* Order badge */}
-              <div className="absolute top-2 left-2 bg-white/90 rounded-full px-2 py-1 text-xs font-medium text-gray-700 flex items-center gap-1">
+              <div className="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 rounded-full px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
                 <GripVertical className="h-3 w-3" />
                 #{poster.order + 1}
               </div>
@@ -368,8 +368,8 @@ export default function PostersPage() {
               <div
                 className={`absolute bottom-2 left-2 rounded-full px-2 py-1 text-xs font-medium ${
                   poster.isActive
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-700'
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                    : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400'
                 }`}
               >
                 {poster.isActive
@@ -385,12 +385,12 @@ export default function PostersPage() {
 
             {/* Content */}
             <div className="p-3">
-              <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-50 text-sm mb-1 line-clamp-2">
                 {isRTL ? poster.titleAr : poster.title}
               </h3>
 
               {poster.scholarship && (
-                <div className="flex items-center gap-1 text-xs text-primary-600 mb-2">
+                <div className="flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 mb-2">
                   <LinkIcon className="h-3 w-3 shrink-0" />
                   <span className="truncate">
                     {isRTL ? poster.scholarship.titleAr : poster.scholarship.title}
@@ -403,7 +403,7 @@ export default function PostersPage() {
                   href={poster.externalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-gray-500 hover:text-primary-600 mb-2"
+                  className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 mb-2"
                 >
                   <ExternalLink className="h-3 w-3 shrink-0" />
                   <span className="truncate">{poster.externalUrl}</span>
@@ -411,14 +411,14 @@ export default function PostersPage() {
               )}
 
               {/* Actions */}
-              <div className="flex items-center justify-between border-t pt-3 mt-2">
+              <div className="flex items-center justify-between border-t dark:border-gray-700 pt-3 mt-2">
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => toggleFeatured(poster.id, poster.isFeatured)}
                     className={`rounded p-1.5 transition-colors ${
                       poster.isFeatured
-                        ? 'text-amber-500 bg-amber-50 hover:bg-amber-100'
-                        : 'text-gray-400 hover:bg-gray-100 hover:text-amber-500'
+                        ? 'text-amber-500 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/50 dark:hover:bg-amber-900/50'
+                        : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-amber-500'
                     }`}
                     title={poster.isFeatured ? 'Remove from featured' : 'Add to featured'}
                   >
@@ -426,7 +426,7 @@ export default function PostersPage() {
                   </button>
                   <button
                     onClick={() => toggleActive(poster.id, poster.isActive)}
-                    className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                    className="rounded p-1.5 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600"
                     title={poster.isActive ? 'Deactivate' : 'Activate'}
                   >
                     {poster.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -435,13 +435,13 @@ export default function PostersPage() {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => openEditModal(poster)}
-                    className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-primary-600"
+                    className="rounded p-1.5 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600"
                   >
                     <Edit className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => deletePoster(poster.id)}
-                    className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-red-600"
+                    className="rounded p-1.5 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -453,10 +453,10 @@ export default function PostersPage() {
       </div>
 
       {filteredPosters.length === 0 && (
-        <div className="rounded-xl bg-white py-12 text-center text-gray-500 shadow-sm">
-          <ImageIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+        <div className="rounded-xl bg-white dark:bg-gray-900 py-12 text-center text-gray-500 dark:text-gray-400 shadow-sm dark:shadow-gray-900/50">
+          <ImageIcon className="h-12 w-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" />
           <p>{isRTL ? 'لا توجد ملصقات للعرض' : 'No posters to display'}</p>
-          <button onClick={openCreateModal} className="mt-4 text-primary-600 hover:underline">
+          <button onClick={openCreateModal} className="mt-4 text-primary-600 dark:text-primary-400 hover:underline">
             {isRTL ? 'إضافة ملصق جديد' : 'Add your first poster'}
           </button>
         </div>
@@ -466,17 +466,17 @@ export default function PostersPage() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setIsModalOpen(false)} />
-          <div className="relative bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+          <div className="relative bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10">
-              <h2 className="text-lg font-semibold text-gray-900">
+            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-900 z-10">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                 {editingId
                   ? isRTL ? 'تعديل الملصق' : 'Edit Poster'
                   : isRTL ? 'إضافة ملصق جديد' : 'Add New Poster'}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+                className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -487,28 +487,28 @@ export default function PostersPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Title (English) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {isRTL ? 'العنوان (إنجليزي)' : 'Title (English)'} *
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                     required
                   />
                 </div>
 
                 {/* Title (Arabic) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {isRTL ? 'العنوان (عربي)' : 'Title (Arabic)'} *
                   </label>
                   <input
                     type="text"
                     value={formData.titleAr}
                     onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                     dir="rtl"
                     required
                   />
@@ -518,27 +518,27 @@ export default function PostersPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Description (English) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {isRTL ? 'الوصف (إنجليزي)' : 'Description (English)'}
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={2}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   />
                 </div>
 
                 {/* Description (Arabic) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {isRTL ? 'الوصف (عربي)' : 'Description (Arabic)'}
                   </label>
                   <textarea
                     value={formData.descriptionAr}
                     onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
                     rows={2}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                     dir="rtl"
                   />
                 </div>
@@ -546,22 +546,22 @@ export default function PostersPage() {
 
               {/* Image URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'رابط الصورة' : 'Image URL'} *
                 </label>
                 <input
                   type="url"
                   value={formData.imageUrl}
                   onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   placeholder="https://example.com/poster.jpg"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {isRTL ? 'استخدم صور عمودية (نسبة 3:4)' : 'Use portrait images (3:4 ratio)'}
                 </p>
                 {formData.imageUrl && (
-                  <div className="mt-2 relative w-32 aspect-[3/4] rounded-lg overflow-hidden bg-gray-100">
+                  <div className="mt-2 relative w-32 aspect-[3/4] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
                     <Image
                       src={formData.imageUrl}
                       alt="Preview"
@@ -577,7 +577,7 @@ export default function PostersPage() {
 
               {/* Category */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'الفئة' : 'Category'} *
                 </label>
                 <select
@@ -585,7 +585,7 @@ export default function PostersPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, category: e.target.value as PosterCategory })
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   required
                 >
                   {categories.map((cat) => (
@@ -598,13 +598,13 @@ export default function PostersPage() {
 
               {/* Link to Scholarship */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'ربط بمنحة (اختياري)' : 'Link to Scholarship (Optional)'}
                 </label>
                 <select
                   value={formData.scholarshipId}
                   onChange={(e) => setFormData({ ...formData, scholarshipId: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 >
                   <option value="">{isRTL ? 'لا يوجد ربط' : 'No linked scholarship'}</option>
                   {scholarships.map((s) => (
@@ -617,17 +617,17 @@ export default function PostersPage() {
 
               {/* External URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'رابط خارجي (اختياري)' : 'External URL (Optional)'}
                 </label>
                 <input
                   type="url"
                   value={formData.externalUrl}
                   onChange={(e) => setFormData({ ...formData, externalUrl: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   placeholder="https://example.com"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {isRTL ? 'يستخدم إذا لم يتم الربط بمنحة' : 'Used if not linking to a scholarship'}
                 </p>
               </div>
@@ -635,7 +635,7 @@ export default function PostersPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Order */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {isRTL ? 'الترتيب' : 'Display Order'}
                   </label>
                   <input
@@ -644,7 +644,7 @@ export default function PostersPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, order: parseInt(e.target.value) || 0 })
                     }
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                     min="0"
                   />
                 </div>
@@ -662,9 +662,9 @@ export default function PostersPage() {
                         }
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                      <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
                     </label>
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {isRTL ? 'مميز في الصفحة الرئيسية' : 'Featured on Homepage'}
                     </span>
                   </div>
@@ -680,9 +680,9 @@ export default function PostersPage() {
                         }
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                      <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {isRTL ? 'نشط' : 'Active'}
                     </span>
                   </div>
@@ -690,18 +690,18 @@ export default function PostersPage() {
               </div>
 
               {/* Submit Button */}
-              <div className="flex justify-end gap-3 pt-4 border-t">
+              <div className="flex justify-end gap-3 pt-4 border-t dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 >
                   {isRTL ? 'إلغاء' : 'Cancel'}
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 dark:bg-primary-500 text-white rounded-lg hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors disabled:opacity-50"
                 >
                   {saving ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

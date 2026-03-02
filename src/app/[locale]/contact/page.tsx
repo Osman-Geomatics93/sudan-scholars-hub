@@ -111,9 +111,9 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
 
               {isSubmitted ? (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-green-100 dark:bg-green-950/50 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg
-                      className="w-8 h-8 text-green-600"
+                      className="w-8 h-8 text-green-600 dark:text-green-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -131,7 +131,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {error && (
-                    <div className="p-3 rounded-lg bg-red-50 text-red-600 text-sm">
+                    <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 text-sm">
                       {error}
                     </div>
                   )}
@@ -184,12 +184,12 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                       rel={info.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                       className="flex items-start gap-4 group"
                     >
-                      <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center shrink-0 group-hover:bg-primary-200 transition-colors">
-                        <info.icon className="h-5 w-5 text-primary-600" />
+                      <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-950 flex items-center justify-center shrink-0 group-hover:bg-primary-200 dark:group-hover:bg-primary-900 transition-colors">
+                        <info.icon className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                       </div>
                       <div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">{info.label}</div>
-                        <div className="font-medium text-gray-900 dark:text-gray-50 group-hover:text-primary-600 transition-colors">{info.value}</div>
+                        <div className="font-medium text-gray-900 dark:text-gray-50 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{info.value}</div>
                       </div>
                     </a>
                   ))}
@@ -203,7 +203,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                 rel="noopener noreferrer"
                 className="block group"
               >
-                <Card className="p-5 bg-gradient-to-r from-[#0088cc] to-[#00a0e3] text-white hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                <Card className="p-5 bg-gradient-to-r from-[#0088cc] to-[#00a0e3] text-white hover:shadow-lg dark:hover:shadow-gray-900/50 transition-all duration-300 hover:scale-[1.02]">
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                       <Send className="h-7 w-7" />
@@ -239,8 +239,8 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(
-                        "w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 transition-colors",
-                        social.color || "hover:bg-primary-100 hover:text-primary-600"
+                        "w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 transition-colors",
+                        social.color || "hover:bg-primary-100 dark:hover:bg-primary-950 hover:text-primary-600 dark:hover:text-primary-400"
                       )}
                       aria-label={social.label}
                       title={social.label}
@@ -252,7 +252,7 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
               </div>
 
               {/* Google Map */}
-              <div className="rounded-lg overflow-hidden h-48 md:h-64 lg:h-72 shadow-md">
+              <div className="rounded-lg overflow-hidden h-48 md:h-64 lg:h-72 shadow-md dark:shadow-gray-900/50">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.8968073728847!2d39.72382!3d40.98808!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40643c5bce1f32a7%3A0x7fe5b62c5e5b9e5a!2sKonaklar%2C%20Gazi%20Mustafa%20Kemal%20Cd.%2C%2061010%20Ortahisar%2FTrabzon%2C%20T%C3%BCrkiye!5e0!3m2!1sen!2s!4v1704067200000!5m2!1sen!2s"
                   width="100%"
@@ -286,9 +286,9 @@ export default function ContactPage({ params: { locale } }: { params: { locale: 
                 >
                   <span className="font-semibold text-gray-900 dark:text-gray-50">{faq.question}</span>
                   {expandedFaq === index ? (
-                    <ChevronUp className="h-5 w-5 text-gray-400 shrink-0" />
+                    <ChevronUp className="h-5 w-5 text-gray-400 dark:text-gray-500 shrink-0" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-400 shrink-0" />
+                    <ChevronDown className="h-5 w-5 text-gray-400 dark:text-gray-500 shrink-0" />
                   )}
                 </button>
                 <div

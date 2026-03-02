@@ -11,10 +11,10 @@ export default function NewTestimonialPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
           {isRTL ? 'إضافة شهادة جديدة' : 'Add New Testimonial'}
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
           {isRTL
             ? 'أضف شهادة طالب جديدة'
             : 'Add a new student testimonial'}

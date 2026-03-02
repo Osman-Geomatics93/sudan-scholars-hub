@@ -247,13 +247,13 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
     return (
       <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 300px)", minHeight: 500 }}>
         {/* Header */}
-        <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border, #e5e7eb)", display: "flex", alignItems: "center", gap: 12, background: "var(--bg-secondary, #f8f9fa)" }}>
-          <button onClick={() => { setActiveSession(null); setMessages([]); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 16, padding: "4px 8px", borderRadius: 6, color: "var(--text-primary, #333)" }}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={{ padding: "12px 16px", borderBottom: "1px solid var(--border, #e5e7eb)", display: "flex", alignItems: "center", gap: 12, background: "var(--bg-secondary, #f8f9fa)" }}>
+          <button className="dark:text-gray-100" onClick={() => { setActiveSession(null); setMessages([]); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 16, padding: "4px 8px", borderRadius: 6, color: "var(--text-primary, #333)" }}>
             {isRTL ? "→" : "←"} {t.back}
           </button>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, color: "var(--text-primary, #1a1a2e)" }}>{activeSession.title}</div>
-            <div style={{ fontSize: 12, color: "var(--text-secondary, #888)" }}>
+            <div className="dark:text-gray-100" style={{ fontWeight: 600, color: "var(--text-primary, #1a1a2e)" }}>{activeSession.title}</div>
+            <div className="dark:text-gray-400" style={{ fontSize: 12, color: "var(--text-secondary, #888)" }}>
               {activeSession.contextType !== "none" ? `📎 ${t[`ctx${activeSession.contextType.charAt(0).toUpperCase() + activeSession.contextType.slice(1)}`]}` : t.ctxNone}
             </div>
           </div>
@@ -262,13 +262,13 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
         {/* Messages */}
         <div style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
           {messages.length === 0 && (
-            <div style={{ textAlign: "center", padding: 40, color: "var(--text-secondary, #888)" }}>
+            <div className="dark:text-gray-400" style={{ textAlign: "center", padding: 40, color: "var(--text-secondary, #888)" }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>💬</div>
               <p>{t.noMessages}</p>
               <p style={{ fontSize: 14, marginTop: 16, fontWeight: 600 }}>{t.suggestedQuestions}</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginTop: 8 }}>
                 {[t.sq1, t.sq2, t.sq3, t.sq4].map((q, i) => (
-                  <button key={i} onClick={() => sendMessage(q)} style={{ padding: "6px 14px", borderRadius: 20, border: "1px solid var(--border, #ddd)", background: "var(--bg-primary, #fff)", cursor: "pointer", fontSize: 13, color: "var(--text-primary, #333)", transition: "all 0.2s" }}
+                  <button key={i} onClick={() => sendMessage(q)} className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" style={{ padding: "6px 14px", borderRadius: 20, border: "1px solid var(--border, #ddd)", background: "var(--bg-primary, #fff)", cursor: "pointer", fontSize: 13, color: "var(--text-primary, #333)", transition: "all 0.2s" }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = "var(--accent, #3B82F6)"; e.currentTarget.style.color = "#fff"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = "var(--bg-primary, #fff)"; e.currentTarget.style.color = "var(--text-primary, #333)"; }}
                   >{q}</button>
@@ -299,13 +299,14 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
         </div>
 
         {/* Input */}
-        <div style={{ padding: "12px 16px", borderTop: "1px solid var(--border, #e5e7eb)", display: "flex", gap: 8, background: "var(--bg-secondary, #f8f9fa)" }}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={{ padding: "12px 16px", borderTop: "1px solid var(--border, #e5e7eb)", display: "flex", gap: 8, background: "var(--bg-secondary, #f8f9fa)" }}>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
             placeholder={t.typeMessage}
             disabled={streaming}
+            className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
             style={{ flex: 1, padding: "10px 14px", borderRadius: 12, border: "1px solid var(--border, #ddd)", background: "var(--bg-primary, #fff)", color: "var(--text-primary, #333)", fontSize: 14, outline: "none", direction: isRTL ? "rtl" : "ltr" }}
           />
           <button onClick={() => sendMessage()} disabled={streaming || !input.trim()} style={{
@@ -325,8 +326,8 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: 22, color: "var(--text-primary, #1a1a2e)" }}>🤖 {t.title}</h2>
-          <p style={{ margin: "4px 0 0", fontSize: 14, color: "var(--text-secondary, #888)" }}>{t.subtitle}</p>
+          <h2 className="dark:text-gray-50" style={{ margin: 0, fontSize: 22, color: "var(--text-primary, #1a1a2e)" }}>🤖 {t.title}</h2>
+          <p className="dark:text-gray-400" style={{ margin: "4px 0 0", fontSize: 14, color: "var(--text-secondary, #888)" }}>{t.subtitle}</p>
         </div>
         <button onClick={() => setShowNewForm(!showNewForm)} style={{
           padding: "8px 18px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #3B82F6, #2563EB)",
@@ -338,14 +339,15 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
 
       {/* New Chat Form */}
       {showNewForm && (
-        <div style={{ background: "var(--bg-secondary, #f8f9fa)", borderRadius: 16, padding: 20, marginBottom: 20, border: "1px solid var(--border, #e5e7eb)" }}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={{ background: "var(--bg-secondary, #f8f9fa)", borderRadius: 16, padding: 20, marginBottom: 20, border: "1px solid var(--border, #e5e7eb)" }}>
           <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.sessionTitle}</label>
+            <label className="dark:text-gray-400" style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.sessionTitle}</label>
             <input value={newForm.title} onChange={(e) => setNewForm({ ...newForm, title: e.target.value })} placeholder={t.sessionTitleHint}
+              className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
               style={{ width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border, #ddd)", background: "var(--bg-primary, #fff)", color: "var(--text-primary, #333)", fontSize: 14, direction: isRTL ? "rtl" : "ltr", boxSizing: "border-box" }} />
           </div>
           <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.contextType}</label>
+            <label className="dark:text-gray-400" style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.contextType}</label>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {[
                 { key: "none", label: t.ctxNone, icon: "💬" },
@@ -353,7 +355,7 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
                 { key: "material", label: t.ctxMaterial, icon: "📚" },
                 { key: "exam", label: t.ctxExam, icon: "📝" },
               ].map((opt) => (
-                <button key={opt.key} onClick={() => setNewForm({ ...newForm, contextType: opt.key })} style={{
+                <button key={opt.key} onClick={() => setNewForm({ ...newForm, contextType: opt.key })} className="dark:text-gray-100 dark:border-gray-600" style={{
                   padding: "6px 14px", borderRadius: 8, border: `1px solid ${newForm.contextType === opt.key ? "#3B82F6" : "var(--border, #ddd)"}`,
                   background: newForm.contextType === opt.key ? "rgba(59,130,246,0.1)" : "var(--bg-primary, #fff)",
                   color: "var(--text-primary, #333)", cursor: "pointer", fontSize: 13,
@@ -366,16 +368,18 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
 
           {newForm.contextType === "material" && (
             <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.materialId}</label>
+              <label className="dark:text-gray-400" style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.materialId}</label>
               <input value={newForm.contextId} onChange={(e) => setNewForm({ ...newForm, contextId: e.target.value })}
+                className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
                 style={{ width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border, #ddd)", background: "var(--bg-primary, #fff)", color: "var(--text-primary, #333)", fontSize: 14, boxSizing: "border-box" }} />
             </div>
           )}
 
           {newForm.contextType === "exam" && (
             <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.examId}</label>
+              <label className="dark:text-gray-400" style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary, #666)", display: "block", marginBottom: 4 }}>{t.examId}</label>
               <input value={newForm.contextId} onChange={(e) => setNewForm({ ...newForm, contextId: e.target.value })}
+                className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
                 style={{ width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border, #ddd)", background: "var(--bg-primary, #fff)", color: "var(--text-primary, #333)", fontSize: 14, boxSizing: "border-box" }} />
             </div>
           )}
@@ -387,6 +391,7 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
                 <label style={{ fontSize: 13, fontWeight: 600, color: "#3B82F6", display: "block", marginBottom: 4 }}>📄 {t.extractPdf}</label>
                 <div style={{ display: "flex", gap: 8 }}>
                   <input value={pdfUrl} onChange={(e) => setPdfUrl(e.target.value)} placeholder={t.pdfUrl}
+                    className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
                     style={{ flex: 1, padding: "6px 10px", borderRadius: 6, border: "1px solid var(--border, #ddd)", fontSize: 13, background: "var(--bg-primary, #fff)", color: "var(--text-primary, #333)" }} />
                   <button onClick={extractPdf} disabled={extracting || !pdfUrl.trim()} style={{
                     padding: "6px 14px", borderRadius: 6, border: "none", background: "#3B82F6", color: "#fff", fontSize: 13, cursor: extracting ? "not-allowed" : "pointer",
@@ -397,6 +402,7 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
               </div>
               <div style={{ marginBottom: 12 }}>
                 <textarea value={newForm.contextText} onChange={(e) => setNewForm({ ...newForm, contextText: e.target.value })} placeholder={t.ctxPasteHint} rows={6}
+                  className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
                   style={{ width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border, #ddd)", background: "var(--bg-primary, #fff)", color: "var(--text-primary, #333)", fontSize: 14, resize: "vertical", direction: isRTL ? "rtl" : "ltr", boxSizing: "border-box", fontFamily: "inherit" }} />
                 {newForm.contextText && (
                   <div style={{ fontSize: 12, color: "var(--text-secondary, #888)", marginTop: 4 }}>
@@ -418,16 +424,16 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
 
       {/* Session List */}
       <div>
-        <h3 style={{ fontSize: 16, marginBottom: 12, color: "var(--text-primary, #1a1a2e)" }}>{t.sessions}</h3>
+        <h3 className="dark:text-gray-100" style={{ fontSize: 16, marginBottom: 12, color: "var(--text-primary, #1a1a2e)" }}>{t.sessions}</h3>
         {sessions.length === 0 ? (
-          <div style={{ textAlign: "center", padding: 40, color: "var(--text-secondary, #888)" }}>
+          <div className="dark:text-gray-400" style={{ textAlign: "center", padding: 40, color: "var(--text-secondary, #888)" }}>
             <div style={{ fontSize: 36, marginBottom: 8 }}>💬</div>
             <p>{t.noSessions}</p>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {sessions.map((s) => (
-              <div key={s.id} onClick={() => openSession(s.id)} style={{
+              <div key={s.id} onClick={() => openSession(s.id)} className="dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700/50" style={{
                 padding: "12px 16px", borderRadius: 12, border: "1px solid var(--border, #e5e7eb)",
                 background: "var(--bg-primary, #fff)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between",
                 transition: "all 0.2s",
@@ -436,8 +442,8 @@ export default function AIStudyAssistant({ locale = "en", userId }) {
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border, #e5e7eb)"; e.currentTarget.style.background = "var(--bg-primary, #fff)"; }}
               >
                 <div>
-                  <div style={{ fontWeight: 600, color: "var(--text-primary, #1a1a2e)", fontSize: 14 }}>{s.title}</div>
-                  <div style={{ fontSize: 12, color: "var(--text-secondary, #888)", marginTop: 2 }}>
+                  <div className="dark:text-gray-100" style={{ fontWeight: 600, color: "var(--text-primary, #1a1a2e)", fontSize: 14 }}>{s.title}</div>
+                  <div className="dark:text-gray-400" style={{ fontSize: 12, color: "var(--text-secondary, #888)", marginTop: 2 }}>
                     {s._count?.messages || 0} messages · {new Date(s.updatedAt).toLocaleDateString(locale === "ar" ? "ar-SA" : "en-US")}
                   </div>
                 </div>

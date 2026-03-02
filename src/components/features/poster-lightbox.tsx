@@ -198,7 +198,7 @@ export function PosterLightbox({
             alt={title}
             width={1580}
             height={2048}
-            className="object-contain w-auto h-auto max-w-full max-h-[75vh] rounded-lg shadow-2xl"
+            className="object-contain w-auto h-auto max-w-full max-h-[75vh] rounded-lg shadow-2xl dark:shadow-gray-900/50"
             priority
           />
         </div>

@@ -75,7 +75,7 @@ export default function BlogPage() {
         <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
           <Container size="md">
             <div className="text-center">
-              <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
+              <BookOpen className="h-16 w-16 text-primary-600 dark:text-primary-400 mx-auto mb-6" />
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
                 {isRTL ? 'المدونة' : 'Blog'}
               </h1>
@@ -90,7 +90,7 @@ export default function BlogPage() {
         </section>
 
         {/* Featured Post Skeleton */}
-        <section className="py-12 bg-white dark:bg-gray-800">
+        <section className="py-12 bg-white dark:bg-gray-900">
           <Container>
             <SkeletonBlogFeatured />
           </Container>
@@ -117,7 +117,7 @@ export default function BlogPage() {
         <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
           <Container size="md">
             <div className="text-center">
-              <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
+              <BookOpen className="h-16 w-16 text-primary-600 dark:text-primary-400 mx-auto mb-6" />
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
                 {isRTL ? 'المدونة' : 'Blog'}
               </h1>
@@ -141,7 +141,7 @@ export default function BlogPage() {
         <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
           <Container size="md">
             <div className="text-center">
-              <BookOpen className="h-16 w-16 text-primary-600 mx-auto mb-6" />
+              <BookOpen className="h-16 w-16 text-primary-600 dark:text-primary-400 mx-auto mb-6" />
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
                 {isRTL ? 'المدونة' : 'Blog'}
               </h1>
@@ -217,7 +217,7 @@ export default function BlogPage() {
                   </div>
                 </div>
                 <div className="flex-1 p-6 lg:p-10 flex flex-col justify-center">
-                  <span className="text-primary-600 font-medium text-sm mb-2">
+                  <span className="text-primary-600 dark:text-primary-400 font-medium text-sm mb-2">
                     {isRTL ? featuredPost.categoryAr : featuredPost.category}
                   </span>
                   <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-4">
@@ -242,7 +242,7 @@ export default function BlogPage() {
                   </div>
                   <Link
                     href={`/${locale}/blog/${featuredPost.slug}`}
-                    className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700 transition-colors"
+                    className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
                   >
                     {isRTL ? 'اقرأ المزيد' : 'Read More'}
                     <ArrowRight className={`h-4 w-4 ${isRTL ? 'rotate-180' : ''}`} />
@@ -264,7 +264,7 @@ export default function BlogPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherPosts.map((post) => (
                 <Link key={post.id} href={`/${locale}/blog/${post.slug}`}>
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow group h-full">
+                  <Card className="overflow-hidden hover:shadow-lg dark:hover:shadow-gray-900/50 transition-shadow group h-full">
                     <div className="relative h-48">
                       <Image
                         src={post.image}
@@ -274,7 +274,7 @@ export default function BlogPage() {
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute top-3 start-3">
-                        <span className="px-2 py-1 bg-white/90 text-gray-700 text-xs font-medium rounded-full">
+                        <span className="px-2 py-1 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 text-xs font-medium rounded-full">
                           {isRTL ? post.categoryAr : post.category}
                         </span>
                       </div>
@@ -291,7 +291,7 @@ export default function BlogPage() {
                       </div>
                     </div>
                     <div className="p-5">
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                         {isRTL ? post.titleAr : post.title}
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
@@ -333,10 +333,10 @@ export default function BlogPage() {
               <input
                 type="email"
                 placeholder={isRTL ? 'بريدك الإلكتروني' : 'Your email'}
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
+                className="flex-1 px-4 py-3 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
                 suppressHydrationWarning
               />
-              <button className="px-6 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-colors">
+              <button className="px-6 py-3 bg-white dark:bg-gray-900 text-primary-600 dark:text-primary-400 font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                 {isRTL ? 'اشترك' : 'Subscribe'}
               </button>
             </div>

@@ -34,8 +34,8 @@ function LoginContent() {
         <Container size="sm">
           <Card className="p-8 md:p-12 max-w-md mx-auto">
             <div className="text-center">
-              <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
-              <p className="mt-4 text-gray-500">
+              <Loader2 className="w-8 h-8 animate-spin text-primary-600 dark:text-primary-400 mx-auto" />
+              <p className="mt-4 text-gray-500 dark:text-gray-400">
                 {isRTL ? 'جاري التحميل...' : 'Loading...'}
               </p>
             </div>
@@ -61,13 +61,13 @@ function LoginContent() {
         <Card className="p-8 md:p-12 max-w-md mx-auto">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-primary-600 dark:bg-primary-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-white text-2xl font-bold">SS</span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-2">
               {isRTL ? 'مرحباً بك' : 'Welcome'}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               {isRTL
                 ? 'سجل الدخول لحفظ المنح الدراسية وتتبع طلباتك'
                 : 'Sign in to save scholarships and track your applications'}
@@ -78,11 +78,11 @@ function LoginContent() {
           <Button
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-full h-12 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 shadow-sm"
+            className="w-full h-12 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 shadow-sm"
             variant="outline"
           >
             {isLoading ? (
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 dark:border-gray-500 border-t-transparent" />
             ) : (
               <>
                 {/* Google Icon */}
@@ -112,10 +112,10 @@ function LoginContent() {
           {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
+              <div className="w-full border-t border-gray-200 dark:border-gray-700" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
+              <span className="px-4 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
                 {isRTL ? 'أو' : 'or'}
               </span>
             </div>
@@ -129,18 +129,18 @@ function LoginContent() {
           </Link>
 
           {/* Admin Login Link */}
-          <p className="mt-8 text-center text-sm text-gray-500">
+          <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
             {isRTL ? 'مدير؟' : 'Admin?'}{' '}
             <Link
               href={`/${locale}/admin/login`}
-              className="text-primary-600 hover:text-primary-700 font-medium"
+              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
             >
               {isRTL ? 'تسجيل دخول المدير' : 'Admin Login'}
             </Link>
           </p>
 
           {/* Terms */}
-          <p className="mt-6 text-center text-xs text-gray-400">
+          <p className="mt-6 text-center text-xs text-gray-400 dark:text-gray-500">
             {isRTL
               ? 'بتسجيل الدخول، أنت توافق على شروط الخدمة وسياسة الخصوصية'
               : 'By signing in, you agree to our Terms of Service and Privacy Policy'}
@@ -157,10 +157,10 @@ function LoginFallback() {
       <Container size="sm">
         <Card className="p-8 md:p-12 max-w-md mx-auto">
           <div className="animate-pulse">
-            <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4" />
-            <div className="h-8 bg-gray-200 rounded w-32 mx-auto mb-4" />
-            <div className="h-4 bg-gray-200 rounded w-48 mx-auto mb-8" />
-            <div className="h-12 bg-gray-200 rounded w-full" />
+            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-4" />
+            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-32 mx-auto mb-4" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto mb-8" />
+            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded w-full" />
           </div>
         </Card>
       </Container>

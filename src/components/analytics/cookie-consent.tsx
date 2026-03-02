@@ -37,7 +37,7 @@ export function CookieConsent() {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg p-4 md:p-6 animate-fade-in-up">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg dark:shadow-gray-900/50 p-4 md:p-6 animate-fade-in-up">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
           <div className="flex items-start gap-3 flex-1">

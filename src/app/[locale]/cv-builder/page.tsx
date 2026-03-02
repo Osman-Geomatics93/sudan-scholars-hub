@@ -212,7 +212,7 @@ export default function CVBuilderPage() {
           {resumes.length === 0 ? (
             <Card>
               <CardContent className="py-16 text-center">
-                <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <FileText className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   {labels.noResumes}
                 </h3>
@@ -230,7 +230,7 @@ export default function CVBuilderPage() {
           ) : (
             <div className="grid gap-4">
               {resumes.map((resume) => (
-                <Card key={resume.id} className="hover:shadow-md transition-shadow">
+                <Card key={resume.id} className="hover:shadow-md dark:shadow-gray-900/50 transition-shadow">
                   <CardContent className="p-4 md:p-6">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                       <div className="flex items-start gap-4">
@@ -244,7 +244,7 @@ export default function CVBuilderPage() {
                           <p className="text-sm text-gray-600 dark:text-gray-400">
                             {resume.fullName}
                           </p>
-                          <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                          <div className="flex items-center gap-3 mt-2 text-xs text-gray-500 dark:text-gray-400">
                             <span className="flex items-center gap-1">
                               <Calendar className="w-3 h-3" />
                               {labels.lastUpdated}: {formatDate(resume.updatedAt)}
@@ -306,7 +306,7 @@ export default function CVBuilderPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50"
                           onClick={() => handleDelete(resume.id)}
                           disabled={deleting === resume.id}
                         >

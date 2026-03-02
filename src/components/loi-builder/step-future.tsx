@@ -72,7 +72,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
       {/* Section explanation */}
       <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800">
         <div className="flex items-start gap-3">
-          <Rocket className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+          <Rocket className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-primary-700 dark:text-primary-300">
               {isRTL ? 'الخطة المستقبلية والتأثير' : 'Future Plan & Impact'}
@@ -115,7 +115,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
         {/* Short-term Goals */}
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <Target className="w-4 h-4 text-primary-600" />
+            <Target className="w-4 h-4 text-primary-600 dark:text-primary-400" />
             {isRTL ? 'الأهداف قصيرة المدى (1-3 سنوات)' : 'Short-term Goals (1-3 years)'} *
           </label>
           <Textarea
@@ -139,7 +139,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              <Rocket className="w-4 h-4 text-primary-600" />
+              <Rocket className="w-4 h-4 text-primary-600 dark:text-primary-400" />
               {isRTL ? 'الأهداف طويلة المدى (5-10 سنوات)' : 'Long-term Goals (5-10 years)'} *
             </label>
             <Button
@@ -148,7 +148,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
               size="sm"
               onClick={() => handleGetAISuggestion('longTermGoals')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'longTermGoals'
@@ -184,7 +184,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              <Globe className="w-4 h-4 text-primary-600" />
+              <Globe className="w-4 h-4 text-primary-600 dark:text-primary-400" />
               {isRTL ? 'التأثير على المجتمع' : 'Impact on Community'} *
             </label>
             <Button
@@ -193,7 +193,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
               size="sm"
               onClick={() => handleGetAISuggestion('impactOnCommunity')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'impactOnCommunity'
@@ -229,7 +229,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              <BarChart className="w-4 h-4 text-primary-600" />
+              <BarChart className="w-4 h-4 text-primary-600 dark:text-primary-400" />
               {isRTL ? 'النتائج القابلة للقياس' : 'Measurable Outcomes'}
             </label>
             <Button
@@ -238,7 +238,7 @@ export function StepFuture({ locale, data, onDataChange }: StepFutureProps) {
               size="sm"
               onClick={() => handleGetAISuggestion('measurableOutcomes')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'measurableOutcomes'

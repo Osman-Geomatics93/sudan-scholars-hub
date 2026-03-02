@@ -115,7 +115,7 @@ export function StepEducation({ locale, data, onDataChange }: StepEducationProps
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {isRTL ? 'مجالات الدراسة المفضلة' : 'Preferred Fields of Study'}
-          <span className="text-gray-500 text-xs ml-2">
+          <span className="text-gray-500 dark:text-gray-400 text-xs ml-2">
             {isRTL ? `(${selectedFields.length}/4)` : `(${selectedFields.length}/4)`}
           </span>
         </label>

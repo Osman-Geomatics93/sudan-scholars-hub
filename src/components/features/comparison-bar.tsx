@@ -25,7 +25,7 @@ export function ComparisonBar({ locale = 'en' }: ComparisonBarProps) {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg animate-fade-in-up">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg dark:shadow-gray-900/50 animate-fade-in-up">
       <div className="container-custom py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Selected scholarships */}

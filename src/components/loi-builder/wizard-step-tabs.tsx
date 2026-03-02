@@ -77,14 +77,14 @@ export function WizardStepTabs({
       {/* Scroll buttons for mobile */}
       <button
         onClick={() => handleScroll('left')}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-900 shadow-md rounded-full p-1 lg:hidden"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-900/50 rounded-full p-1 lg:hidden"
         aria-label={isRTL ? 'Scroll right' : 'Scroll left'}
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
       <button
         onClick={() => handleScroll('right')}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-900 shadow-md rounded-full p-1 lg:hidden"
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-900/50 rounded-full p-1 lg:hidden"
         aria-label={isRTL ? 'Scroll left' : 'Scroll right'}
       >
         <ChevronRight className="w-5 h-5" />
@@ -117,7 +117,7 @@ export function WizardStepTabs({
                 'flex items-center gap-2 px-3 py-2 rounded-lg whitespace-nowrap transition-all duration-200',
                 'focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
                 'min-w-[120px] justify-center',
-                isCurrent && 'bg-primary-600 text-white shadow-md',
+                isCurrent && 'bg-primary-600 dark:bg-primary-500 text-white shadow-md dark:shadow-gray-900/50',
                 isCompleted && !isCurrent && 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300',
                 isPending && !isCurrent && 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
               )}
@@ -126,8 +126,8 @@ export function WizardStepTabs({
               <span
                 className={cn(
                   'flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium',
-                  isCurrent && 'bg-white text-primary-600',
-                  isCompleted && !isCurrent && 'bg-primary-600 text-white',
+                  isCurrent && 'bg-white text-primary-600 dark:text-primary-400',
+                  isCompleted && !isCurrent && 'bg-primary-600 dark:bg-primary-500 text-white',
                   isPending && !isCurrent && 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
                 )}
               >
@@ -150,7 +150,7 @@ export function WizardStepTabs({
       {/* Progress bar */}
       <div className="mt-4 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
         <div
-          className="h-full bg-primary-600 transition-all duration-300"
+          className="h-full bg-primary-600 dark:bg-primary-500 transition-all duration-300"
           style={{ width: `${Math.min(progress, 100)}%` }}
         />
       </div>
@@ -161,7 +161,7 @@ export function WizardStepTabs({
           ? `الخطوة ${currentStep + 1} من ${STEPS.length}`
           : `Step ${currentStep + 1} of ${STEPS.length}`}
         {completedCount > 0 && (
-          <span className="ms-2 text-primary-600">
+          <span className="ms-2 text-primary-600 dark:text-primary-400">
             ({completedCount} {isRTL ? 'مكتملة' : 'completed'})
           </span>
         )}

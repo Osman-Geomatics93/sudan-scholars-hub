@@ -30,7 +30,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   if (!mounted) {
     return (
       <button
-        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 bg-gray-100 dark:bg-gray-800"
+        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800"
         suppressHydrationWarning
       >
         <Globe className="h-5 w-5" />

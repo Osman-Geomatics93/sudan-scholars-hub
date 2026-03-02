@@ -123,7 +123,7 @@ export function StepSkills({ locale, data, onDataChange }: StepSkillsProps) {
         {/* Skills List */}
         <div className="flex flex-wrap gap-2 min-h-[48px]">
           {data.skills.length === 0 ? (
-            <p className="text-sm text-gray-500">{labels.noSkills}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{labels.noSkills}</p>
           ) : (
             data.skills.map((skill, index) => (
               <Badge
@@ -188,7 +188,7 @@ export function StepSkills({ locale, data, onDataChange }: StepSkillsProps) {
         {/* Languages List */}
         <div className="flex flex-wrap gap-2 min-h-[48px]">
           {data.languages.length === 0 ? (
-            <p className="text-sm text-gray-500">{labels.noLanguages}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{labels.noLanguages}</p>
           ) : (
             data.languages.map((lang, index) => (
               <Badge

@@ -38,7 +38,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
   // Don't show sidebar on login page - but still hide parent navbar/footer
   if (pathname.includes('/admin/login')) {
     return (
-      <div className="fixed inset-0 z-[100] bg-gray-100" suppressHydrationWarning>
+      <div className="fixed inset-0 z-[100] bg-gray-100 dark:bg-gray-800" suppressHydrationWarning>
         {children}
       </div>
     );
@@ -146,7 +146,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
   const isRTL = locale === 'ar';
 
   return (
-    <div className={`fixed inset-0 z-[100] bg-gray-100 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <div className={`fixed inset-0 z-[100] bg-gray-100 dark:bg-gray-800 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -157,7 +157,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 z-50 h-full w-64 max-w-[85vw] bg-white shadow-lg transition-transform duration-300 lg:translate-x-0 lg:max-w-none ${
+        className={`fixed top-0 z-50 h-full w-64 max-w-[85vw] bg-white dark:bg-gray-900 shadow-lg dark:shadow-gray-900/50 transition-transform duration-300 lg:translate-x-0 lg:max-w-none ${
           sidebarOpen
             ? 'translate-x-0'
             : isRTL
@@ -167,10 +167,10 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-16 items-center justify-between border-b px-4">
+          <div className="flex h-16 items-center justify-between border-b dark:border-gray-700 px-4">
             <Link href={`/${locale}/admin`} className="flex items-center gap-2">
-              <GraduationCap className="h-8 w-8 text-primary-600" />
-              <span className="font-bold text-gray-900">
+              <GraduationCap className="h-8 w-8 text-primary-600 dark:text-primary-400" />
+              <span className="font-bold text-gray-900 dark:text-gray-50">
                 {isRTL ? 'لوحة الإدارة' : 'Admin Panel'}
               </span>
             </Link>
@@ -196,8 +196,8 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
                   href={item.href}
                   className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-primary-50 text-primary-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-50'
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -209,10 +209,10 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
           </nav>
 
           {/* Logout */}
-          <div className="border-t p-4">
+          <div className="border-t dark:border-gray-700 p-4">
             <button
               onClick={() => signOut({ callbackUrl: `/${locale}/admin/login` })}
-              className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50"
+              className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50"
             >
               <LogOut className="h-5 w-5" />
               {isRTL ? 'تسجيل الخروج' : 'Logout'}
@@ -224,10 +224,10 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       {/* Main content */}
       <div className={`h-full overflow-auto ${isRTL ? 'lg:mr-64' : 'lg:ml-64'}`}>
         {/* Top bar */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-white px-4 shadow-sm lg:justify-end">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b dark:border-gray-700 bg-white dark:bg-gray-900 px-4 shadow-sm dark:shadow-gray-900/50 lg:justify-end">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="rounded-lg p-2 hover:bg-gray-100 lg:hidden"
+            className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800 lg:hidden"
           >
             <Menu className="h-6 w-6" />
           </button>
@@ -235,7 +235,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
             <Link
               href={`/${locale}`}
               target="_blank"
-              className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-200"
+              className="rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
             >
               {isRTL ? 'عرض الموقع' : 'View Site'}
             </Link>

@@ -130,7 +130,7 @@ export function StepProjects({ locale, data, onDataChange }: StepProjectsProps) 
                       {project.name || (isRTL ? 'مشروع جديد' : 'New Project')}
                     </p>
                     {project.technologies.length > 0 && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         {project.technologies.slice(0, 3).join(', ')}
                         {project.technologies.length > 3 && '...'}
                       </p>

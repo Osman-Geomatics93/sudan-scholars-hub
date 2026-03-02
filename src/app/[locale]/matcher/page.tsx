@@ -85,7 +85,7 @@ export default function MatcherPage() {
 
               {/* Features */}
               <div className="mt-12 grid md:grid-cols-3 gap-6 text-start">
-                <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700">
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     {isRTL ? 'مطابقة ذكية' : 'Smart Matching'}
                   </h3>
@@ -95,7 +95,7 @@ export default function MatcherPage() {
                       : 'We analyze your profile and compare it with different scholarship requirements'}
                   </p>
                 </div>
-                <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700">
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     {isRTL ? 'توصيات مخصصة' : 'Personalized Recommendations'}
                   </h3>
@@ -105,7 +105,7 @@ export default function MatcherPage() {
                       : 'Get detailed explanations of why each scholarship fits you'}
                   </p>
                 </div>
-                <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700">
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     {isRTL ? 'تصنيف ذكي' : 'Smart Ranking'}
                   </h3>

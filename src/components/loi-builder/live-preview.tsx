@@ -85,14 +85,14 @@ export function LivePreview({ data, locale }: LivePreviewProps) {
   const isWordCountInRange = wordCount >= TOTAL_WORD_TARGET.min && wordCount <= TOTAL_WORD_TARGET.max;
 
   return (
-    <div className="sticky top-24 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+    <div className="sticky top-24 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 overflow-hidden">
       {/* Header */}
       <div
         className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 cursor-pointer lg:cursor-default"
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-primary-600" />
+          <FileText className="w-5 h-5 text-primary-600 dark:text-primary-400" />
           <h3 className="font-semibold text-gray-900 dark:text-white">
             {isRTL ? 'معاينة مباشرة' : 'Live Preview'}
           </h3>
@@ -188,7 +188,7 @@ export function LivePreview({ data, locale }: LivePreviewProps) {
           </div>
 
           {wordCount < 100 && (
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
               {isRTL ? 'أكمل 100 كلمة على الأقل لتفعيل التصدير' : 'Complete at least 100 words to enable export'}
             </p>
           )}

@@ -155,7 +155,7 @@ export default function MastersPhDCalendarPage() {
               {calendarContains.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800"
+                  className="flex items-center gap-3 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-800"
                 >
                   <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center shrink-0">
                     <item.icon className="h-5 w-5 text-purple-600" />
@@ -180,7 +180,7 @@ export default function MastersPhDCalendarPage() {
               <ul className="space-y-4">
                 {calendarFeatures.map((feature, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                    <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 shrink-0 mt-0.5" />
                     <span className="text-gray-600 dark:text-gray-400">{feature}</span>
                   </li>
                 ))}
@@ -202,7 +202,7 @@ export default function MastersPhDCalendarPage() {
               {latestUpdates.map((update, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800"
+                  className="flex items-start gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-800"
                 >
                   <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center shrink-0">
                     <update.icon className="h-5 w-5 text-purple-600" />

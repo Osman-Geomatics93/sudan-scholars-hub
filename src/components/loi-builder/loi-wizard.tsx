@@ -139,7 +139,7 @@ export function LOIWizard({ locale }: LOIWizardProps) {
             : 'Create a compelling motivation letter for Turkiye Scholarships'}
         </p>
         {lastSaved && (
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
             {isRTL ? 'آخر حفظ: ' : 'Last saved: '}
             {lastSaved.toLocaleTimeString()}
           </p>
@@ -196,7 +196,7 @@ export function LOIWizard({ locale }: LOIWizardProps) {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowResetConfirm(true)}
-                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/50"
               >
                 <RotateCcw className="w-4 h-4 me-1" />
                 {isRTL ? 'إعادة تعيين' : 'Reset'}

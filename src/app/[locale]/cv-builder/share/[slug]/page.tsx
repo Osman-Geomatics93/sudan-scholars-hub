@@ -104,7 +104,7 @@ export default function PublicResumePage() {
       <MainLayout locale={locale}>
         <Container size="md" className="pt-24 pb-16">
           <div className="text-center">
-            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <FileText className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {error || labels.notFound}
             </h1>
@@ -125,7 +125,7 @@ export default function PublicResumePage() {
       >
         <Container size="md" className="pt-20 pb-8 md:pt-24 md:pb-12">
           {/* Resume Card */}
-          <Card className="overflow-hidden shadow-lg">
+          <Card className="overflow-hidden shadow-lg dark:shadow-gray-900/50">
             {/* Header with primary color */}
             <div
               className="p-6 md:p-8 text-white"
@@ -421,7 +421,7 @@ export default function PublicResumePage() {
           </Card>
 
           {/* Footer */}
-          <div className="text-center mt-6 text-sm text-gray-500">
+          <div className="text-center mt-6 text-sm text-gray-500 dark:text-gray-400">
             {labels.poweredBy}{' '}
             <Link href={`/${locale}/cv-builder`} className="text-primary hover:underline">
               Sudan Scholars Hub CV Builder

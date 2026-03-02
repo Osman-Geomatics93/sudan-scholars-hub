@@ -150,7 +150,7 @@ export function ShareModal({ isOpen, onClose, content, locale }: ShareModalProps
 
       {/* Modal */}
       <Card
-        className="relative z-10 w-full max-w-md p-6 bg-white rounded-xl shadow-xl animate-in fade-in zoom-in-95 duration-200"
+        className="relative z-10 w-full max-w-md p-6 bg-white dark:bg-gray-900 rounded-xl shadow-xl dark:shadow-gray-900/50 animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="share-modal-title"
@@ -159,13 +159,13 @@ export function ShareModal({ isOpen, onClose, content, locale }: ShareModalProps
         <div className="flex items-center justify-between mb-6">
           <h2
             id="share-modal-title"
-            className="text-lg font-semibold text-gray-900"
+            className="text-lg font-semibold text-gray-900 dark:text-gray-50"
           >
             {modalTitle}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
             aria-label={t('close')}
           >
             <X className="h-5 w-5" />
@@ -173,8 +173,8 @@ export function ShareModal({ isOpen, onClose, content, locale }: ShareModalProps
         </div>
 
         {/* Preview Card */}
-        <div className="flex gap-4 p-4 bg-gray-50 rounded-lg mb-6">
-          <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-200">
+        <div className="flex gap-4 p-4 bg-gray-50 dark:bg-gray-950 rounded-lg mb-6">
+          <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-200 dark:bg-gray-700">
             <Image
               src={content.image}
               alt={content.title}
@@ -184,10 +184,10 @@ export function ShareModal({ isOpen, onClose, content, locale }: ShareModalProps
             />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-medium text-gray-900 line-clamp-2 text-sm">
+            <h3 className="font-medium text-gray-900 dark:text-gray-50 line-clamp-2 text-sm">
               {content.title}
             </h3>
-            <p className="text-xs text-gray-500 line-clamp-2 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-1">
               {content.description}
             </p>
           </div>
@@ -206,7 +206,7 @@ export function ShareModal({ isOpen, onClose, content, locale }: ShareModalProps
 
         {/* Share Options */}
         <div className="mb-6">
-          <p className="text-sm text-gray-600 mb-3">{t('shareVia')}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{t('shareVia')}</p>
           <div className="grid grid-cols-5 gap-2">
             {platforms.map(({ key, icon: Icon, bgColor, hoverColor }) => (
               <button
@@ -228,13 +228,13 @@ export function ShareModal({ isOpen, onClose, content, locale }: ShareModalProps
 
         {/* Copy Link */}
         <div className="space-y-2">
-          <p className="text-sm text-gray-600">{t('copyLink')}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{t('copyLink')}</p>
           <div className="flex items-center gap-2">
             <input
               type="text"
               value={content.url}
               readOnly
-              className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-600 truncate focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 truncate focus:outline-none focus:ring-2 focus:ring-primary-500"
               onClick={(e) => (e.target as HTMLInputElement).select()}
             />
             <Button

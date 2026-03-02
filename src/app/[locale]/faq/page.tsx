@@ -213,7 +213,7 @@ export default function FAQPage() {
             {filteredFaqs.map((faq) => (
               <div
                 key={faq.id}
-                className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden"
+                className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-800 overflow-hidden"
               >
                 <button
                   onClick={() => toggleItem(faq.id)}
@@ -224,7 +224,7 @@ export default function FAQPage() {
                   </span>
                   <ChevronDown
                     className={cn(
-                      'h-5 w-5 text-gray-500 shrink-0 transition-transform duration-200',
+                      'h-5 w-5 text-gray-500 dark:text-gray-400 shrink-0 transition-transform duration-200',
                       openItems.includes(faq.id) && 'rotate-180'
                     )}
                   />
@@ -259,7 +259,7 @@ export default function FAQPage() {
               }
             </p>
             <Link href={`/${locale}/contact`}>
-              <Button variant="secondary" size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
+              <Button variant="secondary" size="lg" className="bg-white dark:bg-gray-900 text-primary-600 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800">
                 {isRTL ? 'تواصل معنا' : 'Contact Us'}
               </Button>
             </Link>

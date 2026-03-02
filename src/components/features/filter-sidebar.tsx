@@ -61,14 +61,14 @@ export function FilterSidebar({
       {/* Header for mobile */}
       <div className="flex items-center justify-between lg:hidden">
         <h2 className="text-lg font-semibold">{t('filterTitle')}</h2>
-        <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-md">
+        <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
           <X className="h-5 w-5" />
         </button>
       </div>
 
       {/* Study Level */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">{t('studyLevel')}</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-3">{t('studyLevel')}</h3>
         <div className="space-y-2">
           {studyLevels.map((level) => (
             <Checkbox
@@ -83,7 +83,7 @@ export function FilterSidebar({
 
       {/* Funding Type */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">{t('fundingType')}</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-3">{t('fundingType')}</h3>
         <div className="space-y-2">
           {fundingTypes.map((type) => (
             <Checkbox
@@ -98,7 +98,7 @@ export function FilterSidebar({
 
       {/* Country */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">{t('country')}</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-3">{t('country')}</h3>
         <div className="space-y-2">
           {countries.map((country) => (
             <Checkbox
@@ -125,7 +125,7 @@ export function FilterSidebar({
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block w-56 xl:w-64 shrink-0">
         <div className="sticky top-[4.5rem] bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 xl:p-6 max-h-[calc(100vh-6rem)] overflow-y-auto">
-          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <h2 className="font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
             <Filter className="h-4 w-4" />
             {t('filterTitle')}
           </h2>

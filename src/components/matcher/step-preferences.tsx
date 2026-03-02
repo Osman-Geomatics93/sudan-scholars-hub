@@ -49,7 +49,7 @@ export function StepPreferences({ locale, data, onDataChange }: StepPreferencesP
       {/* Funding Preference */}
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <Wallet className="w-4 h-4 text-gray-500" />
+          <Wallet className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {isRTL ? 'تفضيل التمويل' : 'Funding Preference'}
           </label>
@@ -139,10 +139,10 @@ export function StepPreferences({ locale, data, onDataChange }: StepPreferencesP
       {/* Special Circumstances */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <Heart className="w-4 h-4 text-gray-500" />
+          <Heart className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {isRTL ? 'ظروف خاصة' : 'Special Circumstances'}
-            <span className="text-gray-400 text-xs mx-2">
+            <span className="text-gray-400 dark:text-gray-500 text-xs mx-2">
               ({isRTL ? 'اختياري' : 'Optional'})
             </span>
           </label>

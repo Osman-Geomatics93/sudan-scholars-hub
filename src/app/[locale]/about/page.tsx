@@ -108,7 +108,7 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                   {getLocalizedField(member, 'name', locale)}
                 </h3>
-                <p className="text-primary-600 text-sm mb-3">
+                <p className="text-primary-600 dark:text-primary-400 text-sm mb-3">
                   {getLocalizedField(member, 'role', locale)}
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -129,7 +129,7 @@ export default function AboutPage({ params: { locale } }: { params: { locale: st
               {['University of Oxford', 'Harvard', 'MIT', 'Stanford', 'Cambridge'].map((partner) => (
                 <div
                   key={partner}
-                  className="text-xl font-bold text-gray-400"
+                  className="text-xl font-bold text-gray-400 dark:text-gray-500"
                 >
                   {partner}
                 </div>

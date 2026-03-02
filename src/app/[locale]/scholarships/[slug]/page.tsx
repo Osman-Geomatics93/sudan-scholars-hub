@@ -160,13 +160,13 @@ export default function ScholarshipDetailsPage({
           <nav className="py-4 text-sm">
             <ol className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
               <li>
-                <Link href={`/${locale}`} className="hover:text-primary-600">
+                <Link href={`/${locale}`} className="hover:text-primary-600 dark:hover:text-primary-400">
                   {locale === 'ar' ? 'الرئيسية' : 'Home'}
                 </Link>
               </li>
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
               <li>
-                <Link href={`/${locale}/scholarships`} className="hover:text-primary-600">
+                <Link href={`/${locale}/scholarships`} className="hover:text-primary-600 dark:hover:text-primary-400">
                   {locale === 'ar' ? 'المنح' : 'Scholarships'}
                 </Link>
               </li>
@@ -206,11 +206,11 @@ export default function ScholarshipDetailsPage({
 
                 <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-400">
                   <span className="flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5 text-gray-400" />
+                    <GraduationCap className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     {university}
                   </span>
                   <span className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-gray-400" />
+                    <MapPin className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     {country}
                   </span>
                 </div>
@@ -306,7 +306,7 @@ export default function ScholarshipDetailsPage({
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsShareModalOpen(true)}
-                  className="flex items-center justify-center gap-2 flex-1 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 transition-colors"
+                  className="flex items-center justify-center gap-2 flex-1 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                 >
                   <Share2 className="h-4 w-4" />
                   {t('shareTitle')}
@@ -349,7 +349,7 @@ export default function ScholarshipDetailsPage({
               <div className="space-y-4">
                 {keyFacts.map((fact, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <fact.icon className="h-5 w-5 text-primary-600 shrink-0 mt-0.5" />
+                    <fact.icon className="h-5 w-5 text-primary-600 dark:text-primary-400 shrink-0 mt-0.5" />
                     <div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">{fact.label}</div>
                       <div className="font-medium text-gray-900 dark:text-gray-50">{fact.value}</div>

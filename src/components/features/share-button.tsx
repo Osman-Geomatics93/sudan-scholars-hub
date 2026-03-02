@@ -48,7 +48,7 @@ export function ShareButton({
       <button
         onClick={handleClick}
         className={cn(
-          'flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-primary-600 hover:bg-white transition-colors shadow-sm',
+          'flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-sm dark:shadow-gray-900/50',
           size === 'sm' ? 'h-8 w-8' : 'h-10 w-10',
           className
         )}

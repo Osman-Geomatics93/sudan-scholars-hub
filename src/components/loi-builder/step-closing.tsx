@@ -47,7 +47,7 @@ export function StepClosing({ locale, data, onDataChange }: StepClosingProps) {
       {/* Section explanation */}
       <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800">
         <div className="flex items-start gap-3">
-          <Heart className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+          <Heart className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-primary-700 dark:text-primary-300">
               {isRTL ? 'الختام' : 'Closing'}
@@ -111,7 +111,7 @@ export function StepClosing({ locale, data, onDataChange }: StepClosingProps) {
       {/* Settings section */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
         <div className="flex items-center gap-2 mb-4">
-          <Settings className="w-5 h-5 text-gray-500" />
+          <Settings className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           <h3 className="font-semibold text-gray-700 dark:text-gray-300">
             {isRTL ? 'إعدادات الخطاب' : 'Letter Settings'}
           </h3>
@@ -141,7 +141,7 @@ export function StepClosing({ locale, data, onDataChange }: StepClosingProps) {
               id="tone"
               value={data.settings.tone}
               onChange={(e) => handleSettingsChange('tone', e.target.value)}
-              className="w-full h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="formal">
                 {isRTL ? 'رسمي' : 'Formal'}
@@ -164,7 +164,7 @@ export function StepClosing({ locale, data, onDataChange }: StepClosingProps) {
               id="language"
               value={data.settings.language}
               onChange={(e) => handleSettingsChange('language', e.target.value)}
-              className="w-full h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="en">English</option>
               <option value="tr">Türkçe</option>
@@ -181,7 +181,7 @@ export function StepClosing({ locale, data, onDataChange }: StepClosingProps) {
               id="wordCount"
               value={data.settings.targetWordCount}
               onChange={(e) => handleSettingsChange('targetWordCount', parseInt(e.target.value))}
-              className="w-full h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value={500}>500 {isRTL ? 'كلمة (قصير)' : 'words (Short)'}</option>
               <option value={700}>700 {isRTL ? 'كلمة (موصى به)' : 'words (Recommended)'}</option>

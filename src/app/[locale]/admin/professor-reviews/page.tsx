@@ -208,10 +208,10 @@ export default function AdminProfessorReviewsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
           {isRTL ? 'إدارة تقييمات الأساتذة' : 'Manage Professor Reviews'}
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
           {isRTL
             ? `${total} تقييم إجمالاً`
             : `${total} reviews total`}
@@ -227,7 +227,7 @@ export default function AdminProfessorReviewsPage() {
             className={`relative inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
               statusFilter === tab.key
                 ? 'bg-primary-600 text-white shadow-sm'
-                : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
             }`}
           >
             {isRTL ? tab.labelAr : tab.label}
@@ -246,13 +246,13 @@ export default function AdminProfessorReviewsPage() {
 
       {/* Search */}
       <div className="relative">
-        <Search className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+        <Search className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500 ${isRTL ? 'right-3' : 'left-3'}`} />
         <input
           type="text"
           placeholder={isRTL ? 'البحث بالأستاذ، المادة، الجامعة...' : 'Search by professor, course, university...'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className={`w-full rounded-lg border border-gray-300 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+          className={`w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
             isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
           }`}
         />
@@ -263,8 +263,8 @@ export default function AdminProfessorReviewsPage() {
         {/* Review List */}
         <div className="lg:col-span-2 space-y-2 max-h-[70vh] overflow-y-auto">
           {reviews.length === 0 ? (
-            <div className="rounded-xl bg-white py-12 text-center text-gray-500 shadow-sm">
-              <GraduationCap className="mx-auto mb-3 h-10 w-10 text-gray-300" />
+            <div className="rounded-xl bg-white dark:bg-gray-900 py-12 text-center text-gray-500 dark:text-gray-400 shadow-sm dark:shadow-gray-900/50">
+              <GraduationCap className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
               {isRTL ? 'لا توجد تقييمات' : 'No reviews found'}
             </div>
           ) : (
@@ -274,12 +274,12 @@ export default function AdminProfessorReviewsPage() {
                 onClick={() => setSelectedReview(review)}
                 className={`w-full rounded-lg border p-4 text-left transition-all hover:shadow-md ${
                   selectedReview?.id === review.id
-                    ? 'border-primary-500 bg-primary-50 shadow-md'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-950/50 shadow-md'
+                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-gray-900 line-clamp-1">{review.professorName}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-50 line-clamp-1">{review.professorName}</h3>
                   <StatusBadge status={review.status} isRTL={isRTL} />
                 </div>
                 <p className="mt-1 text-sm text-gray-500 line-clamp-1">
@@ -300,7 +300,7 @@ export default function AdminProfessorReviewsPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
-                    <span className="text-sm font-medium text-gray-700">{review.rating}/5</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{review.rating}/5</span>
                   </div>
                 </div>
                 {/* Quick action buttons for PENDING reviews in list */}
@@ -332,7 +332,7 @@ export default function AdminProfessorReviewsPage() {
         {/* Detail Panel */}
         <div className="lg:col-span-3">
           {selectedReview ? (
-            <div className="rounded-xl bg-white p-6 shadow-sm">
+            <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
               {/* Status badge at top */}
               <div className="mb-4 flex items-center justify-between">
                 <StatusBadge status={selectedReview.status} isRTL={isRTL} />
@@ -346,35 +346,35 @@ export default function AdminProfessorReviewsPage() {
 
               {/* Professor & University */}
               <div className="mb-4">
-                <h2 className="text-xl font-bold text-gray-900">{selectedReview.professorName}</h2>
-                <div className="mt-1 flex items-center gap-2 text-sm text-gray-600">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">{selectedReview.professorName}</h2>
+                <div className="mt-1 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <Building2 className="h-4 w-4" />
                   <span>{selectedReview.universityName}</span>
                 </div>
-                <div className="mt-1 flex items-center gap-2 text-sm text-gray-600">
+                <div className="mt-1 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <BookOpen className="h-4 w-4" />
                   <span>{selectedReview.courseName}</span>
                 </div>
               </div>
 
               {/* Rating & Difficulty */}
-              <div className="mb-4 grid grid-cols-2 gap-4 rounded-lg bg-gray-50 p-4">
+              <div className="mb-4 grid grid-cols-2 gap-4 rounded-lg bg-gray-50 dark:bg-gray-800 p-4">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                     {isRTL ? 'التقييم' : 'Rating'}
                   </p>
                   <div className="flex items-center gap-2">
                     <StarRating value={selectedReview.rating} />
-                    <span className="text-sm font-semibold text-gray-700">{selectedReview.rating}/5</span>
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{selectedReview.rating}/5</span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                     {isRTL ? 'الصعوبة' : 'Difficulty'}
                   </p>
                   <div className="flex items-center gap-2">
                     <StarRating value={selectedReview.difficulty} color="text-red-400" />
-                    <span className="text-sm font-semibold text-gray-700">{selectedReview.difficulty}/5</span>
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{selectedReview.difficulty}/5</span>
                   </div>
                 </div>
               </div>
@@ -397,7 +397,7 @@ export default function AdminProfessorReviewsPage() {
               {/* Tags */}
               {selectedReview.tags && selectedReview.tags.length > 0 && (
                 <div className="mb-4">
-                  <p className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
                     <Tag className="h-3 w-3" />
                     {isRTL ? 'الوسوم' : 'Tags'}
                   </p>
@@ -405,7 +405,7 @@ export default function AdminProfessorReviewsPage() {
                     {selectedReview.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary-700"
+                        className="rounded-full bg-primary-50 dark:bg-primary-950/50 px-2.5 py-0.5 text-xs font-medium text-primary-700 dark:text-primary-300"
                       >
                         {tag}
                       </span>
@@ -416,11 +416,11 @@ export default function AdminProfessorReviewsPage() {
 
               {/* Comment */}
               {selectedReview.comment && (
-                <div className="mb-4 rounded-lg bg-gray-50 p-4">
-                  <p className="text-xs font-medium text-gray-500 mb-2">
+                <div className="mb-4 rounded-lg bg-gray-50 dark:bg-gray-800 p-4">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
                     {isRTL ? 'التعليق' : 'Comment'}
                   </p>
-                  <p className="text-sm text-gray-700 whitespace-pre-wrap">{selectedReview.comment}</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{selectedReview.comment}</p>
                 </div>
               )}
 
@@ -436,21 +436,21 @@ export default function AdminProfessorReviewsPage() {
               )}
 
               {/* User info */}
-              <div className="mb-6 flex items-center gap-3 rounded-lg border border-gray-100 p-3">
+              <div className="mb-6 flex items-center gap-3 rounded-lg border border-gray-100 dark:border-gray-700 p-3">
                 {selectedReview.user?.image ? (
                   <img src={selectedReview.user.image} alt="" className="h-10 w-10 rounded-full object-cover" />
                 ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
-                    <User className="h-5 w-5 text-gray-500" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
+                    <User className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                   </div>
                 )}
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-gray-900 dark:text-gray-50">
                     {selectedReview.isAnonymous
                       ? (isRTL ? 'مجهول' : 'Anonymous')
                       : (selectedReview.user?.name || 'Unknown User')}
                   </p>
-                  <p className="text-sm text-gray-500">{selectedReview.user?.email}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{selectedReview.user?.email}</p>
                   {selectedReview.isAnonymous && (
                     <p className="text-xs text-amber-600 mt-0.5">
                       {isRTL ? '(تم النشر بشكل مجهول)' : '(Posted anonymously)'}
@@ -463,8 +463,8 @@ export default function AdminProfessorReviewsPage() {
               </div>
 
               {/* Action buttons */}
-              <div className="border-t pt-4">
-                <p className="mb-3 text-sm font-medium text-gray-700 flex items-center gap-1.5">
+              <div className="border-t dark:border-gray-700 pt-4">
+                <p className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1.5">
                   <Shield className="h-4 w-4" />
                   {isRTL ? 'إجراءات الإدارة' : 'Admin Actions'}
                 </p>
@@ -504,7 +504,7 @@ export default function AdminProfessorReviewsPage() {
               </div>
             </div>
           ) : (
-            <div className="flex h-64 flex-col items-center justify-center rounded-xl bg-white text-gray-400 shadow-sm">
+            <div className="flex h-64 flex-col items-center justify-center rounded-xl bg-white dark:bg-gray-900 text-gray-400 dark:text-gray-500 shadow-sm dark:shadow-gray-900/50">
               <MessageSquare className="mb-3 h-10 w-10" />
               <p>{isRTL ? 'اختر تقييماً لعرض التفاصيل' : 'Select a review to view details'}</p>
             </div>
@@ -515,22 +515,22 @@ export default function AdminProfessorReviewsPage() {
       {/* Rejection modal */}
       {showRejectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowRejectModal(null)}>
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
-                <XCircle className="h-5 w-5 text-amber-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
+                <XCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">
+                <h3 className="font-bold text-gray-900 dark:text-gray-50">
                   {isRTL ? 'رفض التقييم' : 'Reject Review'}
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {isRTL ? 'سيتم إخطار صاحب التقييم بالرفض.' : 'The reviewer will be notified about the rejection.'}
                 </p>
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {isRTL ? 'سبب الرفض (اختياري)' : 'Rejection note (optional)'}
               </label>
               <textarea
@@ -538,13 +538,13 @@ export default function AdminProfessorReviewsPage() {
                 onChange={(e) => setRejectionNote(e.target.value)}
                 rows={3}
                 placeholder={isRTL ? 'اكتب سبب الرفض هنا...' : 'Enter reason for rejection...'}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowRejectModal(null)}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 {isRTL ? 'إلغاء' : 'Cancel'}
               </button>
@@ -563,16 +563,16 @@ export default function AdminProfessorReviewsPage() {
       {/* Delete confirmation modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowDeleteModal(null)}>
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">
+                <h3 className="font-bold text-gray-900 dark:text-gray-50">
                   {isRTL ? 'حذف التقييم' : 'Delete Review'}
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {isRTL ? 'هذا الإجراء لا يمكن التراجع عنه. سيتم إخطار صاحب التقييم.' : 'This action cannot be undone. The reviewer will be notified.'}
                 </p>
               </div>
@@ -580,7 +580,7 @@ export default function AdminProfessorReviewsPage() {
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowDeleteModal(null)}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 {isRTL ? 'إلغاء' : 'Cancel'}
               </button>

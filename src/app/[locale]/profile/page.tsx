@@ -356,9 +356,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 md:pt-24">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-20 md:pt-24">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-gray-900 border-b dark:border-gray-700">
         <Container>
           <div className="py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -371,21 +371,21 @@ export default function ProfilePage() {
                   className="rounded-full"
                 />
               ) : (
-                <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-2xl font-bold text-primary-600">
+                <div className="w-20 h-20 bg-primary-100 dark:bg-primary-950 rounded-full flex items-center justify-center">
+                  <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                     {user?.name?.[0] || user?.email?.[0] || 'U'}
                   </span>
                 </div>
               )}
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-2xl font-bold text-gray-900">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
                     {user?.name || (isRTL ? 'مستخدم' : 'User')}
                   </h1>
                   {user?.badge && (() => {
                     const badgeInfo = getBadgeForPoints(user.points || 0);
                     return (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700">
                         <span>{badgeInfo.icon}</span>
                         <span>{isRTL ? badgeInfo.labelAr : badgeInfo.labelEn}</span>
                         <span className="text-amber-500">{user.points} pts</span>
@@ -393,15 +393,15 @@ export default function ProfilePage() {
                     );
                   })()}
                 </div>
-                <p className="text-gray-600">{user?.email}</p>
+                <p className="text-gray-600 dark:text-gray-400">{user?.email}</p>
                 {user?.studentNumber && (
                   <div className="flex items-center gap-2 mt-1.5">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-mono font-semibold bg-gradient-to-r from-blue-50 to-teal-50 text-blue-700 border border-blue-200">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-mono font-semibold bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-950/50 dark:to-teal-950/50 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-700">
                       {user.studentNumber}
                     </span>
                     <button
                       onClick={handleCopyStudentNumber}
-                      className="p-1 rounded hover:bg-gray-100 transition-colors"
+                      className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                       title={isRTL ? 'نسخ الرقم' : 'Copy number'}
                     >
                       {copied ? (
@@ -411,7 +411,7 @@ export default function ProfilePage() {
                       )}
                     </button>
                     {copied && (
-                      <span className="text-xs text-green-600 font-medium">
+                      <span className="text-xs text-green-600 dark:text-green-400 font-medium">
                         {isRTL ? 'تم النسخ!' : 'Copied!'}
                       </span>
                     )}
@@ -457,13 +457,13 @@ export default function ProfilePage() {
                 key={stat.key}
                 className={`p-4 text-center cursor-pointer transition-colors ${
                   activeTab === (stat.key === 'total' ? 'all' : stat.key.toUpperCase())
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'hover:border-gray-300'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-950'
+                    : 'hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
                 onClick={() => setActiveTab(stat.key === 'total' ? 'all' : stat.key.toUpperCase())}
               >
-                <p className="text-3xl font-bold text-primary-600">{stat.value}</p>
-                <p className="text-sm text-gray-600">{stat.label}</p>
+                <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">{stat.value}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
               </Card>
             ))}
           </div>
@@ -472,7 +472,7 @@ export default function ProfilePage() {
           {user?.studentNumber && (
             <Card className="p-6 mb-8">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-900">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-50">
                   {isRTL ? 'بطاقة الطالب' : 'Student ID Card'}
                 </h2>
                 <Button
@@ -491,18 +491,18 @@ export default function ProfilePage() {
               </div>
               <div className="flex justify-center">
                 {cardGenerating ? (
-                  <div className="flex items-center justify-center w-full max-w-[500px] h-[315px] bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                  <div className="flex items-center justify-center w-full max-w-[500px] h-[315px] bg-gray-50 dark:bg-gray-950 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700">
                     <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
                   </div>
                 ) : cardPreviewUrl ? (
                   <img
                     src={cardPreviewUrl}
                     alt={isRTL ? 'بطاقة الطالب' : 'Student ID Card'}
-                    className="w-full max-w-[500px] rounded-xl shadow-lg border border-gray-200"
+                    className="w-full max-w-[500px] rounded-xl shadow-lg dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700"
                   />
                 ) : (
-                  <div className="flex items-center justify-center w-full max-w-[500px] h-[315px] bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-                    <p className="text-gray-400 text-sm">
+                  <div className="flex items-center justify-center w-full max-w-[500px] h-[315px] bg-gray-50 dark:bg-gray-950 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+                    <p className="text-gray-400 dark:text-gray-500 text-sm">
                       {isRTL ? 'لم يتم إنشاء البطاقة' : 'Card not generated'}
                     </p>
                   </div>
@@ -512,14 +512,14 @@ export default function ProfilePage() {
           )}
 
           {/* Saved Scholarships */}
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50 mb-4">
             {isRTL ? 'المنح المحفوظة' : 'Saved Scholarships'}
           </h2>
 
           {filteredScholarships.length === 0 ? (
             <Card className="p-12 text-center">
-              <Bookmark className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-              <p className="text-gray-500 mb-4">
+              <Bookmark className="h-12 w-12 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 mb-4">
                 {isRTL ? 'لا توجد منح محفوظة' : 'No saved scholarships'}
               </p>
               <Link href={`/${locale}/scholarships`}>
@@ -547,19 +547,19 @@ export default function ProfilePage() {
                       <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                         <Link
                           href={`/${locale}/scholarships/${saved.scholarship.slug}`}
-                          className="text-lg font-semibold text-gray-900 hover:text-primary-600"
+                          className="text-lg font-semibold text-gray-900 dark:text-gray-50 hover:text-primary-600 dark:hover:text-primary-400"
                         >
                           {isRTL ? saved.scholarship.titleAr : saved.scholarship.title}
                         </Link>
                         {getStatusBadge(saved.status)}
                       </div>
 
-                      <p className="text-gray-600 text-sm mb-2">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">
                         {isRTL ? saved.scholarship.universityAr : saved.scholarship.university} •{' '}
                         {isRTL ? saved.scholarship.countryAr : saved.scholarship.country}
                       </p>
 
-                      <p className="text-sm text-gray-500 mb-4">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                         {isRTL ? 'الموعد النهائي:' : 'Deadline:'}{' '}
                         {new Date(saved.scholarship.deadline).toLocaleDateString(
                           isRTL ? 'ar-SA' : 'en-US'
@@ -589,7 +589,7 @@ export default function ProfilePage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => removeSaved(saved.id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50"
                         >
                           <Trash2 className="h-4 w-4 me-1" />
                           {isRTL ? 'إزالة' : 'Remove'}

@@ -902,27 +902,27 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
     <div>
       {/* Stats */}
       <div style={S.grid4}>
-        <div style={S.statCard}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.statCard}>
           <div style={S.statNum}>{completedAttempts.length}</div>
-          <div style={S.statLabel}>{t.testsCompleted}</div>
+          <div className="dark:text-gray-400" style={S.statLabel}>{t.testsCompleted}</div>
         </div>
-        <div style={S.statCard}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.statCard}>
           <div style={S.statNum}>{avgScore}</div>
-          <div style={S.statLabel}>{t.avgScore}</div>
+          <div className="dark:text-gray-400" style={S.statLabel}>{t.avgScore}</div>
         </div>
-        <div style={S.statCard}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.statCard}>
           <div style={S.statNum}>{vocabReviewed}</div>
-          <div style={S.statLabel}>{t.vocabLearned}</div>
+          <div className="dark:text-gray-400" style={S.statLabel}>{t.vocabLearned}</div>
         </div>
-        <div style={S.statCard}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.statCard}>
           <div style={S.statNum}>{attempts.length > 0 ? "1+" : "0"}</div>
-          <div style={S.statLabel}>{t.studyStreak} ({t.days})</div>
+          <div className="dark:text-gray-400" style={S.statLabel}>{t.studyStreak} ({t.days})</div>
         </div>
       </div>
 
       {/* Quick Start */}
-      <div style={{ ...S.card, marginTop: 20 }}>
-        <h3 style={S.cardTitle}>{t.quickStart}</h3>
+      <div className="dark:bg-gray-800 dark:border-gray-700" style={{ ...S.card, marginTop: 20 }}>
+        <h3 className="dark:text-gray-100" style={S.cardTitle}>{t.quickStart}</h3>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 12 }}>
           {["reading", "writing", "listening", "speaking"].map((sec) => (
             <button key={sec} style={S.btn("primary")} onClick={() => { setSectionFilter(sec); setView("tests"); }}>
@@ -934,16 +934,16 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
       </div>
 
       {/* Recent Scores */}
-      <div style={{ ...S.card, marginTop: 16 }}>
-        <h3 style={S.cardTitle}>{t.recentScores}</h3>
+      <div className="dark:bg-gray-800 dark:border-gray-700" style={{ ...S.card, marginTop: 16 }}>
+        <h3 className="dark:text-gray-100" style={S.cardTitle}>{t.recentScores}</h3>
         {completedAttempts.length === 0 ? (
           <p style={S.empty}>{t.noAttempts}</p>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 8 }}>
             {completedAttempts.slice(0, 5).map((a) => (
-              <div key={a.id} style={{ ...S.flexBetween, padding: "10px 0", borderBottom: "1px solid #F3F4F6" }}>
+              <div key={a.id} className="dark:border-gray-700" style={{ ...S.flexBetween, padding: "10px 0", borderBottom: "1px solid #F3F4F6" }}>
                 <div>
-                  <span style={{ fontWeight: 600, fontSize: 14 }}>{a.test?.title || "Test"}</span>
+                  <span className="dark:text-gray-100" style={{ fontWeight: 600, fontSize: 14 }}>{a.test?.title || "Test"}</span>
                   <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
                     <span style={S.badge("blue")}>{a.examType?.toUpperCase()}</span>
                     <span style={S.badge("purple")}>{t[a.section] || a.section}</span>
@@ -980,13 +980,13 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
       ) : (
         <div style={S.grid2}>
           {tests.map((test) => (
-            <div key={test.id} style={S.card}>
+            <div key={test.id} className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
               <div style={S.flexBetween}>
                 <span style={S.badge(test.examType === "ielts" ? "blue" : "purple")}>{test.examType?.toUpperCase()}</span>
                 <span style={S.badge(diffColor(test.difficulty))}>{t[test.difficulty] || test.difficulty}</span>
               </div>
-              <h4 style={{ ...S.cardTitle, marginTop: 10 }}>{test.title}</h4>
-              {test.description && <p style={{ fontSize: 13, color: "#666", margin: "4px 0 12px" }}>{test.description}</p>}
+              <h4 className="dark:text-gray-100" style={{ ...S.cardTitle, marginTop: 10 }}>{test.title}</h4>
+              {test.description && <p className="dark:text-gray-400" style={{ fontSize: 13, color: "#666", margin: "4px 0 12px" }}>{test.description}</p>}
               <div style={{ ...S.flexBetween, marginTop: 8 }}>
                 <span style={{ fontSize: 12, color: "#888" }}>
                   {test.section === "reading" ? "📖" : test.section === "writing" ? "✍️" : test.section === "listening" ? "🎧" : "🎤"}{" "}
@@ -1023,17 +1023,17 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
       <div>
         {renderTimer()}
         <div style={{ ...S.flexBetween, margin: "12px 0" }}>
-          <span style={{ fontWeight: 600, fontSize: 14 }}>{t.passage} {currentPassage + 1} {t.of} {passages.length}</span>
+          <span className="dark:text-gray-100" style={{ fontWeight: 600, fontSize: 14 }}>{t.passage} {currentPassage + 1} {t.of} {passages.length}</span>
           <span style={{ fontSize: 13, color: "#888" }}>{t.question} {qGlobalIndex + 1} {t.of} {totalQ}</span>
         </div>
 
         {/* Passage text */}
-        <div style={S.passageText}>{passage.text}</div>
+        <div className="dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100" style={S.passageText}>{passage.text}</div>
 
         {/* Question */}
         {q && (
-          <div style={{ ...S.card, marginTop: 16 }}>
-            <p style={{ fontWeight: 600, fontSize: 15, marginBottom: 12 }}>
+          <div className="dark:bg-gray-800 dark:border-gray-700" style={{ ...S.card, marginTop: 16 }}>
+            <p className="dark:text-gray-100" style={{ fontWeight: 600, fontSize: 15, marginBottom: 12 }}>
               {qGlobalIndex + 1}. {q.question}
             </p>
             {(q.options || []).map((opt, i) => {
@@ -1042,6 +1042,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
               return (
                 <button
                   key={i}
+                  className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                   style={S.optionBtn(selected, false, false)}
                   onClick={() => setAnswers((prev) => ({ ...prev, [String(qGlobalIndex)]: letter }))}
                 >
@@ -1087,7 +1088,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         )}
 
         {/* Progress bar */}
-        <div style={{ ...S.progressBar(0), marginTop: 12 }}>
+        <div className="dark:bg-gray-700" style={{ ...S.progressBar(0), marginTop: 12 }}>
           <div style={S.progressFill(((qGlobalIndex + 1) / totalQ) * 100)} />
         </div>
       </div>
@@ -1107,16 +1108,17 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
       <div>
         {renderTimer()}
         <div style={{ ...S.flexBetween, margin: "12px 0" }}>
-          <span style={{ fontWeight: 600 }}>{t.task} {currentTask + 1} {t.of} {tasks.length}</span>
+          <span className="dark:text-gray-100" style={{ fontWeight: 600 }}>{t.task} {currentTask + 1} {t.of} {tasks.length}</span>
           <span style={S.badge("blue")}>{task.type}</span>
         </div>
 
-        <div style={S.card}>
-          <p style={{ fontSize: 15, lineHeight: 1.7, color: "#1F2937" }}>{task.prompt}</p>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+          <p className="dark:text-gray-100" style={{ fontSize: 15, lineHeight: 1.7, color: "#1F2937" }}>{task.prompt}</p>
         </div>
 
         <div style={{ marginTop: 12 }}>
           <textarea
+            className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
             style={S.textarea}
             rows={14}
             value={writingText}
@@ -1157,7 +1159,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         {renderTimer()}
 
         {/* Transcript controls */}
-        <div style={{ ...S.card, marginBottom: 12 }}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={{ ...S.card, marginBottom: 12 }}>
           <div style={{ ...S.flexBetween }}>
             <button style={S.btn(ttsPlaying ? "danger" : "primary")} onClick={() => playTTS(content.transcript || "")}>
               {ttsPlaying ? `⏸ ${t.pauseTranscript}` : `▶️ ${t.playTranscript}`}
@@ -1167,7 +1169,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
             </button>
           </div>
           {showTranscript && (
-            <div style={{ ...S.passageText, marginTop: 12, maxHeight: 300 }}>
+            <div className="dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100" style={{ ...S.passageText, marginTop: 12, maxHeight: 300 }}>
               {content.transcript}
             </div>
           )}
@@ -1175,8 +1177,8 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
         {/* Question */}
         {q && (
-          <div style={S.card}>
-            <p style={{ fontWeight: 600, fontSize: 15, marginBottom: 12 }}>
+          <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+            <p className="dark:text-gray-100" style={{ fontWeight: 600, fontSize: 15, marginBottom: 12 }}>
               {currentQ + 1}. {q.question}
             </p>
             {(q.options || []).map((opt, i) => {
@@ -1185,6 +1187,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
               return (
                 <button
                   key={i}
+                  className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                   style={S.optionBtn(selected, false, false)}
                   onClick={() => setAnswers((prev) => ({ ...prev, [String(currentQ)]: letter }))}
                 >
@@ -1210,7 +1213,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
           </div>
         )}
 
-        <div style={{ ...S.progressBar(0), marginTop: 12 }}>
+        <div className="dark:bg-gray-700" style={{ ...S.progressBar(0), marginTop: 12 }}>
           <div style={S.progressFill(((currentQ + 1) / totalQ) * 100)} />
         </div>
       </div>
@@ -1230,12 +1233,12 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
       <div>
         {renderTimer()}
         <div style={{ ...S.flexBetween, margin: "12px 0" }}>
-          <span style={{ fontWeight: 600 }}>{t.part} {part.partNumber}</span>
+          <span className="dark:text-gray-100" style={{ fontWeight: 600 }}>{t.part} {part.partNumber}</span>
           <span style={S.badge("purple")}>{currentPart + 1} {t.of} {parts.length}</span>
         </div>
 
-        <div style={S.card}>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "#1F2937" }}>{part.prompt}</p>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+          <p className="dark:text-gray-100" style={{ fontSize: 15, lineHeight: 1.8, color: "#1F2937" }}>{part.prompt}</p>
           <div style={{ display: "flex", gap: 16, marginTop: 12, fontSize: 13, color: "#888" }}>
             {part.prepTimeSec > 0 && <span>{t.prepTime}: {part.prepTimeSec}s</span>}
             <span>{t.responseTime}: {part.responseTimeSec}s</span>
@@ -1243,7 +1246,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         </div>
 
         {/* Recording area */}
-        <div style={{ ...S.card, marginTop: 12, textAlign: "center" }}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={{ ...S.card, marginTop: 12, textAlign: "center" }}>
           {hasSpeechAPI ? (
             <>
               <button
@@ -1264,8 +1267,9 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
           {/* Manual input fallback */}
           <div style={{ marginTop: 16 }}>
-            <label style={S.label}>{t.transcription}</label>
+            <label className="dark:text-gray-400" style={S.label}>{t.transcription}</label>
             <textarea
+              className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
               style={S.textarea}
               rows={6}
               value={speakingText}
@@ -1303,7 +1307,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
           <button style={S.btnSm("ghost")} onClick={() => { setTimerActive(false); setView("tests"); }}>
             ← {t.back}
           </button>
-          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{currentTest.title}</h3>
+          <h3 className="dark:text-gray-100" style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{currentTest.title}</h3>
         </div>
 
         {currentTest.section === "reading" && renderReadingTest()}
@@ -1330,11 +1334,11 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         </button>
 
         {/* Score display */}
-        <div style={S.scoreDisplay}>
+        <div className="dark:bg-gray-800" style={S.scoreDisplay}>
           <div style={S.scoreBig}>
             {currentAttempt.score != null ? currentAttempt.score : "—"}
           </div>
-          <div style={{ fontSize: 16, color: "#666", marginTop: 4 }}>
+          <div className="dark:text-gray-400" style={{ fontSize: 16, color: "#666", marginTop: 4 }}>
             {isIelts ? t.band : t.score}
             {currentAttempt.maxScore ? ` / ${currentAttempt.maxScore}` : ""}
           </div>
@@ -1347,8 +1351,8 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
         {/* AI Grading Feedback */}
         {isAI && grading && (
-          <div style={S.card}>
-            <h4 style={S.cardTitle}>{t.feedback}</h4>
+          <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+            <h4 className="dark:text-gray-100" style={S.cardTitle}>{t.feedback}</h4>
 
             {/* Criteria breakdown */}
             {grading.criteria && (
@@ -1367,8 +1371,8 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                     languageUse: t.languageUse,
                   };
                   return (
-                    <div key={key} style={S.criteriaRow}>
-                      <span style={S.criteriaLabel}>{labelMap[key] || key}</span>
+                    <div key={key} className="dark:border-gray-700" style={S.criteriaRow}>
+                      <span className="dark:text-gray-300" style={S.criteriaLabel}>{labelMap[key] || key}</span>
                       <span style={S.criteriaScore}>{value}</span>
                     </div>
                   );
@@ -1377,17 +1381,17 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
             )}
 
             {grading.feedback && (
-              <div style={{ background: "#F9FAFB", borderRadius: 12, padding: 16, marginBottom: 12 }}>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: "#374151", margin: 0 }}>{grading.feedback}</p>
+              <div className="dark:bg-gray-700" style={{ background: "#F9FAFB", borderRadius: 12, padding: 16, marginBottom: 12 }}>
+                <p className="dark:text-gray-100" style={{ fontSize: 14, lineHeight: 1.7, color: "#374151", margin: 0 }}>{grading.feedback}</p>
               </div>
             )}
 
             {grading.suggestions && grading.suggestions.length > 0 && (
               <div>
-                <h5 style={{ fontSize: 14, fontWeight: 700, marginBottom: 8 }}>{t.suggestions}</h5>
+                <h5 className="dark:text-gray-100" style={{ fontSize: 14, fontWeight: 700, marginBottom: 8 }}>{t.suggestions}</h5>
                 <ul style={{ paddingLeft: 20, margin: 0 }}>
                   {grading.suggestions.map((s, i) => (
-                    <li key={i} style={{ fontSize: 14, color: "#374151", marginBottom: 4, lineHeight: 1.6 }}>{s}</li>
+                    <li key={i} className="dark:text-gray-300" style={{ fontSize: 14, color: "#374151", marginBottom: 4, lineHeight: 1.6 }}>{s}</li>
                   ))}
                 </ul>
               </div>
@@ -1397,14 +1401,14 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
         {/* Reading/Listening answer breakdown */}
         {!isAI && currentTest && (
-          <div style={S.card}>
-            <h4 style={S.cardTitle}>{t.results}</h4>
+          <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+            <h4 className="dark:text-gray-100" style={S.cardTitle}>{t.results}</h4>
             {getAllQuestions().map((q, i) => {
               const userAns = (currentAttempt.answers || {})[String(i)];
               const isCorrect = userAns === q.correct;
               return (
-                <div key={i} style={{ padding: "10px 0", borderBottom: "1px solid #F3F4F6" }}>
-                  <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{i + 1}. {q.question}</p>
+                <div key={i} className="dark:border-gray-700" style={{ padding: "10px 0", borderBottom: "1px solid #F3F4F6" }}>
+                  <p className="dark:text-gray-100" style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{i + 1}. {q.question}</p>
                   <div style={{ display: "flex", gap: 12, fontSize: 13 }}>
                     <span style={{ color: isCorrect ? "#16A34A" : "#DC2626" }}>
                       {t.yourAnswer}: {userAns || "—"} {isCorrect ? "✓" : "✗"}
@@ -1428,12 +1432,13 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
       {/* Filters */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
         <input
+          className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
           style={{ ...S.input, maxWidth: 250 }}
           placeholder={t.searchWords}
           value={vocabSearch}
           onChange={(e) => setVocabSearch(e.target.value)}
         />
-        <select style={S.select} value={vocabCategory} onChange={(e) => setVocabCategory(e.target.value)}>
+        <select className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" style={S.select} value={vocabCategory} onChange={(e) => setVocabCategory(e.target.value)}>
           <option value="">{t.allWords}</option>
           <option value="ielts_academic">{t.ieltsAcademic}</option>
           <option value="toefl_academic">{t.toeflAcademic}</option>
@@ -1466,6 +1471,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
           {vocab.map((v) => (
             <div
               key={v.id}
+              className="dark:bg-gray-800 dark:border-gray-700"
               style={{ ...S.card, cursor: "pointer", transition: "all 0.3s" }}
               onClick={() => setVocabFlipped((prev) => ({ ...prev, [v.id]: !prev[v.id] }))}
             >
@@ -1479,9 +1485,9 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: "#374151", marginBottom: 6 }}>{v.word}</div>
-                  <p style={{ fontSize: 14, color: "#374151", margin: "4px 0" }}><strong>{t.definition}:</strong> {v.definition}</p>
-                  {v.example && <p style={{ fontSize: 13, color: "#666", fontStyle: "italic", margin: "4px 0" }}>{v.example}</p>}
+                  <div className="dark:text-gray-100" style={{ fontSize: 18, fontWeight: 700, color: "#374151", marginBottom: 6 }}>{v.word}</div>
+                  <p className="dark:text-gray-300" style={{ fontSize: 14, color: "#374151", margin: "4px 0" }}><strong>{t.definition}:</strong> {v.definition}</p>
+                  {v.example && <p className="dark:text-gray-400" style={{ fontSize: 13, color: "#666", fontStyle: "italic", margin: "4px 0" }}>{v.example}</p>}
                   {v.arabicMeaning && <p style={{ fontSize: 16, color: "#7C3AED", fontWeight: 600, margin: "6px 0 0" }}>{v.arabicMeaning}</p>}
                 </>
               )}
@@ -1509,7 +1515,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
           <span style={{ fontSize: 13, color: "#888" }}>{reviewIndex + 1} {t.of} {reviewCards.length}</span>
         </div>
 
-        <div style={S.vocabCard} onClick={() => setReviewFlipped(true)}>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.vocabCard} onClick={() => setReviewFlipped(true)}>
           {!reviewFlipped ? (
             <>
               <div style={S.vocabWord}>{card.word}</div>
@@ -1518,8 +1524,8 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
           ) : (
             <>
               <div style={{ ...S.vocabWord, fontSize: 22 }}>{card.word}</div>
-              <div style={S.vocabDef}>{card.definition}</div>
-              {card.example && <div style={S.vocabExample}>&ldquo;{card.example}&rdquo;</div>}
+              <div className="dark:text-gray-300" style={S.vocabDef}>{card.definition}</div>
+              {card.example && <div className="dark:text-gray-400" style={S.vocabExample}>&ldquo;{card.example}&rdquo;</div>}
               {card.arabicMeaning && <div style={S.vocabArabic}>{card.arabicMeaning}</div>}
             </>
           )}
@@ -1540,7 +1546,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         )}
 
         {/* Progress */}
-        <div style={{ ...S.progressBar(0), marginTop: 20 }}>
+        <div className="dark:bg-gray-700" style={{ ...S.progressBar(0), marginTop: 20 }}>
           <div style={S.progressFill(((reviewIndex + 1) / reviewCards.length) * 100, "#7C3AED")} />
         </div>
       </div>
@@ -1579,6 +1585,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
           </button>
         ))}
         <input
+          className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
           style={{ ...S.input, maxWidth: 220, marginLeft: "auto" }}
           placeholder={t.searchMaterials}
           value={matSearch}
@@ -1597,7 +1604,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
             {materials.map((mat) => {
               const preview = getPreviewUrl(mat.url, mat.materialType);
               return (
-                <div key={mat.id} style={S.card}>
+                <div key={mat.id} className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
                   {/* Header: icon + badges */}
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                     <span style={{ fontSize: 24, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 10, background: `${getMaterialColor(mat.materialType)}15` }}>{getMaterialIcon(mat.materialType)}</span>
@@ -1610,21 +1617,21 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                     </div>
                   </div>
 
-                  <h4 style={{ ...S.cardTitle, fontSize: 15 }}>{mat.title}</h4>
-                  {mat.description && <p style={{ fontSize: 13, color: "#666", margin: "4px 0 10px", lineHeight: 1.5 }}>{mat.description.length > 120 ? mat.description.slice(0, 120) + "..." : mat.description}</p>}
+                  <h4 className="dark:text-gray-100" style={{ ...S.cardTitle, fontSize: 15 }}>{mat.title}</h4>
+                  {mat.description && <p className="dark:text-gray-400" style={{ fontSize: 13, color: "#666", margin: "4px 0 10px", lineHeight: 1.5 }}>{mat.description.length > 120 ? mat.description.slice(0, 120) + "..." : mat.description}</p>}
 
                   {/* Tags */}
                   {mat.tags && Array.isArray(mat.tags) && mat.tags.length > 0 && (
                     <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 8 }}>
                       {mat.tags.slice(0, 5).map((tag, i) => (
-                        <span key={i} style={{ fontSize: 11, padding: "2px 8px", borderRadius: 8, background: "#F3F4F6", color: "#666" }}>#{tag}</span>
+                        <span key={i} className="dark:bg-gray-700 dark:text-gray-400" style={{ fontSize: 11, padding: "2px 8px", borderRadius: 8, background: "#F3F4F6", color: "#666" }}>#{tag}</span>
                       ))}
                     </div>
                   )}
 
                   {/* Preview area */}
                   {matPreview === mat.id && (
-                    <div style={{ marginBottom: 10, borderRadius: 10, overflow: "hidden", border: "1px solid #E5E7EB" }}>
+                    <div className="dark:border-gray-700" style={{ marginBottom: 10, borderRadius: 10, overflow: "hidden", border: "1px solid #E5E7EB" }}>
                       {preview.type === "youtube" && (
                         <iframe src={preview.embedUrl} width="100%" height="200" style={{ border: "none" }} allowFullScreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
                       )}
@@ -1671,12 +1678,12 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                         </div>
                       )}
                       {preview.type === "gdrive-folder" && (
-                        <div style={{
+                        <div className="dark:bg-gray-700" style={{
                           background: "#F9FAFB", padding: "28px 20px",
                           display: "flex", flexDirection: "column", alignItems: "center", gap: 10, textAlign: "center",
                         }}>
                           <div style={{ fontSize: 36 }}>{"\uD83D\uDCC1"}</div>
-                          <p style={{ color: "#444", fontSize: 13, margin: 0 }}>
+                          <p className="dark:text-gray-300" style={{ color: "#444", fontSize: 13, margin: 0 }}>
                             {isRTL ? "مجلد على Google Drive" : "Google Drive Folder"}
                           </p>
                           <a href={mat.url} target="_blank" rel="noopener noreferrer" style={{
@@ -1696,7 +1703,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                   )}
 
                   {/* Footer */}
-                  <div style={{ ...S.flexBetween, marginTop: 8, paddingTop: 8, borderTop: "1px solid #F3F4F6" }}>
+                  <div className="dark:border-gray-700" style={{ ...S.flexBetween, marginTop: 8, paddingTop: 8, borderTop: "1px solid #F3F4F6" }}>
                     <div style={{ fontSize: 11, color: "#999" }}>
                       {mat.userName && <span>{t.uploadedBy} {mat.userName} {"\u2022"} </span>}
                       {new Date(mat.createdAt).toLocaleDateString()}
@@ -1744,13 +1751,13 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
   // ── Share Material (replaces old Upload Test) ──
   const renderShareMaterial = () => (
     <div style={{ maxWidth: 640, margin: "0 auto" }}>
-      <div style={S.card}>
-        <h3 style={S.cardTitle}>{"\uD83D\uDCE4"} {t.shareMaterial}</h3>
+      <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+        <h3 className="dark:text-gray-100" style={S.cardTitle}>{"\uD83D\uDCE4"} {t.shareMaterial}</h3>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 14 }}>
           {/* Exam Type */}
           <div>
-            <label style={S.label}>{t.examType} *</label>
+            <label className="dark:text-gray-400" style={S.label}>{t.examType} *</label>
             <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
               {["ielts", "toefl", "both"].map((et) => (
                 <button key={et} style={S.examBtn(shareForm.examType === et)} onClick={() => setShareForm({ ...shareForm, examType: et })}>
@@ -1762,7 +1769,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
           {/* Section */}
           <div>
-            <label style={S.label}>{t.section} *</label>
+            <label className="dark:text-gray-400" style={S.label}>{t.section} *</label>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 6 }}>
               {["reading", "writing", "listening", "speaking", "general"].map((sec) => (
                 <button key={sec} style={S.sectionTab(shareForm.section === sec)} onClick={() => setShareForm({ ...shareForm, section: sec })}>
@@ -1774,11 +1781,12 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
           {/* Material Type */}
           <div>
-            <label style={S.label}>{t.materialType} *</label>
+            <label className="dark:text-gray-400" style={S.label}>{t.materialType} *</label>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginTop: 6 }}>
               {MATERIAL_TYPES.map((mt) => (
                 <button
                   key={mt.id}
+                  className="dark:border-gray-600 dark:bg-gray-800"
                   onClick={() => setShareForm({ ...shareForm, materialType: mt.id })}
                   style={{
                     padding: "12px 8px", borderRadius: 12, border: "2px solid", cursor: "pointer", transition: "all 0.2s", textAlign: "center",
@@ -1787,7 +1795,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                   }}
                 >
                   <div style={{ fontSize: 24 }}>{mt.icon}</div>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: shareForm.materialType === mt.id ? mt.color : "#666", marginTop: 4 }}>{mt.label}</div>
+                  <div className="dark:text-gray-400" style={{ fontSize: 12, fontWeight: 600, color: shareForm.materialType === mt.id ? mt.color : "#666", marginTop: 4 }}>{mt.label}</div>
                 </button>
               ))}
             </div>
@@ -1795,26 +1803,26 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
           {/* Title */}
           <div>
-            <label style={S.label}>{t.materialTitle} *</label>
-            <input style={S.input} value={shareForm.title} onChange={(e) => setShareForm({ ...shareForm, title: e.target.value })} placeholder={t.materialTitle} />
+            <label className="dark:text-gray-400" style={S.label}>{t.materialTitle} *</label>
+            <input className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500" style={S.input} value={shareForm.title} onChange={(e) => setShareForm({ ...shareForm, title: e.target.value })} placeholder={t.materialTitle} />
           </div>
 
           {/* URL */}
           <div>
-            <label style={S.label}>URL *</label>
-            <input style={S.input} value={shareForm.url} onChange={(e) => setShareForm({ ...shareForm, url: e.target.value })} placeholder={getUrlPlaceholder(shareForm.materialType)} />
+            <label className="dark:text-gray-400" style={S.label}>URL *</label>
+            <input className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500" style={S.input} value={shareForm.url} onChange={(e) => setShareForm({ ...shareForm, url: e.target.value })} placeholder={getUrlPlaceholder(shareForm.materialType)} />
           </div>
 
           {/* Description */}
           <div>
-            <label style={S.label}>{t.materialDescription}</label>
-            <textarea style={{ ...S.textarea, minHeight: 70 }} value={shareForm.description} onChange={(e) => setShareForm({ ...shareForm, description: e.target.value })} />
+            <label className="dark:text-gray-400" style={S.label}>{t.materialDescription}</label>
+            <textarea className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500" style={{ ...S.textarea, minHeight: 70 }} value={shareForm.description} onChange={(e) => setShareForm({ ...shareForm, description: e.target.value })} />
           </div>
 
           {/* Difficulty + Language */}
           <div style={{ display: "flex", gap: 12 }}>
             <div style={{ flex: 1 }}>
-              <label style={S.label}>{t.difficulty}</label>
+              <label className="dark:text-gray-400" style={S.label}>{t.difficulty}</label>
               <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
                 {["easy", "medium", "hard"].map((d) => (
                   <button key={d} style={{ ...S.sectionTab(shareForm.difficulty === d), borderColor: shareForm.difficulty === d ? (d === "easy" ? "#16A34A" : d === "hard" ? "#DC2626" : "#2563EB") : "#E5E7EB", background: shareForm.difficulty === d ? (d === "easy" ? "#16A34A" : d === "hard" ? "#DC2626" : "#2563EB") : "transparent", color: shareForm.difficulty === d ? "#fff" : "#666" }} onClick={() => setShareForm({ ...shareForm, difficulty: d })}>
@@ -1824,7 +1832,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
               </div>
             </div>
             <div style={{ flex: 1 }}>
-              <label style={S.label}>{t.language}</label>
+              <label className="dark:text-gray-400" style={S.label}>{t.language}</label>
               <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
                 {[{ id: "en", label: t.english }, { id: "ar", label: t.arabic }, { id: "both", label: t.both }].map((l) => (
                   <button key={l.id} style={S.sectionTab(shareForm.language === l.id)} onClick={() => setShareForm({ ...shareForm, language: l.id })}>
@@ -1837,12 +1845,12 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
           {/* Tags */}
           <div>
-            <label style={S.label}>{t.tags}</label>
-            <input style={S.input} value={shareForm.tags} onChange={(e) => setShareForm({ ...shareForm, tags: e.target.value })} placeholder={t.tagsPlaceholder} />
+            <label className="dark:text-gray-400" style={S.label}>{t.tags}</label>
+            <input className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500" style={S.input} value={shareForm.tags} onChange={(e) => setShareForm({ ...shareForm, tags: e.target.value })} placeholder={t.tagsPlaceholder} />
           </div>
 
           {/* Status note */}
-          <div style={{ padding: 10, borderRadius: 10, background: "#FFFBEB", border: "1px solid #FDE68A", fontSize: 13, color: "#92400E" }}>
+          <div className="dark:bg-yellow-900/30 dark:border-yellow-700 dark:text-yellow-200" style={{ padding: 10, borderRadius: 10, background: "#FFFBEB", border: "1px solid #FDE68A", fontSize: 13, color: "#92400E" }}>
             {"\u2139\uFE0F"} {t.pendingReview}
           </div>
 
@@ -1874,19 +1882,19 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         </button>
 
         {showJsonUpload && (
-          <div style={{ ...S.card, marginTop: 10 }}>
-            <h4 style={{ ...S.cardTitle, fontSize: 14 }}>{t.uploadTest}</h4>
+          <div className="dark:bg-gray-800 dark:border-gray-700" style={{ ...S.card, marginTop: 10 }}>
+            <h4 className="dark:text-gray-100" style={{ ...S.cardTitle, fontSize: 14 }}>{t.uploadTest}</h4>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 12 }}>
               <div>
-                <label style={S.label}>{t.examType}</label>
-                <select style={S.select} value={uploadForm.examType} onChange={(e) => setUploadForm({ ...uploadForm, examType: e.target.value })}>
+                <label className="dark:text-gray-400" style={S.label}>{t.examType}</label>
+                <select className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" style={S.select} value={uploadForm.examType} onChange={(e) => setUploadForm({ ...uploadForm, examType: e.target.value })}>
                   <option value="ielts">IELTS</option>
                   <option value="toefl">TOEFL</option>
                 </select>
               </div>
               <div>
-                <label style={S.label}>{t.section}</label>
-                <select style={S.select} value={uploadForm.section} onChange={(e) => setUploadForm({ ...uploadForm, section: e.target.value })}>
+                <label className="dark:text-gray-400" style={S.label}>{t.section}</label>
+                <select className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" style={S.select} value={uploadForm.section} onChange={(e) => setUploadForm({ ...uploadForm, section: e.target.value })}>
                   <option value="reading">{t.reading}</option>
                   <option value="writing">{t.writing}</option>
                   <option value="listening">{t.listening}</option>
@@ -1894,30 +1902,31 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
                 </select>
               </div>
               <div>
-                <label style={S.label}>{t.testTitle} *</label>
-                <input style={S.input} value={uploadForm.title} onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })} />
+                <label className="dark:text-gray-400" style={S.label}>{t.testTitle} *</label>
+                <input className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500" style={S.input} value={uploadForm.title} onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })} />
               </div>
               <div>
-                <label style={S.label}>{t.testDescription}</label>
-                <textarea style={{ ...S.textarea, minHeight: 60 }} value={uploadForm.description} onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })} />
+                <label className="dark:text-gray-400" style={S.label}>{t.testDescription}</label>
+                <textarea className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500" style={{ ...S.textarea, minHeight: 60 }} value={uploadForm.description} onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })} />
               </div>
               <div style={{ display: "flex", gap: 12 }}>
                 <div style={{ flex: 1 }}>
-                  <label style={S.label}>{t.difficulty}</label>
-                  <select style={S.select} value={uploadForm.difficulty} onChange={(e) => setUploadForm({ ...uploadForm, difficulty: e.target.value })}>
+                  <label className="dark:text-gray-400" style={S.label}>{t.difficulty}</label>
+                  <select className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" style={S.select} value={uploadForm.difficulty} onChange={(e) => setUploadForm({ ...uploadForm, difficulty: e.target.value })}>
                     <option value="easy">{t.easy}</option>
                     <option value="medium">{t.medium}</option>
                     <option value="hard">{t.hard}</option>
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={S.label}>{t.timeLimit}</label>
-                  <input style={S.input} type="number" value={uploadForm.timeMinutes} onChange={(e) => setUploadForm({ ...uploadForm, timeMinutes: e.target.value })} />
+                  <label className="dark:text-gray-400" style={S.label}>{t.timeLimit}</label>
+                  <input className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" style={S.input} type="number" value={uploadForm.timeMinutes} onChange={(e) => setUploadForm({ ...uploadForm, timeMinutes: e.target.value })} />
                 </div>
               </div>
               <div>
-                <label style={S.label}>{t.testContent} *</label>
+                <label className="dark:text-gray-400" style={S.label}>{t.testContent} *</label>
                 <textarea
+                  className="dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-500"
                   style={{ ...S.textarea, minHeight: 180, fontFamily: "monospace", fontSize: 12 }}
                   value={uploadForm.content}
                   onChange={(e) => setUploadForm({ ...uploadForm, content: e.target.value })}
@@ -1960,14 +1969,14 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
     return (
       <div>
         {/* Overall stats */}
-        <div style={S.scoreDisplay}>
+        <div className="dark:bg-gray-800" style={S.scoreDisplay}>
           <div style={S.scoreBig}>{avgScore}</div>
-          <div style={{ fontSize: 14, color: "#666", marginTop: 4 }}>{t.avgScore}</div>
+          <div className="dark:text-gray-400" style={{ fontSize: 14, color: "#666", marginTop: 4 }}>{t.avgScore}</div>
         </div>
 
         {/* Section breakdown */}
-        <div style={S.card}>
-          <h4 style={S.cardTitle}>{t.sectionBreakdown}</h4>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+          <h4 className="dark:text-gray-100" style={S.cardTitle}>{t.sectionBreakdown}</h4>
           {["reading", "writing", "listening", "speaking"].map((sec) => {
             const sectionAttempts = bySection[sec] || [];
             const secAvg = sectionAttempts.length > 0
@@ -1979,15 +1988,15 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
             return (
               <div key={sec} style={{ marginBottom: 16 }}>
                 <div style={S.flexBetween}>
-                  <span style={{ fontSize: 14, fontWeight: 600 }}>
+                  <span className="dark:text-gray-100" style={{ fontSize: 14, fontWeight: 600 }}>
                     {sec === "reading" ? "📖" : sec === "writing" ? "✍️" : sec === "listening" ? "🎧" : "🎤"}{" "}
                     {t[sec]}
                   </span>
                   <span style={{ fontSize: 16, fontWeight: 700, color: "#2563EB" }}>
-                    {secAvg} <span style={{ fontSize: 12, color: "#999" }}>({sectionAttempts.length} {t.attempts})</span>
+                    {secAvg} <span className="dark:text-gray-500" style={{ fontSize: 12, color: "#999" }}>({sectionAttempts.length} {t.attempts})</span>
                   </span>
                 </div>
-                <div style={{ ...S.progressBar(0), marginTop: 6 }}>
+                <div className="dark:bg-gray-700" style={{ ...S.progressBar(0), marginTop: 6 }}>
                   <div style={S.progressFill(pct, sec === "reading" ? "#2563EB" : sec === "writing" ? "#16A34A" : sec === "listening" ? "#F59E0B" : "#7C3AED")} />
                 </div>
               </div>
@@ -1996,13 +2005,13 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
         </div>
 
         {/* Score history */}
-        <div style={S.card}>
-          <h4 style={S.cardTitle}>{t.scoreHistory}</h4>
+        <div className="dark:bg-gray-800 dark:border-gray-700" style={S.card}>
+          <h4 className="dark:text-gray-100" style={S.cardTitle}>{t.scoreHistory}</h4>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {completedAttempts.slice(0, 15).map((a) => (
-              <div key={a.id} style={{ ...S.flexBetween, padding: "8px 0", borderBottom: "1px solid #F3F4F6" }}>
+              <div key={a.id} className="dark:border-gray-700" style={{ ...S.flexBetween, padding: "8px 0", borderBottom: "1px solid #F3F4F6" }}>
                 <div>
-                  <span style={{ fontSize: 13, fontWeight: 600 }}>{a.test?.title || "Test"}</span>
+                  <span className="dark:text-gray-100" style={{ fontSize: 13, fontWeight: 600 }}>{a.test?.title || "Test"}</span>
                   <div style={{ display: "flex", gap: 4, marginTop: 2 }}>
                     <span style={S.badge("blue")}>{t[a.section]}</span>
                   </div>
@@ -2034,7 +2043,7 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
       {/* Header */}
       <div style={S.header}>
         <h2 style={S.title}>{t.title}</h2>
-        <p style={S.subtitle}>{t.subtitle}</p>
+        <p className="dark:text-gray-400" style={S.subtitle}>{t.subtitle}</p>
       </div>
 
       {/* Exam type toggle */}
@@ -2047,9 +2056,9 @@ export default function IeltsToeflPractice({ locale = "en", userId }) {
 
       {/* Main tabs */}
       {view !== "test-taking" && view !== "results" && view !== "vocab-review" && (
-        <div style={S.tabs}>
+        <div className="dark:border-gray-700" style={S.tabs}>
           {mainTabs.map((tab) => (
-            <button key={tab.key} style={S.tab(view === tab.key)} onClick={() => setView(tab.key)}>
+            <button key={tab.key} className={view === tab.key ? "dark:text-blue-400" : "dark:text-gray-400"} style={S.tab(view === tab.key)} onClick={() => setView(tab.key)}>
               {tab.icon} {tab.label}
             </button>
           ))}

@@ -93,7 +93,7 @@ export function StepPersonal({ locale, data, onDataChange }: StepPersonalProps) 
       {/* Country of Origin */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <MapPin className="w-4 h-4 text-gray-500" />
+          <MapPin className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {isRTL ? 'بلد الإقامة/الجنسية' : 'Country of Origin/Nationality'}
           </label>
@@ -108,7 +108,7 @@ export function StepPersonal({ locale, data, onDataChange }: StepPersonalProps) 
       {/* Languages */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <Languages className="w-4 h-4 text-gray-500" />
+          <Languages className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {isRTL ? 'اللغات التي تتحدثها' : 'Languages You Speak'}
           </label>
@@ -155,10 +155,10 @@ export function StepPersonal({ locale, data, onDataChange }: StepPersonalProps) 
       {/* Age */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <Calendar className="w-4 h-4 text-gray-500" />
+          <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {isRTL ? 'العمر' : 'Age'}
-            <span className="text-gray-400 text-xs mx-2">
+            <span className="text-gray-400 dark:text-gray-500 text-xs mx-2">
               ({isRTL ? 'اختياري' : 'Optional'})
             </span>
           </label>

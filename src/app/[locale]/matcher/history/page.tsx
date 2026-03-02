@@ -159,7 +159,7 @@ export default function MatcherHistoryPage() {
           {history.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
-                <History className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <History className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   {isRTL ? 'لا يوجد سجل بعد' : 'No History Yet'}
                 </h3>
@@ -178,7 +178,7 @@ export default function MatcherHistoryPage() {
               {history.map((item) => (
                 <Card
                   key={item.id}
-                  className="overflow-hidden hover:shadow-lg transition-shadow"
+                  className="overflow-hidden hover:shadow-lg dark:shadow-gray-900/50 transition-shadow"
                 >
                   <CardContent className="p-4 md:p-6">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

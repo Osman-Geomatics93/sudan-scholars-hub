@@ -178,7 +178,7 @@ export function FeaturedPosters({ locale }: FeaturedPostersProps) {
       <div className="sm:hidden mt-4 text-center">
         <Link
           href={`/${locale}/posters`}
-          className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 font-medium"
+          className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
         >
           {t('viewAll')}
           <ArrowRight className={cn('h-4 w-4', isRTL && 'rotate-180')} />

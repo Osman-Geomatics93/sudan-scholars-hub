@@ -227,7 +227,7 @@ export default function UniversityAdmissionsPage() {
         </div>
         <Link
           href={`/${locale}/admin/university-admissions/new`}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-4 py-2 text-white transition-colors hover:bg-primary-700 dark:hover:bg-primary-600"
         >
           <Plus className="h-5 w-5" />
           Add Admission
@@ -268,7 +268,7 @@ export default function UniversityAdmissionsPage() {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
         <input
           type="text"
           placeholder="Search admissions..."
@@ -366,7 +366,7 @@ export default function UniversityAdmissionsPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => toggleActive(admission.id, admission.isActive)}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-600"
                       title={admission.isActive ? 'Deactivate' : 'Activate'}
                     >
                       {admission.isActive ? (
@@ -377,13 +377,13 @@ export default function UniversityAdmissionsPage() {
                     </button>
                     <Link
                       href={`/${locale}/admin/university-admissions/${admission.id}/edit`}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-primary-600 dark:hover:bg-gray-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 hover:text-primary-600 dark:hover:bg-gray-600"
                     >
                       <Edit className="h-4 w-4" />
                     </Link>
                     <button
                       onClick={() => deleteAdmission(admission.id)}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-600"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

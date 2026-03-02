@@ -168,7 +168,7 @@ export default function RecognizedSudanPage() {
           <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+              <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500 ${isRTL ? 'right-3' : 'left-3'}`} />
               <input
                 type="text"
                 placeholder={isRTL ? 'ابحث عن جامعة...' : 'Search for a university...'}
@@ -210,7 +210,7 @@ export default function RecognizedSudanPage() {
                 {filteredUniversities.map((university) => (
                   <div
                     key={university.id}
-                    className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md transition-shadow"
+                    className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center justify-center w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg">

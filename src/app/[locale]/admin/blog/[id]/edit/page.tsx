@@ -43,14 +43,14 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary-600 dark:text-primary-400" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="rounded-lg bg-red-50 p-4 text-red-700">
+      <div className="rounded-lg bg-red-50 dark:bg-red-950/50 p-4 text-red-700 dark:text-red-400">
         {error}
       </div>
     );
@@ -59,10 +59,10 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
           {isRTL ? 'تعديل المقال' : 'Edit Article'}
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
           {blogPost?.title}
         </p>
       </div>

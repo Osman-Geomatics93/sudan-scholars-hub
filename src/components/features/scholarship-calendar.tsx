@@ -127,7 +127,7 @@ export function ScholarshipCalendar({ scholarships, locale }: ScholarshipCalenda
             onClick={() => setViewMode('calendar')}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               viewMode === 'calendar'
-                ? 'bg-primary-600 text-white'
+                ? 'bg-primary-600 dark:bg-primary-500 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
             }`}
           >
@@ -138,7 +138,7 @@ export function ScholarshipCalendar({ scholarships, locale }: ScholarshipCalenda
             onClick={() => setViewMode('timeline')}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               viewMode === 'timeline'
-                ? 'bg-primary-600 text-white'
+                ? 'bg-primary-600 dark:bg-primary-500 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
             }`}
           >
@@ -220,7 +220,7 @@ export function ScholarshipCalendar({ scholarships, locale }: ScholarshipCalenda
                     <span
                       className={`inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full ${
                         isToday
-                          ? 'bg-primary-600 text-white'
+                          ? 'bg-primary-600 dark:bg-primary-500 text-white'
                           : ''
                       }`}
                     >
@@ -235,7 +235,7 @@ export function ScholarshipCalendar({ scholarships, locale }: ScholarshipCalenda
                           />
                         ))}
                         {deadlines.length > 3 && (
-                          <span className="text-[10px] text-gray-500">+{deadlines.length - 3}</span>
+                          <span className="text-[10px] text-gray-500 dark:text-gray-400">+{deadlines.length - 3}</span>
                         )}
                       </div>
                     )}
@@ -245,7 +245,7 @@ export function ScholarshipCalendar({ scholarships, locale }: ScholarshipCalenda
             </div>
 
             {/* Legend */}
-            <div className="flex items-center gap-4 mt-4 pt-4 border-t text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-4 mt-4 pt-4 border-t dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 rounded-full bg-red-500" />
                 <span>{isRTL ? '< 7 أيام' : '< 7 days'}</span>

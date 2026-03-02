@@ -13,11 +13,11 @@ export function EmptyState({ onClearFilters }: EmptyStateProps) {
 
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-6">
-        <SearchX className="h-10 w-10 text-gray-400" />
+      <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-6">
+        <SearchX className="h-10 w-10 text-gray-400 dark:text-gray-500" />
       </div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('emptyTitle')}</h3>
-      <p className="text-gray-600 mb-6 max-w-md">{t('emptyDescription')}</p>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 mb-2">{t('emptyTitle')}</h3>
+      <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md">{t('emptyDescription')}</p>
       {onClearFilters && (
         <Button variant="outline" onClick={onClearFilters}>
           {t('filterTitle')}

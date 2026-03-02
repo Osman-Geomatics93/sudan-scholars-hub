@@ -123,10 +123,10 @@ export default function ContactsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
           {isRTL ? 'الرسائل' : 'Messages'}
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
           {isRTL
             ? `${unreadCount} رسائل غير مقروءة من ${messages.length}`
             : `${unreadCount} unread of ${messages.length} messages`}
@@ -135,41 +135,41 @@ export default function ContactsPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Messages list */}
-        <div className="rounded-xl bg-white shadow-sm">
-          <div className="max-h-[600px] divide-y divide-gray-200 overflow-y-auto">
+        <div className="rounded-xl bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-900/50">
+          <div className="max-h-[600px] divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto">
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`cursor-pointer p-4 transition-colors hover:bg-gray-50 ${
-                  selectedMessage?.id === message.id ? 'bg-primary-50' : ''
-                } ${!message.isRead ? 'bg-blue-50/50' : ''}`}
+                className={`cursor-pointer p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                  selectedMessage?.id === message.id ? 'bg-primary-50 dark:bg-primary-950/50' : ''
+                } ${!message.isRead ? 'bg-blue-50/50 dark:bg-blue-950/30' : ''}`}
                 onClick={() => openMessage(message)}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
                     <div
                       className={`mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
-                        message.isRead ? 'bg-gray-100' : 'bg-primary-100'
+                        message.isRead ? 'bg-gray-100 dark:bg-gray-800' : 'bg-primary-100 dark:bg-primary-900/50'
                       }`}
                     >
                       {message.isRead ? (
-                        <MailOpen className="h-4 w-4 text-gray-400" />
+                        <MailOpen className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                       ) : (
-                        <Mail className="h-4 w-4 text-primary-600" />
+                        <Mail className="h-4 w-4 text-primary-600 dark:text-primary-400" />
                       )}
                     </div>
                     <div className="min-w-0">
                       <p
-                        className={`font-medium text-gray-900 ${
+                        className={`font-medium text-gray-900 dark:text-gray-50 ${
                           !message.isRead ? 'font-semibold' : ''
                         }`}
                       >
                         {message.name}
                       </p>
-                      <p className="truncate text-sm text-gray-600">
+                      <p className="truncate text-sm text-gray-600 dark:text-gray-400">
                         {message.subject}
                       </p>
-                      <p className="mt-1 text-xs text-gray-400">
+                      <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                         {new Date(message.createdAt).toLocaleDateString(
                           isRTL ? 'ar-SA' : 'en-US',
                           {
@@ -188,7 +188,7 @@ export default function ContactsPage() {
                       e.stopPropagation();
                       deleteMessage(message.id);
                     }}
-                    className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-red-600"
+                    className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -197,7 +197,7 @@ export default function ContactsPage() {
             ))}
 
             {messages.length === 0 && (
-              <div className="py-12 text-center text-gray-500">
+              <div className="py-12 text-center text-gray-500 dark:text-gray-400">
                 {isRTL ? 'لا توجد رسائل' : 'No messages'}
               </div>
             )}
@@ -205,24 +205,24 @@ export default function ContactsPage() {
         </div>
 
         {/* Message detail */}
-        <div className="rounded-xl bg-white p-6 shadow-sm">
+        <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
           {selectedMessage ? (
             <div>
-              <div className="mb-6 border-b pb-4">
-                <h2 className="text-xl font-semibold text-gray-900">
+              <div className="mb-6 border-b dark:border-gray-700 pb-4">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
                   {selectedMessage.subject}
                 </h2>
-                <div className="mt-2 flex items-center gap-4 text-sm text-gray-600">
+                <div className="mt-2 flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                   <span>{selectedMessage.name}</span>
                   <span>&bull;</span>
                   <a
                     href={`mailto:${selectedMessage.email}`}
-                    className="text-primary-600 hover:underline"
+                    className="text-primary-600 dark:text-primary-400 hover:underline"
                   >
                     {selectedMessage.email}
                   </a>
                 </div>
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                   {new Date(selectedMessage.createdAt).toLocaleDateString(
                     isRTL ? 'ar-SA' : 'en-US',
                     {
@@ -236,19 +236,19 @@ export default function ContactsPage() {
                   )}
                 </p>
               </div>
-              <div className="whitespace-pre-wrap text-gray-700">
+              <div className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
                 {selectedMessage.message}
               </div>
               <div className="mt-6 flex gap-3">
                 <a
                   href={`mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject}`}
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-4 py-2 text-white transition-colors hover:bg-primary-700 dark:hover:bg-primary-600"
                 >
                   {isRTL ? 'رد' : 'Reply'}
                 </a>
                 <button
                   onClick={() => deleteMessage(selectedMessage.id)}
-                  className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-red-600 transition-colors hover:bg-red-50"
+                  className="inline-flex items-center gap-2 rounded-lg border border-red-200 dark:border-red-800 px-4 py-2 text-red-600 dark:text-red-400 transition-colors hover:bg-red-50 dark:hover:bg-red-950/50"
                 >
                   <Trash2 className="h-4 w-4" />
                   {isRTL ? 'حذف' : 'Delete'}
@@ -256,9 +256,9 @@ export default function ContactsPage() {
               </div>
             </div>
           ) : (
-            <div className="flex h-64 items-center justify-center text-gray-500">
+            <div className="flex h-64 items-center justify-center text-gray-500 dark:text-gray-400">
               <div className="text-center">
-                <Eye className="mx-auto h-12 w-12 text-gray-300" />
+                <Eye className="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600" />
                 <p className="mt-2">
                   {isRTL
                     ? 'اختر رسالة لعرضها'

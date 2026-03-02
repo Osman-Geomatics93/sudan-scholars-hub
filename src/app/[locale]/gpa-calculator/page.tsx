@@ -101,7 +101,7 @@ export default function GPACalculatorPage() {
           </div>
 
           {/* Tips Section */}
-          <div className="mt-12 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="mt-12 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               {isRTL ? 'نصائح مهمة' : 'Important Tips'}
             </h2>

@@ -142,15 +142,15 @@ export default function TurkeyPage() {
   ];
 
   const colorClasses: Record<string, { bg: string; text: string; hover: string }> = {
-    blue: { bg: 'bg-blue-100', text: 'text-blue-600', hover: 'hover:bg-blue-200' },
-    green: { bg: 'bg-green-100', text: 'text-green-600', hover: 'hover:bg-green-200' },
-    purple: { bg: 'bg-purple-100', text: 'text-purple-600', hover: 'hover:bg-purple-200' },
-    orange: { bg: 'bg-orange-100', text: 'text-orange-600', hover: 'hover:bg-orange-200' },
-    yellow: { bg: 'bg-yellow-100', text: 'text-yellow-600', hover: 'hover:bg-yellow-200' },
-    teal: { bg: 'bg-teal-100', text: 'text-teal-600', hover: 'hover:bg-teal-200' },
-    indigo: { bg: 'bg-indigo-100', text: 'text-indigo-600', hover: 'hover:bg-indigo-200' },
-    rose: { bg: 'bg-rose-100', text: 'text-rose-600', hover: 'hover:bg-rose-200' },
-    cyan: { bg: 'bg-cyan-100', text: 'text-cyan-600', hover: 'hover:bg-cyan-200' },
+    blue: { bg: 'bg-blue-100 dark:bg-blue-950/50', text: 'text-blue-600 dark:text-blue-400', hover: 'hover:bg-blue-200 dark:hover:bg-blue-900/50' },
+    green: { bg: 'bg-green-100 dark:bg-green-950/50', text: 'text-green-600 dark:text-green-400', hover: 'hover:bg-green-200 dark:hover:bg-green-900/50' },
+    purple: { bg: 'bg-purple-100 dark:bg-purple-950/50', text: 'text-purple-600 dark:text-purple-400', hover: 'hover:bg-purple-200 dark:hover:bg-purple-900/50' },
+    orange: { bg: 'bg-orange-100 dark:bg-orange-950/50', text: 'text-orange-600 dark:text-orange-400', hover: 'hover:bg-orange-200 dark:hover:bg-orange-900/50' },
+    yellow: { bg: 'bg-yellow-100 dark:bg-yellow-950/50', text: 'text-yellow-600 dark:text-yellow-400', hover: 'hover:bg-yellow-200 dark:hover:bg-yellow-900/50' },
+    teal: { bg: 'bg-teal-100 dark:bg-teal-950/50', text: 'text-teal-600 dark:text-teal-400', hover: 'hover:bg-teal-200 dark:hover:bg-teal-900/50' },
+    indigo: { bg: 'bg-indigo-100 dark:bg-indigo-950/50', text: 'text-indigo-600 dark:text-indigo-400', hover: 'hover:bg-indigo-200 dark:hover:bg-indigo-900/50' },
+    rose: { bg: 'bg-rose-100 dark:bg-rose-950/50', text: 'text-rose-600 dark:text-rose-400', hover: 'hover:bg-rose-200 dark:hover:bg-rose-900/50' },
+    cyan: { bg: 'bg-cyan-100 dark:bg-cyan-950/50', text: 'text-cyan-600 dark:text-cyan-400', hover: 'hover:bg-cyan-200 dark:hover:bg-cyan-900/50' },
   };
 
   // Student Forms
@@ -272,8 +272,8 @@ export default function TurkeyPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {whyTurkeyCards.map((card) => (
-              <Card key={card.titleKey} className="p-6 text-center hover:shadow-lg transition-shadow">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 mb-4">
+              <Card key={card.titleKey} className="p-6 text-center hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 dark:bg-red-950/50 text-red-600 mb-4">
                   <card.icon className="h-7 w-7" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-2">
@@ -295,7 +295,7 @@ export default function TurkeyPage() {
               <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">{t('scholarshipSubtitle')}</p>
               <p className="text-gray-600 dark:text-gray-400 mb-8">{t('scholarshipDesc')}</p>
 
-              <div className="flex items-center gap-3 mb-6 p-4 bg-red-50 rounded-lg">
+              <div className="flex items-center gap-3 mb-6 p-4 bg-red-50 dark:bg-red-950/50 rounded-lg">
                 <Calendar className="h-6 w-6 text-red-600 shrink-0" />
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-gray-50">{t('deadline')}</p>
@@ -315,7 +315,7 @@ export default function TurkeyPage() {
                   </Button>
                 </a>
                 <TrackedDownload href="/downloads/turkey/turkiye-burslari-guide.pdf">
-                  <Button size="lg" variant="outline" className="border-red-300 text-red-700 hover:bg-red-50">
+                  <Button size="lg" variant="outline" className="border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50">
                     <Download className="h-4 w-4 me-2" />
                     {t('downloadGuide')}
                   </Button>
@@ -327,13 +327,13 @@ export default function TurkeyPage() {
               {/* Benefits */}
               <Card className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
                   {t('scholarshipBenefits')}
                 </h3>
                 <ul className="space-y-3">
                   {benefits.map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 shrink-0 mt-0.5" />
                       <span className="text-gray-600 dark:text-gray-400">{benefit}</span>
                     </li>
                   ))}
@@ -343,13 +343,13 @@ export default function TurkeyPage() {
               {/* Eligibility */}
               <Card className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-blue-600" />
+                  <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   {t('scholarshipEligibility')}
                 </h3>
                 <ul className="space-y-3">
                   {eligibility.map((item, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold shrink-0">
+                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-sm font-semibold shrink-0">
                         {index + 1}
                       </span>
                       <span className="text-gray-600 dark:text-gray-400">{item}</span>
@@ -371,9 +371,9 @@ export default function TurkeyPage() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-12">
-            <Card className="p-6 border-2 border-red-100">
+            <Card className="p-6 border-2 border-red-100 dark:border-red-800">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950/50 flex items-center justify-center">
                   <FileText className="h-6 w-6 text-red-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50">{t('yosTitle')}</h3>
@@ -381,10 +381,10 @@ export default function TurkeyPage() {
               <p className="text-gray-600 dark:text-gray-400">{t('yosDesc')}</p>
             </Card>
 
-            <Card className="p-6 border-2 border-blue-100">
+            <Card className="p-6 border-2 border-blue-100 dark:border-blue-800">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                  <Building2 className="h-6 w-6 text-blue-600" />
+                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                  <Building2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50">{t('directTitle')}</h3>
               </div>
@@ -397,8 +397,8 @@ export default function TurkeyPage() {
             <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 text-center mb-8">{t('popularUnis')}</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {universities.map((uni) => (
-                <Card key={uni.logo} className="p-4 text-center hover:shadow-md transition-shadow">
-                  <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
+                <Card key={uni.logo} className="p-4 text-center hover:shadow-md dark:shadow-gray-900/50 transition-shadow">
+                  <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                     <span className="text-xl font-bold text-gray-700 dark:text-gray-300">{uni.logo}</span>
                   </div>
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-50">{uni.name}</p>
@@ -422,7 +422,7 @@ export default function TurkeyPage() {
               const colors = colorClasses[resource.color];
               const fileAvailable = isFileAvailable(resource.file);
               return (
-                <Card key={resource.id} className="p-6 hover:shadow-lg transition-shadow">
+                <Card key={resource.id} className="p-6 hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
                   <div className="flex items-start gap-4">
                     <div className={`w-12 h-12 rounded-lg ${colors.bg} flex items-center justify-center shrink-0`}>
                       <resource.icon className={`h-6 w-6 ${colors.text}`} />
@@ -431,7 +431,7 @@ export default function TurkeyPage() {
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                         {t(resource.titleKey)}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-4">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                         {t(resource.descKey)}
                       </p>
                       {fileAvailable ? (
@@ -471,7 +471,7 @@ export default function TurkeyPage() {
           </div>
 
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {locale === 'ar'
                 ? 'يحتوي هذا الدليل على معلومات شاملة لجميع مراحل الدراسة (البكالوريوس، الماجستير، الدكتوراه)'
                 : 'This comprehensive guide contains information for all study levels (Bachelor, Master, PhD)'}
@@ -491,7 +491,7 @@ export default function TurkeyPage() {
           {/* Recommendation Letters */}
           <div className="mb-10">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-50 mb-6 flex items-center justify-center gap-2">
-              <Users className="h-5 w-5 text-blue-600" />
+              <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               {t('recommendationTitle')}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -499,7 +499,7 @@ export default function TurkeyPage() {
                 const colors = colorClasses[letter.color];
                 const fileAvailable = isFileAvailable(letter.file);
                 return (
-                  <Card key={letter.id} className="p-6 hover:shadow-lg transition-shadow">
+                  <Card key={letter.id} className="p-6 hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
                     <div className="flex items-start gap-4">
                       <div className={`w-12 h-12 rounded-lg ${colors.bg} flex items-center justify-center shrink-0`}>
                         <letter.icon className={`h-6 w-6 ${colors.text}`} />
@@ -508,7 +508,7 @@ export default function TurkeyPage() {
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                           {t(letter.titleKey)}
                         </h4>
-                        <p className="text-gray-600 text-sm mb-4">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                           {t(letter.descKey)}
                         </p>
                         {fileAvailable ? (
@@ -559,7 +559,7 @@ export default function TurkeyPage() {
                 const colors = colorClasses[letter.color];
                 const fileAvailable = isFileAvailable(letter.file);
                 return (
-                  <Card key={letter.id} className="p-6 hover:shadow-lg transition-shadow">
+                  <Card key={letter.id} className="p-6 hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
                     <div className="flex items-start gap-4">
                       <div className={`w-12 h-12 rounded-lg ${colors.bg} flex items-center justify-center shrink-0`}>
                         <letter.icon className={`h-6 w-6 ${colors.text}`} />
@@ -568,7 +568,7 @@ export default function TurkeyPage() {
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                           {t(letter.titleKey)}
                         </h4>
-                        <p className="text-gray-600 text-sm mb-4">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                           {t(letter.descKey)}
                         </p>
                         {fileAvailable ? (
@@ -626,7 +626,7 @@ export default function TurkeyPage() {
             </h3>
             <p className="text-center text-gray-600 dark:text-gray-400 mb-6">{t('secondaryDesc')}</p>
             <div className="max-w-lg mx-auto">
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="p-6 hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
                 <div className="flex items-start gap-4">
                   <div className={`w-12 h-12 rounded-lg ${colorClasses[secondarySchoolForm.color].bg} flex items-center justify-center shrink-0`}>
                     <secondarySchoolForm.icon className={`h-6 w-6 ${colorClasses[secondarySchoolForm.color].text}`} />
@@ -635,18 +635,18 @@ export default function TurkeyPage() {
                     <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                       {t(secondarySchoolForm.titleKey)}
                     </h4>
-                    <p className="text-gray-600 text-sm mb-4">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                       {t(secondarySchoolForm.descKey)}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <TrackedDownload href={secondarySchoolForm.docFile}>
-                        <Button variant="outline" size="sm" className="text-blue-600 border-blue-300 hover:bg-blue-50">
+                        <Button variant="outline" size="sm" className="text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/50">
                           <FileType className="h-4 w-4 me-2" />
                           {t('downloadDoc')}
                         </Button>
                       </TrackedDownload>
                       <TrackedDownload href={secondarySchoolForm.pdfFile}>
-                        <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
+                        <Button variant="outline" size="sm" className="text-red-600 dark:text-red-400 border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-950/50">
                           <FileText className="h-4 w-4 me-2" />
                           {t('downloadPdf')}
                         </Button>
@@ -666,7 +666,7 @@ export default function TurkeyPage() {
             </h3>
             <p className="text-center text-gray-600 dark:text-gray-400 mb-6">{t('universityDesc')}</p>
             <div className="max-w-lg mx-auto">
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="p-6 hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
                 <div className="flex items-start gap-4">
                   <div className={`w-12 h-12 rounded-lg ${colorClasses[universityForm.color].bg} flex items-center justify-center shrink-0`}>
                     <universityForm.icon className={`h-6 w-6 ${colorClasses[universityForm.color].text}`} />
@@ -675,18 +675,18 @@ export default function TurkeyPage() {
                     <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-1">
                       {t(universityForm.titleKey)}
                     </h4>
-                    <p className="text-gray-600 text-sm mb-4">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                       {t(universityForm.descKey)}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <TrackedDownload href={universityForm.docFile}>
-                        <Button variant="outline" size="sm" className="text-blue-600 border-blue-300 hover:bg-blue-50">
+                        <Button variant="outline" size="sm" className="text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/50">
                           <FileType className="h-4 w-4 me-2" />
                           {t('downloadDoc')}
                         </Button>
                       </TrackedDownload>
                       <TrackedDownload href={universityForm.pdfFile}>
-                        <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
+                        <Button variant="outline" size="sm" className="text-red-600 dark:text-red-400 border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-950/50">
                           <FileText className="h-4 w-4 me-2" />
                           {t('downloadPdf')}
                         </Button>
@@ -704,7 +704,7 @@ export default function TurkeyPage() {
       <section className="section-padding bg-white dark:bg-gray-900">
         <Container>
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 mb-4">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 dark:bg-red-950/50 text-red-600 mb-4">
               <PlayCircle className="h-7 w-7" />
             </div>
             <h2 className="text-h2 text-gray-900 dark:text-gray-50 mb-4">{t('videoTutorialsTitle')}</h2>
@@ -713,7 +713,7 @@ export default function TurkeyPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Video 1 */}
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card className="overflow-hidden hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
               <div className="aspect-video">
                 <iframe
                   className="w-full h-full"
@@ -729,7 +729,7 @@ export default function TurkeyPage() {
             </Card>
 
             {/* Video 2 */}
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card className="overflow-hidden hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
               <div className="aspect-video">
                 <iframe
                   className="w-full h-full"
@@ -759,10 +759,10 @@ export default function TurkeyPage() {
             {livingCards.map((card) => (
               <Card key={card.titleKey} className="p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950/50 flex items-center justify-center">
                     <card.icon className="h-6 w-6 text-red-600" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">{t(card.titleKey)}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">{t(card.titleKey)}</h3>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">{t(card.descKey)}</p>
               </Card>

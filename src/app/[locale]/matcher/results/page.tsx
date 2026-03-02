@@ -193,7 +193,7 @@ function MatcherResultsContent() {
           {matches.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
-                <Sparkles className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <Sparkles className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   {isRTL ? 'لم يتم العثور على منح مطابقة' : 'No Matching Scholarships Found'}
                 </h3>
@@ -217,7 +217,7 @@ function MatcherResultsContent() {
                 const LevelIcon = levelConfig.icon;
 
                 return (
-                  <Card key={match.scholarshipId} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <Card key={match.scholarshipId} className="overflow-hidden hover:shadow-lg dark:shadow-gray-900/50 transition-shadow">
                     <CardContent className="p-0">
                       <div className="flex flex-col md:flex-row">
                         {/* Image */}
@@ -277,10 +277,10 @@ function MatcherResultsContent() {
                                     key={factor.type}
                                     className={`text-xs border bg-transparent ${
                                       factor.status === 'match'
-                                        ? 'border-green-500 text-green-600'
+                                        ? 'border-green-500 text-green-600 dark:text-green-400'
                                         : factor.status === 'partial'
-                                        ? 'border-amber-500 text-amber-600'
-                                        : 'border-gray-300 text-gray-500'
+                                        ? 'border-amber-500 text-amber-600 dark:text-amber-400'
+                                        : 'border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400'
                                     }`}
                                   >
                                     {factor.type === 'gpa' && (isRTL ? 'المعدل' : 'GPA')}

@@ -130,7 +130,7 @@ export default function HomePage() {
 
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto mb-8 md:mb-12 px-4 animate-on-load animate-scale-in animation-delay-400">
-              <div className="flex flex-col sm:flex-row gap-2 bg-white p-2 sm:p-2 rounded-xl shadow-lg">
+              <div className="flex flex-col sm:flex-row gap-2 bg-white dark:bg-gray-900 p-2 sm:p-2 rounded-xl shadow-lg dark:shadow-gray-900/50">
                 <Input
                   placeholder={t('searchPlaceholder')}
                   className="border-0 focus:ring-0 h-12"
@@ -150,7 +150,7 @@ export default function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 px-4 animate-on-load animate-fade-in-up animation-delay-600">
               {stats.map((stat, index) => (
                 <div key={stat.labelKey} className="text-center p-3 md:p-0">
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 mb-1">
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 mb-1">
                     {stat.value}
                   </div>
                   <div className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t(`stats.${stat.labelKey}`)}</div>
@@ -183,7 +183,7 @@ export default function HomePage() {
               <h2 className="text-xl sm:text-2xl md:text-h2 font-bold text-gray-900 dark:text-gray-50 mb-1 md:mb-2">{t('featuredTitle')}</h2>
               <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t('featuredSubtitle')}</p>
             </div>
-            <Link href={`/${locale}/scholarships`} className="hidden md:flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium shrink-0">
+            <Link href={`/${locale}/scholarships`} className="hidden md:flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium shrink-0">
               {locale === 'ar' ? 'عرض الكل' : 'View All'}
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Link>
@@ -233,8 +233,8 @@ export default function HomePage() {
                   key={category.id}
                   href={`/${locale}/scholarships?field=${category.id}`}
                 >
-                  <Card className="p-4 md:p-6 text-center hover:border-primary-300 hover:shadow-md transition-all group cursor-pointer h-full">
-                    <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary-100 text-primary-600 mb-3 md:mb-4 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                  <Card className="p-4 md:p-6 text-center hover:border-primary-300 hover:shadow-md dark:hover:shadow-gray-900/50 transition-all group cursor-pointer h-full">
+                    <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400 mb-3 md:mb-4 group-hover:bg-primary-600 group-hover:text-white transition-colors">
                       <Icon className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
                     <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1 text-sm md:text-base">

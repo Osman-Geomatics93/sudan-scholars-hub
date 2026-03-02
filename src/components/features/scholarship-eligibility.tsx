@@ -72,7 +72,7 @@ export function ScholarshipEligibility({ locale, gpaPercent, level }: Scholarshi
     return (
       <div
         key={scholarship.id}
-        className={`p-4 rounded-lg border ${config.bg} transition-all hover:shadow-sm`}
+        className={`p-4 rounded-lg border ${config.bg} transition-all hover:shadow-sm dark:hover:shadow-gray-900/50`}
       >
         <div className="flex items-start gap-3">
           <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${config.color}`} />
@@ -252,7 +252,7 @@ export function ScholarshipEligibility({ locale, gpaPercent, level }: Scholarshi
                   </p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-400">
+                  <p className="text-2xl font-bold text-gray-400 dark:text-gray-500">
                     {SCHOLARSHIP_REQUIREMENTS.length}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">

@@ -53,7 +53,7 @@ export function PosterCard({ poster, locale, onOpen }: PosterCardProps) {
 
   return (
     <Card
-      className="group overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
+      className="group overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/50 hover:-translate-y-1"
       onClick={() => onOpen(poster)}
     >
       {/* Image Container - 3:4 aspect ratio for portrait posters */}

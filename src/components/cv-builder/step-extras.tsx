@@ -173,7 +173,7 @@ export function StepExtras({ locale, data, onDataChange }: StepExtrasProps) {
             {summaryError}
           </p>
         )}
-        <p className="text-xs text-gray-500">{labels.summaryTip}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">{labels.summaryTip}</p>
       </div>
 
       <hr className="border-gray-200 dark:border-gray-700" />
@@ -204,7 +204,7 @@ export function StepExtras({ locale, data, onDataChange }: StepExtrasProps) {
                       <p className="font-medium">
                         {cert.name || (isRTL ? 'شهادة جديدة' : 'New Certification')}
                       </p>
-                      <p className="text-sm text-gray-500">{cert.issuer}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{cert.issuer}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

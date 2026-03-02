@@ -183,7 +183,7 @@ export default function ApplicationTipsPage() {
       <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
         <Container size="md">
           <div className="text-center">
-            <Award className="h-16 w-16 text-primary-600 mx-auto mb-6" />
+            <Award className="h-16 w-16 text-primary-600 dark:text-primary-400 mx-auto mb-6" />
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
               {isRTL ? 'نصائح للتقديم' : 'Application Tips'}
             </h1>
@@ -202,10 +202,10 @@ export default function ApplicationTipsPage() {
         <Container>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {[
-              { icon: Clock, text: isRTL ? 'ابدأ مبكراً' : 'Start Early', color: 'bg-blue-100 text-blue-600' },
-              { icon: CheckCircle, text: isRTL ? 'كن منظماً' : 'Stay Organized', color: 'bg-green-100 text-green-600' },
-              { icon: Lightbulb, text: isRTL ? 'كن فريداً' : 'Be Unique', color: 'bg-yellow-100 text-yellow-600' },
-              { icon: Target, text: isRTL ? 'خصص طلبك' : 'Be Specific', color: 'bg-purple-100 text-purple-600' },
+              { icon: Clock, text: isRTL ? 'ابدأ مبكراً' : 'Start Early', color: 'bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400' },
+              { icon: CheckCircle, text: isRTL ? 'كن منظماً' : 'Stay Organized', color: 'bg-green-100 dark:bg-green-950/50 text-green-600 dark:text-green-400' },
+              { icon: Lightbulb, text: isRTL ? 'كن فريداً' : 'Be Unique', color: 'bg-yellow-100 dark:bg-yellow-950/50 text-yellow-600 dark:text-yellow-400' },
+              { icon: Target, text: isRTL ? 'خصص طلبك' : 'Be Specific', color: 'bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400' },
             ].map((item, idx) => (
               <div key={idx} className="text-center p-4">
                 <div className={`inline-flex p-3 rounded-full ${item.color} mb-3`}>
@@ -226,10 +226,10 @@ export default function ApplicationTipsPage() {
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {applicationTips.map((tip) => (
-              <Card key={tip.id} className="p-6 hover:shadow-md transition-shadow">
+              <Card key={tip.id} className="p-6 hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary-100 rounded-lg shrink-0">
-                    <tip.icon className="h-6 w-6 text-primary-600" />
+                  <div className="p-3 bg-primary-100 dark:bg-primary-950 rounded-lg shrink-0">
+                    <tip.icon className="h-6 w-6 text-primary-600 dark:text-primary-400" />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-2">
@@ -268,18 +268,18 @@ export default function ApplicationTipsPage() {
           </p>
           <div className="relative">
             {/* Timeline line */}
-            <div className={`absolute top-0 bottom-0 w-0.5 bg-primary-200 ${isRTL ? 'right-4 md:right-1/2' : 'left-4 md:left-1/2'}`} />
+            <div className={`absolute top-0 bottom-0 w-0.5 bg-primary-200 dark:bg-primary-800 ${isRTL ? 'right-4 md:right-1/2' : 'left-4 md:left-1/2'}`} />
 
             <div className="space-y-8">
               {timeline.map((item, idx) => (
                 <div key={idx} className={`relative flex items-center gap-4 ${idx % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                   {/* Dot */}
-                  <div className={`absolute w-4 h-4 bg-primary-600 rounded-full border-4 border-white shadow ${isRTL ? 'right-2 md:right-1/2 md:-translate-x-1/2' : 'left-2 md:left-1/2 md:-translate-x-1/2'}`} />
+                  <div className={`absolute w-4 h-4 bg-primary-600 dark:bg-primary-500 rounded-full border-4 border-white dark:border-gray-900 shadow dark:shadow-gray-900/50 ${isRTL ? 'right-2 md:right-1/2 md:-translate-x-1/2' : 'left-2 md:left-1/2 md:-translate-x-1/2'}`} />
 
                   {/* Content */}
                   <div className={`${isRTL ? 'mr-10 md:mr-0' : 'ml-10 md:ml-0'} md:w-1/2 ${idx % 2 === 0 ? 'md:pe-8 md:text-end' : 'md:ps-8'}`}>
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                      <span className="text-sm font-medium text-primary-600">
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700">
+                      <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
                         {isRTL ? item.monthAr : item.month}
                       </span>
                       <p className="text-gray-900 dark:text-gray-50 mt-1">
@@ -308,7 +308,7 @@ export default function ApplicationTipsPage() {
               }
             </p>
             <Link href={`/${locale}/scholarships`}>
-              <Button variant="secondary" size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
+              <Button variant="secondary" size="lg" className="bg-white dark:bg-gray-900 text-primary-600 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800">
                 {isRTL ? 'تصفح المنح' : 'Browse Scholarships'}
                 <ArrowRight className={`h-5 w-5 ${isRTL ? 'rotate-180 me-2' : 'ms-2'}`} />
               </Button>

@@ -71,7 +71,7 @@ export function StepWhyScholarship({ locale, data, onDataChange }: StepWhySchola
       {/* Section explanation */}
       <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800">
         <div className="flex items-start gap-3">
-          <Award className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+          <Award className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-primary-700 dark:text-primary-300">
               {isRTL ? 'لماذا منحة تركيا' : 'Why Turkiye Scholarships'}
@@ -123,7 +123,7 @@ export function StepWhyScholarship({ locale, data, onDataChange }: StepWhySchola
               size="sm"
               onClick={() => handleGetAISuggestion('whatAttracted')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'whatAttracted'
@@ -167,7 +167,7 @@ export function StepWhyScholarship({ locale, data, onDataChange }: StepWhySchola
               size="sm"
               onClick={() => handleGetAISuggestion('alignmentWithGoals')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'alignmentWithGoals'

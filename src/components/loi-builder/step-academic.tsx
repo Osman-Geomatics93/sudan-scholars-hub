@@ -72,7 +72,7 @@ export function StepAcademic({ locale, data, onDataChange }: StepAcademicProps) 
       {/* Section explanation */}
       <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800">
         <div className="flex items-start gap-3">
-          <GraduationCap className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+          <GraduationCap className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-primary-700 dark:text-primary-300">
               {isRTL ? 'الخلفية الأكاديمية' : 'Academic Preparation'}
@@ -146,7 +146,7 @@ export function StepAcademic({ locale, data, onDataChange }: StepAcademicProps) 
               size="sm"
               onClick={() => handleGetAISuggestion('relevantCourses')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'relevantCourses'
@@ -190,7 +190,7 @@ export function StepAcademic({ locale, data, onDataChange }: StepAcademicProps) 
               size="sm"
               onClick={() => handleGetAISuggestion('academicAchievements')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'academicAchievements'

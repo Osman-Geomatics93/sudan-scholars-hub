@@ -75,9 +75,9 @@ export default function BlogDetailPage() {
   const renderContent = (content: string) => {
     // Convert markdown headings
     let html = content
-      .replace(/^### (.*$)/gm, '<h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">$1</h3>')
-      .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">$1</h2>')
-      .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold text-gray-900 mt-10 mb-6">$1</h1>')
+      .replace(/^### (.*$)/gm, '<h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50 mt-8 mb-4">$1</h3>')
+      .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold text-gray-900 dark:text-gray-50 mt-10 mb-4">$1</h2>')
+      .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50 mt-10 mb-6">$1</h1>')
       // Convert bold
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
       // Convert italic
@@ -87,7 +87,7 @@ export default function BlogDetailPage() {
       // Convert numbered lists
       .replace(/^\d+\. (.*$)/gm, '<li class="ml-4 mb-2 list-decimal">$1</li>')
       // Convert paragraphs (lines separated by double newlines)
-      .replace(/\n\n/g, '</p><p class="text-gray-700 leading-relaxed mb-4">')
+      .replace(/\n\n/g, '</p><p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">')
       // Convert single newlines to line breaks
       .replace(/\n/g, '<br />');
 
@@ -95,7 +95,7 @@ export default function BlogDetailPage() {
     html = html.replace(/(<li.*?<\/li>)+/g, '<ul class="list-disc mb-4 space-y-1">$&</ul>');
 
     // Wrap in paragraph tags
-    html = `<p class="text-gray-700 leading-relaxed mb-4">${html}</p>`;
+    html = `<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">${html}</p>`;
 
     return DOMPurify.sanitize(html, { ALLOWED_TAGS: ["p", "br", "strong", "em", "ul", "ol", "li", "h1", "h2", "h3", "h4", "a", "blockquote"], ALLOWED_ATTR: ["href", "class", "target", "rel"] });
   };
@@ -127,7 +127,7 @@ export default function BlogDetailPage() {
             </p>
             <Link
               href={`/${locale}/blog`}
-              className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700"
+              className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300"
             >
               <ArrowLeft className={`h-4 w-4 ${isRTL ? 'rotate-180' : ''}`} />
               {isRTL ? 'العودة إلى المدونة' : 'Back to Blog'}
@@ -218,7 +218,7 @@ export default function BlogDetailPage() {
           <div className="mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-                <User className="h-8 w-8 text-primary-600" />
+                <User className="h-8 w-8 text-primary-600 dark:text-primary-400" />
               </div>
               <div>
                 <p className="font-semibold text-gray-900 dark:text-gray-50">
@@ -240,7 +240,7 @@ export default function BlogDetailPage() {
             </span>
             <button
               onClick={() => setIsShareModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
               <Share2 className="h-4 w-4" />
               {isRTL ? 'مشاركة' : 'Share'}
@@ -251,7 +251,7 @@ export default function BlogDetailPage() {
           <div className="mt-12 pt-8 border-t dark:border-gray-700">
             <Link
               href={`/${locale}/blog`}
-              className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
             >
               <ArrowLeft className={`h-4 w-4 ${isRTL ? 'rotate-180' : ''}`} />
               {isRTL ? 'عرض جميع المقالات' : 'View All Articles'}
@@ -274,7 +274,7 @@ export default function BlogDetailPage() {
             </p>
             <Link
               href={`/${locale}/scholarships`}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-900 text-primary-600 dark:text-primary-400 font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               {isRTL ? 'تصفح المنح الدراسية' : 'Browse Scholarships'}
             </Link>

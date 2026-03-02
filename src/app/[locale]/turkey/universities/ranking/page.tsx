@@ -147,7 +147,7 @@ export default function UniversityRankingPage() {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+              <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500 ${isRTL ? 'right-3' : 'left-3'}`} />
               <input
                 type="text"
                 placeholder={isRTL ? 'ابحث عن جامعة...' : 'Search for a university...'}
@@ -202,7 +202,7 @@ export default function UniversityRankingPage() {
               {filteredUniversities.map((university) => (
                 <div
                   key={university.rank}
-                  className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 hover:shadow-md transition-shadow ${
+                  className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-4 md:p-6 hover:shadow-md transition-shadow ${
                     university.rank <= 3 ? 'ring-2 ring-yellow-400 dark:ring-yellow-600' : ''
                   }`}
                 >

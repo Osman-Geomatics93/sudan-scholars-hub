@@ -111,18 +111,18 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {error && (
-        <div className="rounded-lg bg-red-50 p-4 text-red-700">{error}</div>
+        <div className="rounded-lg bg-red-50 dark:bg-red-950/50 p-4 text-red-700 dark:text-red-400">{error}</div>
       )}
 
       {/* Personal Info */}
-      <div className="rounded-xl bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">
+      <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
+        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-50">
           {isRTL ? 'المعلومات الشخصية' : 'Personal Information'}
         </h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Name (English) *
             </label>
             <input
@@ -131,12 +131,12 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
               placeholder="e.g., Ahmed Mohamed"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               الاسم (عربي) *
             </label>
             <input
@@ -146,12 +146,12 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
               required
               dir="rtl"
               placeholder="مثال: أحمد محمد"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Avatar URL *
             </label>
             <input
@@ -160,7 +160,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
               onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
               required
               placeholder="https://example.com/avatar.jpg"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
             {formData.avatar && (
               <div className="mt-2">
@@ -179,7 +179,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Scholarship Year *
             </label>
             <select
@@ -188,7 +188,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
                 setFormData({ ...formData, scholarshipYear: parseInt(e.target.value) })
               }
               required
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             >
               {years.map((year) => (
                 <option key={year} value={year}>
@@ -201,14 +201,14 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
       </div>
 
       {/* University & Country */}
-      <div className="rounded-xl bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">
+      <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
+        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-50">
           {isRTL ? 'الجامعة والدولة' : 'University & Country'}
         </h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               University (English) *
             </label>
             <input
@@ -217,12 +217,12 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
               onChange={(e) => setFormData({ ...formData, university: e.target.value })}
               required
               placeholder="e.g., Harvard University"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               الجامعة (عربي) *
             </label>
             <input
@@ -232,23 +232,23 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
               required
               dir="rtl"
               placeholder="مثال: جامعة هارفارد"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
           </div>
 
           <div className="md:col-span-2">
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Country *
             </label>
             <div className="relative">
               <div className="relative mb-2">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                 <input
                   type="text"
                   placeholder="Search countries..."
                   value={countrySearch}
                   onChange={(e) => setCountrySearch(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 py-2 pl-10 pr-4 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 />
               </div>
               <select
@@ -256,7 +256,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
                 onChange={(e) => handleCountryChange(e.target.value)}
                 required
                 size={6}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               >
                 {filteredCountries.map((c) => (
                   <option key={c.code} value={c.name}>
@@ -265,7 +265,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
                 ))}
               </select>
               {formData.country && (
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   Selected: {formData.country} / {formData.countryAr}
                 </p>
               )}
@@ -275,14 +275,14 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
       </div>
 
       {/* Testimonial Quote */}
-      <div className="rounded-xl bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">
+      <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
+        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-50">
           {isRTL ? 'الشهادة' : 'Testimonial Quote'}
         </h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Quote (English) *
             </label>
             <textarea
@@ -291,12 +291,12 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
               required
               rows={5}
               placeholder="Share the student's experience and journey..."
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               الاقتباس (عربي) *
             </label>
             <textarea
@@ -306,15 +306,15 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
               rows={5}
               dir="rtl"
               placeholder="شارك تجربة الطالب ورحلته..."
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             />
           </div>
         </div>
       </div>
 
       {/* Status */}
-      <div className="rounded-xl bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">
+      <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
+        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-50">
           {isRTL ? 'الحالة' : 'Status'}
         </h2>
 
@@ -326,7 +326,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
             onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
             className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
           />
-          <label htmlFor="isPublished" className="text-sm text-gray-700">
+          <label htmlFor="isPublished" className="text-sm text-gray-700 dark:text-gray-300">
             {isRTL ? 'منشور (يظهر على الموقع)' : 'Published (visible on website)'}
           </label>
         </div>
@@ -337,7 +337,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
         <button
           type="button"
           onClick={() => router.back()}
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           <ArrowLeft className="h-4 w-4" />
           {isRTL ? 'رجوع' : 'Back'}
@@ -346,7 +346,7 @@ export function TestimonialForm({ initialData, testimonialId }: TestimonialFormP
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-6 py-2 text-white hover:bg-primary-700 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-6 py-2 text-white hover:bg-primary-700 dark:hover:bg-primary-600 disabled:opacity-50"
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />

@@ -103,10 +103,10 @@ export function StepTemplate({ locale, data, onDataChange }: StepTemplateProps) 
           {templates.map((template) => (
             <Card
               key={template.id}
-              className={`cursor-pointer transition-all hover:shadow-lg ${
+              className={`cursor-pointer transition-all hover:shadow-lg dark:shadow-gray-900/50 ${
                 selectedTemplate === template.id
                   ? 'ring-2 ring-primary border-primary'
-                  : 'hover:border-gray-400'
+                  : 'hover:border-gray-400 dark:hover:border-gray-500'
               }`}
               onClick={() => handleTemplateSelect(template.id)}
             >
@@ -242,27 +242,27 @@ export function StepTemplate({ locale, data, onDataChange }: StepTemplateProps) 
         </h4>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500">{isRTL ? 'الاسم:' : 'Name:'}</span>
+            <span className="text-gray-500 dark:text-gray-400">{isRTL ? 'الاسم:' : 'Name:'}</span>
             <span className="ml-2 font-medium">{data.personal.fullName || '-'}</span>
           </div>
           <div>
-            <span className="text-gray-500">{isRTL ? 'البريد:' : 'Email:'}</span>
+            <span className="text-gray-500 dark:text-gray-400">{isRTL ? 'البريد:' : 'Email:'}</span>
             <span className="ml-2 font-medium">{data.personal.email || '-'}</span>
           </div>
           <div>
-            <span className="text-gray-500">{isRTL ? 'التعليم:' : 'Education:'}</span>
+            <span className="text-gray-500 dark:text-gray-400">{isRTL ? 'التعليم:' : 'Education:'}</span>
             <span className="ml-2 font-medium">{data.education.length} {isRTL ? 'إدخالات' : 'entries'}</span>
           </div>
           <div>
-            <span className="text-gray-500">{isRTL ? 'الخبرة:' : 'Experience:'}</span>
+            <span className="text-gray-500 dark:text-gray-400">{isRTL ? 'الخبرة:' : 'Experience:'}</span>
             <span className="ml-2 font-medium">{data.experience.length} {isRTL ? 'إدخالات' : 'entries'}</span>
           </div>
           <div>
-            <span className="text-gray-500">{isRTL ? 'المهارات:' : 'Skills:'}</span>
+            <span className="text-gray-500 dark:text-gray-400">{isRTL ? 'المهارات:' : 'Skills:'}</span>
             <span className="ml-2 font-medium">{data.skills.length} {isRTL ? 'مهارات' : 'skills'}</span>
           </div>
           <div>
-            <span className="text-gray-500">{isRTL ? 'اللغات:' : 'Languages:'}</span>
+            <span className="text-gray-500 dark:text-gray-400">{isRTL ? 'اللغات:' : 'Languages:'}</span>
             <span className="ml-2 font-medium">{data.languages.length} {isRTL ? 'لغات' : 'languages'}</span>
           </div>
         </div>

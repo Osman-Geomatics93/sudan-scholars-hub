@@ -193,10 +193,10 @@ export default function AdvertisementsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
             {isRTL ? 'الإعلانات' : 'Advertisements'}
           </h1>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 dark:text-gray-400">
             {isRTL
               ? `${advertisements.length} إعلان`
               : `${advertisements.length} advertisements`}
@@ -204,7 +204,7 @@ export default function AdvertisementsPage() {
         </div>
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-4 py-2 text-white transition-colors hover:bg-primary-700 dark:hover:bg-primary-600"
         >
           <Plus className="h-5 w-5" />
           {isRTL ? 'إضافة إعلان' : 'Add Advertisement'}
@@ -214,7 +214,7 @@ export default function AdvertisementsPage() {
       {/* Search */}
       <div className="relative">
         <Search
-          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${
+          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500 ${
             isRTL ? 'right-3' : 'left-3'
           }`}
         />
@@ -223,7 +223,7 @@ export default function AdvertisementsPage() {
           placeholder={isRTL ? 'البحث عن إعلان...' : 'Search advertisements...'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className={`w-full rounded-lg border border-gray-300 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+          className={`w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
             isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
           }`}
         />
@@ -234,10 +234,10 @@ export default function AdvertisementsPage() {
         {filteredAdvertisements.map((ad) => (
           <div
             key={ad.id}
-            className="group rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md overflow-hidden"
+            className="group rounded-xl bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-900/50 transition-shadow hover:shadow-md overflow-hidden"
           >
             {/* Image */}
-            <div className="relative h-40 bg-gray-100">
+            <div className="relative h-40 bg-gray-100 dark:bg-gray-800">
               <Image
                 src={ad.imageUrl}
                 alt={isRTL ? ad.titleAr : ad.title}
@@ -248,7 +248,7 @@ export default function AdvertisementsPage() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
 
               {/* Order badge */}
-              <div className="absolute top-2 left-2 bg-white/90 rounded-full px-2 py-1 text-xs font-medium text-gray-700 flex items-center gap-1">
+              <div className="absolute top-2 left-2 bg-white/90 dark:bg-gray-900/90 rounded-full px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
                 <GripVertical className="h-3 w-3" />
                 #{ad.order + 1}
               </div>
@@ -257,8 +257,8 @@ export default function AdvertisementsPage() {
               <div
                 className={`absolute top-2 right-2 rounded-full px-2 py-1 text-xs font-medium ${
                   ad.isActive
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-700'
+                    ? 'bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-400'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                 }`}
               >
                 {ad.isActive
@@ -273,7 +273,7 @@ export default function AdvertisementsPage() {
 
             {/* Content */}
             <div className="p-4">
-              <h3 className="font-semibold text-gray-900 mb-1 truncate">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1 truncate">
                 {isRTL ? ad.titleAr : ad.title}
               </h3>
               {ad.linkUrl && (
@@ -281,7 +281,7 @@ export default function AdvertisementsPage() {
                   href={ad.linkUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-primary-600 hover:underline flex items-center gap-1 truncate"
+                  className="text-sm text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1 truncate"
                 >
                   <ExternalLink className="h-3 w-3 shrink-0" />
                   <span className="truncate">{ad.linkUrl}</span>
@@ -289,10 +289,10 @@ export default function AdvertisementsPage() {
               )}
 
               {/* Actions */}
-              <div className="flex items-center justify-end gap-2 border-t mt-4 pt-4">
+              <div className="flex items-center justify-end gap-2 border-t dark:border-gray-700 mt-4 pt-4">
                 <button
                   onClick={() => toggleActive(ad.id, ad.isActive)}
-                  className="rounded p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                  className="rounded p-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300"
                   title={ad.isActive ? 'Deactivate' : 'Activate'}
                 >
                   {ad.isActive ? (
@@ -303,13 +303,13 @@ export default function AdvertisementsPage() {
                 </button>
                 <button
                   onClick={() => openEditModal(ad)}
-                  className="rounded p-2 text-gray-400 hover:bg-gray-100 hover:text-primary-600"
+                  className="rounded p-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600"
                 >
                   <Edit className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => deleteAdvertisement(ad.id)}
-                  className="rounded p-2 text-gray-400 hover:bg-gray-100 hover:text-red-600"
+                  className="rounded p-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -320,12 +320,12 @@ export default function AdvertisementsPage() {
       </div>
 
       {filteredAdvertisements.length === 0 && (
-        <div className="rounded-xl bg-white py-12 text-center text-gray-500 shadow-sm">
-          <ImageIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+        <div className="rounded-xl bg-white dark:bg-gray-900 py-12 text-center text-gray-500 dark:text-gray-400 shadow-sm dark:shadow-gray-900/50">
+          <ImageIcon className="h-12 w-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" />
           <p>{isRTL ? 'لا توجد إعلانات للعرض' : 'No advertisements to display'}</p>
           <button
             onClick={openCreateModal}
-            className="mt-4 text-primary-600 hover:underline"
+            className="mt-4 text-primary-600 dark:text-primary-400 hover:underline"
           >
             {isRTL ? 'إضافة إعلان جديد' : 'Add your first advertisement'}
           </button>
@@ -339,10 +339,10 @@ export default function AdvertisementsPage() {
             className="absolute inset-0 bg-black/50"
             onClick={() => setIsModalOpen(false)}
           />
-          <div className="relative bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+          <div className="relative bg-white dark:bg-gray-900 rounded-xl shadow-xl dark:shadow-gray-900/50 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-semibold text-gray-900">
+            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                 {editingId
                   ? isRTL
                     ? 'تعديل الإعلان'
@@ -353,7 +353,7 @@ export default function AdvertisementsPage() {
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+                className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -363,7 +363,7 @@ export default function AdvertisementsPage() {
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
               {/* Title (English) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'العنوان (إنجليزي)' : 'Title (English)'} *
                 </label>
                 <input
@@ -372,14 +372,14 @@ export default function AdvertisementsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   required
                 />
               </div>
 
               {/* Title (Arabic) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'العنوان (عربي)' : 'Title (Arabic)'} *
                 </label>
                 <input
@@ -388,7 +388,7 @@ export default function AdvertisementsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, titleAr: e.target.value })
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   dir="rtl"
                   required
                 />
@@ -396,7 +396,7 @@ export default function AdvertisementsPage() {
 
               {/* Image URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'رابط الصورة' : 'Image URL'} *
                 </label>
                 <input
@@ -405,7 +405,7 @@ export default function AdvertisementsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, imageUrl: e.target.value })
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   placeholder="https://example.com/image.jpg"
                   required
                 />
@@ -426,7 +426,7 @@ export default function AdvertisementsPage() {
 
               {/* Link URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'رابط الإعلان (اختياري)' : 'Link URL (Optional)'}
                 </label>
                 <input
@@ -435,14 +435,14 @@ export default function AdvertisementsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, linkUrl: e.target.value })
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   placeholder="https://example.com"
                 />
               </div>
 
               {/* Order */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {isRTL ? 'الترتيب' : 'Display Order'}
                 </label>
                 <input
@@ -451,7 +451,7 @@ export default function AdvertisementsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, order: parseInt(e.target.value) || 0 })
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   min="0"
                 />
               </div>
@@ -469,24 +469,24 @@ export default function AdvertisementsPage() {
                   />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
                 </label>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {isRTL ? 'نشط' : 'Active'}
                 </span>
               </div>
 
               {/* Submit Button */}
-              <div className="flex justify-end gap-3 pt-4 border-t">
+              <div className="flex justify-end gap-3 pt-4 border-t dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 >
                   {isRTL ? 'إلغاء' : 'Cancel'}
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 dark:bg-primary-500 text-white rounded-lg hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors disabled:opacity-50"
                 >
                   {saving ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

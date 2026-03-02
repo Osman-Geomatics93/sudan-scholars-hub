@@ -99,7 +99,7 @@ export function StepAwards({ locale, data, onDataChange }: StepAwardsProps) {
                       {award.title || (isRTL ? 'جائزة جديدة' : 'New Award')}
                     </p>
                     {award.issuer && (
-                      <p className="text-sm text-gray-500">{award.issuer}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{award.issuer}</p>
                     )}
                   </div>
                 </div>

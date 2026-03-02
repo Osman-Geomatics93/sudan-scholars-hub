@@ -122,7 +122,7 @@ export function WizardStepTabs({
       {showLeftArrow && (
         <button
           onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md rounded-full border border-gray-200 dark:border-gray-700 lg:hidden"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900/50 rounded-full border border-gray-200 dark:border-gray-700 lg:hidden"
           aria-label={isRTL ? 'تمرير لليسار' : 'Scroll left'}
         >
           <ChevronLeft className="w-4 h-4" />
@@ -162,7 +162,7 @@ export function WizardStepTabs({
                 // Current step
                 isCurrent && [
                   'bg-primary-600 text-white shadow-md',
-                  'dark:bg-primary-500',
+                  'dark:bg-primary-500 dark:shadow-gray-900/50',
                 ],
                 // Completed step
                 isCompleted && [
@@ -207,7 +207,7 @@ export function WizardStepTabs({
       {showRightArrow && (
         <button
           onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md rounded-full border border-gray-200 dark:border-gray-700 lg:hidden"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900/50 rounded-full border border-gray-200 dark:border-gray-700 lg:hidden"
           aria-label={isRTL ? 'تمرير لليمين' : 'Scroll right'}
         >
           <ChevronRight className="w-4 h-4" />

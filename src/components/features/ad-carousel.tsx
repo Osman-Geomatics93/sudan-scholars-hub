@@ -134,7 +134,7 @@ export function AdCarousel({ locale = 'en', autoPlayInterval = 5000 }: AdCarouse
                 e.stopPropagation();
                 isRTL ? goToNext() : goToPrev();
               }}
-              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 dark:bg-gray-900/80 text-gray-800 dark:text-gray-200 shadow-lg hover:bg-white dark:hover:bg-gray-900 transition-all opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100"
+              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 dark:bg-gray-900/80 text-gray-800 dark:text-gray-200 shadow-lg dark:shadow-gray-900/50 hover:bg-white dark:hover:bg-gray-900 transition-all opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100"
               style={{ opacity: isPaused ? 1 : 0 }}
               aria-label={isRTL ? 'Next slide' : 'Previous slide'}
             >
@@ -145,7 +145,7 @@ export function AdCarousel({ locale = 'en', autoPlayInterval = 5000 }: AdCarouse
                 e.stopPropagation();
                 isRTL ? goToPrev() : goToNext();
               }}
-              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 dark:bg-gray-900/80 text-gray-800 dark:text-gray-200 shadow-lg hover:bg-white dark:hover:bg-gray-900 transition-all opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100"
+              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 dark:bg-gray-900/80 text-gray-800 dark:text-gray-200 shadow-lg dark:shadow-gray-900/50 hover:bg-white dark:hover:bg-gray-900 transition-all opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100"
               style={{ opacity: isPaused ? 1 : 0 }}
               aria-label={isRTL ? 'Previous slide' : 'Next slide'}
             >

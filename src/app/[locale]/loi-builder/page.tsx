@@ -30,8 +30,8 @@ export default function LOIBuilderPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
-          <p className="mt-2 text-gray-500">
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 dark:text-primary-400 mx-auto" />
+          <p className="mt-2 text-gray-500 dark:text-gray-400">
             {isRTL ? 'جاري التحميل...' : 'Loading...'}
           </p>
         </div>
@@ -44,8 +44,8 @@ export default function LOIBuilderPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
-          <p className="mt-2 text-gray-500">
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 dark:text-primary-400 mx-auto" />
+          <p className="mt-2 text-gray-500 dark:text-gray-400">
             {isRTL ? 'جاري إعادة التوجيه...' : 'Redirecting...'}
           </p>
         </div>

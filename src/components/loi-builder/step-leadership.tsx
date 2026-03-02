@@ -73,7 +73,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
       {/* Section explanation */}
       <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg border border-primary-100 dark:border-primary-800">
         <div className="flex items-start gap-3">
-          <Users className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+          <Users className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-primary-700 dark:text-primary-300">
               {isRTL ? 'قصة القيادة (تنسيق STAR)' : 'Leadership Story (STAR Format)'}
@@ -94,25 +94,25 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
         </h4>
         <div className="grid sm:grid-cols-2 gap-3 text-sm">
           <div className="flex items-start gap-2">
-            <span className="bg-primary-600 text-white px-2 py-0.5 rounded font-bold text-xs">S</span>
+            <span className="bg-primary-600 dark:bg-primary-500 text-white px-2 py-0.5 rounded font-bold text-xs">S</span>
             <span className="text-gray-600 dark:text-gray-400">
               {isRTL ? 'الموقف - السياق والإطار' : 'Situation - Context and setting'}
             </span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="bg-primary-600 text-white px-2 py-0.5 rounded font-bold text-xs">T</span>
+            <span className="bg-primary-600 dark:bg-primary-500 text-white px-2 py-0.5 rounded font-bold text-xs">T</span>
             <span className="text-gray-600 dark:text-gray-400">
               {isRTL ? 'المهمة - مسؤوليتك' : 'Task - Your responsibility'}
             </span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="bg-primary-600 text-white px-2 py-0.5 rounded font-bold text-xs">A</span>
+            <span className="bg-primary-600 dark:bg-primary-500 text-white px-2 py-0.5 rounded font-bold text-xs">A</span>
             <span className="text-gray-600 dark:text-gray-400">
               {isRTL ? 'الإجراء - ما فعلته أنت' : 'Action - What YOU did'}
             </span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="bg-primary-600 text-white px-2 py-0.5 rounded font-bold text-xs">R</span>
+            <span className="bg-primary-600 dark:bg-primary-500 text-white px-2 py-0.5 rounded font-bold text-xs">R</span>
             <span className="text-gray-600 dark:text-gray-400">
               {isRTL ? 'النتيجة - النتيجة القابلة للقياس' : 'Result - Measurable outcome'}
             </span>
@@ -149,7 +149,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
         {/* Situation */}
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <Target className="w-4 h-4 text-primary-600" />
+            <Target className="w-4 h-4 text-primary-600 dark:text-primary-400" />
             {isRTL ? 'الموقف (السياق)' : 'Situation (Context)'} *
           </label>
           <Textarea
@@ -172,7 +172,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
         {/* Task */}
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <Zap className="w-4 h-4 text-primary-600" />
+            <Zap className="w-4 h-4 text-primary-600 dark:text-primary-400" />
             {isRTL ? 'المهمة (مسؤوليتك)' : 'Task (Your Responsibility)'} *
           </label>
           <Textarea
@@ -196,7 +196,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              <Zap className="w-4 h-4 text-primary-600" />
+              <Zap className="w-4 h-4 text-primary-600 dark:text-primary-400" />
               {isRTL ? 'الإجراء (ما فعلته)' : 'Action (What You Did)'} *
             </label>
             <Button
@@ -205,7 +205,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
               size="sm"
               onClick={() => handleGetAISuggestion('action')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'action'
@@ -241,7 +241,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              <Trophy className="w-4 h-4 text-primary-600" />
+              <Trophy className="w-4 h-4 text-primary-600 dark:text-primary-400" />
               {isRTL ? 'النتيجة (النتيجة القابلة للقياس)' : 'Result (Measurable Outcome)'} *
             </label>
             <Button
@@ -250,7 +250,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
               size="sm"
               onClick={() => handleGetAISuggestion('result')}
               disabled={isLoadingAI}
-              className="text-primary-600 hover:text-primary-700"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               <Sparkles className="w-4 h-4 me-1" />
               {isLoadingAI && activeField === 'result'
@@ -285,7 +285,7 @@ export function StepLeadership({ locale, data, onDataChange }: StepLeadershipPro
         {/* Lessons Learned */}
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <Lightbulb className="w-4 h-4 text-primary-600" />
+            <Lightbulb className="w-4 h-4 text-primary-600 dark:text-primary-400" />
             {isRTL ? 'الدروس المستفادة' : 'Lessons Learned'}
           </label>
           <Textarea

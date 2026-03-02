@@ -120,10 +120,10 @@ export default function TestimonialsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
             {isRTL ? 'شهادات الطلاب' : 'Testimonials'}
           </h1>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 dark:text-gray-400">
             {isRTL
               ? `${testimonials.length} شهادة`
               : `${testimonials.length} testimonials`}
@@ -131,7 +131,7 @@ export default function TestimonialsPage() {
         </div>
         <Link
           href={`/${locale}/admin/testimonials/new`}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-4 py-2 text-white transition-colors hover:bg-primary-700 dark:hover:bg-primary-600"
         >
           <Plus className="h-5 w-5" />
           {isRTL ? 'إضافة شهادة' : 'Add Testimonial'}
@@ -141,7 +141,7 @@ export default function TestimonialsPage() {
       {/* Search */}
       <div className="relative">
         <Search
-          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${
+          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500 ${
             isRTL ? 'right-3' : 'left-3'
           }`}
         />
@@ -150,7 +150,7 @@ export default function TestimonialsPage() {
           placeholder={isRTL ? 'البحث عن شهادة...' : 'Search testimonials...'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className={`w-full rounded-lg border border-gray-300 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+          className={`w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
             isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
           }`}
         />
@@ -161,7 +161,7 @@ export default function TestimonialsPage() {
         {filteredTestimonials.map((testimonial) => (
           <div
             key={testimonial.id}
-            className="rounded-xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50 transition-shadow hover:shadow-md"
           >
             {/* Header */}
             <div className="mb-4 flex items-start justify-between">
@@ -177,10 +177,10 @@ export default function TestimonialsPage() {
                   }}
                 />
                 <div>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-50">
                     {isRTL ? testimonial.nameAr : testimonial.name}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {isRTL ? testimonial.universityAr : testimonial.university}
                   </p>
                 </div>
@@ -188,8 +188,8 @@ export default function TestimonialsPage() {
               <span
                 className={`rounded-full px-2 py-1 text-xs font-medium ${
                   testimonial.isPublished
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-700'
+                    ? 'bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-400'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                 }`}
               >
                 {testimonial.isPublished
@@ -205,13 +205,13 @@ export default function TestimonialsPage() {
             {/* Quote */}
             <div className="mb-4">
               <Quote className="mb-2 h-5 w-5 text-primary-300" />
-              <p className="line-clamp-3 text-sm text-gray-600">
+              <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
                 {isRTL ? testimonial.quoteAr : testimonial.quote}
               </p>
             </div>
 
             {/* Meta */}
-            <div className="mb-4 flex items-center gap-4 text-sm text-gray-500">
+            <div className="mb-4 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
               <span className="flex items-center gap-1">
                 <GraduationCap className="h-4 w-4" />
                 {testimonial.scholarshipYear}
@@ -220,12 +220,12 @@ export default function TestimonialsPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-2 border-t pt-4">
+            <div className="flex items-center justify-end gap-2 border-t dark:border-gray-700 pt-4">
               <button
                 onClick={() =>
                   togglePublish(testimonial.id, testimonial.isPublished)
                 }
-                className="rounded p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                className="rounded p-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300"
                 title={testimonial.isPublished ? 'Unpublish' : 'Publish'}
               >
                 {testimonial.isPublished ? (
@@ -236,13 +236,13 @@ export default function TestimonialsPage() {
               </button>
               <Link
                 href={`/${locale}/admin/testimonials/${testimonial.id}/edit`}
-                className="rounded p-2 text-gray-400 hover:bg-gray-100 hover:text-primary-600"
+                className="rounded p-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600"
               >
                 <Edit className="h-4 w-4" />
               </Link>
               <button
                 onClick={() => deleteTestimonial(testimonial.id)}
-                className="rounded p-2 text-gray-400 hover:bg-gray-100 hover:text-red-600"
+                className="rounded p-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -252,7 +252,7 @@ export default function TestimonialsPage() {
       </div>
 
       {filteredTestimonials.length === 0 && (
-        <div className="rounded-xl bg-white py-12 text-center text-gray-500 shadow-sm">
+        <div className="rounded-xl bg-white dark:bg-gray-900 py-12 text-center text-gray-500 dark:text-gray-400 shadow-sm dark:shadow-gray-900/50">
           {isRTL ? 'لا توجد شهادات للعرض' : 'No testimonials to display'}
         </div>
       )}

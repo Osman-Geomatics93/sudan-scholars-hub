@@ -24,7 +24,7 @@ export function ChatMessage({ message, locale = 'en' }: ChatMessageProps) {
       <div
         className={cn(
           'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-          isUser ? 'bg-primary-100 text-primary-600' : 'bg-gradient-to-br from-primary-500 to-primary-600 text-white'
+          isUser ? 'bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400' : 'bg-gradient-to-br from-primary-500 to-primary-600 text-white'
         )}
       >
         {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
@@ -66,9 +66,9 @@ export function TypingIndicator({ locale = 'en' }: { locale?: string }) {
       </div>
       <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-sm px-4 py-3">
         <div className="flex gap-1">
-          <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-          <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-          <span className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+          <span className="h-2 w-2 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+          <span className="h-2 w-2 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+          <span className="h-2 w-2 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce" style={{ animationDelay: '300ms' }} />
         </div>
       </div>
     </div>

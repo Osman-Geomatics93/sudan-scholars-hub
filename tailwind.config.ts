@@ -51,7 +51,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         arabic: ['var(--font-cairo)', 'Cairo', 'system-ui', 'sans-serif'],
       },
       fontSize: {

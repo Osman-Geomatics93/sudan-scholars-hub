@@ -251,7 +251,7 @@ export default function EditCVPage() {
       <MainLayout locale={locale}>
         <Container size="md" className="pt-24 pb-16">
           <div className="text-center">
-            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <FileText className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {labels.notFound}
             </h1>
@@ -327,7 +327,7 @@ export default function EditCVPage() {
                     <h3 className="font-medium text-gray-900 dark:text-white">
                       {labels.shareSettings}
                     </h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {labels.publicDescription}
                     </p>
                   </div>

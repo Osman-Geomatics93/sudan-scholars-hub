@@ -170,7 +170,7 @@ export default function StudyGuidesPage() {
       <section className="gradient-hero pt-24 pb-16 md:pt-32 md:pb-24">
         <Container size="md">
           <div className="text-center">
-            <Globe className="h-16 w-16 text-primary-600 mx-auto mb-6" />
+            <Globe className="h-16 w-16 text-primary-600 dark:text-primary-400 mx-auto mb-6" />
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">
               {isRTL ? 'أدلة الدراسة' : 'Study Guides'}
             </h1>
@@ -222,7 +222,7 @@ export default function StudyGuidesPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       {guide.highlights.map((h, i) => (
                         <div key={i} className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                          <h.icon className="h-5 w-5 text-primary-600 mx-auto mb-1" />
+                          <h.icon className="h-5 w-5 text-primary-600 dark:text-primary-400 mx-auto mb-1" />
                           <span className="text-sm text-gray-700 dark:text-gray-300">
                             {isRTL ? h.textAr : h.text}
                           </span>
@@ -233,7 +233,7 @@ export default function StudyGuidesPage() {
                     {/* Details */}
                     <div className="grid md:grid-cols-2 gap-4 text-sm">
                       <div className="flex items-start gap-2">
-                        <DollarSign className="h-4 w-4 text-gray-400 mt-0.5" />
+                        <DollarSign className="h-4 w-4 text-gray-400 dark:text-gray-500 mt-0.5" />
                         <div>
                           <span className="font-medium text-gray-900 dark:text-gray-50">
                             {isRTL ? 'تكلفة المعيشة:' : 'Cost of Living:'}
@@ -244,7 +244,7 @@ export default function StudyGuidesPage() {
                         </div>
                       </div>
                       <div className="flex items-start gap-2">
-                        <Languages className="h-4 w-4 text-gray-400 mt-0.5" />
+                        <Languages className="h-4 w-4 text-gray-400 dark:text-gray-500 mt-0.5" />
                         <div>
                           <span className="font-medium text-gray-900 dark:text-gray-50">
                             {isRTL ? 'اللغة:' : 'Language:'}
@@ -255,7 +255,7 @@ export default function StudyGuidesPage() {
                         </div>
                       </div>
                       <div className="flex items-start gap-2 md:col-span-2">
-                        <FileCheck className="h-4 w-4 text-gray-400 mt-0.5" />
+                        <FileCheck className="h-4 w-4 text-gray-400 dark:text-gray-500 mt-0.5" />
                         <div>
                           <span className="font-medium text-gray-900 dark:text-gray-50">
                             {isRTL ? 'التأشيرة:' : 'Visa:'}
@@ -268,7 +268,7 @@ export default function StudyGuidesPage() {
                     </div>
 
                     {/* Top Universities */}
-                    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                       <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
                         {isRTL ? 'أفضل الجامعات:' : 'Top Universities:'}
                       </span>
@@ -292,9 +292,9 @@ export default function StudyGuidesPage() {
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {generalTips.map((tip, idx) => (
-              <Card key={idx} className="p-6 text-center hover:shadow-md transition-shadow">
-                <div className="inline-flex p-3 bg-primary-100 rounded-full mb-4">
-                  <tip.icon className="h-6 w-6 text-primary-600" />
+              <Card key={idx} className="p-6 text-center hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow">
+                <div className="inline-flex p-3 bg-primary-100 dark:bg-primary-950 rounded-full mb-4">
+                  <tip.icon className="h-6 w-6 text-primary-600 dark:text-primary-400" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-2">
                   {isRTL ? tip.titleAr : tip.title}
@@ -323,7 +323,7 @@ export default function StudyGuidesPage() {
               }
             </p>
             <Link href={`/${locale}/scholarships`}>
-              <Button variant="secondary" size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
+              <Button variant="secondary" size="lg" className="bg-white dark:bg-gray-900 text-primary-600 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800">
                 {isRTL ? 'استكشف المنح' : 'Explore Scholarships'}
                 <ArrowRight className={`h-5 w-5 ${isRTL ? 'rotate-180 me-2' : 'ms-2'}`} />
               </Button>

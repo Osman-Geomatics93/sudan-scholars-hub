@@ -212,9 +212,9 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       )}
 
       {/* Calendar Type Selection */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
-          <Calendar className="h-5 w-5 text-primary-600" />
+          <Calendar className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           Calendar Type
         </h2>
         <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">
@@ -264,9 +264,9 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       </div>
 
       {/* University Info */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
-          <School className="h-5 w-5 text-primary-600" />
+          <School className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           University Information
         </h2>
 
@@ -406,7 +406,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       </div>
 
       {/* Language of Instruction */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
           Language of Instruction *
         </h2>
@@ -446,7 +446,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
 
       {/* Program Duration (only for Summer) */}
       {formData.calendarType === 'summer' && (
-        <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+        <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
             <Sun className="h-5 w-5 text-orange-500" />
             Summer Program Details
@@ -473,7 +473,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       )}
 
       {/* Dates */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
           Important Dates
         </h2>
@@ -521,7 +521,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       </div>
 
       {/* Accepted Certificates */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
           Accepted Certificates *
         </h2>
@@ -583,7 +583,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       </div>
 
       {/* Application Details */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
           Application Details
         </h2>
@@ -624,7 +624,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       </div>
 
       {/* Application Fee */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
           Application Fee
         </h2>
@@ -695,7 +695,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
       </div>
 
       {/* Status */}
-      <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
+      <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/50 dark:bg-gray-800">
         <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Status</h2>
 
         <div className="flex items-center gap-3">
@@ -730,7 +730,7 @@ export function UniversityAdmissionForm({ initialData, admissionId }: University
             formData.acceptedCertificates.length === 0 ||
             formData.languageOfInstruction.length === 0
           }
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-6 py-2 text-white hover:bg-primary-700 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-6 py-2 text-white hover:bg-primary-700 dark:hover:bg-primary-600 disabled:opacity-50"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           {loading ? 'Saving...' : 'Save'}

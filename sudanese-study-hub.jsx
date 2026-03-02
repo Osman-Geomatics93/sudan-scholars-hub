@@ -3568,7 +3568,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     ))}
                     <button
                       onClick={() => { setShowAddToCollectionPopup(null); setShowCollectionModal(true); }}
-                      style={{ ...S.shareOption, borderTop: "1px solid #ede5da", color: "#C8956C", fontWeight: 700 }}
+                      style={{ ...S.shareOption, borderTop: "1px solid rgba(0,0,0,0.06)", color: "#C8956C", fontWeight: 700 }}
                     >+ {t.createCollection}</button>
                   </div>
                 )}
@@ -3650,18 +3650,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           overflow: visible !important;
         }
 
-        /* Hover animations (preserved) */
+        /* Hover animations (premium snap) */
         .recent-mat-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 8px 30px rgba(0,0,0,0.1) !important;
+          transform: translateY(-2px);
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08) !important;
           border-color: #C8956C !important;
         }
         .studyhub-country-card {
-          transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .studyhub-country-card:hover {
-          transform: translateY(-6px) scale(1.02);
-          box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+          transform: translateY(-2px);
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08);
         }
         .studyhub-show-all-btn {
           transition: background 0.2s, color 0.2s;
@@ -3678,11 +3678,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           color: white !important;
         }
         .studyhub-view-all-btn {
-          transition: transform 0.2s, box-shadow 0.2s;
+          transition: opacity 0.2s;
         }
         .studyhub-view-all-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 15px rgba(27,58,75,0.3);
+          opacity: 0.85;
         }
 
         /* === Header nav dropdown animation === */
@@ -3702,7 +3701,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         [dir=rtl] .my-group-chevron.expanded { transform: rotate(-90deg); }
         .my-mat-card:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08) !important;
         }
         .my-group-header:hover { background: #f0ebe4 !important; }
 
@@ -3712,7 +3711,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           .my-mat-card:hover,
           .studyhub-country-card:hover {
             transform: none !important;
-            box-shadow: 0 3px 16px rgba(0,0,0,0.05) !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06) !important;
           }
         }
 
@@ -3740,7 +3739,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         @media (max-width: 1023px) {
           .studyhub-hero {
             padding: clamp(24px, 4vw, 44px) clamp(14px, 2.5vw, 18px) clamp(20px, 3.5vw, 36px) !important;
-            border-radius: 18px !important;
+            border-radius: 8px !important;
           }
           .studyhub-how-grid {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -3777,7 +3776,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           /* Hero */
           .studyhub-hero {
             padding: 28px 16px 24px !important;
-            border-radius: 16px !important;
+            border-radius: 8px !important;
             margin-bottom: 28px !important;
           }
           .studyhub-hero-title { font-size: 24px !important; }
@@ -3879,7 +3878,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           }
           .studyhub-modal {
             max-width: 100% !important;
-            border-radius: 20px 20px 0 0 !important;
+            border-radius: 12px 12px 0 0 !important;
             max-height: 92dvh !important;
             animation: studyhub-slide-up 0.3s ease-out;
           }
@@ -3902,7 +3901,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
           /* Confirm modal → bottom-sheet too */
           .studyhub-confirm-modal {
-            border-radius: 20px 20px 0 0 !important;
+            border-radius: 12px 12px 0 0 !important;
             max-width: 100% !important;
             padding: 28px 20px !important;
           }
@@ -3921,7 +3920,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           /* My Materials banner */
           .my-mat-banner {
             padding: 20px 18px !important;
-            border-radius: 16px !important;
+            border-radius: 8px !important;
           }
           .my-mat-banner h2 { font-size: 20px !important; }
           .my-mat-stats-row {
@@ -3954,7 +3953,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           /* Duplicate modal */
           .studyhub-dup-modal {
             padding: 24px 16px !important;
-            border-radius: 20px 20px 0 0 !important;
+            border-radius: 12px 12px 0 0 !important;
             max-height: 85dvh !important;
             max-width: 100% !important;
           }
@@ -4048,13 +4047,13 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           /* Card-style sections → tighter on mobile */
           .studyhub-card-section {
             padding: 28px 16px !important;
-            border-radius: 18px !important;
+            border-radius: 8px !important;
           }
 
           /* Video tutorial section → tighter on mobile */
           .studyhub-video-section {
             padding: 28px 16px !important;
-            border-radius: 18px !important;
+            border-radius: 8px !important;
             margin-bottom: 32px !important;
           }
 
@@ -4099,7 +4098,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           .studyhub-hero-title { font-size: 21px !important; }
           .studyhub-hero-sub { font-size: 12px !important; }
           .studyhub-hero-arabic { font-size: 14px !important; }
-          .studyhub-hero { padding: 22px 12px 20px !important; border-radius: 14px !important; }
+          .studyhub-hero { padding: 22px 12px 20px !important; border-radius: 8px !important; }
 
           .studyhub-degree-grid,
           .studyhub-degree-cards {
@@ -4156,7 +4155,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           /* Card sections ultra-compact */
           .studyhub-card-section {
             padding: 22px 12px !important;
-            border-radius: 14px !important;
+            border-radius: 8px !important;
           }
         }
 
@@ -4177,7 +4176,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
             gap: 6px !important;
           }
-          .studyhub-country-card { padding: 12px 8px !important; border-radius: 12px !important; }
+          .studyhub-country-card { padding: 12px 8px !important; border-radius: 8px !important; }
 
           .studyhub-main { padding: 12px 8px !important; }
           .studyhub-breadcrumb {
@@ -4207,7 +4206,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           /* Card sections - minimal padding */
           .studyhub-card-section {
             padding: 18px 10px !important;
-            border-radius: 12px !important;
+            border-radius: 8px !important;
           }
         }
 
@@ -4272,16 +4271,16 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
         /* === REDESIGN: Card interactive hover (replaces inline handlers) === */
         .studyhub-card-interactive {
-          transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .studyhub-card-interactive:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+          transform: translateY(-2px);
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08);
         }
         @media (hover: none) {
           .studyhub-card-interactive:hover {
             transform: none;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06);
           }
         }
 
@@ -4303,9 +4302,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           justify-content: center;
           gap: 0;
           padding: 28px 20px;
-          background: linear-gradient(135deg, rgba(27,58,75,0.04), rgba(200,149,108,0.06));
-          border-radius: 20px;
+          background: rgba(27,58,75,0.03);
+          border-radius: 8px;
           margin-bottom: 44px;
+          border: 1px solid rgba(0,0,0,0.06);
           animation: fadeUp 0.5s ease-out both;
         }
         .studyhub-trust-bar-item {
@@ -4318,22 +4318,23 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           text-align: center;
         }
         .studyhub-trust-bar-item:not(:last-child) {
-          border-right: 1px solid rgba(200,149,108,0.2);
+          border-right: 1px solid rgba(0,0,0,0.06);
         }
         [dir=rtl] .studyhub-trust-bar-item:not(:last-child) {
           border-right: none;
-          border-left: 1px solid rgba(200,149,108,0.2);
+          border-left: 1px solid rgba(0,0,0,0.06);
         }
         .studyhub-trust-bar-num {
           font-size: clamp(24px, 4vw, 34px);
-          font-weight: 900;
+          font-weight: 800;
           color: #C8956C;
           line-height: 1.1;
+          font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         }
         .studyhub-trust-bar-label {
           font-size: 12px;
-          font-weight: 700;
-          color: #888;
+          font-weight: 600;
+          color: #666;
           text-transform: uppercase;
           letter-spacing: 0.6px;
         }
@@ -4366,14 +4367,14 @@ export default function SudaneseStudyHub({ locale = "en" }) {
         .studyhub-degree-strip-card {
           flex-shrink: 0;
           background: white;
-          border-radius: 16px;
+          border-radius: 8px;
           padding: 18px 24px;
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 6px;
           border-top: 4px solid;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06);
           min-width: 135px;
           cursor: default;
         }
@@ -4385,12 +4386,10 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
         /* === REDESIGN: CTA button hover === */
         .studyhub-cta-primary:hover {
-          filter: brightness(1.08);
-          box-shadow: 0 6px 20px rgba(200,149,108,0.35);
+          opacity: 0.88;
         }
         .studyhub-cta-secondary:hover {
-          filter: brightness(1.08);
-          box-shadow: 0 6px 20px rgba(27,58,75,0.35);
+          opacity: 0.88;
         }
 
         /* === REDESIGN: Explore Tools toggle button === */
@@ -4399,7 +4398,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           align-items: center;
           gap: 8px;
           padding: 10px 24px;
-          border-radius: 50px;
+          border-radius: 999px;
           border: 2px solid rgba(255,255,255,0.2);
           background: rgba(255,255,255,0.08);
           color: #F5E6D3;
@@ -4407,7 +4406,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           font-size: 13px;
           cursor: pointer;
           font-family: inherit;
-          transition: all 0.25s;
+          transition: background 0.2s, border-color 0.2s;
           backdrop-filter: blur(4px);
         }
         .studyhub-explore-toggle:hover {
@@ -4428,7 +4427,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           align-items: center;
           gap: 10px;
           padding: 10px 14px;
-          border-radius: 12px;
+          border-radius: 8px;
           background: rgba(255,255,255,0.06);
           border: 1px solid rgba(255,255,255,0.08);
           color: #F5E6D3;
@@ -4436,17 +4435,15 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           font-family: inherit;
           font-size: 13px;
           font-weight: 600;
-          transition: all 0.2s;
+          transition: background 0.2s, border-color 0.2s;
           width: 100%;
           text-align: start;
         }
         .studyhub-qa-item:hover {
           background: rgba(255,255,255,0.14);
           border-color: rgba(255,255,255,0.18);
-          transform: translateX(2px);
         }
         [dir=rtl] .studyhub-qa-item:hover {
-          transform: translateX(-2px);
         }
 
         /* === Keyframes === */
@@ -4485,7 +4482,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
           }
         }
         @media (max-width: 479px) {
-          .studyhub-trust-bar { margin-bottom: 28px !important; border-radius: 16px !important; }
+          .studyhub-trust-bar { margin-bottom: 28px !important; border-radius: 8px !important; }
           .studyhub-trust-bar-num { font-size: 20px !important; }
           .studyhub-degree-strip-card { padding: 14px 18px !important; min-width: 115px !important; }
         }
@@ -5615,7 +5612,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {/* ══════ 1. HERO — Redesigned: clean value prop + search + categorized tools ══════ */}
             <div className="studyhub-hero" style={S.hero}>
               <div className="studyhub-hero-badge" style={S.heroBadge}>🇸🇩 {t.heroBadge}</div>
-              <h2 className="studyhub-hero-title" style={{ ...S.heroTitle, fontSize: "clamp(28px, 5vw, 42px)" }}>{t.heroHeadline}</h2>
+              <h2 className="studyhub-hero-title" style={S.heroTitle}>{t.heroHeadline}</h2>
               <p className="studyhub-hero-sub" style={S.heroSub}>{t.heroSubNew}</p>
 
               {/* Premium Search */}
@@ -5632,7 +5629,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 {heroSearchQuery && <button onClick={() => setHeroSearchQuery("")} style={S.clearBtn}>✕</button>}
                 <button
                   onClick={() => { if (heroSearchQuery.trim()) { setSearchQuery(heroSearchQuery.trim()); navigate("browse-all"); } }}
-                  style={{ background: "linear-gradient(135deg, #C8956C, #B07D55)", border: "none", borderRadius: 50, padding: "8px 20px", color: "white", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap", marginLeft: isRTL ? 0 : 4, marginRight: isRTL ? 4 : 0 }}
+                  style={{ background: "#C8956C", border: "none", borderRadius: 999, padding: "8px 20px", color: "white", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap", marginLeft: isRTL ? 0 : 4, marginRight: isRTL ? 4 : 0 }}
                 >
                   {isRTL ? "بحث" : "Search"}
                 </button>
@@ -5643,18 +5640,18 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <button
                   className="studyhub-cta-primary"
                   onClick={() => navigate("browse-all")}
-                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 50, background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 15px rgba(200,149,108,0.3)", transition: "all 0.2s" }}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 999, background: "#C8956C", color: "white", border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", transition: "opacity 0.2s" }}
                 >
-                  📚 {t.browseMaterialsShort}
+                  {t.browseMaterialsShort}
                 </button>
                 <button
                   className="studyhub-cta-secondary"
                   onClick={() => {
                     if (!requireLogin()) { if (selectedSemester) setShowUploadModal(true); else showNotif(t.selectSemesterFirst, "error"); }
                   }}
-                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 50, background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 15px rgba(27,58,75,0.3)", transition: "all 0.2s" }}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 999, background: "#1B3A4B", color: "white", border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", transition: "opacity 0.2s" }}
                 >
-                  📤 {t.uploadMaterialShort}
+                  {t.uploadMaterialShort}
                 </button>
               </div>
 
@@ -5664,7 +5661,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   className={`studyhub-explore-toggle ${showQuickAccess ? "open" : ""}`}
                   onClick={() => setShowQuickAccess(!showQuickAccess)}
                 >
-                  🧭 {t.exploreTools} <span className="chevron">▼</span>
+                  {t.exploreTools} <span className="chevron">▼</span>
                 </button>
               </div>
 
@@ -5706,12 +5703,11 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {/* ══════ 2. TRUST BAR — Social proof stats ══════ */}
             <div className="studyhub-trust-bar">
               {[
-                { n: `${ALL_COUNTRIES.length}+`, l: t.trustCountries, icon: "🌍" },
-                { n: "10,000+", l: t.trustUniversities, icon: "🏛️" },
-                { n: allMaterialsTotal || "0", l: t.trustMaterials, icon: "📚" },
+                { n: `${ALL_COUNTRIES.length}+`, l: t.trustCountries },
+                { n: "10,000+", l: t.trustUniversities },
+                { n: allMaterialsTotal || "0", l: t.trustMaterials },
               ].map((s, i) => (
                 <div key={i} className="studyhub-trust-bar-item">
-                  <span style={{ fontSize: 20, opacity: 0.7 }}>{s.icon}</span>
                   <span className="studyhub-trust-bar-num">{s.n}</span>
                   <span className="studyhub-trust-bar-label">{s.l}</span>
                 </div>
@@ -5721,7 +5717,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {/* ══════ 3. BROWSE BY COUNTRY — Primary navigation (moved UP) ══════ */}
             <div className="studyhub-section" style={S.countrySectionWrap}>
               <div style={S.sectionHead}>
-                <h3 style={S.sectionHeadTitle}>🌍 {t.browseByCountry}</h3>
+                <h3 style={S.sectionHeadTitle}>{t.browseByCountry}</h3>
                 <p style={S.sectionHeadSub}>
                   {isRTL ? "تصفح الجامعات والمواد الدراسية حسب الدولة" : "Explore universities and study materials by country"}
                 </p>
@@ -5738,7 +5734,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={(e) => { const w = e.currentTarget.parentElement; w.style.borderColor = "#1B3A4B"; w.style.boxShadow = "0 0 0 3px rgba(27,58,75,0.08)"; }}
                     onBlur={(e) => { const w = e.currentTarget.parentElement; w.style.borderColor = "#e8ddd0"; w.style.boxShadow = "none"; }}
-                    style={{ flex: 1, border: "none", outline: "none", fontSize: 14, padding: "10px 0", background: "transparent", color: "#1B3A4B", fontFamily: "inherit" }}
+                    style={{ flex: 1, border: "none", outline: "none", fontSize: 16, padding: "10px 0", background: "transparent", color: "#1a1a1a", fontFamily: "inherit", lineHeight: 1.6 }}
                   />
                   {searchQuery && <button onClick={() => setSearchQuery("")} style={S.clearBtn}>✕</button>}
                 </div>
@@ -5773,7 +5769,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {/* ══════ 4. DEGREE LEVELS — Horizontal scrollable strip ══════ */}
             <div className="studyhub-section" style={S.sectionBlock}>
               <div style={S.sectionHead}>
-                <h3 style={S.sectionHeadTitle}>🎓 {t.degreeLevelsTitle}</h3>
+                <h3 style={S.sectionHeadTitle}>{t.degreeLevelsTitle}</h3>
                 <p style={S.sectionHeadSub}>
                   {isRTL ? "اختر المرحلة الدراسية المناسبة لك" : "Choose your academic level to get started"}
                 </p>
@@ -5787,8 +5783,8 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     style={{ borderTopColor: d.color }}
                   >
                     <span style={{ fontSize: 32 }}>{d.icon}</span>
-                    <span style={{ fontWeight: 800, fontSize: 15, color: "#1B3A4B" }}>{degreeName(d)}</span>
-                    <span style={{ fontSize: 12, color: "#888" }}>{isRTL ? d.name : d.arabic}</span>
+                    <span style={{ fontWeight: 800, fontSize: 15, color: "#1a1a1a" }}>{degreeName(d)}</span>
+                    <span style={{ fontSize: 12, color: "#666" }}>{isRTL ? d.name : d.arabic}</span>
                   </div>
                 ))}
               </div>
@@ -5798,7 +5794,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {(allMaterials.length > 0 || isRecentFiltered) && (
               <div className="studyhub-recent-section studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
                 <div style={S.sectionHead}>
-                  <h3 style={S.sectionHeadTitle}>📚 {t.recentMaterials}</h3>
+                  <h3 style={S.sectionHeadTitle}>{t.recentMaterials}</h3>
                   <p style={S.sectionHeadSub}>{isRecentFiltered ? t.filteredResults : t.recentMaterialsSub}</p>
                   <div style={S.sectionDivider} />
                 </div>
@@ -5813,7 +5809,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       style={{ ...S.recentFilterChip, ...(recentFilters.countryId ? S.recentFilterChipActive : {}), ...(recentFilterOpen === "country" ? S.recentFilterChipOpen : {}) }}
                       onClick={() => { setRecentFilterOpen(recentFilterOpen === "country" ? null : "country"); setRecentCountrySearch(""); }}
                     >
-                      {recentFilters.countryId ? (() => { const c = ALL_COUNTRIES.find(x => x.id === recentFilters.countryId); return c ? `${c.flag} ${countryName(c)}` : t.filterByCountry; })() : `🌍 ${t.filterByCountry}`}
+                      {recentFilters.countryId ? (() => { const c = ALL_COUNTRIES.find(x => x.id === recentFilters.countryId); return c ? `${c.flag} ${countryName(c)}` : t.filterByCountry; })() : t.filterByCountry}
                       <span style={{ fontSize: 10 }}>{recentFilterOpen === "country" ? "▲" : "▼"}</span>
                     </button>
                     {recentFilterOpen === "country" && (
@@ -6241,7 +6237,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {/* ══════ 6. HOW IT WORKS — moved down, with Watch Tutorial link ══════ */}
             <div className="studyhub-section studyhub-card-section" style={S.howSectionRedesign}>
               <div style={S.sectionHead}>
-                <h3 style={S.sectionHeadTitle}>📖 {t.howItWorks}</h3>
+                <h3 style={S.sectionHeadTitle}>{t.howItWorks}</h3>
                 <p style={S.sectionHeadSub}>
                   {isRTL ? "ابدأ في أربع خطوات بسيطة" : "Get started in four simple steps"}
                 </p>
@@ -6284,7 +6280,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
             {(leaderboardData.length > 0 || requestsList.length > 0) && (
               <div className="studyhub-section studyhub-card-section" style={S.sectionBlockAlt}>
                 <div style={S.sectionHead}>
-                  <h3 style={S.sectionHeadTitle}>👥 {t.communitySection}</h3>
+                  <h3 style={S.sectionHeadTitle}>{t.communitySection}</h3>
                   <div style={S.sectionDivider} />
                 </div>
                 <div className="studyhub-community-grid">
@@ -6298,7 +6294,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                         {leaderboardData.slice(0, 5).map((user, idx) => {
                           const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
                           return (
-                            <div key={user.id} className="studyhub-card-interactive" style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderRadius: 12, background: idx < 3 ? "#FAF6F1" : "transparent", border: "1px solid #ede5da" }}>
+                            <div key={user.id} className="studyhub-card-interactive" style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderRadius: 12, background: idx < 3 ? "#FAFAF8" : "transparent", border: "1px solid rgba(0,0,0,0.06)" }}>
                               <span style={{ fontSize: idx < 3 ? 18 : 14, width: 28, textAlign: "center", fontWeight: 900 }}>{medal}</span>
                               {user.image ? (
                                 <img src={user.image} alt="" style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }} referrerPolicy="no-referrer" />
@@ -6333,7 +6329,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                       </h4>
                       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                         {requestsList.slice(0, 5).map((req) => (
-                          <div key={req.id} className="studyhub-card-interactive" style={{ padding: "10px 14px", borderRadius: 12, border: "1px solid #ede5da", display: "flex", alignItems: "center", gap: 12 }}>
+                          <div key={req.id} className="studyhub-card-interactive" style={{ padding: "10px 14px", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", display: "flex", alignItems: "center", gap: 12 }}>
                             <span style={{ fontSize: 18 }}>📌</span>
                             <div style={{ flex: 1, minWidth: 0 }}>
                               <div style={{ fontWeight: 700, fontSize: 13, color: "#1B3A4B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{req.title}</div>
@@ -6679,7 +6675,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 
             {/* Advanced filters panel */}
             {showAdvancedFilters && (
-              <div className="studyhub-advanced-filters" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 16, padding: "14px 16px", background: "#FAF6F1", borderRadius: 14, border: "1px solid #ede5da" }}>
+              <div className="studyhub-advanced-filters" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 16, padding: "14px 16px", background: "#FAFAF8", borderRadius: 14, border: "1px solid rgba(0,0,0,0.06)" }}>
                 <div>
                   <label style={{ fontSize: 11, fontWeight: 700, color: "#888", display: "block", marginBottom: 4 }}>{t.filterByRating}</label>
                   <select value={advancedFilters.minRating} onChange={(e) => setAdvancedFilters({ ...advancedFilters, minRating: e.target.value })} style={{ ...S.input, padding: "8px 10px", fontSize: 12 }}>
@@ -7737,7 +7733,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     { icon: "⏱️", label: t.pomodoroTotalFocus, value: `${pomodoroTotalToday} ${t.pomodoroMinutes}` },
                     { icon: "🔥", label: t.pomodoroStreak, value: pomodoroStreak },
                   ].map((s, i) => (
-                    <div key={i} style={{ textAlign: "center", padding: "14px 20px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, minWidth: 100, boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}>
+                    <div key={i} style={{ textAlign: "center", padding: "14px 20px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "rgba(0,0,0,0.06)"}`, minWidth: 100, boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}>
                       <span style={{ display: "block", fontSize: 22, marginBottom: 4 }}>{s.icon}</span>
                       <span style={{ display: "block", fontSize: 22, fontWeight: 900, color: "#EA580C" }}>{s.value}</span>
                       <span style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" }}>{s.label}</span>
@@ -7752,7 +7748,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   >⚙️ {t.pomodoroSettings}</button>
                 </div>
                 {pomodoroShowSettings && (
-                  <div style={{ marginTop: 20, padding: 24, borderRadius: 18, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
+                  <div style={{ marginTop: 20, padding: 24, borderRadius: 18, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "rgba(0,0,0,0.06)"}`, boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
                     {[
                       { label: t.pomodoroWorkDuration, key: "workMin", min: 1, max: 60 },
                       { label: t.pomodoroBreakDuration, key: "breakMin", min: 1, max: 30 },
@@ -7897,7 +7893,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                     const elapsed = totalDays - cd.days;
                     const progressPct = cd.isPassed ? 100 : Math.min(100, Math.max(0, (elapsed / totalDays) * 100));
                     return (
-                      <div key={exam.id} style={{ background: darkMode ? "#1e1e2e" : "white", borderRadius: 18, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, [isRTL ? "borderRight" : "borderLeft"]: `5px solid ${exam.color || urgColor}` }}>
+                      <div key={exam.id} style={{ background: darkMode ? "#1e1e2e" : "white", borderRadius: 18, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: `1px solid ${darkMode ? "#333" : "rgba(0,0,0,0.06)"}`, [isRTL ? "borderRight" : "borderLeft"]: `5px solid ${exam.color || urgColor}` }}>
                         <div style={{ padding: "20px 22px" }}>
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                             <h4 style={{ fontSize: 17, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", margin: 0 }}>{exam.name}</h4>
@@ -7971,8 +7967,8 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <div key={user.id} style={{
                   ...S.leaderRow,
                   ...(idx === 0 ? S.leaderRowFirst : {}),
-                  background: idx === 0 ? "linear-gradient(135deg, #FEF3C7, #FDE68A)" : idx === 1 ? (darkMode ? "#2a2a3a" : "linear-gradient(135deg, #F3F4F6, #E5E7EB)") : idx === 2 ? (darkMode ? "#2a2a3a" : "linear-gradient(135deg, #FFF7ED, #FED7AA)") : (darkMode ? "#1e1e2e" : "#FAF6F1"),
-                  border: idx < 3 ? `1px solid ${idx === 0 ? "#F59E0B40" : idx === 1 ? "#9CA3AF40" : "#F9731640"}` : `1px solid ${darkMode ? "#333" : "#ede5da"}`,
+                  background: idx === 0 ? "linear-gradient(135deg, #FEF3C7, #FDE68A)" : idx === 1 ? (darkMode ? "#2a2a3a" : "linear-gradient(135deg, #F3F4F6, #E5E7EB)") : idx === 2 ? (darkMode ? "#2a2a3a" : "linear-gradient(135deg, #FFF7ED, #FED7AA)") : (darkMode ? "#1e1e2e" : "#FAFAF8"),
+                  border: idx < 3 ? `1px solid ${idx === 0 ? "#F59E0B40" : idx === 1 ? "#9CA3AF40" : "#F9731640"}` : `1px solid ${darkMode ? "#333" : "rgba(0,0,0,0.06)"}`,
                 }}>
                   <span style={{ ...S.leaderRank, color: idx === 0 ? "#F59E0B" : idx === 1 ? "#6B7280" : idx === 2 ? "#F97316" : (darkMode ? "#aaa" : "#888") }}>
                     {idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`}
@@ -8132,7 +8128,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   { icon: "👍", label: t.profTakeAgainPct, value: `${profAggregates.wouldTakeAgainPct}%`, color: "#16A34A" },
                   { icon: "📝", label: t.profReviewCount, value: profAggregates.totalCount, color: "#2563EB" },
                 ].map((s, i) => (
-                  <div key={i} style={{ textAlign: "center", padding: "16px 22px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, minWidth: 110, boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}>
+                  <div key={i} style={{ textAlign: "center", padding: "16px 22px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "rgba(0,0,0,0.06)"}`, minWidth: 110, boxShadow: "0 2px 10px rgba(0,0,0,0.04)" }}>
                     <span style={{ display: "block", fontSize: 20, marginBottom: 4 }}>{s.icon}</span>
                     <span style={{ display: "block", fontSize: 24, fontWeight: 900, color: s.color }}>{s.value}</span>
                     <span style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" }}>{s.label}</span>
@@ -8148,7 +8144,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                 <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8 }}>
                   {mostReviewedProfs.map((prof, i) => (
                     <div key={i} onClick={() => { setProfSearchQuery(prof.professorName); fetchProfReviews(prof.professorName, profFilterUniversity); }}
-                      style={{ minWidth: 180, padding: "16px 18px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "#ede5da"}`, cursor: "pointer", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", flexShrink: 0 }}>
+                      style={{ minWidth: 180, padding: "16px 18px", borderRadius: 16, background: darkMode ? "#1e1e2e" : "white", border: `1px solid ${darkMode ? "#333" : "rgba(0,0,0,0.06)"}`, cursor: "pointer", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", flexShrink: 0 }}>
                       <h4 style={{ fontSize: 14, fontWeight: 800, color: darkMode ? "#fff" : "#1B3A4B", margin: "0 0 4px" }}>👨‍🏫 {prof.professorName}</h4>
                       <p style={{ fontSize: 11, color: "#888", margin: "0 0 8px" }}>🏛️ {prof.universityName}</p>
                       <div style={{ display: "flex", gap: 8, fontSize: 12 }}>
@@ -8930,7 +8926,7 @@ export default function SudaneseStudyHub({ locale = "en" }) {
                   <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: "#1B3A4B" }}>{t.reviewsLabel} ({materialReviews[showReviewModal].reviewCount})</h4>
                   {materialReviews[showReviewModal].reviews?.length > 0 ? (
                     materialReviews[showReviewModal].reviews.map((rev) => (
-                      <div key={rev.id} style={{ padding: "10px 0", borderBottom: "1px solid #ede5da" }}>
+                      <div key={rev.id} style={{ padding: "10px 0", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
                           {rev.user?.image ? <img src={rev.user.image} alt="" style={{ width: 24, height: 24, borderRadius: "50%" }} referrerPolicy="no-referrer" /> : <span>👤</span>}
                           <span style={{ fontWeight: 700, fontSize: 13, color: "#1B3A4B" }}>{rev.user?.name || "Anonymous"}</span>
@@ -9067,197 +9063,197 @@ export default function SudaneseStudyHub({ locale = "en" }) {
 }
 
 const S = {
-  app: { fontFamily: "var(--font-inter), var(--font-cairo), 'Inter', 'Cairo', system-ui, sans-serif", minHeight: "100vh", background: "#FAF6F1", color: "#1B3A4B", position: "relative" },
-  bgPattern: { position: "fixed", inset: 0, backgroundImage: "radial-gradient(circle at 20% 50%, rgba(200,149,108,0.07) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(27,58,75,0.04) 0%, transparent 50%)", pointerEvents: "none", zIndex: 0 },
-  notification: { position: "fixed", top: 20, right: 20, padding: "14px 24px", borderRadius: 12, color: "white", fontWeight: 700, fontSize: 14, zIndex: 1000, boxShadow: "0 8px 30px rgba(0,0,0,0.2)" },
+  app: { fontFamily: "'DM Sans', var(--font-cairo), 'Cairo', system-ui, sans-serif", minHeight: "100vh", background: "#FAFAF8", color: "#1a1a1a", position: "relative" },
+  bgPattern: { position: "fixed", inset: 0, backgroundImage: "radial-gradient(circle at 20% 50%, rgba(200,149,108,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(27,58,75,0.03) 0%, transparent 50%)", pointerEvents: "none", zIndex: 0 },
+  notification: { position: "fixed", top: 20, right: 20, padding: "14px 24px", borderRadius: 8, color: "white", fontWeight: 700, fontSize: 14, zIndex: 1000, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
   breadcrumb: { maxWidth: 1200, margin: "0 auto", padding: "12px clamp(12px, 3vw, 24px)", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", position: "relative", zIndex: 1 },
-  crumbItem: { cursor: "pointer", color: "#1B3A4B", fontWeight: 600, fontSize: 13, padding: "4px 10px", borderRadius: 6, background: "rgba(200,149,108,0.1)" },
+  crumbItem: { cursor: "pointer", color: "#1a1a1a", fontWeight: 600, fontSize: 13, padding: "4px 10px", borderRadius: 6, background: "rgba(200,149,108,0.1)" },
   crumbActive: { color: "#C8956C", fontWeight: 700, fontSize: 13, padding: "4px 10px" },
   crumbSep: { color: "#C8956C", fontWeight: 700, fontSize: 18 },
   main: { maxWidth: 1200, margin: "0 auto", padding: "20px clamp(12px, 3vw, 24px)", position: "relative", zIndex: 1, minHeight: "60vh" },
-  hero: { textAlign: "center", padding: "clamp(32px, 6vw, 60px) clamp(16px, 3vw, 24px) clamp(28px, 5vw, 48px)", background: "linear-gradient(135deg, #1B3A4B 0%, #274555 100%)", borderRadius: 24, marginBottom: 44 },
-  heroBadge: { display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#F5E6D3", padding: "8px 22px", borderRadius: 50, fontSize: 13, fontWeight: 700, marginBottom: 20, border: "1px solid rgba(255,255,255,0.1)" },
-  heroTitle: { fontSize: "clamp(24px, 5vw, 38px)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.15, letterSpacing: "-1px", textShadow: "0 2px 10px rgba(0,0,0,0.15)" },
-  heroSub: { fontSize: "clamp(14px, 2.5vw, 16px)", color: "rgba(255,255,255,0.75)", maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 },
+  hero: { textAlign: "center", padding: "clamp(40px, 7vw, 96px) clamp(16px, 3vw, 32px) clamp(36px, 6vw, 80px)", background: "#1B3A4B", borderRadius: 8, marginBottom: 44 },
+  heroBadge: { display: "inline-block", background: "rgba(255,255,255,0.1)", color: "#F5E6D3", padding: "8px 22px", borderRadius: 999, fontSize: 13, fontWeight: 700, marginBottom: 20, border: "1px solid rgba(255,255,255,0.08)" },
+  heroTitle: { fontSize: "clamp(32px, 6vw, 56px)", fontWeight: 800, color: "#fff", margin: "0 0 14px", lineHeight: 1.1, letterSpacing: "-0.03em", fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" },
+  heroSub: { fontSize: "clamp(15px, 2.5vw, 18px)", color: "rgba(255,255,255,0.7)", maxWidth: 620, margin: "0 auto 10px", lineHeight: 1.6 },
   heroArabic: { fontSize: "clamp(16px, 3vw, 20px)", color: "#C8956C", fontWeight: 700, margin: "0 0 28px" },
-  searchBox: { display: "flex", alignItems: "center", maxWidth: 520, margin: "0 auto", background: "white", borderRadius: 50, padding: "6px 8px 6px 20px", boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "none" },
+  searchBox: { display: "flex", alignItems: "center", maxWidth: 520, margin: "0 auto", background: "white", borderRadius: 999, padding: "6px 8px 6px 20px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", border: "none" },
   searchIcon: { fontSize: 18, marginRight: 8 },
-  searchInput: { flex: 1, border: "none", outline: "none", fontSize: 15, padding: "11px 0", background: "transparent", color: "#1B3A4B", fontFamily: "inherit" },
-  clearBtn: { background: "#e8ddd0", border: "none", borderRadius: "50%", width: 30, height: 30, cursor: "pointer", fontSize: 13, fontWeight: 700, color: "#1B3A4B" },
+  searchInput: { flex: 1, border: "none", outline: "none", fontSize: 16, padding: "11px 0", background: "transparent", color: "#1a1a1a", fontFamily: "inherit", lineHeight: 1.6 },
+  clearBtn: { background: "#e8ddd0", border: "none", borderRadius: "50%", width: 30, height: 30, cursor: "pointer", fontSize: 13, fontWeight: 700, color: "#1a1a1a" },
   degreePreview: { display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap", margin: "32px 0 40px" },
-  degreePreviewCard: { background: "white", borderRadius: 16, padding: "22px 28px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, borderTop: "4px solid", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", minWidth: 135, cursor: "default", transition: "transform 0.2s ease, box-shadow 0.2s ease" },
-  statsWrapper: { background: "linear-gradient(135deg, rgba(27,58,75,0.05), rgba(200,149,108,0.08))", borderRadius: 20, padding: "28px 20px", marginBottom: 44 },
+  degreePreviewCard: { background: "white", borderRadius: 8, padding: "22px 28px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, borderTop: "4px solid", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", minWidth: 135, cursor: "default", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)" },
+  statsWrapper: { background: "rgba(27,58,75,0.03)", borderRadius: 8, padding: "28px 20px", marginBottom: 44 },
   statsRow: { display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" },
-  statCard: { background: "white", borderRadius: 14, padding: "18px 24px", textAlign: "left", boxShadow: "0 2px 10px rgba(0,0,0,0.04)", borderLeft: "3px solid #C8956C", minWidth: 110, flex: "1 1 0" },
+  statCard: { background: "white", borderRadius: 8, padding: "18px 24px", textAlign: "left", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", borderLeft: "3px solid #C8956C", minWidth: 110, flex: "1 1 0" },
   statIcon: { fontSize: 24, marginBottom: 4, display: "block" },
   statNum: { display: "block", fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 900, color: "#C8956C" },
-  statLabel: { fontSize: 12, color: "#777", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" },
-  secTitle: { fontSize: "clamp(18px, 3vw, 22px)", fontWeight: 800, color: "#1B3A4B", marginBottom: 20 },
+  statLabel: { fontSize: 12, color: "#666", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" },
+  secTitle: { fontSize: "clamp(18px, 3vw, 22px)", fontWeight: 800, color: "#1a1a1a", marginBottom: 20, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif", letterSpacing: "-0.02em" },
   countryGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 14, marginBottom: 36 },
-  countryCard: { background: "white", borderRadius: 18, padding: "22px 14px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 3px 16px rgba(0,0,0,0.05)", border: "1px solid #ede5da" },
-  countryFlag: { fontSize: 42, display: "block", marginBottom: 8 },
-  countryName: { fontSize: 13, fontWeight: 800, color: "#1B3A4B", margin: "0 0 4px" },
-  countryInfo: { fontSize: 12, color: "#888", margin: 0 },
-  countryMats: { fontSize: 11, color: "#C8956C", fontWeight: 700, marginTop: 6, display: "inline-block", background: "#C8956C15", padding: "2px 10px", borderRadius: 20 },
-  howSection: { background: "white", borderRadius: 24, padding: "32px 24px", border: "1px solid #ede5da", marginBottom: 44, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
+  countryCard: { background: "white", borderRadius: 8, padding: "24px 14px", textAlign: "center", cursor: "pointer", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.06)" },
+  countryFlag: { fontSize: 36, display: "block", marginBottom: 8 },
+  countryName: { fontSize: 13, fontWeight: 800, color: "#1a1a1a", margin: "0 0 4px" },
+  countryInfo: { fontSize: 12, color: "#666", margin: 0 },
+  countryMats: { fontSize: 11, color: "#C8956C", fontWeight: 700, marginTop: 6, display: "inline-block", background: "#C8956C15", padding: "2px 10px", borderRadius: 999 },
+  howSection: { background: "white", borderRadius: 8, padding: "32px 24px", border: "1px solid rgba(0,0,0,0.06)", marginBottom: 44, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
   howGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 },
-  howCard: { background: "#FAF6F1", borderRadius: 16, padding: "24px 20px", textAlign: "center", position: "relative" },
-  howStep: { position: "absolute", top: 12, left: 16, background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", width: 34, height: 34, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 15, boxShadow: "0 3px 10px rgba(200,149,108,0.3)" },
+  howCard: { background: "#FAFAF8", borderRadius: 8, padding: "24px 20px", textAlign: "center", position: "relative" },
+  howStep: { position: "absolute", top: 12, left: 16, background: "#C8956C", color: "white", width: 34, height: 34, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 15, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
   viewHeader: { display: "flex", alignItems: "center", gap: 16, marginBottom: 28, flexWrap: "wrap" },
-  viewTitle: { fontSize: "clamp(20px, 3.5vw, 26px)", fontWeight: 900, color: "#1B3A4B", margin: 0, letterSpacing: "-0.5px" },
-  viewSub: { fontSize: 14, color: "#777", margin: "4px 0 0" },
+  viewTitle: { fontSize: "clamp(20px, 3.5vw, 26px)", fontWeight: 800, color: "#1a1a1a", margin: 0, letterSpacing: "-0.02em", fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" },
+  viewSub: { fontSize: 14, color: "#666", margin: "4px 0 0" },
   uniGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 },
-  uniCard: { background: "white", borderRadius: 14, padding: "24px 22px", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 2px 12px rgba(0,0,0,0.04)", border: "2px solid transparent", display: "flex", flexDirection: "column", gap: 6, position: "relative" },
+  uniCard: { background: "white", borderRadius: 8, padding: "24px", cursor: "pointer", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", gap: 6, position: "relative" },
   uniIcon: { fontSize: 30 },
-  uniName: { fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: 0 },
+  uniName: { fontSize: 16, fontWeight: 800, color: "#1a1a1a", margin: 0 },
   uniDegrees: { display: "flex", gap: 6, flexWrap: "wrap", marginTop: 4 },
-  uniDegreeDot: { fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 10 },
+  uniDegreeDot: { fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999 },
   uniArrow: { position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)", fontSize: 22, color: "#C8956C", fontWeight: 700 },
   degreeGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 18 },
-  degreeCard: { background: "white", borderRadius: 18, padding: "32px 24px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", borderTop: "4px solid" },
-  degreeBadge: { display: "inline-block", padding: "4px 14px", borderRadius: 20, fontSize: 13, fontWeight: 700 },
+  degreeCard: { background: "white", borderRadius: 8, padding: "32px 24px", textAlign: "center", cursor: "pointer", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", borderTop: "4px solid" },
+  degreeBadge: { display: "inline-block", padding: "4px 14px", borderRadius: 999, fontSize: 13, fontWeight: 700 },
   semGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 14 },
-  semCard: { background: "white", borderRadius: 14, padding: "24px 18px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", borderLeft: "4px solid" },
+  semCard: { background: "white", borderRadius: 8, padding: "24px 18px", textAlign: "center", cursor: "pointer", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", borderLeft: "4px solid" },
   semNum: { fontSize: 32, fontWeight: 900, lineHeight: 1 },
   facultyGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 },
-  facultyCard: { background: "white", borderRadius: 18, padding: "28px 20px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "2px solid transparent", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 },
+  facultyCard: { background: "white", borderRadius: 8, padding: "24px 20px", textAlign: "center", cursor: "pointer", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 },
   facultyIcon: { fontSize: 42, display: "block", marginBottom: 6 },
-  facultyName: { margin: "0 0 2px", fontWeight: 800, color: "#1B3A4B", fontSize: 15, lineHeight: 1.3 },
-  facultyNameAr: { margin: 0, fontSize: 13, color: "#888", fontWeight: 600 },
-  facultyDesc: { margin: "4px 0 8px", fontSize: 12, color: "#aaa", lineHeight: 1.4 },
-  facultyBadge: { display: "inline-block", padding: "4px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, marginTop: 6 },
-  uploadBtn: { background: "linear-gradient(135deg, #C8956C, #B07D55)", color: "white", border: "none", padding: "11px 24px", borderRadius: 50, fontWeight: 700, fontSize: 14, cursor: "pointer", marginLeft: "auto", transition: "all 0.2s", boxShadow: "0 4px 15px rgba(200,149,108,0.3)", fontFamily: "inherit" },
+  facultyName: { margin: "0 0 2px", fontWeight: 800, color: "#1a1a1a", fontSize: 15, lineHeight: 1.3 },
+  facultyNameAr: { margin: 0, fontSize: 13, color: "#666", fontWeight: 600 },
+  facultyDesc: { margin: "4px 0 8px", fontSize: 12, color: "#999", lineHeight: 1.4 },
+  facultyBadge: { display: "inline-block", padding: "4px 14px", borderRadius: 999, fontSize: 12, fontWeight: 700, marginTop: 6 },
+  uploadBtn: { background: "#C8956C", color: "white", border: "none", padding: "11px 24px", borderRadius: 999, fontWeight: 700, fontSize: 14, cursor: "pointer", marginLeft: "auto", transition: "opacity 0.2s, transform 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", fontFamily: "inherit" },
   filterRow: { display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" },
-  filterBtn: { padding: "7px 16px", borderRadius: 50, border: "2px solid #ddd", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "all 0.2s", minHeight: 44 },
+  filterBtn: { padding: "7px 16px", borderRadius: 999, border: "2px solid #ddd", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "background 0.2s, color 0.2s, border-color 0.2s", minHeight: 44 },
   filterActive: { background: "#1B3A4B", color: "white", borderColor: "#1B3A4B" },
   matList: { display: "flex", flexDirection: "column", gap: 12 },
-  matCard: { background: "white", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 18, boxShadow: "0 2px 12px rgba(0,0,0,0.05)", borderLeft: "4px solid #e0d5c8", transition: "all 0.3s cubic-bezier(.4,0,.2,1)", flexWrap: "wrap", cursor: "default" },
-  matIcon: { width: 56, height: 56, borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 },
+  matCard: { background: "white", borderRadius: 8, padding: "20px 24px", display: "flex", alignItems: "center", gap: 18, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", borderLeft: "4px solid #e0d5c8", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", flexWrap: "wrap", cursor: "default" },
+  matIcon: { width: 56, height: 56, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 },
   matInfo: { flex: 1, minWidth: 180 },
-  matTitle: { fontSize: 16, fontWeight: 800, color: "#1B3A4B", margin: "0 0 4px", lineHeight: 1.3 },
-  matSubject: { fontSize: 12, color: "#888", margin: "0 0 3px" },
+  matTitle: { fontSize: 16, fontWeight: 800, color: "#1a1a1a", margin: "0 0 4px", lineHeight: 1.3 },
+  matSubject: { fontSize: 12, color: "#666", margin: "0 0 3px" },
   matFaculty: { fontSize: 11, color: "#C8956C", margin: "0 0 3px", fontWeight: 600 },
   matDesc: { fontSize: 12, color: "#999", margin: "0 0 6px" },
   matMeta: { display: "flex", alignItems: "center", gap: 10 },
-  matBadge: { color: "white", padding: "2px 9px", borderRadius: 20, fontSize: 10, fontWeight: 700 },
-  matDate: { fontSize: 11, color: "#aaa" },
+  matBadge: { color: "white", padding: "2px 9px", borderRadius: 999, fontSize: 10, fontWeight: 700 },
+  matDate: { fontSize: 11, color: "#999" },
   matActions: { display: "flex", gap: 8, alignItems: "center", flexShrink: 0, flexDirection: "column" },
-  dlBtn: { background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", padding: "10px 22px", borderRadius: 50, textDecoration: "none", fontWeight: 700, fontSize: 13, whiteSpace: "nowrap", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(27,58,75,0.2)", transition: "all 0.2s", minHeight: 44 },
-  delBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, minHeight: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
-  editBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
-  shareBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
-  sharePopup: { position: "absolute", top: "calc(100% + 6px)", minWidth: 180, background: "white", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "1px solid #ede5da", zIndex: 100, overflow: "hidden" },
-  shareOption: { display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "10px 14px", border: "none", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1B3A4B", textDecoration: "none", fontFamily: "inherit", transition: "background 0.15s" },
-  confirmModal: { background: "white", borderRadius: 18, padding: "32px 28px", textAlign: "center", maxWidth: 380, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
+  dlBtn: { background: "#1B3A4B", color: "white", padding: "10px 22px", borderRadius: 999, textDecoration: "none", fontWeight: 700, fontSize: 13, whiteSpace: "nowrap", fontFamily: "inherit", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", transition: "opacity 0.2s", minHeight: 44 },
+  delBtn: { background: "transparent", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "50%", width: 44, height: 44, minHeight: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.2s" },
+  editBtn: { background: "transparent", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.2s" },
+  shareBtn: { background: "transparent", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.2s" },
+  sharePopup: { position: "absolute", top: "calc(100% + 6px)", minWidth: 180, background: "white", borderRadius: 8, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.12)", border: "1px solid rgba(0,0,0,0.06)", zIndex: 100, overflow: "hidden" },
+  shareOption: { display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "10px 14px", border: "none", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1a1a1a", textDecoration: "none", fontFamily: "inherit", transition: "background 0.15s" },
+  confirmModal: { background: "white", borderRadius: 12, padding: "32px 28px", textAlign: "center", maxWidth: 380, width: "100%", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 16px 48px rgba(0,0,0,0.16)" },
   confirmIcon: { fontSize: 48, marginBottom: 12 },
-  confirmTitle: { fontSize: 20, fontWeight: 900, color: "#1B3A4B", margin: "0 0 10px" },
-  confirmMsg: { fontSize: 14, color: "#666", margin: "0 0 24px", lineHeight: 1.5 },
+  confirmTitle: { fontSize: 20, fontWeight: 800, color: "#1a1a1a", margin: "0 0 10px", fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" },
+  confirmMsg: { fontSize: 14, color: "#666", margin: "0 0 24px", lineHeight: 1.6 },
   confirmActions: { display: "flex", gap: 10, justifyContent: "center" },
-  cancelBtn: { padding: "10px 24px", borderRadius: 10, border: "2px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#555", fontFamily: "inherit" },
-  confirmDeleteBtn: { padding: "10px 24px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #e74c3c, #c0392b)", color: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", boxShadow: "0 4px 15px rgba(231,76,60,0.3)" },
-  myGroupSection: { marginBottom: 20, background: "white", borderRadius: 18, border: "1px solid #e8e0d6", overflow: "hidden", boxShadow: "0 2px 14px rgba(0,0,0,0.05)" },
-  myGroupHeader: { display: "flex", alignItems: "center", gap: 12, padding: "18px 22px", cursor: "pointer", background: "#FAF6F1", borderBottom: "1px solid #ede5da", transition: "background 0.2s", userSelect: "none" },
-  myGroupTitle: { fontSize: 17, fontWeight: 800, color: "#1B3A4B", flex: 1, display: "flex", alignItems: "center", gap: 10 },
-  myGroupCount: { fontSize: 12, fontWeight: 700, color: "#fff", background: "linear-gradient(135deg, #C8956C, #B07D55)", padding: "4px 14px", borderRadius: 20, boxShadow: "0 2px 6px rgba(200,149,108,0.25)" },
-  myGroupChevron: { fontSize: 16, color: "#1B3A4B", fontWeight: 700, width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center" },
+  cancelBtn: { padding: "10px 24px", borderRadius: 8, border: "2px solid rgba(0,0,0,0.06)", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#555", fontFamily: "inherit" },
+  confirmDeleteBtn: { padding: "10px 24px", borderRadius: 8, border: "none", background: "#e74c3c", color: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
+  myGroupSection: { marginBottom: 20, background: "white", borderRadius: 8, border: "1px solid rgba(0,0,0,0.06)", overflow: "hidden", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
+  myGroupHeader: { display: "flex", alignItems: "center", gap: 12, padding: "18px 22px", cursor: "pointer", background: "#FAFAF8", borderBottom: "1px solid rgba(0,0,0,0.06)", transition: "background 0.2s", userSelect: "none" },
+  myGroupTitle: { fontSize: 17, fontWeight: 800, color: "#1a1a1a", flex: 1, display: "flex", alignItems: "center", gap: 10 },
+  myGroupCount: { fontSize: 12, fontWeight: 700, color: "#fff", background: "#C8956C", padding: "4px 14px", borderRadius: 999 },
+  myGroupChevron: { fontSize: 16, color: "#1a1a1a", fontWeight: 700, width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center" },
   myGroupBody: { padding: "16px 20px" },
   mySubGroup: { marginBottom: 20 },
-  mySubGroupHeader: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, paddingLeft: 12, borderBottom: "2px solid #f0e8df", borderLeft: "3px solid #C8956C" },
+  mySubGroupHeader: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, paddingLeft: 12, borderBottom: "2px solid rgba(0,0,0,0.04)", borderLeft: "3px solid #C8956C" },
   mySubGroupTitle: { fontSize: 15, fontWeight: 700, color: "#444" },
-  empty: { textAlign: "center", padding: "50px 20px", color: "#888" },
-  myMatBanner: { background: "linear-gradient(135deg, #1B3A4B 0%, #1a6b6a 100%)", borderRadius: 20, padding: "28px 30px", marginBottom: 28, color: "white", position: "relative", overflow: "hidden" },
-  myMatBannerTitle: { fontSize: 24, fontWeight: 900, margin: "0 0 4px", color: "white", letterSpacing: "-0.3px" },
-  myMatBannerSub: { fontSize: 14, color: "rgba(255,255,255,0.75)", margin: 0 },
+  empty: { textAlign: "center", padding: "50px 20px", color: "#666" },
+  myMatBanner: { background: "#1B3A4B", borderRadius: 8, padding: "28px 30px", marginBottom: 28, color: "white", position: "relative", overflow: "hidden" },
+  myMatBannerTitle: { fontSize: 24, fontWeight: 800, margin: "0 0 4px", color: "white", letterSpacing: "-0.02em", fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" },
+  myMatBannerSub: { fontSize: 14, color: "rgba(255,255,255,0.7)", margin: 0, lineHeight: 1.6 },
   myMatStatsRow: { display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" },
-  myMatStatPill: { padding: "5px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 },
-  myEmptyCard: { textAlign: "center", padding: "48px 24px", border: "2px dashed #d4cdc4", borderRadius: 20, background: "#FDFBF9", margin: "20px 0" },
+  myMatStatPill: { padding: "5px 14px", borderRadius: 999, fontSize: 12, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6 },
+  myEmptyCard: { textAlign: "center", padding: "48px 24px", border: "2px dashed rgba(0,0,0,0.1)", borderRadius: 8, background: "#FAFAF8", margin: "20px 0" },
   recentSection: { marginBottom: 44 },
   recentHeader: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, flexWrap: "wrap", gap: 10 },
   recentGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 },
-  recentCard: { background: "white", borderRadius: 18, padding: "20px 22px", boxShadow: "0 2px 14px rgba(0,0,0,0.05)", border: "1px solid #ede5da", transition: "all 0.3s cubic-bezier(.4,0,.2,1)", cursor: "pointer", display: "flex", flexDirection: "column", gap: 12, position: "relative", overflow: "hidden" },
+  recentCard: { background: "white", borderRadius: 8, padding: "20px 22px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.06)", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", cursor: "pointer", display: "flex", flexDirection: "column", gap: 12, position: "relative", overflow: "hidden" },
   recentCardTop: { display: "flex", alignItems: "center", gap: 14 },
-  recentCardIcon: { width: 48, height: 48, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 },
+  recentCardIcon: { width: 48, height: 48, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 },
   recentCardInfo: { flex: 1, minWidth: 0 },
-  recentCardTitle: { fontSize: 15, fontWeight: 800, color: "#1B3A4B", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
-  recentCardSubject: { fontSize: 12, color: "#888", margin: "2px 0 0" },
+  recentCardTitle: { fontSize: 15, fontWeight: 800, color: "#1a1a1a", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+  recentCardSubject: { fontSize: 12, color: "#666", margin: "2px 0 0" },
   recentCardMeta: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" },
   recentCardLocation: { fontSize: 11, color: "#999", display: "flex", alignItems: "center", gap: 4 },
-  viewAllBtn: { background: "linear-gradient(135deg, #1B3A4B, #274555)", color: "white", border: "none", padding: "9px 22px", borderRadius: 50, fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(27,58,75,0.2)", transition: "all 0.2s", textDecoration: "none" },
+  viewAllBtn: { background: "#1B3A4B", color: "white", border: "none", padding: "9px 22px", borderRadius: 999, fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", transition: "opacity 0.2s", textDecoration: "none" },
   overlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20, backdropFilter: "blur(4px)" },
-  modal: { background: "white", borderRadius: 24, width: "100%", maxWidth: 520, maxHeight: "90dvh", overflow: "hidden", boxShadow: "0 25px 80px rgba(0,0,0,0.25)", display: "flex", flexDirection: "column" },
-  modalHead: { background: "linear-gradient(135deg, #1B3A4B 0%, #1a6b6a 100%)", padding: "24px 28px 20px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative" },
-  modalTitle: { fontSize: 20, fontWeight: 900, color: "white", margin: 0, display: "flex", alignItems: "center", gap: 10 },
+  modal: { background: "white", borderRadius: 12, width: "100%", maxWidth: 520, maxHeight: "90dvh", overflow: "hidden", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 16px 48px rgba(0,0,0,0.16)", display: "flex", flexDirection: "column" },
+  modalHead: { background: "#1B3A4B", padding: "24px 28px 20px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative" },
+  modalTitle: { fontSize: 20, fontWeight: 800, color: "white", margin: 0, display: "flex", alignItems: "center", gap: 10, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" },
   modalX: { background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%", width: 36, height: 36, fontSize: 18, cursor: "pointer", fontWeight: 700, color: "white", transition: "background 0.2s", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" },
   modalBody: { padding: "22px 28px 28px", overflowY: "auto", flex: 1 },
-  modalCtx: { fontSize: 12, color: "#666", background: "linear-gradient(135deg, #f8f4ef, #FAF6F1)", padding: "12px 16px", borderRadius: 12, marginBottom: 20, border: "1px solid #ede5da", display: "flex", alignItems: "center", gap: 8, lineHeight: 1.5 },
-  label: { display: "block", fontSize: 13, fontWeight: 700, color: "#1B3A4B", marginBottom: 6, marginTop: 18, letterSpacing: "0.2px" },
-  input: { width: "100%", padding: "12px 16px", borderRadius: 12, border: "2px solid #e8ddd0", fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FDFBF9", transition: "border-color 0.2s, box-shadow 0.2s" },
+  modalCtx: { fontSize: 12, color: "#666", background: "#FAFAF8", padding: "12px 16px", borderRadius: 8, marginBottom: 20, border: "1px solid rgba(0,0,0,0.06)", display: "flex", alignItems: "center", gap: 8, lineHeight: 1.6 },
+  label: { display: "block", fontSize: 13, fontWeight: 700, color: "#1a1a1a", marginBottom: 6, marginTop: 18, letterSpacing: "0.2px" },
+  input: { width: "100%", padding: "12px 16px", borderRadius: 8, border: "2px solid rgba(0,0,0,0.08)", fontSize: 16, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FAFAF8", transition: "border-color 0.2s, box-shadow 0.2s", lineHeight: 1.6 },
   typeSelector: { display: "flex", gap: 10, flexWrap: "wrap" },
-  typeOpt: { display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "12px 18px", borderRadius: 14, border: "2px solid #e8ddd0", cursor: "pointer", background: "white", fontFamily: "inherit", transition: "all 0.2s", minWidth: 72 },
-  submitBtn: { width: "100%", background: "linear-gradient(135deg, #1B3A4B, #1a6b6a)", color: "white", border: "none", padding: "15px", borderRadius: 14, fontWeight: 800, fontSize: 15, cursor: "pointer", marginTop: 24, fontFamily: "inherit", boxShadow: "0 4px 20px rgba(27,58,75,0.3)", transition: "all 0.2s", letterSpacing: "0.3px" },
-  footer: { background: "linear-gradient(135deg, #1B3A4B, #0F2530)", padding: "32px 24px", marginTop: 50, position: "relative", zIndex: 1, textAlign: "center" },
+  typeOpt: { display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "12px 18px", borderRadius: 8, border: "2px solid rgba(0,0,0,0.08)", cursor: "pointer", background: "white", fontFamily: "inherit", transition: "border-color 0.2s, background 0.2s", minWidth: 72 },
+  submitBtn: { width: "100%", background: "#1B3A4B", color: "white", border: "none", padding: "15px", borderRadius: 8, fontWeight: 800, fontSize: 15, cursor: "pointer", marginTop: 24, fontFamily: "inherit", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", transition: "opacity 0.2s", letterSpacing: "0.3px" },
+  footer: { background: "#1B3A4B", padding: "32px 24px", marginTop: 50, position: "relative", zIndex: 1, textAlign: "center" },
   footerText: { color: "#F5E6D3", fontSize: 14, fontWeight: 600, margin: "0 0 6px" },
   footerAr: { color: "#C8956C", fontSize: 15, fontWeight: 700, margin: "0 0 14px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: 14, alignItems: "center", flexWrap: "wrap" },
   footerLink: { color: "#8BB8CC", textDecoration: "none", fontSize: 13, fontWeight: 600, cursor: "pointer" },
-  duplicateModal: { background: "white", borderRadius: 18, padding: "32px 28px", textAlign: "center", maxWidth: 480, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.3)", maxHeight: "80vh", overflow: "auto" },
+  duplicateModal: { background: "white", borderRadius: 12, padding: "32px 28px", textAlign: "center", maxWidth: 480, width: "100%", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 16px 48px rgba(0,0,0,0.16)", maxHeight: "80vh", overflow: "auto" },
   duplicateIcon: { fontSize: 48, marginBottom: 12 },
-  duplicateList: { textAlign: "left", margin: "16px 0 24px", maxHeight: 200, overflowY: "auto", borderRadius: 10, border: "1px solid #ede5da", background: "#FAF6F1" },
-  duplicateItem: { display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderBottom: "1px solid #ede5da" },
+  duplicateList: { textAlign: "left", margin: "16px 0 24px", maxHeight: 200, overflowY: "auto", borderRadius: 8, border: "1px solid rgba(0,0,0,0.06)", background: "#FAFAF8" },
+  duplicateItem: { display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderBottom: "1px solid rgba(0,0,0,0.06)" },
   duplicateItemIcon: { width: 36, height: 36, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 },
   duplicateItemInfo: { display: "flex", flexDirection: "column", gap: 2, flex: 1, minWidth: 0 },
-  duplicateItemTitle: { fontSize: 13, fontWeight: 700, color: "#1B3A4B", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
-  duplicateItemMeta: { fontSize: 11, color: "#888" },
-  duplicateConfirmBtn: { padding: "10px 24px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #E67E22, #D35400)", color: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", boxShadow: "0 4px 15px rgba(230,126,34,0.3)" },
+  duplicateItemTitle: { fontSize: 13, fontWeight: 700, color: "#1a1a1a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+  duplicateItemMeta: { fontSize: 11, color: "#666" },
+  duplicateConfirmBtn: { padding: "10px 24px", borderRadius: 8, border: "none", background: "#E67E22", color: "white", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
   subjectGroupControls: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 8 },
-  subjectGroupLabel: { fontSize: 14, fontWeight: 700, color: "#1B3A4B" },
-  groupToggleBtn: { padding: "4px 12px", borderRadius: 20, border: "1px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 600, fontSize: 11, fontFamily: "inherit", color: "#777" },
-  showAllBtn: { display: "block", margin: "20px auto 0", padding: "10px 32px", borderRadius: 50, border: "2px solid #C8956C", background: "transparent", color: "#C8956C", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", transition: "all 0.2s" },
+  subjectGroupLabel: { fontSize: 14, fontWeight: 700, color: "#1a1a1a" },
+  groupToggleBtn: { padding: "4px 12px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.06)", background: "white", cursor: "pointer", fontWeight: 600, fontSize: 11, fontFamily: "inherit", color: "#666" },
+  showAllBtn: { display: "block", margin: "20px auto 0", padding: "10px 32px", borderRadius: 999, border: "2px solid #C8956C", background: "transparent", color: "#C8956C", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "inherit", transition: "background 0.2s, color 0.2s" },
   // --- Redesigned homepage styles ---
   sectionBlock: { marginBottom: 48 },
-  sectionBlockAlt: { marginBottom: 48, background: "white", borderRadius: 24, padding: "40px clamp(16px, 3vw, 32px)", border: "1px solid #ede5da", boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
-  sectionHead: { textAlign: "center", marginBottom: 28 },
-  sectionHeadTitle: { fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 900, color: "#1B3A4B", margin: "0 0 8px", letterSpacing: "-0.5px", lineHeight: 1.2 },
-  sectionHeadSub: { fontSize: "clamp(13px, 2vw, 15px)", color: "#888", margin: "0 auto", maxWidth: 560, lineHeight: 1.6 },
-  sectionDivider: { width: 60, height: 3, background: "linear-gradient(90deg, #C8956C, #1B3A4B)", borderRadius: 3, margin: "12px auto 0" },
+  sectionBlockAlt: { marginBottom: 48, background: "white", borderRadius: 8, padding: "40px clamp(16px, 3vw, 32px)", border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
+  sectionHead: { marginBottom: 28 },
+  sectionHeadTitle: { fontSize: "clamp(22px, 3.5vw, 30px)", fontWeight: 800, color: "#1a1a1a", margin: "0 0 8px", letterSpacing: "-0.02em", lineHeight: 1.2, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" },
+  sectionHeadSub: { fontSize: "clamp(14px, 2vw, 16px)", color: "#666", margin: 0, maxWidth: 560, lineHeight: 1.6 },
+  sectionDivider: { width: 48, height: 2, background: "#C8956C", borderRadius: 2, margin: "12px 0 0" },
   heroQuickNav: { display: "flex", justifyContent: "center", gap: 10, marginTop: 24, flexWrap: "wrap" },
-  heroQuickPill: { display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", borderRadius: 50, background: "rgba(255,255,255,0.1)", color: "#F5E6D3", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", fontWeight: 700, fontSize: 13, fontFamily: "inherit", transition: "all 0.25s", backdropFilter: "blur(4px)" },
+  heroQuickPill: { display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", borderRadius: 999, background: "rgba(255,255,255,0.1)", color: "#F5E6D3", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", fontWeight: 700, fontSize: 13, fontFamily: "inherit", transition: "background 0.2s, border-color 0.2s", backdropFilter: "blur(4px)" },
   heroInlineStats: { display: "flex", justifyContent: "center", gap: 0, marginTop: 32, flexWrap: "wrap" },
   heroInlineStat: { display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "0 clamp(14px, 3vw, 28px)" },
   heroInlineStatNum: { fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 900, color: "#F5E6D3", lineHeight: 1.1 },
   heroInlineStatLabel: { fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.8px" },
-  howSectionRedesign: { background: "linear-gradient(180deg, #FDFBF9 0%, #F9F5F0 100%)", borderRadius: 24, padding: "48px clamp(20px, 3vw, 40px)", border: "1px solid #ede5da", marginBottom: 48, boxShadow: "0 2px 10px rgba(0,0,0,0.03)" },
-  howCardRedesign: { background: "white", borderRadius: 20, padding: "32px 20px 28px", textAlign: "center", position: "relative", border: "1px solid #f0ebe4", transition: "all 0.35s cubic-bezier(0.4,0,0.2,1)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)", cursor: "default" },
+  howSectionRedesign: { background: "#FAFAF8", borderRadius: 8, padding: "48px clamp(20px, 3vw, 40px)", border: "1px solid rgba(0,0,0,0.06)", marginBottom: 48, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)" },
+  howCardRedesign: { background: "white", borderRadius: 8, padding: "32px 20px 28px", textAlign: "center", position: "relative", border: "1px solid rgba(0,0,0,0.06)", transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)", cursor: "default" },
   countrySectionWrap: { marginBottom: 48 },
   countrySearchRow: { display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 },
-  countrySearchInner: { display: "flex", alignItems: "center", maxWidth: 420, width: "100%", background: "white", borderRadius: 50, padding: "6px 8px 6px 20px", border: "2px solid #e8ddd0", transition: "border-color 0.2s, box-shadow 0.2s" },
+  countrySearchInner: { display: "flex", alignItems: "center", maxWidth: 420, width: "100%", background: "white", borderRadius: 999, padding: "6px 8px 6px 20px", border: "2px solid rgba(0,0,0,0.08)", transition: "border-color 0.2s, box-shadow 0.2s" },
   // === NEW FEATURE STYLES ===
-  notifDropdown: { position: "absolute", top: "calc(100% + 8px)", right: 0, width: 340, background: "white", borderRadius: 16, boxShadow: "0 12px 40px rgba(0,0,0,0.15)", border: "1px solid #ede5da", zIndex: 100, overflow: "hidden" },
-  notifItem: { padding: "12px 16px", borderBottom: "1px solid #f5f0eb", transition: "background 0.15s", cursor: "default" },
+  notifDropdown: { position: "absolute", top: "calc(100% + 8px)", right: 0, width: 340, background: "white", borderRadius: 8, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.12)", border: "1px solid rgba(0,0,0,0.06)", zIndex: 100, overflow: "hidden" },
+  notifItem: { padding: "12px 16px", borderBottom: "1px solid rgba(0,0,0,0.04)", transition: "background 0.15s", cursor: "default" },
   notifItemUnread: { background: "#FEF9F3", borderLeft: "3px solid #C8956C" },
-  starBtn: { width: 40, height: 40, borderRadius: 10, border: "2px solid #e8ddd0", cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", background: "white", fontFamily: "inherit" },
+  starBtn: { width: 40, height: 40, borderRadius: 8, border: "2px solid rgba(0,0,0,0.08)", cursor: "pointer", fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.2s, border-color 0.2s", background: "white", fontFamily: "inherit" },
   starActive: { background: "#FEF3C7", borderColor: "#F59E0B", transform: "scale(1.1)" },
   starInactive: { opacity: 0.4 },
-  bookmarkBtn: { background: "transparent", border: "1px solid #e0d5c8", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" },
+  bookmarkBtn: { background: "transparent", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "50%", width: 44, height: 44, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.2s" },
   bookmarkActive: { background: "#FEF3C7", borderColor: "#F59E0B" },
-  leaderRow: { display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 12, background: "#FAF6F1", transition: "background 0.15s" },
+  leaderRow: { display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 8, background: "#FAFAF8", transition: "background 0.15s" },
   leaderRowFirst: { background: "linear-gradient(135deg, #FEF3C7, #FDE68A)", border: "1px solid #F59E0B40" },
   leaderRank: { fontWeight: 900, fontSize: 18, width: 32, textAlign: "center", flexShrink: 0 },
   leaderAvatar: { width: 36, height: 36, borderRadius: "50%", objectFit: "cover", flexShrink: 0 },
   leaderPoints: { fontSize: 13, fontWeight: 800, color: "#C8956C", whiteSpace: "nowrap" },
-  counterBadge: { fontSize: 11, color: "#888", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 3 },
-  previewFrame: { width: "100%", height: 420, border: "none", borderRadius: "0 0 24px 24px" },
+  counterBadge: { fontSize: 11, color: "#666", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 3 },
+  previewFrame: { width: "100%", height: 420, border: "none", borderRadius: "0 0 8px 8px" },
   // Recent Filter Bar
   recentFilterBar: { display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap", alignItems: "center", position: "relative" },
-  recentFilterChip: { position: "relative", padding: "7px 16px", borderRadius: 50, border: "2px solid #e0d5c8", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "all 0.2s", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", minHeight: 38, userSelect: "none" },
+  recentFilterChip: { position: "relative", padding: "7px 16px", borderRadius: 999, border: "2px solid rgba(0,0,0,0.08)", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#555", transition: "background 0.2s, color 0.2s, border-color 0.2s", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", minHeight: 38, userSelect: "none" },
   recentFilterChipActive: { background: "#1B3A4B", color: "white", borderColor: "#1B3A4B" },
   recentFilterChipOpen: { borderColor: "#C8956C", boxShadow: "0 0 0 3px rgba(200,149,108,0.15)" },
-  recentFilterDropdown: { position: "absolute", top: "calc(100% + 6px)", left: 0, minWidth: 220, maxHeight: 280, overflowY: "auto", background: "white", borderRadius: 14, boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "1px solid #ede5da", zIndex: 120, padding: "6px 0" },
+  recentFilterDropdown: { position: "absolute", top: "calc(100% + 6px)", left: 0, minWidth: 220, maxHeight: 280, overflowY: "auto", background: "white", borderRadius: 8, boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.12)", border: "1px solid rgba(0,0,0,0.06)", zIndex: 120, padding: "6px 0" },
   recentFilterDropdownRTL: { left: "auto", right: 0 },
-  recentFilterOption: { display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "9px 16px", border: "none", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1B3A4B", fontFamily: "inherit", transition: "background 0.15s", textAlign: "start" },
-  recentFilterOptionActive: { background: "#f0ebe4", fontWeight: 800 },
-  recentFilterSearch: { width: "calc(100% - 20px)", margin: "6px 10px", padding: "8px 12px", borderRadius: 10, border: "2px solid #e8ddd0", fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FDFBF9" },
-  recentFilterClearAll: { padding: "7px 16px", borderRadius: 50, border: "2px solid #e74c3c", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#e74c3c", transition: "all 0.2s", display: "inline-flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", minHeight: 38 },
-  recentFilterBadge: { background: "#C8956C", color: "white", fontSize: 10, fontWeight: 800, borderRadius: 10, padding: "1px 7px", lineHeight: "16px" },
-  recentFilterLoadingOverlay: { position: "absolute", inset: 0, background: "rgba(250,246,241,0.7)", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, backdropFilter: "blur(1px)" },
+  recentFilterOption: { display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "9px 16px", border: "none", background: "transparent", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1a1a1a", fontFamily: "inherit", transition: "background 0.15s", textAlign: "start" },
+  recentFilterOptionActive: { background: "rgba(0,0,0,0.04)", fontWeight: 800 },
+  recentFilterSearch: { width: "calc(100% - 20px)", margin: "6px 10px", padding: "8px 12px", borderRadius: 8, border: "2px solid rgba(0,0,0,0.08)", fontSize: 13, fontFamily: "inherit", outline: "none", boxSizing: "border-box", background: "#FAFAF8" },
+  recentFilterClearAll: { padding: "7px 16px", borderRadius: 999, border: "2px solid #e74c3c", background: "white", cursor: "pointer", fontWeight: 700, fontSize: 12, fontFamily: "inherit", color: "#e74c3c", transition: "background 0.2s, color 0.2s", display: "inline-flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", minHeight: 38 },
+  recentFilterBadge: { background: "#C8956C", color: "white", fontSize: 10, fontWeight: 800, borderRadius: 999, padding: "1px 7px", lineHeight: "16px" },
+  recentFilterLoadingOverlay: { position: "absolute", inset: 0, background: "rgba(250,250,248,0.7)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, backdropFilter: "blur(1px)" },
 };

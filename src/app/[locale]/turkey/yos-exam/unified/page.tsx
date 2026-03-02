@@ -462,7 +462,7 @@ export default function UnifiedYosPage() {
                   href={exam.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-600 hover:shadow-md transition-all group"
+                  className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-600 hover:shadow-md dark:shadow-gray-900/50 transition-all group"
                 >
                   <div className="flex items-center justify-center w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg shrink-0 group-hover:bg-red-200 dark:group-hover:bg-red-900/50 transition-colors">
                     <FileDown className="h-5 w-5 text-red-600 dark:text-red-400" />
@@ -511,9 +511,9 @@ export default function UnifiedYosPage() {
                         </span>
                       </div>
                       {isExpanded ? (
-                        <ChevronUp className="h-5 w-5 text-gray-400" />
+                        <ChevronUp className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                       ) : (
-                        <ChevronDown className="h-5 w-5 text-gray-400" />
+                        <ChevronDown className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                       )}
                     </button>
                     {isExpanded && (

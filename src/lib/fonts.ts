@@ -1,6 +1,6 @@
 import { Inter, Cairo } from 'next/font/google';
 
-// English font - Inter
+// English font - Inter (kept for webpack compatibility, overridden via CSS)
 export const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],

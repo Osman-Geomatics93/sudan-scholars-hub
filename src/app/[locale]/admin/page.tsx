@@ -150,10 +150,10 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
           {isRTL ? 'لوحة التحكم' : 'Dashboard'}
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
           {isRTL
             ? 'مرحباً بك في لوحة إدارة المنح الدراسية'
             : 'Welcome to the scholarship management dashboard'}
@@ -166,7 +166,7 @@ export default function AdminDashboard() {
           <Link
             key={card.title}
             href={card.href}
-            className="group rounded-xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            className="group rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50 transition-shadow hover:shadow-md"
           >
             <div className="flex items-center justify-between">
               <div
@@ -174,12 +174,12 @@ export default function AdminDashboard() {
               >
                 <card.icon className="h-6 w-6 text-white" />
               </div>
-              <Arrow className="h-5 w-5 text-gray-400 transition-transform group-hover:translate-x-1" />
+              <Arrow className="h-5 w-5 text-gray-400 dark:text-gray-500 transition-transform group-hover:translate-x-1" />
             </div>
             <div className="mt-4">
-              <p className="text-3xl font-bold text-gray-900">{card.value}</p>
-              <p className="text-sm font-medium text-gray-900">{card.title}</p>
-              <p className="text-sm text-gray-500">{card.subtitle}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-gray-50">{card.value}</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-50">{card.title}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{card.subtitle}</p>
             </div>
           </Link>
         ))}
@@ -187,14 +187,14 @@ export default function AdminDashboard() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Recent scholarships */}
-        <div className="rounded-xl bg-white p-6 shadow-sm">
+        <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
               {isRTL ? 'أحدث المنح' : 'Recent Scholarships'}
             </h2>
             <Link
               href={`/${locale}/admin/scholarships`}
-              className="text-sm text-primary-600 hover:text-primary-700"
+              className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               {isRTL ? 'عرض الكل' : 'View all'}
             </Link>
@@ -203,17 +203,17 @@ export default function AdminDashboard() {
             {recentScholarships.map((scholarship) => (
               <div
                 key={scholarship.id}
-                className="flex items-center justify-between gap-4 rounded-lg border p-4 transition-colors hover:bg-gray-50"
+                className="flex items-center justify-between gap-4 rounded-lg border dark:border-gray-700 p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <div className="flex min-w-0 flex-1 items-center gap-3">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-50">
-                    <GraduationCap className="h-5 w-5 text-primary-600" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-950">
+                    <GraduationCap className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-gray-900">
+                    <p className="truncate font-medium text-gray-900 dark:text-gray-50">
                       {isRTL ? scholarship.titleAr : scholarship.title}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {new Date(scholarship.createdAt).toLocaleDateString(
                         isRTL ? 'ar-SA' : 'en-US'
                       )}
@@ -223,8 +223,8 @@ export default function AdminDashboard() {
                 <span
                   className={`flex-shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
                     scholarship.isPublished
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 text-gray-700'
+                      ? 'bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-400'
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                   }`}
                 >
                   {scholarship.isPublished
@@ -238,7 +238,7 @@ export default function AdminDashboard() {
               </div>
             ))}
             {recentScholarships.length === 0 && (
-              <p className="py-8 text-center text-gray-500">
+              <p className="py-8 text-center text-gray-500 dark:text-gray-400">
                 {isRTL ? 'لا توجد منح حتى الآن' : 'No scholarships yet'}
               </p>
             )}
@@ -246,14 +246,14 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent messages */}
-        <div className="rounded-xl bg-white p-6 shadow-sm">
+        <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
               {isRTL ? 'أحدث الرسائل' : 'Recent Messages'}
             </h2>
             <Link
               href={`/${locale}/admin/contacts`}
-              className="text-sm text-primary-600 hover:text-primary-700"
+              className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             >
               {isRTL ? 'عرض الكل' : 'View all'}
             </Link>
@@ -262,34 +262,34 @@ export default function AdminDashboard() {
             {recentContacts.map((contact) => (
               <div
                 key={contact.id}
-                className="flex items-center justify-between gap-4 rounded-lg border p-4 transition-colors hover:bg-gray-50"
+                className="flex items-center justify-between gap-4 rounded-lg border dark:border-gray-700 p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <div className="flex min-w-0 flex-1 items-center gap-3">
                   <div
                     className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg ${
-                      contact.isRead ? 'bg-gray-100' : 'bg-primary-50'
+                      contact.isRead ? 'bg-gray-100 dark:bg-gray-800' : 'bg-primary-50 dark:bg-primary-950'
                     }`}
                   >
                     <Mail
                       className={`h-5 w-5 ${
-                        contact.isRead ? 'text-gray-400' : 'text-primary-600'
+                        contact.isRead ? 'text-gray-400 dark:text-gray-500' : 'text-primary-600 dark:text-primary-400'
                       }`}
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-gray-900">{contact.name}</p>
-                    <p className="truncate text-sm text-gray-500">
+                    <p className="truncate font-medium text-gray-900 dark:text-gray-50">{contact.name}</p>
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">
                       {contact.subject}
                     </p>
                   </div>
                 </div>
                 {!contact.isRead && (
-                  <span className="h-2.5 w-2.5 flex-shrink-0 rounded-full bg-primary-600" />
+                  <span className="h-2.5 w-2.5 flex-shrink-0 rounded-full bg-primary-600 dark:bg-primary-500" />
                 )}
               </div>
             ))}
             {recentContacts.length === 0 && (
-              <p className="py-8 text-center text-gray-500">
+              <p className="py-8 text-center text-gray-500 dark:text-gray-400">
                 {isRTL ? 'لا توجد رسائل حتى الآن' : 'No messages yet'}
               </p>
             )}

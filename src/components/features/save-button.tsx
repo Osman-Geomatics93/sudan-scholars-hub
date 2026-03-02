@@ -120,8 +120,8 @@ export function SaveButton({ scholarshipId, className, size = 'md' }: SaveButton
         'rounded-full flex items-center justify-center transition-all',
         'hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
         showSaved
-          ? 'bg-red-100 text-red-600 hover:bg-red-200'
-          : 'bg-white/90 text-gray-600 hover:bg-white hover:text-red-500',
+          ? 'bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50'
+          : 'bg-white/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800 hover:text-red-500',
         (isLoading || !mounted) && 'opacity-50 cursor-not-allowed',
         sizeClasses[size],
         className

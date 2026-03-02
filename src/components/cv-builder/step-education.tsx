@@ -104,7 +104,7 @@ export function StepEducation({ locale, data, onDataChange }: StepEducationProps
                     <p className="font-medium">
                       {edu.institution || (isRTL ? 'مؤسسة جديدة' : 'New Institution')}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {edu.degree} {edu.field && `in ${edu.field}`}
                     </p>
                   </div>

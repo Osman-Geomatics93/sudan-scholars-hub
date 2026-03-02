@@ -186,7 +186,7 @@ function ScholarshipsContent({ locale }: { locale: string }) {
                 {searchQuery && (
                   <button
                     onClick={handleClearSearch}
-                    className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -248,7 +248,7 @@ function ScholarshipsContent({ locale }: { locale: string }) {
                     onClick={() => setViewMode('grid')}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                       viewMode === 'grid'
-                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm'
+                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm dark:shadow-gray-900/50'
                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                     }`}
                   >
@@ -259,7 +259,7 @@ function ScholarshipsContent({ locale }: { locale: string }) {
                     onClick={() => setViewMode('calendar')}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                       viewMode === 'calendar'
-                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm'
+                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-sm dark:shadow-gray-900/50'
                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                     }`}
                   >

@@ -107,7 +107,7 @@ export function StepExperience({ locale, data, onDataChange }: StepExperiencePro
                     <p className="font-medium">
                       {exp.position || (isRTL ? 'منصب جديد' : 'New Position')}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {exp.company}
                     </p>
                   </div>

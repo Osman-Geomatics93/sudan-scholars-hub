@@ -65,7 +65,7 @@ export function ComparisonModal({ locale = 'en' }: ComparisonModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-6xl max-h-[90dvh] mx-2 sm:mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden animate-scale-in">
+      <div className="relative w-full max-w-6xl max-h-[90dvh] mx-2 sm:mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-2xl dark:shadow-gray-900/50 overflow-hidden animate-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
@@ -99,7 +99,7 @@ export function ComparisonModal({ locale = 'en' }: ComparisonModalProps) {
                   </div>
                   <button
                     onClick={() => removeFromCompare(scholarship.id)}
-                    className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                    className="p-1 text-gray-400 dark:text-gray-500 hover:text-red-500 transition-colors"
                     title={isRTL ? 'إزالة' : 'Remove'}
                   >
                     <X className="h-4 w-4" />

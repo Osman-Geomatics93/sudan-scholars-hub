@@ -155,10 +155,10 @@ export default function ScholarshipsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
             {isRTL ? 'المنح الدراسية' : 'Scholarships'}
           </h1>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 dark:text-gray-400">
             {isRTL
               ? `${scholarships.length} منحة دراسية`
               : `${scholarships.length} scholarships`}
@@ -166,7 +166,7 @@ export default function ScholarshipsPage() {
         </div>
         <Link
           href={`/${locale}/admin/scholarships/new`}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-4 py-2 text-white transition-colors hover:bg-primary-700 dark:hover:bg-primary-600"
         >
           <Plus className="h-5 w-5" />
           {isRTL ? 'إضافة منحة' : 'Add Scholarship'}
@@ -176,7 +176,7 @@ export default function ScholarshipsPage() {
       {/* Search */}
       <div className="relative">
         <Search
-          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${
+          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500 ${
             isRTL ? 'right-3' : 'left-3'
           }`}
         />
@@ -185,47 +185,47 @@ export default function ScholarshipsPage() {
           placeholder={isRTL ? 'البحث عن منحة...' : 'Search scholarships...'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className={`w-full rounded-lg border border-gray-300 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+          className={`w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
             isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
           }`}
         />
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-900/50">
         <table className="w-full">
-          <thead className="border-b bg-gray-50">
+          <thead className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
             <tr>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'المنحة' : 'Scholarship'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'المستوى' : 'Level'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'الموعد النهائي' : 'Deadline'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'الحالة' : 'Status'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
@@ -233,15 +233,15 @@ export default function ScholarshipsPage() {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {filteredScholarships.map((scholarship) => (
-              <tr key={scholarship.id} className="hover:bg-gray-50">
+              <tr key={scholarship.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                 <td className="px-6 py-4">
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 dark:text-gray-50">
                       {isRTL ? scholarship.titleAr : scholarship.title}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {isRTL ? scholarship.universityAr : scholarship.university}
                     </p>
                   </div>
@@ -249,13 +249,13 @@ export default function ScholarshipsPage() {
                 <td className="px-6 py-4">
                   <div className="flex flex-wrap gap-1">
                     {(scholarship.levels || []).map((level: string) => (
-                      <span key={level} className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                      <span key={level} className="rounded-full bg-gray-100 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300">
                         {level}
                       </span>
                     ))}
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                   {new Date(scholarship.deadline).toLocaleDateString(
                     isRTL ? 'ar-SA' : 'en-US'
                   )}
@@ -265,8 +265,8 @@ export default function ScholarshipsPage() {
                     <span
                       className={`rounded-full px-2 py-1 text-xs font-medium ${
                         scholarship.isPublished
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
+                          ? 'bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-400'
+                          : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                       }`}
                     >
                       {scholarship.isPublished
@@ -288,7 +288,7 @@ export default function ScholarshipsPage() {
                       onClick={() =>
                         togglePublish(scholarship.id, scholarship.isPublished)
                       }
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300"
                       title={scholarship.isPublished ? 'Unpublish' : 'Publish'}
                     >
                       {scholarship.isPublished ? (
@@ -301,7 +301,7 @@ export default function ScholarshipsPage() {
                       onClick={() =>
                         toggleFeatured(scholarship.id, scholarship.isFeatured)
                       }
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-amber-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-amber-600"
                       title={scholarship.isFeatured ? 'Unfeature' : 'Feature'}
                     >
                       {scholarship.isFeatured ? (
@@ -312,13 +312,13 @@ export default function ScholarshipsPage() {
                     </button>
                     <Link
                       href={`/${locale}/admin/scholarships/${scholarship.id}/edit`}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-primary-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600"
                     >
                       <Edit className="h-4 w-4" />
                     </Link>
                     <button
                       onClick={() => deleteScholarship(scholarship.id)}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-red-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -330,7 +330,7 @@ export default function ScholarshipsPage() {
         </table>
 
         {filteredScholarships.length === 0 && (
-          <div className="py-12 text-center text-gray-500">
+          <div className="py-12 text-center text-gray-500 dark:text-gray-400">
             {isRTL ? 'لا توجد منح للعرض' : 'No scholarships to display'}
           </div>
         )}

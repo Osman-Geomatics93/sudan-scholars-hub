@@ -22,7 +22,7 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         htmlFor={inputId}
         className={cn(
           'relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer',
-          checked ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700',
+          checked ? 'bg-primary-600 dark:bg-primary-500' : 'bg-gray-200 dark:bg-gray-700',
           disabled && 'opacity-50 cursor-not-allowed',
           className
         )}
@@ -39,7 +39,7 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         />
         <span
           className={cn(
-            'inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform',
+            'inline-block h-5 w-5 transform rounded-full bg-white shadow-lg dark:shadow-gray-900/50 transition-transform',
             checked ? 'translate-x-5' : 'translate-x-0.5'
           )}
         />

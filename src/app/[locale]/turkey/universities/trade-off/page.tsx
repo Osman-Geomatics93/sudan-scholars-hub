@@ -46,7 +46,7 @@ function FAQItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 overflow-hidden">
       <button
         onClick={onToggle}
         className="w-full px-6 py-5 flex items-center gap-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
@@ -61,7 +61,7 @@ function FAQItem({
           {isOpen ? (
             <Minus className="h-5 w-5 text-red-600 dark:text-red-400" />
           ) : (
-            <Plus className="h-5 w-5 text-gray-400" />
+            <Plus className="h-5 w-5 text-gray-400 dark:text-gray-500" />
           )}
         </div>
       </button>
@@ -347,7 +347,7 @@ export default function TradeOffPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-3 gap-4 mb-12">
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 text-center">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-5 text-center">
                 <Users className="h-10 w-10 text-red-600 dark:text-red-400 mx-auto mb-3" />
                 <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
                   {isRTL ? 'للطلاب الدوليين' : 'For International Students'}
@@ -356,7 +356,7 @@ export default function TradeOffPage() {
                   {isRTL ? 'نظام خاص بالطلاب الأجانب' : 'Special system for foreign students'}
                 </p>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 text-center">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-5 text-center">
                 <Calendar className="h-10 w-10 text-red-600 dark:text-red-400 mx-auto mb-3" />
                 <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
                   {isRTL ? 'مواعيد محددة' : 'Specific Deadlines'}
@@ -365,7 +365,7 @@ export default function TradeOffPage() {
                   {isRTL ? 'لكل جامعة مواعيد خاصة' : 'Each university has its own dates'}
                 </p>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 text-center">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-5 text-center">
                 <Award className="h-10 w-10 text-red-600 dark:text-red-400 mx-auto mb-3" />
                 <h3 className="font-semibold text-gray-900 dark:text-gray-50 mb-1">
                   {isRTL ? 'تنافسي' : 'Competitive'}
@@ -449,7 +449,7 @@ export default function TradeOffPage() {
               {steps.map((step, index) => (
                 <div
                   key={step.number}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 flex items-start gap-4"
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-5 flex items-start gap-4"
                 >
                   <div className="flex items-center justify-center w-12 h-12 bg-red-600 text-white rounded-full shrink-0 font-bold text-lg">
                     {step.number}

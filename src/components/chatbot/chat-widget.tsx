@@ -49,7 +49,7 @@ export function ChatWidget() {
       <button
         onClick={toggleChat}
         className={cn(
-          'fixed z-50 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl',
+          'fixed z-50 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg dark:shadow-gray-900/50 transition-all duration-300 hover:scale-110 hover:shadow-xl',
           isRTL ? 'left-2 sm:left-4 md:left-6' : 'right-2 sm:right-4 md:right-6',
           'bottom-2 sm:bottom-4 md:bottom-6',
           isOpen && 'scale-0 opacity-0'
@@ -65,7 +65,7 @@ export function ChatWidget() {
       {/* Chat Window */}
       <div
         className={cn(
-          'fixed z-50 flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-gray-900 shadow-2xl transition-all duration-300',
+          'fixed z-50 flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-gray-900 shadow-2xl dark:shadow-gray-900/50 transition-all duration-300',
           isRTL ? 'left-2 sm:left-4 md:left-6' : 'right-2 sm:right-4 md:right-6',
           'bottom-2 sm:bottom-4 md:bottom-6',
           isOpen
@@ -145,7 +145,7 @@ export function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={isRTL ? 'اكتب رسالتك...' : 'Type your message...'}
-              className="flex-1 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:text-white"
+              className="flex-1 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:text-white dark:placeholder:text-gray-500"
               disabled={isLoading}
               dir={isRTL ? 'rtl' : 'ltr'}
               suppressHydrationWarning
@@ -153,7 +153,7 @@ export function ChatWidget() {
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white transition-all hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 dark:bg-primary-500 text-white transition-all hover:bg-primary-700 dark:hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
               suppressHydrationWarning
             >
               <Send className={cn('h-4 w-4', isRTL && 'rotate-180')} />

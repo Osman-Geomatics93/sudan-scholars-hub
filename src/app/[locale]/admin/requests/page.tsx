@@ -149,10 +149,10 @@ export default function AdminRequestsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
           {isRTL ? 'إدارة الطلبات' : 'Manage Requests'}
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
           {isRTL
             ? `${statusCounts.ALL} طلب — ${statusCounts.OPEN} مفتوح`
             : `${statusCounts.ALL} requests — ${statusCounts.OPEN} open`}
@@ -160,20 +160,20 @@ export default function AdminRequestsPage() {
       </div>
 
       {/* Status Tabs */}
-      <div className="flex gap-2 overflow-x-auto border-b border-gray-200 pb-px">
+      <div className="flex gap-2 overflow-x-auto border-b border-gray-200 dark:border-gray-700 pb-px">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => { setActiveTab(tab.key); setSelectedRequest(null); }}
             className={`flex items-center gap-2 whitespace-nowrap rounded-t-lg px-4 py-2.5 text-sm font-medium transition-colors ${
               activeTab === tab.key
-                ? 'border-b-2 border-primary-600 text-primary-700 bg-primary-50'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                ? 'border-b-2 border-primary-600 text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/50'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
           >
             {isRTL ? tab.labelAr : tab.label}
             <span className={`rounded-full px-2 py-0.5 text-xs ${
-              activeTab === tab.key ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-600'
+              activeTab === tab.key ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
             }`}>
               {statusCounts[tab.key]}
             </span>
@@ -183,13 +183,13 @@ export default function AdminRequestsPage() {
 
       {/* Search */}
       <div className="relative">
-        <Search className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+        <Search className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500 ${isRTL ? 'right-3' : 'left-3'}`} />
         <input
           type="text"
           placeholder={isRTL ? 'البحث في الطلبات...' : 'Search requests...'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className={`w-full rounded-lg border border-gray-300 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+          className={`w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
             isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
           }`}
         />
@@ -200,8 +200,8 @@ export default function AdminRequestsPage() {
         {/* Request List */}
         <div className="lg:col-span-2 space-y-2 max-h-[70vh] overflow-y-auto">
           {filteredRequests.length === 0 ? (
-            <div className="rounded-xl bg-white py-12 text-center text-gray-500 shadow-sm">
-              <ClipboardList className="mx-auto mb-3 h-10 w-10 text-gray-300" />
+            <div className="rounded-xl bg-white dark:bg-gray-900 py-12 text-center text-gray-500 dark:text-gray-400 shadow-sm dark:shadow-gray-900/50">
+              <ClipboardList className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
               {isRTL ? 'لا توجد طلبات' : 'No requests found'}
             </div>
           ) : (
@@ -213,18 +213,18 @@ export default function AdminRequestsPage() {
                   onClick={() => setSelectedRequest(req)}
                   className={`w-full rounded-lg border p-4 text-left transition-all hover:shadow-md ${
                     selectedRequest?.id === req.id
-                      ? 'border-primary-500 bg-primary-50 shadow-md'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-950/50 shadow-md'
+                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-gray-900 line-clamp-1">{req.title}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-50 line-clamp-1">{req.title}</h3>
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${cfg.color}`}>
                       {isRTL ? cfg.labelAr : cfg.label}
                     </span>
                   </div>
                   {req.subject && (
-                    <p className="mt-1 text-sm text-gray-500 line-clamp-1">
+                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
                       <BookOpen className="inline h-3 w-3 mr-1" /> {req.subject}
                     </p>
                   )}
@@ -245,7 +245,7 @@ export default function AdminRequestsPage() {
         {/* Detail Panel */}
         <div className="lg:col-span-3">
           {selectedRequest ? (
-            <div className="rounded-xl bg-white p-6 shadow-sm">
+            <div className="rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm dark:shadow-gray-900/50">
               {/* Status badge */}
               <div className="mb-4 flex items-center justify-between">
                 <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium ${STATUS_CONFIG[selectedRequest.status].color}`}>
@@ -258,11 +258,11 @@ export default function AdminRequestsPage() {
               </div>
 
               {/* Title */}
-              <h2 className="text-xl font-bold text-gray-900 mb-2">{selectedRequest.title}</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50 mb-2">{selectedRequest.title}</h2>
 
               {/* Subject */}
               {selectedRequest.subject && (
-                <div className="mb-3 flex items-center gap-2 text-sm text-gray-600">
+                <div className="mb-3 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <BookOpen className="h-4 w-4" />
                   <span>{selectedRequest.subject}</span>
                 </div>
@@ -270,29 +270,29 @@ export default function AdminRequestsPage() {
 
               {/* Description */}
               {selectedRequest.description && (
-                <div className="mb-4 rounded-lg bg-gray-50 p-4">
-                  <p className="text-sm text-gray-700 whitespace-pre-wrap">{selectedRequest.description}</p>
+                <div className="mb-4 rounded-lg bg-gray-50 dark:bg-gray-800 p-4">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{selectedRequest.description}</p>
                 </div>
               )}
 
               {/* User info */}
-              <div className="mb-6 flex items-center gap-3 rounded-lg border border-gray-100 p-3">
+              <div className="mb-6 flex items-center gap-3 rounded-lg border border-gray-100 dark:border-gray-700 p-3">
                 {selectedRequest.user?.image ? (
                   <img src={selectedRequest.user.image} alt="" className="h-10 w-10 rounded-full object-cover" />
                 ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
-                    <User className="h-5 w-5 text-gray-500" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
+                    <User className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                   </div>
                 )}
                 <div>
-                  <p className="font-medium text-gray-900">{selectedRequest.user?.name || 'Unknown User'}</p>
-                  <p className="text-sm text-gray-500">{selectedRequest.user?.email}</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-50">{selectedRequest.user?.name || 'Unknown User'}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{selectedRequest.user?.email}</p>
                 </div>
               </div>
 
               {/* Action buttons */}
-              <div className="border-t pt-4">
-                <p className="mb-3 text-sm font-medium text-gray-700">
+              <div className="border-t dark:border-gray-700 pt-4">
+                <p className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
                   {isRTL ? 'إجراءات الإدارة' : 'Admin Actions'}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -345,7 +345,7 @@ export default function AdminRequestsPage() {
               </div>
             </div>
           ) : (
-            <div className="flex h-64 flex-col items-center justify-center rounded-xl bg-white text-gray-400 shadow-sm">
+            <div className="flex h-64 flex-col items-center justify-center rounded-xl bg-white dark:bg-gray-900 text-gray-400 dark:text-gray-500 shadow-sm dark:shadow-gray-900/50">
               <MessageSquare className="mb-3 h-10 w-10" />
               <p>{isRTL ? 'اختر طلباً لعرض التفاصيل' : 'Select a request to view details'}</p>
             </div>
@@ -356,22 +356,22 @@ export default function AdminRequestsPage() {
       {/* Close with note modal */}
       {showNoteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => { setShowNoteModal(null); setAdminNote(''); }}>
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
-                <AlertTriangle className="h-5 w-5 text-gray-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+                <AlertTriangle className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">
+                <h3 className="font-bold text-gray-900 dark:text-gray-50">
                   {isRTL ? 'إغلاق الطلب' : 'Close Request'}
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {isRTL ? 'سيتم إخطار صاحب الطلب' : 'The requester will be notified'}
                 </p>
               </div>
             </div>
             <div className="mb-4">
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {isRTL ? 'ملاحظة (اختياري)' : 'Note (optional)'}
               </label>
               <textarea
@@ -379,13 +379,13 @@ export default function AdminRequestsPage() {
                 onChange={(e) => setAdminNote(e.target.value)}
                 rows={3}
                 placeholder={isRTL ? 'سبب الإغلاق...' : 'Reason for closing...'}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => { setShowNoteModal(null); setAdminNote(''); }}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 {isRTL ? 'إلغاء' : 'Cancel'}
               </button>

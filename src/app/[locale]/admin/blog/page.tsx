@@ -154,10 +154,10 @@ export default function BlogPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
             {isRTL ? 'المدونة' : 'Blog'}
           </h1>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 dark:text-gray-400">
             {isRTL
               ? `${blogPosts.length} مقال`
               : `${blogPosts.length} articles`}
@@ -165,7 +165,7 @@ export default function BlogPage() {
         </div>
         <Link
           href={`/${locale}/admin/blog/new`}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 dark:bg-primary-500 px-4 py-2 text-white transition-colors hover:bg-primary-700 dark:hover:bg-primary-600"
         >
           <Plus className="h-5 w-5" />
           {isRTL ? 'إضافة مقال' : 'Add Article'}
@@ -175,7 +175,7 @@ export default function BlogPage() {
       {/* Search */}
       <div className="relative">
         <Search
-          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 ${
+          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500 ${
             isRTL ? 'right-3' : 'left-3'
           }`}
         />
@@ -184,47 +184,47 @@ export default function BlogPage() {
           placeholder={isRTL ? 'البحث عن مقال...' : 'Search articles...'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className={`w-full rounded-lg border border-gray-300 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
+          className={`w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
             isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
           }`}
         />
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-900/50">
         <table className="w-full">
-          <thead className="border-b bg-gray-50">
+          <thead className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
             <tr>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'المقال' : 'Article'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'التصنيف' : 'Category'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'الوسوم' : 'Tags'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
                 {isRTL ? 'الحالة' : 'Status'}
               </th>
               <th
-                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 ${
+                className={`px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 ${
                   isRTL ? 'text-right' : 'text-left'
                 }`}
               >
@@ -232,21 +232,21 @@ export default function BlogPage() {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {filteredPosts.map((post) => (
-              <tr key={post.id} className="hover:bg-gray-50">
+              <tr key={post.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                 <td className="px-6 py-4">
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 dark:text-gray-50">
                       {isRTL ? post.titleAr : post.title}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {isRTL ? post.authorAr : post.author}
                     </p>
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                  <span className="rounded-full bg-gray-100 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300">
                     {isRTL ? post.categoryAr : post.category}
                   </span>
                 </td>
@@ -255,14 +255,14 @@ export default function BlogPage() {
                     {post.tags.slice(0, 2).map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-xs text-blue-700"
+                        className="inline-flex items-center gap-1 rounded bg-blue-50 dark:bg-blue-950/50 px-1.5 py-0.5 text-xs text-blue-700 dark:text-blue-400"
                       >
                         <Tag className="h-3 w-3" />
                         {tag}
                       </span>
                     ))}
                     {post.tags.length > 2 && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         +{post.tags.length - 2}
                       </span>
                     )}
@@ -273,8 +273,8 @@ export default function BlogPage() {
                     <span
                       className={`rounded-full px-2 py-1 text-xs font-medium ${
                         post.isPublished
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
+                          ? 'bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-400'
+                          : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                       }`}
                     >
                       {post.isPublished
@@ -296,7 +296,7 @@ export default function BlogPage() {
                       onClick={() =>
                         togglePublish(post.id, post.isPublished)
                       }
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300"
                       title={post.isPublished ? 'Unpublish' : 'Publish'}
                     >
                       {post.isPublished ? (
@@ -309,7 +309,7 @@ export default function BlogPage() {
                       onClick={() =>
                         toggleFeatured(post.id, post.isFeatured)
                       }
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-amber-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-amber-600"
                       title={post.isFeatured ? 'Unfeature' : 'Feature'}
                     >
                       {post.isFeatured ? (
@@ -320,13 +320,13 @@ export default function BlogPage() {
                     </button>
                     <Link
                       href={`/${locale}/admin/blog/${post.id}/edit`}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-primary-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600"
                     >
                       <Edit className="h-4 w-4" />
                     </Link>
                     <button
                       onClick={() => deleteBlogPost(post.id)}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-red-600"
+                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -338,7 +338,7 @@ export default function BlogPage() {
         </table>
 
         {filteredPosts.length === 0 && (
-          <div className="py-12 text-center text-gray-500">
+          <div className="py-12 text-center text-gray-500 dark:text-gray-400">
             {isRTL ? 'لا توجد مقالات للعرض' : 'No articles to display'}
           </div>
         )}

@@ -183,13 +183,13 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
     <form onSubmit={handleSubmit} className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Profile Picture */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <User className="h-5 w-5 text-primary-600" />
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
+          <User className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           {t('profilePicture')}
         </h3>
         <div className="flex items-center gap-6">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100">
+            <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800">
               {displayImage ? (
                 <Image
                   src={displayImage}
@@ -199,7 +199,7 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
                   sizes="96px"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
                   <User className="h-10 w-10" />
                 </div>
               )}
@@ -234,74 +234,74 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
                 variant="ghost"
                 size="sm"
                 onClick={handleRemoveImage}
-                className="text-red-600 hover:text-red-700"
+                className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
               >
                 <X className="h-4 w-4 me-2" />
                 {t('removePicture')}
               </Button>
             )}
-            <p className="text-xs text-gray-500">{t('uploadHint')}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t('uploadHint')}</p>
           </div>
         </div>
       </Card>
 
       {/* Personal Information */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <User className="h-5 w-5 text-primary-600" />
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
+          <User className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           {t('personalInfo')}
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('name')}
             </label>
             <div className="relative">
-              <User className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <User className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder={t('namePlaceholder')}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('phone')}
             </label>
             <div className="relative">
-              <Phone className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Phone className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
                 placeholder={t('phonePlaceholder')}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('location')}
             </label>
             <div className="relative">
-              <MapPin className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <MapPin className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
                 placeholder={t('locationPlaceholder')}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('bio')}
             </label>
             <textarea
@@ -311,9 +311,9 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
               placeholder={t('bioPlaceholder')}
               rows={3}
               maxLength={500}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {formData.bio.length}/500 - {t('bioHint')}
             </p>
           </div>
@@ -322,22 +322,22 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
 
       {/* Education */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <GraduationCap className="h-5 w-5 text-primary-600" />
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
+          <GraduationCap className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           {t('education')}
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('educationLevel')}
             </label>
             <div className="relative">
-              <GraduationCap className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <GraduationCap className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <select
                 name="educationLevel"
                 value={formData.educationLevel}
                 onChange={handleInputChange}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-white"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-white dark:bg-gray-800 dark:text-gray-100"
               >
                 <option value="">{t('selectLevel')}</option>
                 {EDUCATION_LEVELS.map((level) => (
@@ -349,16 +349,16 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('fieldOfStudy')}
             </label>
             <div className="relative">
-              <BookOpen className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <BookOpen className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <select
                 name="fieldOfStudy"
                 value={formData.fieldOfStudy}
                 onChange={handleInputChange}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-white"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-white dark:bg-gray-800 dark:text-gray-100"
               >
                 <option value="">{t('selectField')}</option>
                 {FIELDS_OF_STUDY.map((field) => (
@@ -374,68 +374,68 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
 
       {/* Social Links */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <Globe className="h-5 w-5 text-primary-600" />
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4 flex items-center gap-2">
+          <Globe className="h-5 w-5 text-primary-600 dark:text-primary-400" />
           {t('socialLinks')}
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('twitter')}
             </label>
             <div className="relative">
-              <Twitter className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Twitter className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="url"
                 value={formData.socialLinks.twitter}
                 onChange={(e) => handleSocialChange('twitter', e.target.value)}
                 placeholder={t('twitterPlaceholder')}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('linkedin')}
             </label>
             <div className="relative">
-              <Linkedin className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Linkedin className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="url"
                 value={formData.socialLinks.linkedin}
                 onChange={(e) => handleSocialChange('linkedin', e.target.value)}
                 placeholder={t('linkedinPlaceholder')}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('facebook')}
             </label>
             <div className="relative">
-              <Facebook className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Facebook className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="url"
                 value={formData.socialLinks.facebook}
                 onChange={(e) => handleSocialChange('facebook', e.target.value)}
                 placeholder={t('facebookPlaceholder')}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('website')}
             </label>
             <div className="relative">
-              <Globe className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Globe className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="url"
                 value={formData.socialLinks.website}
                 onChange={(e) => handleSocialChange('website', e.target.value)}
                 placeholder={t('websitePlaceholder')}
-                className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full ps-10 pe-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -444,10 +444,10 @@ export function ProfileEditForm({ user, locale, onSave, onCancel }: ProfileEditF
 
       {/* Error/Success Messages */}
       {error && (
-        <div className="p-4 bg-red-50 text-red-700 rounded-lg">{error}</div>
+        <div className="p-4 bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 rounded-lg">{error}</div>
       )}
       {success && (
-        <div className="p-4 bg-green-50 text-green-700 rounded-lg flex items-center gap-2">
+        <div className="p-4 bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-400 rounded-lg flex items-center gap-2">
           <Check className="h-5 w-5" />
           {t('saved')}
         </div>

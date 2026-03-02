@@ -155,12 +155,12 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
   // Render sort icon
   const SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) {
-      return <ChevronUp className="h-4 w-4 text-gray-300" />;
+      return <ChevronUp className="h-4 w-4 text-gray-300 dark:text-gray-600" />;
     }
     return sortDirection === 'asc' ? (
-      <ChevronUp className="h-4 w-4 text-primary-600" />
+      <ChevronUp className="h-4 w-4 text-primary-600 dark:text-primary-400" />
     ) : (
-      <ChevronDown className="h-4 w-4 text-primary-600" />
+      <ChevronDown className="h-4 w-4 text-primary-600 dark:text-primary-400" />
     );
   };
 
@@ -184,13 +184,13 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             {/* Search Input */}
             <div className="relative flex-1 w-full sm:max-w-md">
-              <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 ${isRTL ? 'right-3' : 'left-3'}`} />
+              <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500 ${isRTL ? 'right-3' : 'left-3'}`} />
               <input
                 type="text"
                 placeholder={isRTL ? 'ابحث عن الجامعة...' : 'Search university...'}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full py-2 ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent`}
+                className={`w-full py-2 ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent`}
               />
             </div>
 
@@ -444,7 +444,7 @@ export function AdmissionsTable({ admissions, locale }: AdmissionsTableProps) {
                           href={admission.detailsUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium"
+                          className="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium"
                         >
                           {isRTL ? 'التفاصيل' : 'Details'}
                           <ExternalLink className="h-3 w-3" />

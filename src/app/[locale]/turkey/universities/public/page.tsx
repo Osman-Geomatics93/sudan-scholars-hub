@@ -166,7 +166,7 @@ export default function PublicUniversitiesPage() {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Input */}
             <div className="flex-1 relative">
-              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 placeholder={isRTL ? 'ابحث عن جامعة...' : 'Search for a university...'}
@@ -205,7 +205,7 @@ export default function PublicUniversitiesPage() {
             {filteredUniversities.map((uni) => (
               <div
                 key={uni.id}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center justify-center w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg">

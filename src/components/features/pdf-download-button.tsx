@@ -93,7 +93,7 @@ export function PDFDownloadButton({
         onClick={handleDownload}
         disabled={isGenerating}
         className={cn(
-          'flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-primary-600 hover:bg-white transition-colors shadow-sm disabled:opacity-50',
+          'flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-sm dark:shadow-gray-900/50 disabled:opacity-50',
           size === 'sm' ? 'h-8 w-8' : 'h-10 w-10',
           className
         )}
@@ -114,7 +114,7 @@ export function PDFDownloadButton({
       onClick={handleDownload}
       disabled={isGenerating}
       className={cn(
-        'flex items-center justify-center gap-2 w-full py-2 text-gray-600 hover:text-primary-600 transition-colors disabled:opacity-50',
+        'flex items-center justify-center gap-2 w-full py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors disabled:opacity-50',
         className
       )}
     >

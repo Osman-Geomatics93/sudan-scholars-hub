@@ -384,7 +384,7 @@ export default function YosQuestionsPage() {
             {/* Search Bar */}
             <div className="mb-6">
               <div className="relative">
-                <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 ${isRTL ? 'right-4' : 'left-4'}`} />
+                <Search className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500 ${isRTL ? 'right-4' : 'left-4'}`} />
                 <input
                   type="text"
                   placeholder={isRTL ? 'ابحث عن جامعة...' : 'Search for a university...'}
@@ -444,9 +444,9 @@ export default function YosQuestionsPage() {
                           {university.papers.length} {isRTL ? 'ورقة' : 'papers'}
                         </span>
                         {isExpanded ? (
-                          <ChevronUp className="h-5 w-5 text-gray-400" />
+                          <ChevronUp className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                         ) : (
-                          <ChevronDown className="h-5 w-5 text-gray-400" />
+                          <ChevronDown className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                         )}
                       </div>
                     </button>
@@ -498,7 +498,7 @@ export default function YosQuestionsPage() {
       <section className="py-12 md:py-16">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 md:p-8">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-6 md:p-8">
               <div className="flex items-start gap-4 mb-6">
                 <div className="flex items-center justify-center w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg shrink-0">
                   <BookOpen className="h-6 w-6 text-red-600 dark:text-red-400" />
@@ -608,7 +608,7 @@ export default function YosQuestionsPage() {
               {sampleQuestions.map((q, index) => (
                 <div
                   key={index}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5"
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 p-5"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
